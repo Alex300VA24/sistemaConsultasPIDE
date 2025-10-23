@@ -1,0 +1,249 @@
+.consulta-dni-container * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .consulta-dni-container {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #a8d5e2, #7cb8cc);
+        padding: 20px;
+    }
+
+    .consulta-dni-container .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .consulta-dni-container .window-header {
+        background: linear-gradient(to bottom, #e8f4f8, #d0e8f0);
+        padding: 8px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #b0c4cc;
+    }
+
+    .consulta-dni-container .window-title {
+        font-size: 13px;
+        color: #333;
+    }
+
+    .consulta-dni-container .window-controls {
+        display: flex;
+        gap: 5px;
+    }
+
+    .consulta-dni-container .window-controls button {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #999;
+        background: linear-gradient(to bottom, #f0f0f0, #d8d8d8);
+        cursor: pointer;
+        font-size: 11px;
+    }
+
+    .consulta-dni-container .page-title {
+        background: white;
+        padding: 30px;
+        text-align: center;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .consulta-dni-container .page-title h1 {
+        color: #0066cc;
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        background: linear-gradient(to bottom, #d0e8f0, #b8dce8);
+        padding: 30px;
+    }
+
+    .consulta-dni-container .search-section {
+        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
+        border: 2px solid #8bb4c4;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .consulta-dni-container .search-form {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .consulta-dni-container .search-form label {
+        font-weight: bold;
+        color: #333;
+        min-width: 50px;
+    }
+
+    .consulta-dni-container .search-form input {
+        flex: 1;
+        max-width: 300px;
+        padding: 8px 12px;
+        border: 2px solid #6b9db0;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .consulta-dni-container .btn-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .consulta-dni-container .btn {
+        padding: 8px 20px;
+        border: 2px solid #6b9db0;
+        border-radius: 4px;
+        background: linear-gradient(to bottom, #f0f8fc, #d8e8f0);
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.3s;
+    }
+
+    .consulta-dni-container .btn:hover {
+        background: linear-gradient(to bottom, #e0f0f8, #c8d8e0);
+        transform: translateY(-1px);
+    }
+
+    .consulta-dni-container .btn-search {
+        background: linear-gradient(to bottom, #fff, #e8f4f8);
+    }
+
+    .consulta-dni-container .btn-clear {
+        background: linear-gradient(to bottom, #fff, #f0f0f0);
+    }
+
+    .consulta-dni-container .btn-primary {
+        background: linear-gradient(to bottom, #4a9fd8, #3a8fc8);
+        color: white;
+        border-color: #2a7fb8;
+    }
+
+    .consulta-dni-container .btn-primary:hover {
+        background: linear-gradient(to bottom, #5aafef, #4a9fd8);
+    }
+
+    .consulta-dni-container .results-section {
+        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
+        border: 2px solid #8bb4c4;
+        border-radius: 8px;
+        padding: 25px;
+        display: flex;
+        gap: 30px;
+    }
+
+    .consulta-dni-container .info-column {
+        flex: 1;
+    }
+
+    .consulta-dni-container .info-row {
+        display: flex;
+        margin-bottom: 15px;
+        align-items: center;
+    }
+
+    .consulta-dni-container .info-label {
+        font-weight: bold;
+        color: #333;
+        min-width: 140px;
+        text-align: right;
+        padding-right: 15px;
+    }
+
+    .consulta-dni-container .info-value {
+        flex: 1;
+        padding: 13px 15px;
+        background: #fffef0;
+        border: 1px solid #a0a080;
+        border-radius: 3px;
+    }
+
+    .consulta-dni-container .photo-column {
+        width: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .consulta-dni-container .photo-frame {
+        width: 200px;
+        height: 200px;
+        background: white;
+        border: 3px solid #8bb4c4;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .consulta-dni-container .photo-placeholder {
+        width: 160px;
+        height: 160px;
+        background: linear-gradient(135deg, #d88872 0%, #c86b50 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .consulta-dni-container .photo-placeholder::before {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: #8b5a4a;
+        border-radius: 50%;
+        top: 35px;
+    }
+
+    .consulta-dni-container .photo-placeholder::after {
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 80px;
+        background: white;
+        border-radius: 50% 50% 0 0;
+        bottom: 0;
+    }
+
+    .consulta-dni-container .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .consulta-dni-container .alert-info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+    }
+
+    .consulta-dni-container .alert-warning {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+    }
+
+    .consulta-dni-container .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
+
+    .consulta-dni-container .hidden {
+        display: none;
+    }
