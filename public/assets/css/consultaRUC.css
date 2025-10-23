@@ -1,0 +1,211 @@
+.consulta-ruc-container * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .consulta-ruc-container {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #a8d5e2, #7cb8cc);
+        padding: 20px;
+    }
+
+    .consulta-ruc-container .container {
+        max-width: 950px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .consulta-ruc-container .window-header {
+        background: linear-gradient(to bottom, #e8f4f8, #d0e8f0);
+        padding: 8px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #b0c4cc;
+    }
+
+    .consulta-ruc-container .window-title {
+        font-size: 13px;
+        color: #333;
+    }
+
+    .consulta-ruc-container .window-controls {
+        display: flex;
+        gap: 5px;
+    }
+
+    .consulta-ruc-container .window-controls button {
+        width: 24px;
+        height: 24px;
+        border: 1px solid #999;
+        background: linear-gradient(to bottom, #f0f0f0, #d8d8d8);
+        cursor: pointer;
+        font-size: 11px;
+    }
+
+    .consulta-ruc-container .page-title {
+        background: white;
+        padding: 30px;
+        text-align: center;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .consulta-ruc-container .page-title h1 {
+        color: #0066cc;
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .consulta-ruc-container .content-wrapper {
+        background: linear-gradient(to bottom, #d0e8f0, #b8dce8);
+        padding: 30px;
+    }
+
+    .consulta-ruc-container .search-section {
+        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
+        border: 2px solid #8bb4c4;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .consulta-ruc-container .search-form {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .consulta-ruc-container .search-form label {
+        font-weight: bold;
+        color: #333;
+        min-width: 70px;
+    }
+
+    .consulta-ruc-container .search-form input {
+        flex: 1;
+        max-width: 250px;
+        padding: 8px 12px;
+        border: 2px solid #6b9db0;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .consulta-ruc-container .btn-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .consulta-ruc-container .btn {
+        padding: 8px 20px;
+        border: 2px solid #6b9db0;
+        border-radius: 4px;
+        background: linear-gradient(to bottom, #f0f8fc, #d8e8f0);
+        cursor: pointer;
+        font-size: 14px;
+        color: #333;
+        transition: all 0.3s;
+    }
+
+    .consulta-ruc-container .btn:hover {
+        background: linear-gradient(to bottom, #e0f0f8, #c8d8e0);
+        transform: translateY(-1px);
+    }
+
+    .consulta-ruc-container .btn-icon {
+        width: 45px;
+        height: 45px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .consulta-ruc-container .results-section {
+        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
+        border: 2px solid #8bb4c4;
+        border-radius: 8px;
+        padding: 25px;
+    }
+
+    .consulta-ruc-container .form-row {
+        display: flex;
+        margin-bottom: 12px;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .consulta-ruc-container .form-group {
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+
+    .consulta-ruc-container .form-group.full-width {
+        flex: 1 1 100%;
+    }
+
+    .consulta-ruc-container .form-group.half-width {
+        flex: 1 1 48%;
+    }
+
+    .consulta-ruc-container .form-group.third-width {
+        flex: 1 1 32%;
+    }
+
+    .consulta-ruc-container .form-label {
+        font-weight: bold;
+        color: #333;
+        min-width: 180px;
+        font-size: 13px;
+    }
+
+    .consulta-ruc-container .form-input {
+        flex: 1;
+        padding: 6px 10px;
+        background: #fffef0;
+        border: 1px solid #a0a080;
+        border-radius: 3px;
+        font-size: 13px;
+    }
+
+    .consulta-ruc-container .form-input.white-bg {
+        background: white;
+    }
+
+    .consulta-ruc-container .form-input.readonly {
+        background: #f5f5f5;
+        color: #666;
+    }
+
+    .consulta-ruc-container .small-input {
+        max-width: 100px;
+    }
+
+    .consulta-ruc-container .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .consulta-ruc-container .alert-info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+    }
+
+    .consulta-ruc-container .alert-warning {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+    }
+
+    .consulta-ruc-container .alert-danger {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+    }
