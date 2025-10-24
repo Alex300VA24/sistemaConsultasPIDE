@@ -1,26 +1,14 @@
-(function() {
+document.addEventListener("DOMContentLoaded", async () => {
     const form = document.getElementById('searchFormDNI');
     const dniInput = document.getElementById('dniInput');
     const btnBuscar = document.getElementById('btnBuscarDNI');
     const alertContainer = document.getElementById('alertContainer');
 
+    console.log("El valor del dni es: ", dniInput.value);
+
     // Validar solo números en el campo DNI
     dniInput.addEventListener('input', function(e) {
         this.value = this.value.replace(/[^0-9]/g, '');
-    });
-
-    // Manejar el envío del formulario
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const dni = dniInput.value.trim();
-        
-        if (dni.length !== 8) {
-            mostrarAlerta('El DNI debe tener 8 dígitos', 'warning');
-            return;
-        }
-
-        await consultarDNI(dni);
     });
 
     async function consultarDNI(dni) {
@@ -32,7 +20,7 @@
             alertContainer.innerHTML = '';
 
             // Llamar a tu API
-            const response = await api.post('/consultar-dni', { dni: dni });
+            const response = await api.consultarDNI(dni);
 
             if (response.success && response.data) {
                 mostrarResultados(response.data);
@@ -62,10 +50,37 @@
         document.getElementById('result-restriccion').textContent = data.restriccion || '';
         document.getElementById('result-ubigeo').textContent = data.ubigeo || '';
 
-        // Mostrar foto si existe
         const photoContainer = document.getElementById('photoContainer');
+
+        // Limpiar contenido previo
+        photoContainer.innerHTML = '';
+
         if (data.foto) {
-            photoContainer.innerHTML = `<img src="${data.foto}" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">`;
+            // Asegurar prefijo base64 correcto
+            const fotoBase64 = data.foto.startsWith('data:image')
+                ? data.foto
+                : `data:image/jpeg;base64,${data.foto}`;
+
+            // Crear imagen dinámica
+            const img = document.createElement('img');
+            img.src = fotoBase64;
+            img.alt = 'Foto del DNI';
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            img.style.borderRadius = '10px';
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+
+            // Insertar imagen
+            photoContainer.appendChild(img);
+
+        } else {
+            // Mostrar placeholder si no hay foto
+            photoContainer.innerHTML = `
+                <div class="photo-placeholder"></div>
+            `;
+            photoContainer.style.width = '200px';
+            photoContainer.style.height = '200px';
         }
     }
 
@@ -78,11 +93,16 @@
         document.getElementById('result-direccion').textContent = '';
         document.getElementById('result-restriccion').textContent = '';
         document.getElementById('result-ubigeo').textContent = '';
-        
+
         const photoContainer = document.getElementById('photoContainer');
-        photoContainer.className = 'photo-placeholder';
-        photoContainer.innerHTML = '';
+        photoContainer.innerHTML = `
+            <div class="photo-placeholder"></div>
+        `;
+        photoContainer.style.width = '200px';
+        photoContainer.style.height = '200px';
     }
+
+
 
     function mostrarAlerta(mensaje, tipo) {
         alertContainer.innerHTML = `
@@ -110,4 +130,21 @@
             showPage('pageInicio');
         }
     };
-})();
+
+
+    // Manejar el envío del formulario
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const dni = dniInput.value.trim();
+        
+        if (dni.length !== 8) {
+            mostrarAlerta('El DNI debe tener 8 dígitos', 'warning');
+            return;
+        }
+
+        await consultarDNI(dni);
+    });
+});
+
+

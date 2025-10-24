@@ -15,11 +15,11 @@ class ConsultasController {
     
     public function __construct() {
         // Cargar desde configuración o variables de entorno
-        $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? "TU_DNI_USUARIO";
-        $this->rucUsuario = $_ENV['PIDE_RUC_USUARIO'] ?? "TU_RUC";
-        $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? "TU_PASSWORD";
-        $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://URL_SERVICIO_RENIEC";
-        $this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://URL_SERVICIO_SUNAT";
+        $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? "42761038"; // variable1
+        $this->rucUsuario = $_ENV['PIDE_RUC_USUARIO'] ?? "20164091547";
+        $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? "Muni2025@"; //variable
+        $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
+        //$this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://URL_SERVICIO_SUNAT";
     }
 
     // ========================================
@@ -142,7 +142,7 @@ class ConsultasController {
                     ];
 
                     // Registrar en BD (opcional)
-                    $this->registrarConsulta('DNI', $dni, $resultado['data']);
+                    //$this->registrarConsulta('DNI', $dni, $resultado['data']);
 
                     return $resultado;
                 } else {

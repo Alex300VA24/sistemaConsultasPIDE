@@ -1,253 +1,339 @@
 .consulta-dni-container * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    .consulta-dni-container {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #a8d5e2, #7cb8cc);
-        padding: 20px;
-    }
+.consulta-dni-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #90caf9 0%, #764ba2 100%);
+    padding: 40px 20px;
+    min-height: 100vh;
+}
 
-    .consulta-dni-container .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
+.consulta-dni-container .page-title {
+    max-width: 1000px;
+    margin: 0 auto 30px;
+    background: white;
+    padding: 25px;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
 
-    .consulta-dni-container .window-header {
-        background: linear-gradient(to bottom, #e8f4f8, #d0e8f0);
-        padding: 8px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #b0c4cc;
-    }
+.consulta-dni-container .page-title h1 {
+    color: #667eea;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
 
-    .consulta-dni-container .window-title {
-        font-size: 13px;
-        color: #333;
-    }
+.consulta-dni-container .content-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
-    .consulta-dni-container .page-title {
-        background: white;
-        padding: 30px;
-        text-align: center;
-        border-bottom: 2px solid #e0e0e0;
-    }
+/* Sección de búsqueda */
+.consulta-dni-container .search-section {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
 
-    .consulta-dni-container .page-title h1 {
-        color: #0066cc;
-        font-size: 36px;
-        font-weight: bold;
-        letter-spacing: 2px;
-    }
+.consulta-dni-container .search-form {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
 
-    .consulta-dni-container .content-wrapper {
-        background: linear-gradient(to bottom, #d0e8f0, #b8dce8);
-        padding: 30px;
-    }
+.consulta-dni-container .form-group {
+    flex: 1;
+    min-width: 250px;
+}
 
-    .consulta-dni-container .search-section {
-        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
-        border: 2px solid #8bb4c4;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
+.consulta-dni-container .form-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
 
-    .consulta-dni-container .search-form {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 15px;
-    }
+.consulta-dni-container .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
 
-    .consulta-dni-container .search-form label {
-        font-weight: bold;
-        color: #333;
-        min-width: 50px;
-    }
+.consulta-dni-container .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
 
-    .consulta-dni-container .search-form input {
-        flex: 1;
-        max-width: 300px;
-        padding: 8px 12px;
-        border: 2px solid #6b9db0;
-        border-radius: 4px;
-        font-size: 14px;
-    }
+.consulta-dni-container .btn-group {
+    display: flex;
+    gap: 12px;
+}
 
-    .consulta-dni-container .btn-group {
-        display: flex;
-        gap: 15px;
-    }
+.consulta-dni-container .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-    .consulta-dni-container .btn {
-        padding: 8px 20px;
-        border: 2px solid #6b9db0;
-        border-radius: 4px;
-        background: linear-gradient(to bottom, #f0f8fc, #d8e8f0);
-        cursor: pointer;
-        font-size: 14px;
-        color: #333;
-        transition: all 0.3s;
-    }
+.consulta-dni-container .btn-search {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
 
-    .consulta-dni-container .btn:hover {
-        background: linear-gradient(to bottom, #e0f0f8, #c8d8e0);
-        transform: translateY(-1px);
-    }
+.consulta-dni-container .btn-search:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
 
-    .consulta-dni-container .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+.consulta-dni-container .btn-clear {
+    background: #f5f5f5;
+    color: #666;
+}
 
-    .consulta-dni-container .btn-search {
-        background: linear-gradient(to bottom, #fff, #e8f4f8);
-    }
+.consulta-dni-container .btn-clear:hover {
+    background: #e0e0e0;
+}
 
-    .consulta-dni-container .btn-clear {
-        background: linear-gradient(to bottom, #fff, #f0f0f0);
-    }
+.consulta-dni-container .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
-    .consulta-dni-container .results-section {
-        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
-        border: 2px solid #8bb4c4;
-        border-radius: 8px;
-        padding: 25px;
-        display: flex;
+/* Contenedor de resultados */
+.consulta-dni-container .results-container {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+}
+
+/* Sección de foto */
+.consulta-dni-container .photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.consulta-dni-container .photo-frame {
+    width: 100%;
+    max-width: 350px;         /* Tamaño máximo del marco */
+    aspect-ratio: 3 / 4;      /* Relación típica de DNI o retrato */
+    background: #f8f9fa;
+    border: 4px solid #667eea;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;           /* Centrar el marco */
+}
+
+.consulta-dni-container .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* 🔁 Cambia este valor para probar comportamiento */
+    object-position: center;
+    display: block;
+}
+
+
+.consulta-dni-container .photo-placeholder {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.consulta-dni-container .photo-placeholder::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    top: 40px;
+}
+
+.consulta-dni-container .photo-placeholder::after {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50% 50% 0 0;
+    bottom: 0;
+}
+
+/* Sección de información */
+.consulta-dni-container .info-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.consulta-dni-container .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.consulta-dni-container .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.consulta-dni-container .info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.consulta-dni-container .info-label {
+    font-weight: 600;
+    color: #667eea;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consulta-dni-container .info-value {
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    color: #333;
+    font-size: 15px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+/* Alertas */
+.consulta-dni-container .alert {
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s;
+    font-weight: 500;
+}
+
+.consulta-dni-container .alert-info {
+    background: #e3f2fd;
+    border: 1px solid #90caf9;
+    color: #1565c0;
+}
+
+.consulta-dni-container .alert-warning {
+    background: #fff3e0;
+    border: 1px solid #ffb74d;
+    color: #e65100;
+}
+
+.consulta-dni-container .alert-danger {
+    background: #ffebee;
+    border: 1px solid #ef5350;
+    color: #c62828;
+}
+
+.consulta-dni-container .alert-success {
+    background: #e8f5e9;
+    border: 1px solid #66bb6a;
+    color: #2e7d32;
+}
+
+.consulta-dni-container .loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+    .consulta-dni-container .results-container {
+        grid-template-columns: 1fr;
         gap: 30px;
     }
 
-    .consulta-dni-container .info-column {
-        flex: 1;
-    }
-
-    .consulta-dni-container .info-row {
-        display: flex;
-        margin-bottom: 15px;
-        align-items: center;
-    }
-
-    .consulta-dni-container .info-label {
-        font-weight: bold;
-        color: #333;
-        min-width: 140px;
-        text-align: right;
-        padding-right: 15px;
-    }
-
-    .consulta-dni-container .info-value {
-        flex: 1;
-        padding: 8px 12px;
-        background: #fffef0;
-        border: 1px solid #a0a080;
-        border-radius: 3px;
-    }
-
-    .consulta-dni-container .photo-column {
-        width: 220px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .consulta-dni-container .photo-frame {
-        width: 200px;
-        height: 200px;
-        background: white;
-        border: 3px solid #8bb4c4;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 640px) {
+    .consulta-dni-container {
+        padding: 20px 15px;
+    }
+
+    .consulta-dni-container .page-title h1 {
+        font-size: 24px;
+    }
+
+    .consulta-dni-container .search-section {
+        padding: 20px;
+    }
+
+    .consulta-dni-container .search-form {
+        flex-direction: column;
+    }
+
+    .consulta-dni-container .btn-group {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .consulta-dni-container .btn {
+        width: 100%;
         justify-content: center;
-        overflow: hidden;
     }
 
-    .consulta-dni-container .photo-placeholder {
-        width: 160px;
-        height: 160px;
-        background: linear-gradient(135deg, #d88872 0%, #c86b50 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
+    .consulta-dni-container .results-container {
+        padding: 25px 20px;
     }
 
-    .consulta-dni-container .photo-placeholder::before {
-        content: '';
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        background: #8b5a4a;
-        border-radius: 50%;
-        top: 35px;
+    .consulta-dni-container .info-grid {
+        grid-template-columns: 1fr;
     }
-
-    .consulta-dni-container .photo-placeholder::after {
-        content: '';
-        position: absolute;
-        width: 100px;
-        height: 80px;
-        background: white;
-        border-radius: 50% 50% 0 0;
-        bottom: 0;
-    }
-
-    .consulta-dni-container .alert {
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        animation: fadeIn 0.3s;
-    }
-
-    .consulta-dni-container .alert-info {
-        background: #d1ecf1;
-        border: 1px solid #bee5eb;
-        color: #0c5460;
-    }
-
-    .consulta-dni-container .alert-warning {
-        background: #fff3cd;
-        border: 1px solid #ffeeba;
-        color: #856404;
-    }
-
-    .consulta-dni-container .alert-danger {
-        background: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-    }
-
-    .consulta-dni-container .alert-success {
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-    }
-
-    .consulta-dni-container .loading {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #0066cc;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+}
