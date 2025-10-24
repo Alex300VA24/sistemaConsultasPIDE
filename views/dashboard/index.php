@@ -1,14 +1,6 @@
 <?php
 session_start();
 
-
-// Validar sesión
-/*if (!isset($_SESSION['usuarioID'])) {
-    header("Location: /login");
-    exit;
-}*/
-
-
 ?>
 
 <?php $titulo = "Dashboard Principal"; ?>

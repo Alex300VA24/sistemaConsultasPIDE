@@ -75,6 +75,25 @@ class API {
         return this.get('/inicio');
     }
 
+    // 📌 --- CONSULTAS RENIEC ---
+    /**
+     * Consultar DNI en RENIEC
+     * @param {string} dni - DNI de 8 dígitos
+     * @returns {Promise} - Datos de la persona
+     */
+    async consultarDNI(dni) {
+        return this.post('/consultar-dni', { dni });
+    }
+
+    // 📌 --- CONSULTAS SUNAT ---
+    /**
+     * Consultar RUC en SUNAT
+     * @param {string} ruc - RUC de 11 dígitos
+     * @returns {Promise} - Datos del contribuyente
+     */
+    async consultarRUC(ruc) {
+        return this.post('/consultar-ruc', { ruc });
+    }
 
 }
 
