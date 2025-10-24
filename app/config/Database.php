@@ -32,8 +32,8 @@ class Database {
         
         $this->host = $_ENV['DB_HOST'] ?? 'localhost';
         $this->database = $_ENV['DB_NAME'] ?? 'sistemaPIDE';
-        $this->username = $_ENV['DB_USER'] ?? 'alex';
-        $this->password = $_ENV['DB_PASS'] ?? 'admin123';
+        $this->username = $_ENV['DB_USER'] ?? 'sa';
+        $this->password = $_ENV['DB_PASS'] ?? 'sql';
         $this->port = $_ENV['DB_PORT'] ?? '1433';
     }
     
