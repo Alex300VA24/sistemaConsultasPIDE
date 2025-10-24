@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../autoload.php';
 
-
 // Para no mostrar los errores
 error_reporting();
 ini_set('display_errors', 0);
@@ -13,13 +12,10 @@ session_start();
 // Constante BASE_URL
 define('BASE_URL', '/sistemaConsultasPIDE/public/');
 
-
-
 // Configurar headers para CORS si es necesario
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -40,7 +36,9 @@ error_log("PATH RECIBIDO: " . $path);
 
 // Rutas de la API
 switch (true) {
-    // Rutas de Usuario/Auth
+    // ========================================
+    // 📌 RUTAS DE USUARIO/AUTH
+    // ========================================
     case preg_match('#^/api/login$#', $path):
         $controller = new \App\Controllers\UsuarioController();
         $controller->login();
@@ -56,13 +54,33 @@ switch (true) {
         $controller->logout();
         break;
 
-    // Ruta de Inicio
+    // ========================================
+    // 📌 RUTA DE INICIO/DASHBOARD
+    // ========================================
     case preg_match('#^/api/inicio$#', $path):
         $controller = new \App\Controllers\DashboardController();
         $controller->obtenerDatosInicio();
         break;
 
-    
+    // ========================================
+    // 📌 RUTAS DE CONSULTAS RENIEC
+    // ========================================
+    case preg_match('#^/api/consultar-dni$#', $path):
+        $controller = new \App\Controllers\ConsultasController();
+        $controller->consultarDNI();
+        break;
+
+    // ========================================
+    // 📌 RUTAS DE CONSULTAS SUNAT
+    // ========================================
+    case preg_match('#^/api/consultar-ruc$#', $path):
+        $controller = new \App\Controllers\ConsultasController();
+        $controller->consultarRUC();
+        break;
+
+    // ========================================
+    // 📌 VISTAS
+    // ========================================
     
     // Vista de Login
     case $path === '/' || $path === '/login':
@@ -78,8 +96,15 @@ switch (true) {
         require __DIR__ . '/../views/dashboard/index.php';
         break;
     
+    // ========================================
+    // ❌ RUTA NO ENCONTRADA
+    // ========================================
     default:
         http_response_code(404);
-        echo json_encode(['error' => 'Ruta no encontrada']);
+        echo json_encode([
+            'error' => 'Ruta no encontrada',
+            'path' => $path
+        ]);
         break;
 }
+?>

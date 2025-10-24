@@ -25,8 +25,7 @@
                     <div class="btn-group">
                         <button type="submit" name="buscar" class="btn btn-search">🔍</button>
                         <button type="button" class="btn btn-clear" onclick="limpiarFormularioDNI()">📄</button>
-                        <button type="button" class="btn btn-primary">Button1</button>
-                        <button type="button" class="btn">📌</button>
+                        <button type="button" class="btn">🚪</button>
                     </div>
                 </form>
             </div>
