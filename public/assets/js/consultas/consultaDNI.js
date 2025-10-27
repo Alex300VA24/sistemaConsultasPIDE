@@ -56,32 +56,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         photoContainer.innerHTML = '';
 
         if (data.foto) {
-            // Asegurar prefijo base64 correcto
             const fotoBase64 = data.foto.startsWith('data:image')
                 ? data.foto
                 : `data:image/jpeg;base64,${data.foto}`;
 
-            // Crear imagen dinámica
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = 'Foto del DNI';
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-            img.style.borderRadius = '10px';
-            img.style.display = 'block';
-            img.style.margin = '0 auto';
 
-            // Insertar imagen
+            // ✅ Restablecer tamaño del contenedor
+            photoContainer.style.width = '350px';
+            photoContainer.style.height = '450px';
+
+            photoContainer.innerHTML = ''; // limpiar
             photoContainer.appendChild(img);
-
         } else {
             // Mostrar placeholder si no hay foto
             photoContainer.innerHTML = `
                 <div class="photo-placeholder"></div>
             `;
+            // ✅ Solo se aplica cuando no hay foto
             photoContainer.style.width = '200px';
             photoContainer.style.height = '200px';
         }
+
     }
 
     function limpiarResultados() {

@@ -2,11 +2,10 @@
 
 namespace App\Controllers;
 
-class ConsultasController {
+class ConsultasReniecController {
     
-    // ========================================
     // 🔐 CONFIGURACIÓN PIDE/RENIEC
-    // ========================================
+
     private $dniUsuario;
     private $rucUsuario;
     private $passwordPIDE;
@@ -19,12 +18,9 @@ class ConsultasController {
         $this->rucUsuario = $_ENV['PIDE_RUC_USUARIO'] ?? "20164091547";
         $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? "Muni2025@"; //variable
         $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
-        //$this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://URL_SERVICIO_SUNAT";
     }
 
-    // ========================================
     // 📌 CONSULTAR DNI (RENIEC)
-    // ========================================
     public function consultarDNI() {
         header('Content-Type: application/json');
 

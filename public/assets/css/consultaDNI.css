@@ -139,9 +139,8 @@
 }
 
 .consulta-dni-container .photo-frame {
-    width: 100%;
-    max-width: 350px;         /* Tamaño máximo del marco */
-    aspect-ratio: 3 / 4;      /* Relación típica de DNI o retrato */
+    width: 350px;             /* Tamaño fijo */
+    height: 450px;
     background: #f8f9fa;
     border: 4px solid #667eea;
     border-radius: 20px;
@@ -151,16 +150,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;           /* Centrar el marco */
+    margin: 0 auto;
+    flex-shrink: 0;            /* ✅ evita que se reduzca si está dentro de un flex padre */
 }
 
+/* Imagen dentro del marco */
 .consulta-dni-container .photo-frame img {
     width: 100%;
     height: 100%;
-    object-fit: cover;       /* 🔁 Cambia este valor para probar comportamiento */
+    object-fit: contain;        /* ✅ muestra toda la foto sin recortarla */
     object-position: center;
     display: block;
+    border-radius: 0;           /* evita doble borde redondeado */
+    background-color: #fff;     /* opcional: fondo blanco detrás de la imagen */
 }
+
 
 
 .consulta-dni-container .photo-placeholder {
