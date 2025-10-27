@@ -36,9 +36,8 @@ error_log("PATH RECIBIDO: " . $path);
 
 // Rutas de la API
 switch (true) {
-    // ========================================
-    // 📌 RUTAS DE USUARIO/AUTH
-    // ========================================
+
+    // RUTAS DE USUARIO/AUTH
     case preg_match('#^/api/login$#', $path):
         $controller = new \App\Controllers\UsuarioController();
         $controller->login();
@@ -54,33 +53,25 @@ switch (true) {
         $controller->logout();
         break;
 
-    // ========================================
-    // 📌 RUTA DE INICIO/DASHBOARD
-    // ========================================
+    // RUTA DE INICIO/DASHBOARD
     case preg_match('#^/api/inicio$#', $path):
         $controller = new \App\Controllers\DashboardController();
         $controller->obtenerDatosInicio();
         break;
 
-    // ========================================
-    // 📌 RUTAS DE CONSULTAS RENIEC
-    // ========================================
+    // RUTAS DE CONSULTAS RENIEC
     case preg_match('#^/api/consultar-dni$#', $path):
-        $controller = new \App\Controllers\ConsultasController();
+        $controller = new \App\Controllers\ConsultasReniecController();
         $controller->consultarDNI();
         break;
 
-    // ========================================
-    // 📌 RUTAS DE CONSULTAS SUNAT
-    // ========================================
+    // RUTAS DE CONSULTAS SUNAT
     case preg_match('#^/api/consultar-ruc$#', $path):
-        $controller = new \App\Controllers\ConsultasController();
+        $controller = new \App\Controllers\ConsultasSunatController();
         $controller->consultarRUC();
         break;
 
-    // ========================================
-    // 📌 VISTAS
-    // ========================================
+    // VISTAS
     
     // Vista de Login
     case $path === '/' || $path === '/login':
@@ -96,9 +87,8 @@ switch (true) {
         require __DIR__ . '/../views/dashboard/index.php';
         break;
     
-    // ========================================
-    // ❌ RUTA NO ENCONTRADA
-    // ========================================
+
+    // RUTA NO ENCONTRADA
     default:
         http_response_code(404);
         echo json_encode([
