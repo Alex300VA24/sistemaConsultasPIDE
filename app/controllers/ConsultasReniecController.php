@@ -14,16 +14,16 @@ class ConsultasReniecController {
     
     public function __construct() {
         // Cargar desde configuración o variables de entorno
-        $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? "42761038"; // variable1
-        $this->rucUsuario = $_ENV['PIDE_RUC_USUARIO'] ?? "20164091547";
-        $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? "Muni2025@"; //variable
+        $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'] ?? "20164091547";
         $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
     }
 
     // 📌 CONSULTAR DNI (RENIEC)
-    public function consultarDNI() {
+    public function consultarDNI()
+    {
         header('Content-Type: application/json');
 
+        // Solo se permite método POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             echo json_encode([
@@ -33,21 +33,24 @@ class ConsultasReniecController {
             return;
         }
 
-        // Obtener datos del request
+        // Obtener datos del cuerpo del request
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['dni'])) {
+        // Validar campos requeridos
+        if (!isset($input['dniConsulta']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'DNI no proporcionado'
+                'message' => 'Faltan datos: dni, dniUsuario o passwordPIDE'
             ]);
             return;
         }
 
-        $dni = trim($input['dni']);
+        $dni = trim($input['dniConsulta']);
+        $this->dniUsuario = trim($input['dniUsuario']);
+        $this->passwordPIDE = trim($input['password']);
 
-        // Validar formato
+        // Validar formato del DNI a consultar
         if (!preg_match('/^\d{8}$/', $dni)) {
             http_response_code(400);
             echo json_encode([
@@ -57,31 +60,34 @@ class ConsultasReniecController {
             return;
         }
 
-        // Realizar consulta
-        $resultado = $this->consultarServicioRENIEC($dni);
-        
+        // Realizar la consulta con las credenciales del usuario
+        $resultado = $this->consultarServicioRENIEC($dni, $this->dniUsuario, $this->passwordPIDE);
+
+        // Enviar respuesta según resultado
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado);
     }
 
+
     // ========================================
     // 🔍 SERVICIO RENIEC (CURL)
     // ========================================
-    private function consultarServicioRENIEC($dni) {
+    private function consultarServicioRENIEC($dni, $dniUsuario, $passwordPIDE)
+    {
         try {
-            // Construir petición JSON
+            // Construir la estructura del request JSON según la API de RENIEC
             $data = [
                 "PIDE" => [
                     "nuDniConsulta" => $dni,
-                    "nuDniUsuario"  => $this->dniUsuario,
-                    "nuRucUsuario"  => $this->rucUsuario,
-                    "password"      => $this->passwordPIDE
+                    "nuDniUsuario"  => $dniUsuario,
+                    "nuRucUsuario"  => $this->rucUsuario,   // este sí puede mantenerse fijo en la clase
+                    "password"      => $passwordPIDE
                 ]
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
 
-            // Inicializar CURL
+            // Inicializar cURL
             $ch = curl_init($this->urlRENIEC);
 
             curl_setopt_array($ch, [
@@ -104,7 +110,6 @@ class ConsultasReniecController {
             if (curl_errno($ch)) {
                 $error = curl_error($ch);
                 curl_close($ch);
-                
                 return [
                     'success' => false,
                     'message' => "Error de conexión con RENIEC: $error",
@@ -118,6 +123,7 @@ class ConsultasReniecController {
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
 
+                // Validar estructura esperada
                 if (isset($jsonResponse['consultarResponse']['return']['datosPersona'])) {
                     $datosPersona = $jsonResponse['consultarResponse']['return']['datosPersona'];
 
@@ -137,8 +143,8 @@ class ConsultasReniecController {
                         ]
                     ];
 
-                    // Registrar en BD (opcional)
-                    //$this->registrarConsulta('DNI', $dni, $resultado['data']);
+                    // (Opcional) Registrar en base de datos
+                    // $this->registrarConsulta('DNI', $dni, $resultado['data']);
 
                     return $resultado;
                 } else {
@@ -155,7 +161,6 @@ class ConsultasReniecController {
                     'data' => null
                 ];
             }
-
         } catch (\Exception $e) {
             return [
                 'success' => false,
@@ -164,6 +169,7 @@ class ConsultasReniecController {
             ];
         }
     }
+
 
     // ========================================
     // 📌 CONSULTAR RUC (SUNAT)

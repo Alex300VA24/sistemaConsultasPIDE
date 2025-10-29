@@ -1,0 +1,81 @@
+[2025-10-29 16:47:30] ERROR: El login y la contraseña son obligatorios
+Datos enviados:
+Array
+(
+    [data] => Array
+        (
+            [perTipo] => 1
+            [perDocumentoTipo] => 1
+            [perDocumentoNum] => 75879519
+            [perNombre] => Alexander Josue
+            [perApellidoPat] => Vasquez
+            [perApellidoMat] => Alcantara
+            [perSexo] => 1
+            [perEmail] => avasqueza@unitru.edu.pe
+            [usuLogin] => alex123
+            [usuPass] => MiClaveSegura123
+            [usuPassConfirm] => MiClaveSegura123
+            [usuPermiso] => 1
+            [usuEstado] => 1
+            [cui] => 7
+            [reniecDni] => 
+            [reniecRuc] => 
+        )
+
+)
+
+------------------------------------------------------------
+[2025-10-29 16:50:44] ERROR: El login y la contraseña son obligatorios
+Datos enviados:
+Array
+(
+    [data] => Array
+        (
+            [perTipo] => 1
+            [perDocumentoTipo] => 1
+            [perDocumentoNum] => 75879519
+            [perNombre] => Alexander Josue
+            [perApellidoPat] => Vasquez
+            [perApellidoMat] => Alcantara
+            [perSexo] => 1
+            [perEmail] => avasqueza@unitru.edu.pe
+            [usuLogin] => alex123
+            [usuPass] => MiClaveSegura123
+            [usuPassConfirm] => MiClaveSegura123
+            [usuPermiso] => 1
+            [usuEstado] => 1
+            [cui] => 7
+            [reniecDni] => 
+            [reniecRuc] => 
+        )
+
+)
+
+------------------------------------------------------------
+[2025-10-29 16:56:45] ERROR: El login y la contraseña son obligatorios
+Datos enviados:
+Array
+(
+    [data] => Array
+        (
+            [perTipo] => 1
+            [perDocumentoTipo] => 1
+            [perDocumentoNum] => 75879519
+            [perNombre] => Alexander Josue
+            [perApellidoPat] => Vasquez
+            [perApellidoMat] => Alcantara
+            [perSexo] => 1
+            [perEmail] => avasqueza@unitru.edu.pe
+            [usuLogin] => alex123
+            [usuPass] => MiClaveSegura123
+            [usuPassConfirm] => MiClaveSegura123
+            [usuPermiso] => 1
+            [usuEstado] => 1
+            [cui] => 7
+            [reniecDni] => 
+            [reniecRuc] => 
+        )
+
+)
+
+------------------------------------------------------------

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let BASE_URL = '/sistemaConsultasPIDE/public/';
 
     // 🔹 Al cargar el dashboard, también se puede mostrar el inicio
-    await cargarInicio();
+    //await cargarInicio();
 
     // Navegación
     window.showPage = function (pageId, element) {

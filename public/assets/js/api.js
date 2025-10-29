@@ -81,8 +81,8 @@ class API {
      * @param {string} dni - DNI de 8 dígitos
      * @returns {Promise} - Datos de la persona
      */
-    async consultarDNI(dni) {
-        return this.post('/consultar-dni', { dni });
+    async consultarDNI(data) {
+        return this.post('/consultar-dni', data);
     }
 
     // 📌 --- CONSULTAS SUNAT ---
@@ -98,6 +98,17 @@ class API {
     async crearUsuario(data) {
         return this.post('/crear-usuario', { data })
     }
+
+    async eliminarUsuario(usuario_id) {
+        return this.post('/eliminar-usuario', { usuario_id });
+    }
+
+    async obtenerDniYPassword(nombreUsuario) {
+        return this.post('/obtener-dni-pass', {
+            nombreUsuario
+        });
+    }
+
 
 }
 

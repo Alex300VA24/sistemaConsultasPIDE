@@ -13,15 +13,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function consultarDNI(dni) {
         try {
-            // Deshabilitar botón y mostrar loading
+            // 🔹 Deshabilitar botón y mostrar loading
             btnBuscar.disabled = true;
             btnBuscar.innerHTML = '<span class="loading"></span>';
             limpiarResultados();
             alertContainer.innerHTML = '';
 
-            // Llamar a tu API
-            const response = await api.consultarDNI(dni);
+            // 🔹 Obtener credenciales guardadas según el usuario actual
+            const usuario = localStorage.getItem('usuario');
+            console.log('Este es el usuario', usuario)
+            const credencialesResponse = await api.obtenerDniYPassword(usuario);
+            console.log(credencialesResponse.data);
 
+            if (!credencialesResponse.success || !credencialesResponse.data) {
+                mostrarAlerta('No se pudieron obtener las credenciales del usuario', 'danger');
+                return;
+            }
+
+            const dniUsuario = credencialesResponse.data.DNI;
+            const password = credencialesResponse.data.Contraseña;
+
+            console.log(dniUsuario);
+            console.log(password);
+
+            // 🔹 Armar payload para la API de consulta
+            const payload = {
+                dniConsulta: dni,           // DNI que se quiere consultar
+                dniUsuario: dniUsuario,     // DNI del usuario logueado
+                password: password          // Contraseña asociada
+            };
+
+            console.log(payload);
+
+            // 🔹 Enviar solicitud a la API con credenciales + DNI
+            const response = await api.consultarDNI(payload);
+
+            // 🔹 Manejar la respuesta
             if (response.success && response.data) {
                 mostrarResultados(response.data);
                 mostrarAlerta('Consulta realizada exitosamente', 'success');
@@ -33,11 +60,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error('Error al consultar DNI:', error);
             mostrarAlerta('Error al realizar la consulta: ' + error.message, 'danger');
         } finally {
-            // Rehabilitar botón
+            // 🔹 Rehabilitar botón
             btnBuscar.disabled = false;
             btnBuscar.innerHTML = '🔍';
         }
     }
+
 
     function mostrarResultados(data) {
         // Mapear los datos según la estructura de tu API

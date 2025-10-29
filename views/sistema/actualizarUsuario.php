@@ -112,30 +112,6 @@
                 </div>
             </div>
 
-            <!-- Datos RENIEC (solo para DNI) -->
-            <div id="reniecSection" style="display: none;">
-                <div class="section-header">
-                    <i class="fas fa-landmark"></i> Credenciales RENIEC (PIDE)
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>DNI Usuario RENIEC <span class="required">*</span></label>
-                        <input type="text" id="reniecDni" maxlength="8" placeholder="DNI del usuario">
-                    </div>
-
-                    <div class="form-group">
-                        <label>RUC Entidad <span class="required">*</span></label>
-                        <input type="text" id="reniecRuc" maxlength="11" placeholder="RUC de la entidad">
-                    </div>
-
-                    <div class="form-group full-width">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> Estos datos son necesarios para registrar las credenciales en el sistema PIDE de RENIEC
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Botones de acción -->
             <div class="action-buttons">
                 <button class="btn btn-secondary" onclick="limpiarFormulario()">
