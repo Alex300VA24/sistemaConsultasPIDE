@@ -34,9 +34,9 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
                     <input type="password" id="password" name="password" placeholder="******" required>
                     <i id="togglePassword" class="fas fa-eye-slash"></i>
                 </div>
-                <br>
 
                 <button id="btnLogin" type="submit">Ingresar</button>
+
             </form>
         </div>
     </div>
@@ -83,6 +83,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
             this.classList.toggle('fa-eye-slash');
             this.classList.toggle('fa-eye');
         });
+
     </script>
 </body>
 </html>

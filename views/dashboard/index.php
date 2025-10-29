@@ -19,10 +19,6 @@ session_start();
             <?php include __DIR__ . "/pages/mantenimiento.php"; ?>
         </div>
 
-        <div id="pageSistemas" class="page-content">
-            <?php include __DIR__ . "/pages/sistemas.php"; ?>
-        </div>
-
         <!-- SubPages-->
         <div id="pageConsultaDNI" class="page-content">
             <?php include __DIR__ . "/pages/subpages/consultaDNI.php"; ?>
@@ -46,6 +42,14 @@ session_start();
 
         <div id="pageConsultaCertificaciones" class="page-content">
             <?php include __DIR__ . "/pages/subpages/consultaCertificaciones.php"; ?>
+        </div>
+
+        <div id="pageCrearUsuario" class="page-content">
+            <?php include __DIR__ . "/pages/sistema/crearUsuario.php"; ?>
+        </div>
+
+        <div id="pageActualizarUsuario" class="page-content">
+            <?php include __DIR__ . "/pages/sistema/actualizarUsuario.php"; ?>
         </div>
 
     </div>

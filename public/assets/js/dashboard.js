@@ -6,23 +6,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Navegación
     window.showPage = function (pageId, element) {
+        console.clear();
+        console.log("🟦 Click en:", pageId);
         document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-        console.log(pageId);
 
-        const targetPage = document.getElementById('page' + capitalize(pageId));
+        const targetId = 'page' + capitalize(pageId);
+        console.log("🟩 Buscando elemento con id:", targetId);
+
+        const targetPage = document.getElementById(targetId);
+        console.log("🟨 Resultado del querySelector:", targetPage);
+
         if (targetPage) {
             targetPage.classList.add('active');
+            console.log("✅ Se activó la página:", targetId);
         } else {
-            console.warn(`No se encontró la página: page${capitalize(pageId)}`);
+            console.warn(`⚠️ No se encontró la página con id: ${targetId}`);
+            console.log("📋 Elementos disponibles en DOM:");
+            document.querySelectorAll('.page-content').forEach(p => console.log("   →", p.id));
         }
 
+        // Activar la opción
         document.querySelectorAll('.option, .suboption').forEach(o => o.classList.remove('active'));
-        element.classList.add('active');
+        element?.classList.add('active');
 
         if (pageId === 'inicio') {
             cargarInicio();
         }
     };
+
 
 
     function capitalize(str) {

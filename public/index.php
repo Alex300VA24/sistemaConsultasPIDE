@@ -53,6 +53,11 @@ switch (true) {
         $controller->logout();
         break;
 
+    case preg_match('#^/api/crear-usuario$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->crearUsuario();
+        break;
+
     // RUTA DE INICIO/DASHBOARD
     case preg_match('#^/api/inicio$#', $path):
         $controller = new \App\Controllers\DashboardController();
@@ -86,6 +91,8 @@ switch (true) {
         }
         require __DIR__ . '/../views/dashboard/index.php';
         break;
+    
+
     
 
     // RUTA NO ENCONTRADA

@@ -1,5 +1,6 @@
-<div class="sideBar">
-    <div>
+
+<div class="dashboard-container">
+    <div class="sideBar">
         <div class="sidebar-header">
             <img class="sidebar-logo" src="<?= BASE_URL ?>assets/images/logo.png" alt="Logo">
             <div class="sidebar-title">MDE</div>
@@ -13,7 +14,7 @@
         </div>
         <!-- Consultas del Sistema -->
             <div class="option has-submenu" onclick="toggleSubmenu(this)">
-                <div class="containerIconOption"><i class="fa-solid fa-user"></i></div>
+                <div class="containerIconOption"><i class="fa-solid fa-database"></i></div>
                 <p>Consultas</p>
                 <i class="fa-solid fa-chevron-down submenu-icon"></i>
             </div>
@@ -45,44 +46,57 @@
                 </div>
             </div>
 
-
         <!-- Mantenimiento del Sistema -->
-            <div class="option" onclick="showPage('mantenimiento', this)">
-                <div class="containerIconOption"><i class="fa-solid fa-tools"></i></div>
-                <p>Mantenimiento</p>
-            </div>
+        <div class="option" onclick="showPage('mantenimiento', this)">
+            <div class="containerIconOption"><i class="fa-solid fa-tools"></i></div>
+            <p>Mantenimiento</p>
+        </div>
+
 
 
         <!-- Apartado de Sistemas -->
-            <div class="option" onclick="showPage('sistemas', this)">
-                <div class="containerIconOption"><i class="fa-solid fa-gear"></i></div>
-                <p>Sistemas</p>
-            </div>
-
-    </div>
-
-    <!-- === Modal de Confirmación de Cierre de Sesión === -->
-    <div id="logoutModal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h3>¿Estás seguro que quieres cerrar sesión?</h3>
-            <p>Tu sesión actual se cerrará y volverás a la pantalla de inicio de sesión.</p>
-            <div class="modal-buttons">
-                <button id="cancelLogout" class="btn-cancel">Cancelar</button>
-                <button id="confirmLogout" class="btn-logout">Cerrar sesión</button>
-            </div>
-        </div>
-    </div>
-    
-
-    <!-- === Información del usuario === -->
-    <div class="user-info">
-        <div><strong id="currentUserName"><?= htmlspecialchars($_SESSION['nombreUsuario'] ?? '') ?></strong></div>
-        <div id="currentUserRole">
-            <?= htmlspecialchars($cargo) ?><?= $area ? " - " . htmlspecialchars($area) : '' ?>
+        <div class="option has-submenu" onclick="toggleSubmenu(this)">
+            <div class="containerIconOption"><i class="fa-solid fa-gear"></i></div>
+            <p>Sistema</p>
+            <i class="fa-solid fa-chevron-down submenu-icon"></i>
         </div>
 
-        <button class="logout-btn" id="btnLogout">
-            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-        </button>
+        <div class="submenu">
+            <div class="suboption" onclick="showPage('crearUsuario', this)">
+                <i class="fa-solid fa-user-plus"></i>
+                <p>Crear Usuario</p>
+            </div>
+            <div class="suboption" onclick="showPage('actualizarUsuario', this)">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <p>Actualizar Usuario</p>
+            </div>
+        </div>
+
+
+        <!-- === Modal de Confirmación de Cierre de Sesión === -->
+        <div id="logoutModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3>¿Estás seguro que quieres cerrar sesión?</h3>
+                <p>Tu sesión actual se cerrará y volverás a la pantalla de inicio de sesión.</p>
+                <div class="modal-buttons">
+                    <button id="cancelLogout" class="btn-cancel">Cancelar</button>
+                    <button id="confirmLogout" class="btn-logout">Cerrar sesión</button>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- === Información del usuario === -->
+        <div class="user-info">
+            <div><strong id="currentUserName"><?= htmlspecialchars($_SESSION['nombreUsuario'] ?? '') ?></strong></div>
+            <div id="currentUserRole">
+                <?= htmlspecialchars($cargo) ?><?= $area ? " - " . htmlspecialchars($area) : '' ?>
+            </div>
+
+            <button class="logout-btn" id="btnLogout">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+        
     </div>
 </div>
