@@ -1,211 +1,482 @@
-.consulta-ruc-container * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+/* Variables CSS */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #64748b;
+    --secondary-hover: #475569;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
 
+/* Container Principal */
+.consulta-ruc-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Título de Página */
+.consulta-ruc-container .page-title {
+    background: var(--surface);
+    padding: 25px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.consulta-ruc-container .page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.consulta-ruc-container .page-title h1 i {
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+/* Content Wrapper */
+.consulta-ruc-container .content-wrapper {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 35px;
+}
+
+/* Sección de Búsqueda */
+.consulta-ruc-container .search-section {
+    margin-bottom: 30px;
+}
+
+.consulta-ruc-container .search-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.consulta-ruc-container .search-form > div {
+    flex: 1;
+    min-width: 250px;
+}
+
+.consulta-ruc-container .search-form label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.consulta-ruc-container .search-form input[type="text"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.consulta-ruc-container .search-form input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.consulta-ruc-container .search-form input[type="text"]:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+.consulta-ruc-container .search-form input[type="text"]::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Grupo de Botones */
+.consulta-ruc-container .btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.consulta-ruc-container .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.consulta-ruc-container .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.consulta-ruc-container .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.consulta-ruc-container .btn i {
+    position: relative;
+    z-index: 1;
+}
+
+.consulta-ruc-container .btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.consulta-ruc-container .btn-icon {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: var(--surface);
+}
+
+.consulta-ruc-container .btn-icon:first-child {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+}
+
+.consulta-ruc-container .btn-icon:last-child {
+    background: var(--secondary-color);
+}
+
+.consulta-ruc-container .btn-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+}
+
+.consulta-ruc-container .btn-icon:last-child:hover {
+    background: var(--secondary-hover);
+    box-shadow: 0 8px 16px rgba(100, 116, 139, 0.3);
+}
+
+.consulta-ruc-container .btn-icon:active {
+    transform: translateY(0);
+}
+
+.consulta-ruc-container .btn-icon i {
+    color: white !important;
+}
+
+/* Alertas */
+.consulta-ruc-container .alert {
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.consulta-ruc-container .alert i {
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.consulta-ruc-container .alert-success {
+    background: #d1fae5;
+    border-color: var(--success-color);
+    color: #065f46;
+}
+
+.consulta-ruc-container .alert-success i {
+    color: var(--success-color);
+}
+
+.consulta-ruc-container .alert-danger {
+    background: #fee2e2;
+    border-color: var(--danger-color);
+    color: #991b1b;
+}
+
+.consulta-ruc-container .alert-danger i {
+    color: var(--danger-color);
+}
+
+.consulta-ruc-container .alert-warning {
+    background: #fef3c7;
+    border-color: var(--warning-color);
+    color: #92400e;
+}
+
+.consulta-ruc-container .alert-warning i {
+    color: var(--warning-color);
+}
+
+.consulta-ruc-container .alert-info {
+    background: #dbeafe;
+    border-color: var(--info-color);
+    color: #1e40af;
+}
+
+.consulta-ruc-container .alert-info i {
+    color: var(--info-color);
+}
+
+/* Sección de Resultados */
+.consulta-ruc-container .results-section {
+    margin-top: 30px;
+}
+
+/* Info Grid - Similar al DNI */
+.consulta-ruc-container .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.consulta-ruc-container .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.consulta-ruc-container .info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.consulta-ruc-container .info-item.half-width {
+    grid-column: span 2;
+}
+
+.consulta-ruc-container .info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consulta-ruc-container .info-value {
+    padding: 12px 16px;
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.consulta-ruc-container .info-value.white-bg {
+    background: var(--surface);
+}
+
+.consulta-ruc-container .info-value:empty::before {
+    content: '-';
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Form Row (mantener compatibilidad con código existente) */
+.consulta-ruc-container .form-row {
+    display: contents;
+}
+
+.consulta-ruc-container .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.consulta-ruc-container .form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.consulta-ruc-container .form-group.half-width {
+    grid-column: span 2;
+}
+
+.consulta-ruc-container .form-group.third-width {
+    grid-column: span 1;
+}
+
+.consulta-ruc-container .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consulta-ruc-container .form-input {
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background: var(--background);
+    transition: all 0.2s ease;
+    font-weight: 500;
+    min-height: 44px;
+}
+
+.consulta-ruc-container .form-input.white-bg {
+    background: var(--surface);
+}
+
+.consulta-ruc-container .form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.consulta-ruc-container .form-input[readonly] {
+    cursor: default;
+}
+
+.consulta-ruc-container .small-input {
+    max-width: 100px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .consulta-ruc-container .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
     .consulta-ruc-container {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(to bottom, #a8d5e2, #7cb8cc);
-        padding: 20px;
-    }
-
-    .consulta-ruc-container .container {
-        max-width: 950px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .consulta-ruc-container .window-header {
-        background: linear-gradient(to bottom, #e8f4f8, #d0e8f0);
-        padding: 8px 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #b0c4cc;
-    }
-
-    .consulta-ruc-container .window-title {
-        font-size: 13px;
-        color: #333;
-    }
-
-    .consulta-ruc-container .window-controls {
-        display: flex;
-        gap: 5px;
-    }
-
-    .consulta-ruc-container .window-controls button {
-        width: 24px;
-        height: 24px;
-        border: 1px solid #999;
-        background: linear-gradient(to bottom, #f0f0f0, #d8d8d8);
-        cursor: pointer;
-        font-size: 11px;
+        padding: 15px;
     }
 
     .consulta-ruc-container .page-title {
-        background: white;
-        padding: 30px;
-        text-align: center;
-        border-bottom: 2px solid #e0e0e0;
+        padding: 20px;
     }
 
     .consulta-ruc-container .page-title h1 {
-        color: #0066cc;
-        font-size: 36px;
-        font-weight: bold;
-        letter-spacing: 2px;
+        font-size: 22px;
+    }
+
+    .consulta-ruc-container .page-title h1 i {
+        font-size: 26px;
     }
 
     .consulta-ruc-container .content-wrapper {
-        background: linear-gradient(to bottom, #d0e8f0, #b8dce8);
-        padding: 30px;
-    }
-
-    .consulta-ruc-container .search-section {
-        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
-        border: 2px solid #8bb4c4;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
+        padding: 25px 20px;
     }
 
     .consulta-ruc-container .search-form {
-        display: flex;
-        align-items: center;
-        gap: 15px;
+        flex-direction: column;
     }
 
-    .consulta-ruc-container .search-form label {
-        font-weight: bold;
-        color: #333;
-        min-width: 70px;
-    }
-
-    .consulta-ruc-container .search-form input {
-        flex: 1;
-        max-width: 250px;
-        padding: 8px 12px;
-        border: 2px solid #6b9db0;
-        border-radius: 4px;
-        font-size: 14px;
+    .consulta-ruc-container .search-form > div {
+        min-width: 100%;
     }
 
     .consulta-ruc-container .btn-group {
-        display: flex;
-        gap: 15px;
+        flex-direction: column;
     }
 
     .consulta-ruc-container .btn {
-        padding: 8px 20px;
-        border: 2px solid #6b9db0;
-        border-radius: 4px;
-        background: linear-gradient(to bottom, #f0f8fc, #d8e8f0);
-        cursor: pointer;
-        font-size: 14px;
-        color: #333;
-        transition: all 0.3s;
-    }
-
-    .consulta-ruc-container .btn:hover {
-        background: linear-gradient(to bottom, #e0f0f8, #c8d8e0);
-        transform: translateY(-1px);
-    }
-
-    .consulta-ruc-container .btn-icon {
-        width: 45px;
-        height: 45px;
-        padding: 8px;
-        display: flex;
-        align-items: center;
+        width: 100%;
         justify-content: center;
     }
 
-    .consulta-ruc-container .results-section {
-        background: linear-gradient(to bottom, #c8e0ec, #b0d4e0);
-        border: 2px solid #8bb4c4;
-        border-radius: 8px;
-        padding: 25px;
-    }
-
-    .consulta-ruc-container .form-row {
-        display: flex;
-        margin-bottom: 12px;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .consulta-ruc-container .form-group {
-        display: flex;
-        align-items: center;
-        flex: 1;
-    }
-
-    .consulta-ruc-container .form-group.full-width {
-        flex: 1 1 100%;
-    }
-
-    .consulta-ruc-container .form-group.half-width {
-        flex: 1 1 48%;
-    }
-
-    .consulta-ruc-container .form-group.third-width {
-        flex: 1 1 32%;
-    }
-
-    .consulta-ruc-container .form-label {
-        font-weight: bold;
-        color: #333;
-        min-width: 180px;
-        font-size: 13px;
-    }
-
-    .consulta-ruc-container .form-input {
-        flex: 1;
-        padding: 6px 10px;
-        background: #fffef0;
-        border: 1px solid #a0a080;
-        border-radius: 3px;
-        font-size: 13px;
-    }
-
-    .consulta-ruc-container .form-input.white-bg {
-        background: white;
-    }
-
-    .consulta-ruc-container .form-input.readonly {
-        background: #f5f5f5;
-        color: #666;
+    .consulta-ruc-container .info-grid {
+        grid-template-columns: 1fr;
     }
 
     .consulta-ruc-container .small-input {
-        max-width: 100px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .consulta-ruc-container {
+        padding: 10px;
     }
 
-    .consulta-ruc-container .alert {
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
+    .consulta-ruc-container .page-title h1 {
+        font-size: 20px;
+        flex-wrap: wrap;
     }
 
-    .consulta-ruc-container .alert-info {
-        background: #d1ecf1;
-        border: 1px solid #bee5eb;
-        color: #0c5460;
+    .consulta-ruc-container .content-wrapper {
+        padding: 20px 15px;
     }
 
-    .consulta-ruc-container .alert-warning {
-        background: #fff3cd;
-        border: 1px solid #ffeeba;
-        color: #856404;
+    .consulta-ruc-container .search-form input[type="text"],
+    .consulta-ruc-container .form-input {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+}
+
+/* Mejoras de accesibilidad */
+.consulta-ruc-container .btn:focus-visible,
+.consulta-ruc-container .search-form input:focus-visible,
+.consulta-ruc-container .form-input:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .consulta-ruc-container .search-section {
+        display: none;
     }
 
-    .consulta-ruc-container .alert-danger {
-        background: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
+    .consulta-ruc-container .content-wrapper,
+    .consulta-ruc-container .page-title {
+        box-shadow: none;
     }
+}

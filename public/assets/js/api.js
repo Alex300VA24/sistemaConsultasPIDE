@@ -95,6 +95,10 @@ class API {
         return this.post('/consultar-ruc', { ruc });
     }
 
+    async crearUsuario(data) {
+        return this.post('/crear-usuario', { data })
+    }
+
 }
 
 const api = new API();

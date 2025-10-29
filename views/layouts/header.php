@@ -18,6 +18,8 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaDNI.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaRUC.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/usuario.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/inicio.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/dashboard.css">
 </head>
 <body>

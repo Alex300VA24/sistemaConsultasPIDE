@@ -95,6 +95,7 @@ body {
     width: 100%;
 }
 
+
 .password-container input {
     width: 100%;
     padding-right: 50px;
@@ -105,13 +106,13 @@ body {
     position: absolute;
     right: 15px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-100%);
     cursor: pointer;
     color: #666;
 }
 
 #btnLogin {
-    background: #1e3a47;
+    background: #4273C2;
     color: white;
     border: none;
     padding: 15px;
@@ -123,6 +124,7 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 #btnLogin:hover {
@@ -136,6 +138,7 @@ body {
     cursor: not-allowed;
     transform: none;
 }
+
 
 /* Modal CUI */
 .modalCUI {
@@ -290,3 +293,6 @@ body {
         font-size: 1.3rem;
     }
 }
+
+
+

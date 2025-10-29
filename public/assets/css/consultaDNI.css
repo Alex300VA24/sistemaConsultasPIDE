@@ -1,207 +1,311 @@
-.consulta-dni-container * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Variables CSS */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #64748b;
+    --secondary-hover: #475569;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
 }
 
+/* Container Principal */
 .consulta-dni-container {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #90caf9 0%, #764ba2 100%);
-    padding: 40px 20px;
-    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
-
+/* Título de Página */
 .consulta-dni-container .page-title {
-    max-width: 1000px;
-    margin: 0 auto 30px;
-    background: white;
-    padding: 25px;
-    text-align: center;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background: var(--surface);
+    padding: 25px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
 }
 
 .consulta-dni-container .page-title h1 {
-    color: #667eea;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    letter-spacing: 1px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
 }
 
+.consulta-dni-container .page-title h1 i {
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+/* Content Wrapper */
 .consulta-dni-container .content-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 35px;
 }
 
-/* Sección de búsqueda */
+/* Sección de Búsqueda */
 .consulta-dni-container .search-section {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .consulta-dni-container .search-form {
     display: flex;
-    gap: 20px;
     align-items: flex-end;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
 .consulta-dni-container .form-group {
     flex: 1;
     min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .consulta-dni-container .form-group label {
-    display: block;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 8px;
     font-size: 14px;
+    color: var(--text-primary);
 }
 
 .consulta-dni-container .form-group input {
     width: 100%;
     padding: 12px 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.3s;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    color: var(--text-primary);
 }
 
 .consulta-dni-container .form-group input:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+.consulta-dni-container .form-group input:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+.consulta-dni-container .form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Grupo de Botones */
 .consulta-dni-container .btn-group {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 .consulta-dni-container .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
-    transition: all 0.3s;
-    display: flex;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
+    font-family: inherit;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.consulta-dni-container .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.consulta-dni-container .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.consulta-dni-container .btn i {
+    position: relative;
+    z-index: 1;
+}
+
+.consulta-dni-container .btn span {
+    position: relative;
+    z-index: 1;
 }
 
 .consulta-dni-container .btn-search {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: var(--surface);
 }
 
 .consulta-dni-container .btn-search:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
 }
 
 .consulta-dni-container .btn-clear {
-    background: #f5f5f5;
-    color: #666;
+    background: var(--secondary-color);
+    color: var(--surface);
 }
 
 .consulta-dni-container .btn-clear:hover {
-    background: #e0e0e0;
+    background: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(100, 116, 139, 0.3);
+}
+
+.consulta-dni-container .btn:active {
+    transform: translateY(0);
 }
 
 .consulta-dni-container .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none !important;
 }
 
-/* Contenedor de resultados */
+/* Alertas */
+.consulta-dni-container #alertContainer {
+    margin-bottom: 20px;
+}
+
+.consulta-dni-container .alert {
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.consulta-dni-container .alert i {
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.consulta-dni-container .alert-success {
+    background: #d1fae5;
+    border-color: var(--success-color);
+    color: #065f46;
+}
+
+.consulta-dni-container .alert-danger {
+    background: #fee2e2;
+    border-color: var(--danger-color);
+    color: #991b1b;
+}
+
+.consulta-dni-container .alert-warning {
+    background: #fef3c7;
+    border-color: var(--warning-color);
+    color: #92400e;
+}
+
+.consulta-dni-container .alert-info {
+    background: #dbeafe;
+    border-color: var(--info-color);
+    color: #1e40af;
+}
+
+/* Contenedor de Resultados */
 .consulta-dni-container .results-container {
-    background: white;
-    border-radius: 15px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 40px;
+    grid-template-columns: 250px 1fr;
+    gap: 30px;
+    margin-top: 30px;
 }
 
-/* Sección de foto */
+/* Sección de Foto */
 .consulta-dni-container .photo-section {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
 }
 
 .consulta-dni-container .photo-frame {
-    width: 350px;             /* Tamaño fijo */
-    height: 450px;
-    background: #f8f9fa;
-    border: 4px solid #667eea;
-    border-radius: 20px;
+    width: 200px;
+    height: 250px;
+    border: 3px solid var(--border-color);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-
+    background: var(--background);
+    box-shadow: var(--shadow-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    flex-shrink: 0;            /* ✅ evita que se reduzca si está dentro de un flex padre */
 }
 
-/* Imagen dentro del marco */
 .consulta-dni-container .photo-frame img {
     width: 100%;
     height: 100%;
-    object-fit: contain;        /* ✅ muestra toda la foto sin recortarla */
-    object-position: center;
-    display: block;
-    border-radius: 0;           /* evita doble borde redondeado */
-    background-color: #fff;     /* opcional: fondo blanco detrás de la imagen */
+    object-fit: cover;
 }
 
-
-
 .consulta-dni-container .photo-placeholder {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
 .consulta-dni-container .photo-placeholder::before {
-    content: '';
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    top: 40px;
+    content: '\f007';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 400;
+    font-size: 80px;
+    color: var(--text-secondary);
+    opacity: 0.3;
 }
 
-.consulta-dni-container .photo-placeholder::after {
-    content: '';
-    position: absolute;
-    width: 120px;
-    height: 90px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50% 50% 0 0;
-    bottom: 0;
-}
-
-/* Sección de información */
+/* Sección de Información */
 .consulta-dni-container .info-section {
-    display: flex;
-    flex-direction: column;
+    flex: 1;
 }
 
 .consulta-dni-container .info-grid {
@@ -221,110 +325,52 @@
 }
 
 .consulta-dni-container .info-label {
+    font-size: 12px;
     font-weight: 600;
-    color: #667eea;
-    font-size: 13px;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .consulta-dni-container .info-value {
     padding: 12px 16px;
-    background: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    color: #333;
-    font-size: 15px;
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
     min-height: 44px;
     display: flex;
     align-items: center;
 }
 
-/* Alertas */
-.consulta-dni-container .alert {
-    padding: 16px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    animation: fadeIn 0.3s;
-    font-weight: 500;
-}
-
-.consulta-dni-container .alert-info {
-    background: #e3f2fd;
-    border: 1px solid #90caf9;
-    color: #1565c0;
-}
-
-.consulta-dni-container .alert-warning {
-    background: #fff3e0;
-    border: 1px solid #ffb74d;
-    color: #e65100;
-}
-
-.consulta-dni-container .alert-danger {
-    background: #ffebee;
-    border: 1px solid #ef5350;
-    color: #c62828;
-}
-
-.consulta-dni-container .alert-success {
-    background: #e8f5e9;
-    border: 1px solid #66bb6a;
-    color: #2e7d32;
-}
-
-.consulta-dni-container .loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+.consulta-dni-container .info-value:empty::before {
+    content: '-';
+    color: var(--text-secondary);
+    opacity: 0.5;
 }
 
 /* Responsive */
-@media (max-width: 968px) {
-    .consulta-dni-container .results-container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-
-    .consulta-dni-container .photo-frame {
-        max-width: 300px;
-        margin: 0 auto;
-    }
-}
-
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .consulta-dni-container {
-        padding: 20px 15px;
+        padding: 15px;
     }
 
-    .consulta-dni-container .page-title h1 {
-        font-size: 24px;
-    }
-
-    .consulta-dni-container .search-section {
-        padding: 20px;
+    .consulta-dni-container .content-wrapper {
+        padding: 25px 20px;
     }
 
     .consulta-dni-container .search-form {
         flex-direction: column;
+        align-items: stretch;
+    }
+
+    .consulta-dni-container .form-group {
+        min-width: 100%;
     }
 
     .consulta-dni-container .btn-group {
-        width: 100%;
         flex-direction: column;
     }
 
@@ -334,10 +380,47 @@
     }
 
     .consulta-dni-container .results-container {
-        padding: 25px 20px;
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .consulta-dni-container .photo-section {
+        order: -1;
     }
 
     .consulta-dni-container .info-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .consulta-dni-container {
+        padding: 10px;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        padding: 20px 15px;
+    }
+
+    .consulta-dni-container .form-group input {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+}
+
+/* Mejoras de accesibilidad */
+.consulta-dni-container .btn:focus-visible,
+.consulta-dni-container .form-group input:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .consulta-dni-container .search-section {
+        display: none;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        box-shadow: none;
     }
 }

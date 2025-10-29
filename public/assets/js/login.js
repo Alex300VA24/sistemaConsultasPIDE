@@ -69,4 +69,5 @@ document.addEventListener('DOMContentLoaded', function() {
             btnLogin.textContent = 'Ingresar';
         });
     }
+
 });

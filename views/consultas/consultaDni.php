@@ -1,11 +1,14 @@
 <div class="consulta-dni-container">
+    <div class="page-title">
+        <h1><i class="fas fa-magnifying-glass"></i> Consulta DNI - RENIEC</h1>
+    </div>
     <div class="content-wrapper">
         <!-- Formulario de búsqueda -->
         <div class="search-section">
             <div id="alertContainer"></div>
             <form method="POST" action="" class="search-form" id="searchFormDNI">
                 <div class="form-group">
-                    <label for="dni">Número de DNI:</label>
+                    <label for="dniInput">Número de DNI:</label>
                     <input 
                         type="text" 
                         id="dniInput" 
@@ -19,10 +22,12 @@
                 </div>
                 <div class="btn-group">
                     <button type="submit" name="buscar" class="btn btn-search" id="btnBuscarDNI">
-                        🔍 Buscar
+                        <i class="fas fa-magnifying-glass"></i>
+                        <span>Buscar</span>
                     </button>
                     <button type="button" class="btn btn-clear" onclick="limpiarFormularioDNI()">
-                        📄 Limpiar
+                        <i class="fas fa-eraser"></i>
+                        <span>Limpiar</span>
                     </button>
                 </div>
             </form>
@@ -30,7 +35,8 @@
 
         <?php if (isset($mensaje)): ?>
             <div class="alert alert-<?php echo $tipo_mensaje; ?>">
-                <?php echo $mensaje; ?>
+                <i class="fas fa-<?php echo $tipo_mensaje === 'success' ? 'check-circle' : ($tipo_mensaje === 'danger' ? 'exclamation-circle' : ($tipo_mensaje === 'warning' ? 'exclamation-triangle' : 'info-circle')); ?>"></i>
+                <span><?php echo $mensaje; ?></span>
             </div>
         <?php endif; ?>
 
@@ -40,7 +46,7 @@
             <div class="photo-section">
                 <div class="photo-frame" id="photoContainer">
                     <?php if (isset($persona['foto']) && !empty($persona['foto'])): ?>
-                        <img src="<?php echo htmlspecialchars($persona['foto']); ?>" alt="Foto">
+                        <img src="<?php echo htmlspecialchars($persona['foto']); ?>" alt="Foto de persona">
                     <?php else: ?>
                         <div class="photo-placeholder"></div>
                     <?php endif; ?>
@@ -80,22 +86,22 @@
                             <?php echo isset($persona['estado_civil']) ? htmlspecialchars($persona['estado_civil']) : ''; ?>
                         </div>
                     </div>
+                    <div class="info-item">
+                        <span class="info-label">Ubigeo</span>
+                        <div class="info-value" id="result-ubigeo">
+                            <?php echo isset($persona['ubigeo']) ? htmlspecialchars($persona['ubigeo']) : ''; ?>
+                        </div>
+                    </div>
                     <div class="info-item full-width">
                         <span class="info-label">Dirección</span>
                         <div class="info-value" id="result-direccion">
                             <?php echo isset($persona['direccion']) ? htmlspecialchars($persona['direccion']) : ''; ?>
                         </div>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item full-width">
                         <span class="info-label">Restricción</span>
                         <div class="info-value" id="result-restriccion">
                             <?php echo isset($persona['restriccion']) ? htmlspecialchars($persona['restriccion']) : ''; ?>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Ubigeo</span>
-                        <div class="info-value" id="result-ubigeo">
-                            <?php echo isset($persona['ubigeo']) ? htmlspecialchars($persona['ubigeo']) : ''; ?>
                         </div>
                     </div>
                 </div>
