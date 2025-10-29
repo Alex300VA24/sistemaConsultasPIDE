@@ -2,17 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnCrear = document.getElementById("btnCrear");
     const alertContainer = document.getElementById("alertContainer");
-    const reniecSection = document.getElementById("reniecSection");
-
-    // Mostrar u ocultar la sección RENIEC según tipo de documento
-    const perDocumentoTipo = document.getElementById("perDocumentoTipo");
-    perDocumentoTipo.addEventListener("change", () => {
-        if (perDocumentoTipo.value === "1") { // 1 = DNI
-            reniecSection.style.display = "block";
-        } else {
-            reniecSection.style.display = "none";
-        }
-    });
 
     // Función principal
     window.crearUsuario = async function () {
@@ -40,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reniecRuc: getValue("reniecRuc"),
         };
 
+
         // Validaciones mínimas
         if (!data.perTipo || !data.perDocumentoTipo || !data.perDocumentoNum || !data.perNombre || !data.perApellidoPat) {
             mostrarAlerta("warning", "Completa todos los campos personales obligatorios.");
@@ -64,13 +54,15 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await api.crearUsuario(data);
 
-            const result = await response.json();
+            const result = response;
 
-            if (response.ok && result.success) {
-                mostrarAlerta("success", result.message || "✅ Usuario creado correctamente.");
+            if (result.success) {
+                //mostrarAlerta("success", result.message || "Usuario creado correctamente.");
+                alert("Usuario creado correctamente.")
                 limpiarFormulario();
             } else {
-                mostrarAlerta("danger", result.message || "⚠️ Error al crear el usuario.");
+                alert("Error al crear el usuario.");
+                //mostrarAlerta("danger", result.message || "Error al crear el usuario.");
             }
 
         } catch (error) {

@@ -57,6 +57,18 @@ switch (true) {
         $controller = new \App\Controllers\UsuarioController();
         $controller->crearUsuario();
         break;
+    
+    case preg_match('#^/api/eliminar-usuario$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->eliminarUsuario();
+        break;
+    
+    case preg_match('#^/api/obtener-dni-pass$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->obtenerDniYPassword();
+        break;
+
+
 
     // RUTA DE INICIO/DASHBOARD
     case preg_match('#^/api/inicio$#', $path):
@@ -75,6 +87,7 @@ switch (true) {
         $controller = new \App\Controllers\ConsultasSunatController();
         $controller->consultarRUC();
         break;
+    
 
     // VISTAS
     

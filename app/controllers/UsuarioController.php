@@ -101,7 +101,7 @@ class UsuarioController {
             $_SESSION['usuarioID'] = $resultado['USU_id'];
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
-            $_SESSION['usuario'] = $resultado['usuario'];
+            //$_SESSION['usuario'] = $nombreUsuario;
 
             $this->jsonResponse([
                 'success' => true,
@@ -129,6 +129,85 @@ class UsuarioController {
             'success' => true,
             'message' => 'Sesión cerrada correctamente'
         ]);
+    }
+
+    // 🔹 Método para crear usuario
+    public function crearUsuario() {
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+            $data = $input['data'] ?? $input; // si viene dentro de 'data', la saca
+
+            $result = $this->usuarioService->crearUsuario($data);
+
+            $this->jsonResponse([
+                'success' => true,
+                'message' => 'Usuario creado correctamente',
+                'data' => $result
+            ]);
+        } catch (\Throwable $e) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    // 🔹 Método para eliminar usuario
+    public function eliminarUsuario() {
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if (empty($data['usuario_id'])) {
+            return $this->jsonResponse(["error" => "Debe proporcionar el ID del usuario"], 400);
+        }
+
+        try {
+            $this->usuarioService->eliminarUsuario($data['usuario_id']);
+            $this->jsonResponse([
+                "success" => true,
+                "message" => "Usuario eliminado correctamente"
+            ]);
+        } catch (\Exception $e) {
+            $this->jsonResponse([
+                "success" => false,
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function obtenerDniYPassword()
+    {
+        header('Content-Type: application/json');
+
+        try {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $nombreUsuario = $data['nombreUsuario'] ?? null;
+
+            if (empty($nombreUsuario)) {
+                throw new \Exception("El nombre de usuario es requerido");
+            }
+
+            $resultado = $this->usuarioService->obtenerDniYPassword($nombreUsuario);
+
+            if (!$resultado) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "No se encontró el usuario"
+                ]);
+                return;
+            }
+
+            echo json_encode([
+                "success" => true,
+                "data" => $resultado
+            ]);
+
+        } catch (\Throwable $e) {
+            echo json_encode([
+                "success" => false,
+                "message" => $e->getMessage()
+            ]);
+        }
     }
 
 
