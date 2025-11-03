@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 class ConsultasReniecController {
     
-    // 🔐 CONFIGURACIÓN PIDE/RENIEC
+    // CONFIGURACIÓN PIDE/RENIEC
 
     private $dniUsuario;
     private $rucUsuario;
@@ -25,6 +25,7 @@ class ConsultasReniecController {
 
         // Solo se permite método POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            
             http_response_code(405);
             echo json_encode([
                 'success' => false,
