@@ -3,6 +3,8 @@ session_start();
 
 ?>
 
+
+
 <?php $titulo = "Dashboard Principal"; ?>
 <?php include __DIR__ . "/../layouts/header.php"; ?>
 
@@ -50,6 +52,10 @@ session_start();
 
         <div id="pageActualizarUsuario" class="page-content">
             <?php include __DIR__ . "/pages/sistema/actualizarUsuario.php"; ?>
+        </div>
+
+        <div id="pageActualizarPassword" class="page-content">
+            <?php include __DIR__ . "/pages/sistema/actualizarPassword.php"; ?>
         </div>
 
     </div>

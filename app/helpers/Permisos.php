@@ -8,7 +8,7 @@ class Permisos {
                   'asistencias', 'reportes', 'certificados',
                   'consultaDNI', 'consultaRUC', 'consultaPartidas', 
                   'consultaCobranza', 'consultaPapeletas', 'consultaCertificaciones',
-                  'crearUsuario', 'actualizarUsuario'], // Gerente RRHH
+                  'crearUsuario', 'actualizarPassword'], // Gerente RRHH
             2 => ['inicio', 'practicantes', 'asistencias'], // Encargado de Área
             3 => ['inicio', 'asistencias'], // Usuario de Área
         ];

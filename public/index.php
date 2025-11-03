@@ -68,7 +68,32 @@ switch (true) {
         $controller->obtenerDniYPassword();
         break;
 
+    case preg_match('#^/api/obtener-usuario$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->obtenerUsuario();
+        break;
+    
+    case preg_match('#^/api/listar-usuarios$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->listarUsuarios();
+        break;
 
+    case preg_match('#^/api/actualizar-usuario$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->actualizarUsuario();
+        break;
+
+    // 📌 RUTA PARA ACTUALIZAR PASSWORD EN RENIEC
+    case preg_match('#^/api/actualizar-password-reniec$#', $path):
+        $controller = new \App\Controllers\ConsultasReniecController();
+        $controller->actualizarPasswordRENIEC();
+        break;
+    
+    // En tu archivo de rutas (routes.php o similar)
+    case preg_match('#^/api/usuario/actual$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->obtenerUsuarioActual();
+        break;
 
     // RUTA DE INICIO/DASHBOARD
     case preg_match('#^/api/inicio$#', $path):

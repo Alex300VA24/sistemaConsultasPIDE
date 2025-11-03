@@ -1,0 +1,520 @@
+[2025-11-03 04:52:35] Inicio validarCUI()
+[2025-11-03 04:52:35] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 04:52:35] JSON recibido -> {"cui":"3"}
+[2025-11-03 04:52:35] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 04:52:35] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 04:52:35] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 30
+            [PER_id] => 6745
+            [USU_login] => dani061123
+            [USU_permiso] => 1
+            [USU_estado] => 1
+            [cui] => 3
+            [USU_pass] => J–é÷Ï†’×3pW;=§åÓìk†
+Ï­åù–£
+            [PER_documento_num] => 77251011
+            [PER_nombre] => Daniela Adelina
+            [PER_apellido_pat] => Azabache
+            [PER_apellido_mat] => Vilchez
+        )
+
+)
+
+[2025-11-03 04:52:35] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 04:52:35] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_id] => 30
+            [PER_id] => 6745
+            [USU_login] => dani061123
+            [USU_permiso] => 1
+            [USU_estado] => 1
+            [cui] => 3
+            [USU_pass] => J–é÷Ï†’×3pW;=§åÓìk†
+Ï­åù–£
+            [PER_documento_num] => 77251011
+            [PER_nombre] => Daniela Adelina
+            [PER_apellido_pat] => Azabache
+            [PER_apellido_mat] => Vilchez
+        )
+
+)
+
+[2025-11-03 04:57:46] Inicio validarCUI()
+[2025-11-03 04:57:46] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 04:57:46] JSON recibido -> {"cui":"3"}
+[2025-11-03 04:57:46] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 04:57:46] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 04:57:46] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+        )
+
+)
+
+[2025-11-03 04:57:46] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-03 04:57:46] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+        )
+
+)
+
+[2025-11-03 05:04:03] Inicio validarCUI()
+[2025-11-03 05:04:03] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 05:04:03] JSON recibido -> {"cui":"3"}
+[2025-11-03 05:04:03] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 05:04:03] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 05:04:03] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 05:04:03] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-03 05:04:03] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 05:12:48] Inicio validarCUI()
+[2025-11-03 05:12:48] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 05:12:48] JSON recibido -> {"cui":"3"}
+[2025-11-03 05:12:48] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 05:12:48] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 05:12:48] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 05:12:48] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-03 05:12:48] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 05:15:28] Inicio validarCUI()
+[2025-11-03 05:15:28] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 05:15:28] JSON recibido -> {"cui":"3"}
+[2025-11-03 05:15:28] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 05:15:28] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 05:15:28] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 05:15:28] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 05:15:28] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 05:27:00] Inicio validarCUI()
+[2025-11-03 05:27:00] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 05:27:00] JSON recibido -> {"cui":"3"}
+[2025-11-03 05:27:00] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 05:27:00] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 05:27:00] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 05:27:00] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 05:27:00] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 05:31:02] Inicio validarCUI()
+[2025-11-03 05:31:02] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 05:31:02] JSON recibido -> {"cui":"3"}
+[2025-11-03 05:31:02] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 05:31:02] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 05:31:02] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 05:31:02] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 05:31:02] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 06:52:32] Inicio validarCUI()
+[2025-11-03 06:52:32] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 06:52:32] JSON recibido -> {"cui":"3"}
+[2025-11-03 06:52:32] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 06:52:32] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 06:52:32] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 06:52:32] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 06:52:32] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 06:56:46] Inicio validarCUI()
+[2025-11-03 06:56:46] SesiÃ³n iniciada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 1
+)
+
+[2025-11-03 06:56:46] JSON recibido -> {"cui":"3"}
+[2025-11-03 06:56:46] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-03 06:56:46] Variables preparadas -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [cui] => 3
+)
+
+[2025-11-03 06:56:46] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+
+[2025-11-03 06:56:46] SesiÃ³n actualizada -> Array
+(
+    [nombreUsuario] => dani061123
+    [password] => Dani123
+    [requireCUI] => 
+    [usuarioID] => 30
+    [authenticated] => 1
+)
+
+[2025-11-03 06:56:46] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => dani061123
+            [USU_id] => 30
+            [PER_documento_num] => 77251011
+        )
+
+)
+

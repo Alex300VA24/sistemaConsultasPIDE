@@ -70,6 +70,10 @@
                 <i class="fa-solid fa-pen-to-square"></i>
                 <p>Actualizar Usuario</p>
             </div>
+            <div class="suboption" onclick="showPage('actualizarPassword', this)">
+                <i class="fas fa-lock"></i>
+                <p>Actualizar Contraseña</p>
+            </div>
         </div>
 
 

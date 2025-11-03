@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Services\UsuarioService;
+use App\Helpers\Debug;
 
 class UsuarioController {
     private $usuarioService;
@@ -70,52 +71,65 @@ class UsuarioController {
      */
     public function validarCUI() {
         try {
+            $debug = new Debug();
+            $debug->log_debug("Inicio validarCUI()");
+            
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                $debug->log_debug("Método no permitido", $_SERVER['REQUEST_METHOD']);
                 throw new \Exception("Método no permitido");
             }
 
             session_start();
-            $json = file_get_contents('php://input');
-            $data = json_decode($json, true);
+            $debug->log_debug("Sesión iniciada", $_SESSION);
 
-            $nombreUsuario = $_SESSION['nombreUsuario'];
+            $json = file_get_contents('php://input');
+            $debug->log_debug("JSON recibido", $json);
+
+            $data = json_decode($json, true);
+            $debug->log_debug("JSON decodificado", $data);
+
+            $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
             $password = $_SESSION['password'] ?? null;
             $cui = $data['cui'] ?? '';
 
+            $debug->log_debug("Variables preparadas", [
+                'nombreUsuario' => $nombreUsuario,
+                'password' => $password,
+                'cui' => $cui
+            ]);
+
             if (!$nombreUsuario || !$password) {
+                $debug->log_debug("Sesión incompleta", $_SESSION);
                 throw new \Exception("Sesión incompleta para validar CUI");
             }
 
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
+            $debug->log_debug("Resultado del servicio", $resultado);
 
-            if (!$resultado['valido']) {
-                $this->jsonResponse([
-                    'success' => false,
-                    'message' => $resultado['mensaje']
-                ], 401);
-                return;
-            }
-
-            // Si todo va bien → guardar sesión completa
-            
-            $_SESSION['usuarioID'] = $resultado['USU_id'];
+            // Guardar sesión completa
+            $_SESSION['usuarioID'] = $resultado['usuario']['USU_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
-            //$_SESSION['usuario'] = $nombreUsuario;
+            $debug->log_debug("Sesión actualizada", $_SESSION);
 
-            $this->jsonResponse([
+            $respuesta = [
                 'success' => true,
-                'message' => $resultado['mensaje'],
-                'data' => $resultado['usuario']
-            ]);
+                'message' => $resultado['mensaje'] ?? 'Sin mensaje',
+                'data' => $resultado['usuario'] ?? []
+            ];
+            $debug->log_debug("Respuesta JSON", $respuesta);
+
+            $this->jsonResponse($respuesta);
 
         } catch (\Exception $e) {
+            $debug->log_debug("Error capturado", $e->getMessage());
             $this->jsonResponse([
                 'success' => false,
                 'message' => $e->getMessage()
             ], 400);
         }
     }
+
 
 
     /**
@@ -130,6 +144,44 @@ class UsuarioController {
             'message' => 'Sesión cerrada correctamente'
         ]);
     }
+
+    /**
+     * Obtener datos del usuario actual desde la sesión
+     */
+    public function obtenerUsuarioActual() {
+        try {
+            session_start();
+
+            if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+                throw new \Exception("Usuario no autenticado");
+            }
+
+            if (!isset($_SESSION['usuarioID'])) {
+                throw new \Exception("No se encontró el ID del usuario en la sesión");
+            }
+
+            $usuarioId = $_SESSION['usuarioID'];
+            $usuario = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
+
+            if (!$usuario) {
+                throw new \Exception("Usuario no encontrado");
+            }
+
+            // 🔹 Enviar respuesta compatible con el frontend
+            $this->jsonResponse([
+                'success' => true,
+                'message' => 'Usuario obtenido correctamente',
+                'data' => $usuario
+            ]);
+
+        } catch (\Exception $e) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
 
     // 🔹 Método para crear usuario
     public function crearUsuario() {
@@ -209,6 +261,130 @@ class UsuarioController {
             ]);
         }
     }
+
+    /**
+     * Listar todos los usuarios
+     */
+    public function listarUsuarios()
+    {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            $usuarios = $this->usuarioService->listarUsuarios();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Usuarios obtenidos correctamente',
+                'data' => $usuarios
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al listar usuarios: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Obtener usuario por ID para edición
+     */
+    public function obtenerUsuario()
+    {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            // Obtener ID desde query parameter
+            $usuarioId = $_GET['id'] ?? null;
+
+            if (empty($usuarioId)) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'ID de usuario es requerido'
+                ]);
+                return;
+            }
+
+            $usuario = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Usuario obtenido correctamente',
+                'data' => $usuario
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al obtener usuario: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Actualizar usuario
+     */
+    public function actualizarUsuario(){
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            if (!isset($input['data'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Datos no proporcionados'
+                ]);
+                return;
+            }
+
+            $datos = $input['data'];
+
+            $this->usuarioService->actualizarUsuario($datos);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Usuario actualizado correctamente'
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al actualizar usuario: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    
 
 
     //🔹 Enviar respuesta JSON
