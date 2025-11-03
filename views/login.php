@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
-    header('Location: /dashboard');
+    header('Location: ' . BASE_URL . 'dashboard');
     exit;
 }
 ?>
@@ -20,23 +20,39 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
 <body>
     <div class="login-container">
         <div class="login-left">
-            <img class="logo-login" src="<?= BASE_URL ?>assets/images/logo.png" alt="logo MDE">
+            <div class="logo-container">
+                <img class="logo-login" src="<?= BASE_URL ?>assets/images/logo.png" alt="Logo Municipalidad">
+                <div class="divider"></div>
+                <div class="institution-info">
+                    <h3>Sistema de Consultas PIDE</h3>
+                    <p>Plataforma de Interoperabilidad del Estado</p>
+                </div>
+            </div>
         </div>
+        
         <div class="login-right">
-            <h2 class="login-title">SISTEMA DE CONSULTAS PIDE</h2>
-            <p>Ingresa tus datos para iniciar sesión</p>
+            <div class="login-header">
+                <h2 class="login-title">Iniciar Sesión</h2>
+                <p class="login-subtitle">Ingrese sus credenciales para acceder</p>
+            </div>
+            
             <form id="formLogin" method="post">
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" autocomplete="off" placeholder="ejemplo: alopezv" required>
-
-                <label for="password">Contraseña:</label>
-                <div class="password-container">
-                    <input type="password" id="password" name="password" placeholder="******" required>
-                    <i id="togglePassword" class="fas fa-eye-slash"></i>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" autocomplete="off" placeholder="Ingrese su usuario" required>
+                    </div>
                 </div>
 
-                <button id="btnLogin" type="submit">Ingresar</button>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-wrapper password-container">
+                        <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                        <i id="togglePassword" class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                </div>
 
+                <button id="btnLogin" type="submit">INGRESAR AL SISTEMA</button>
             </form>
         </div>
     </div>
@@ -46,26 +62,27 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Autenticación de Doble Factor - CUI</h5>
+                    <h5 class="modal-title">Autenticación de Doble Factor</h5>
                 </div>
                 <form class="formValidarCUI" id="validarCUIForm" method="post">
                     <div class="modal-body">
                         <div class="containerGuiaCUI">
                             <p>
-                                Busca tu código único de Identificación (CUI) en tu DNI e ingrésalo en el cuadro de abajo.
+                                Por favor, ingrese el último dígito de su Código Único de Identificación (CUI) que se encuentra en su DNI.
                             </p>
-                            <img src="<?= BASE_URL ?>assets/images/dniGuiCUI.svg" alt="Guía CUI DNI">
+                            <img src="<?= BASE_URL ?>assets/images/dniGuiCUI.svg" alt="Guía ubicación CUI en DNI">
                         </div>
 
                         <div class="containerCUI">
-                            <label for="cui" class="form-label">Código único de Identificación (CUI):</label>
-                            <input type="text" id="cui" maxlength="1" autocomplete="off" required>
+                            <label for="cui">Último dígito del CUI:</label>
+                            <input type="text" id="cui" maxlength="1" autocomplete="off" pattern="[0-9]" required>
+                        </div>
+                        <div class="containerButtonsModals">
+                            <input type="submit" id="btnConfirmarCUI" class="btn btn-submit" value="Confirmar">
+                            <input type="button" id="btnCancelarCUI" class="btn btn-cancel" value="Cancelar">
                         </div>
                     </div>
-                    <div class="containerButtonsModals">
-                        <input type="submit" id="btnConfirmarCUI" class="btn btn-submit" value="Confirmar">
-                        <input type="button" id="btnCancelarCUI" class="btn btn-cancel" value="Cancelar">
-                    </div>
+
                 </form>
             </div>
         </div>
@@ -75,7 +92,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     <script src="<?= BASE_URL ?>assets/js/login.js"></script>
 
     <script>
-        // Toggle password
+        // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -84,6 +101,10 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
             this.classList.toggle('fa-eye');
         });
 
+        // Prevent non-numeric input in CUI field
+        document.getElementById('cui').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
     </script>
 </body>
 </html>

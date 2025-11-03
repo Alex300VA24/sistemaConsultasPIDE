@@ -75,6 +75,19 @@ class API {
         return this.get('/inicio');
     }
 
+    async obtenerUsuario(usuarioId) {
+        return this.get(`/obtener-usuario?id=${usuarioId}`);
+    }
+
+    async obtenerUsuarioActual() {
+        return this.get(`/usuario/actual`);
+    }
+    
+
+    async listarUsuarios() {
+        return this.get('/listar-usuarios');
+    }
+
     // 📌 --- CONSULTAS RENIEC ---
     /**
      * Consultar DNI en RENIEC
@@ -83,6 +96,10 @@ class API {
      */
     async consultarDNI(data) {
         return this.post('/consultar-dni', data);
+    }
+
+    async actualizarPasswordRENIEC(data) {
+        return this.post('/actualizar-password-reniec', data);
     }
 
     // 📌 --- CONSULTAS SUNAT ---
@@ -97,6 +114,10 @@ class API {
 
     async crearUsuario(data) {
         return this.post('/crear-usuario', { data })
+    }
+
+    async actualizarUsuario(data) {
+        return this.put('/actualizar-usuario', { data })
     }
 
     async eliminarUsuario(usuario_id) {

@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btnConfirmar.value = 'Validando...';
             
             const response = await api.validarCUI(cui);
+            console.log(response);
             if (response.success) {
                 window.location.href = 'dashboard';
             }

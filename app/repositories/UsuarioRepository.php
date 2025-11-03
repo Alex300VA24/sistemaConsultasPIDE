@@ -51,27 +51,43 @@ class UsuarioRepository {
             $stmt->bindParam(':cui', $cui, PDO::PARAM_STR);
             $stmt->execute();
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Puede devolver múltiples resultsets (SELECT + EXEC)
+            $results = [];
+            do {
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if ($rows) {
+                    $results[] = $rows;
+                }
+            } while ($stmt->nextRowset());
 
-            // Si devuelve sólo un mensaje de error
-            if (isset($result['VALIDO']) && $result['VALIDO'] == 0) {
+            if (empty($results)) {
+                return ['valido' => false, 'mensaje' => 'Sin datos devueltos'];
+            }
+
+            // El primer SELECT puede ser mensaje, el segundo los datos
+            $first = $results[0][0];
+
+            if (isset($first['VALIDO']) && $first['VALIDO'] == 0) {
                 return [
                     'valido' => false,
-                    'mensaje' => $result['MENSAJE']
+                    'mensaje' => $first['MENSAJE']
                 ];
             }
 
-            // Si devuelve datos completos del usuario
+            // Si no hay error, asumimos que el último resultset es el usuario
+            $usuarioData = end($results)[0];
+
             return [
                 'valido' => true,
                 'mensaje' => 'CUI validado correctamente',
-                'usuario' => $result
+                'usuario' => $usuarioData
             ];
 
         } catch (PDOException $e) {
             throw new \Exception("Error al validar CUI: " . $e->getMessage());
         }
     }
+
 
     public function crearUsuario(array $data) {
         try {
@@ -153,6 +169,101 @@ class UsuarioRepository {
 
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $result ?: null;
+    }
+
+    /**
+     * Listar todos los usuarios
+     */
+    public function listarUsuarios()
+    {
+        try {
+            $stmt = $this->db->prepare("EXEC sp_ListarUsuarios");
+            $stmt->execute();
+            
+            $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            return $resultados;
+        } catch (PDOException $e) {
+            error_log("Error en listarUsuarios: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Obtener usuario por ID
+     */
+    public function obtenerUsuarioPorId($usuarioId)
+    {
+        try {
+            $stmt = $this->db->prepare("EXEC sp_ObtenerUsuarioPorId @USU_id = :usuarioId");
+            $stmt->bindParam(':usuarioId', $usuarioId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $resultado ?: null;
+        } catch (PDOException $e) {
+            error_log("Error en obtenerUsuarioPorId: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    
+
+    /**
+     * Actualizar usuario
+     */
+    public function actualizarUsuario($datos)
+    {
+        try {
+            $sql = "EXEC sp_ActualizarUsuario 
+                @USU_id = :usuarioId,
+                @PER_id = :personaId,
+                @PER_tipo = :perTipo,
+                @PER_documento_tipo = :perDocumentoTipo,
+                @PER_documento_num = :perDocumentoNum,
+                @PER_nombre = :perNombre,
+                @PER_apellido_pat = :perApellidoPat,
+                @PER_apellido_mat = :perApellidoMat,
+                @PER_sexo = :perSexo,
+                @PER_email = :perEmail,
+                @USU_login = :usuLogin,
+                @USU_pass = :usuPass,
+                @USU_permiso = :usuPermiso,
+                @USU_estado = :usuEstado,
+                @cui = :cui";
+
+            $stmt = $this->db->prepare($sql);
+            
+            $stmt->bindParam(':usuarioId', $datos['USU_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':personaId', $datos['PER_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':perTipo', $datos['PER_tipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perDocumentoTipo', $datos['PER_documento_tipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perDocumentoNum', $datos['PER_documento_num'], PDO::PARAM_STR);
+            $stmt->bindParam(':perNombre', $datos['PER_nombre'], PDO::PARAM_STR);
+            $stmt->bindParam(':perApellidoPat', $datos['PER_apellido_pat'], PDO::PARAM_STR);
+            $stmt->bindParam(':perApellidoMat', $datos['PER_apellido_mat'], PDO::PARAM_STR);
+            $stmt->bindParam(':perSexo', $datos['PER_sexo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perEmail', $datos['PER_email'], PDO::PARAM_STR);
+            $stmt->bindParam(':usuLogin', $datos['USU_login'], PDO::PARAM_STR);
+            
+            // La contraseña puede ser NULL si no se actualiza
+            $usuPass = !empty($datos['USU_pass']) ? $datos['USU_pass'] : null;
+            $stmt->bindParam(':usuPass', $usuPass, PDO::PARAM_STR);
+            
+            $stmt->bindParam(':usuPermiso', $datos['USU_permiso'], PDO::PARAM_INT);
+            $stmt->bindParam(':usuEstado', $datos['USU_estado'], PDO::PARAM_INT);
+            
+            $cui = $datos['cui'] ?? null;
+            $stmt->bindParam(':cui', $cui, PDO::PARAM_INT);
+
+            $stmt->execute();
+            
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error en actualizarUsuario: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     

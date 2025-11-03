@@ -73,6 +73,32 @@ class UsuarioService {
         }
     }
 
+    /**
+     * Listar todos los usuarios
+     */
+    public function listarUsuarios()
+    {
+        return $this->usuarioRepository->listarUsuarios();
+    }
+
+    /**
+     * Obtener datos del usuario para edición
+     */
+    public function obtenerUsuarioPorId($usuarioId)
+    {
+        if (empty($usuarioId) || !is_numeric($usuarioId)) {
+            throw new \Exception('ID de usuario inválido');
+        }
+
+        $usuario = $this->usuarioRepository->obtenerUsuarioPorId($usuarioId);
+
+        if (!$usuario) {
+            throw new \Exception('Usuario no encontrado');
+        }
+
+        return $usuario;
+    }
+
 
     public function eliminarUsuario($usuarioId) {
         if (!$usuarioId) {
@@ -85,6 +111,86 @@ class UsuarioService {
     public function obtenerDniYPassword($nombreUsuario)
     {
         return $this->usuarioRepository->obtenerDniYPassword($nombreUsuario);
+    }
+
+    /**
+     * Actualizar usuario
+     */
+    public function actualizarUsuario($datos)
+    {
+        // Validaciones
+        $this->validarDatosUsuario($datos, true);
+
+        // Si hay contraseña nueva, hashearla
+        if (!empty($datos['USU_pass'])) {
+            $datos['USU_pass'] = password_hash($datos['USU_pass'], PASSWORD_BCRYPT);
+        } else {
+            $datos['USU_pass'] = null; // No actualizar contraseña
+        }
+
+        // Actualizar en BD
+        $this->usuarioRepository->actualizarUsuario($datos);
+
+        return true;
+    }
+
+    /**
+     * Validar datos del usuario
+     */
+    private function validarDatosUsuario($datos, $esActualizacion = false)
+    {
+        $errores = [];
+
+        // Validar ID en actualizaciones
+        if ($esActualizacion) {
+            if (empty($datos['USU_id'])) {
+                $errores[] = 'ID de usuario es requerido';
+            }
+            if (empty($datos['PER_id'])) {
+                $errores[] = 'ID de persona es requerido';
+            }
+        }
+
+        // Validar tipo de persona
+        if (empty($datos['PER_tipo'])) {
+            $errores[] = 'Tipo de persona es requerido';
+        }
+
+        // Validar documento
+        if (empty($datos['PER_documento_tipo'])) {
+            $errores[] = 'Tipo de documento es requerido';
+        }
+        if (empty($datos['PER_documento_num'])) {
+            $errores[] = 'Número de documento es requerido';
+        }
+
+        // Validar nombres
+        if (empty($datos['PER_nombre'])) {
+            $errores[] = 'Nombres son requeridos';
+        }
+        
+        if (empty($datos['PER_apellido_pat'])) {
+            $errores[] = 'Apellido paterno es requerido';
+        }
+
+        // Validar sexo
+        if (empty($datos['PER_sexo'])) {
+            $errores[] = 'Sexo es requerido';
+        }
+
+        // Validar login
+        if (empty($datos['USU_login'])) {
+            $errores[] = 'Login/Usuario es requerido';
+        }
+
+        // Validar email si se proporciona
+        if (!empty($datos['PER_email']) && !filter_var($datos['PER_email'], FILTER_VALIDATE_EMAIL)) {
+            $errores[] = 'Email inválido';
+        }
+
+        if (!empty($errores)) {
+            throw new \Exception(implode(', ', $errores));
+        }
     }
     
 }
