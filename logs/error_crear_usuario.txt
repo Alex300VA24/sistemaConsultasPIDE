@@ -79,3 +79,26 @@ Array
 )
 
 ------------------------------------------------------------
+[2025-10-30 20:31:17] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Could not find stored procedure 'sp_CrearUsuario'.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => avasqueza@unitru.edu.pe
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 9
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
