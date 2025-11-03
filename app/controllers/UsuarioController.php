@@ -239,7 +239,7 @@ class UsuarioController {
                 throw new \Exception("El nombre de usuario es requerido");
             }
 
-            $resultado = $this->usuarioService->obtenerDniYPassword($nombreUsuario);
+            $resultado = $this->usuarioService->obtenerDni($nombreUsuario);
 
             if (!$resultado) {
                 echo json_encode([
@@ -249,10 +249,23 @@ class UsuarioController {
                 return;
             }
 
-            echo json_encode([
+            // ✅ Obtener la contraseña desde la sesión
+            $passwordSesion = $_SESSION['password'] ?? null;
+
+            if (empty($passwordSesion)) {
+                throw new \Exception("No se encontró la contraseña en la sesión");
+            }
+
+            // ✅ Armar la respuesta combinada
+            $respuesta = [
                 "success" => true,
-                "data" => $resultado
-            ]);
+                "data" => [
+                    "DNI" => $resultado['DNI'],
+                    "Contraseña" => $passwordSesion
+                ]
+            ];
+
+            echo json_encode($respuesta);
 
         } catch (\Throwable $e) {
             echo json_encode([
@@ -374,6 +387,47 @@ class UsuarioController {
             echo json_encode([
                 'success' => true,
                 'message' => 'Usuario actualizado correctamente'
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al actualizar usuario: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function actualizarPassword(){
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            $input = json_decode(file_get_contents('php://input'), true);
+
+            if (!isset($input['data'])) {
+                http_response_code(400);
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Datos no proporcionados'
+                ]);
+                return;
+            }
+
+            $datos = $input['data'];
+
+            $this->usuarioService->actualizarPassword($datos);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Contraseña actualizada correctamente'
             ]);
         } catch (\Exception $e) {
             http_response_code(500);

@@ -160,9 +160,9 @@ class UsuarioRepository {
         }
     }
 
-    public function obtenerDniYPassword($nombreUsuario)
+    public function obtenerDni($nombreUsuario)
     {
-        $sql = "EXEC sp_ObtenerDniYPassword @usuLogin = ?";
+        $sql = "EXEC sp_ObtenerDni @usuLogin = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(1, $nombreUsuario);
         $stmt->execute();
@@ -262,6 +262,34 @@ class UsuarioRepository {
             return true;
         } catch (PDOException $e) {
             error_log("Error en actualizarUsuario: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function actualizarPassword($datos)
+    {
+        try {
+            $sql = "EXEC sp_ActualizarUsuario 
+                @USU_id = :usuarioId,
+                @PER_id = :personaId,
+                @USU_pass = :usuPass";
+
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->bindParam(':usuarioId', $datos['USU_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':personaId', $datos['PER_id'], PDO::PARAM_INT);
+            
+            
+            // La contraseña puede ser NULL si no se actualiza
+            $usuPass = !empty($datos['USU_pass']) ? $datos['USU_pass'] : null;
+            $stmt->bindParam(':usuPass', $usuPass, PDO::PARAM_STR);
+            
+
+            $stmt->execute();
+            
+            return true;
+        } catch (PDOException $e) {
+            error_log("Error en actualizar password: " . $e->getMessage());
             throw $e;
         }
     }

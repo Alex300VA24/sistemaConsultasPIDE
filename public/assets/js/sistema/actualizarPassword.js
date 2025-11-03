@@ -115,11 +115,13 @@ async function actualizarPasswordUsuarioActual() {
         // PASO 2: Actualizar en base de datos local
         mostrarAlerta('Actualizando contraseña en el sistema local...', 'info');
         
-        const response = await api.actualizarUsuario({
+        const response = await api.actualizarPassword({
             USU_id: usuarioActual.id,
             PER_id: usuarioActual.personaId,
             USU_pass: datos.passwordNueva
         });
+
+        console.log(response);
         
         if (response.success) {
             mostrarAlerta('✓ Contraseña actualizada correctamente en ambos sistemas', 'success');
@@ -131,7 +133,7 @@ async function actualizarPasswordUsuarioActual() {
                 
                 // Redirigir al login después de 3 segundos
                 setTimeout(() => {
-                    window.location.href = 'login.php';
+                    window.location.href = 'login';
                 }, 3000);
             }, 2000);
         } else {
