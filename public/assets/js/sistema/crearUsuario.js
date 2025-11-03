@@ -79,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".usuario-container input, .usuario-container select").forEach(el => {
             el.value = "";
         });
-        reniecSection.style.display = "none";
     };
 
     // ===== Utilitarios =====

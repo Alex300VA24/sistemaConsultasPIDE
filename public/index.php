@@ -82,6 +82,11 @@ switch (true) {
         $controller = new \App\Controllers\UsuarioController();
         $controller->actualizarUsuario();
         break;
+    
+    case preg_match('#^/api/actualizar-password$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->actualizarPassword();
+        break;
 
     // 📌 RUTA PARA ACTUALIZAR PASSWORD EN RENIEC
     case preg_match('#^/api/actualizar-password-reniec$#', $path):

@@ -108,9 +108,9 @@ class UsuarioService {
         return $this->usuarioRepository->eliminarUsuario($usuarioId);
     }
 
-    public function obtenerDniYPassword($nombreUsuario)
+    public function obtenerDni($nombreUsuario)
     {
-        return $this->usuarioRepository->obtenerDniYPassword($nombreUsuario);
+        return $this->usuarioRepository->obtenerDni($nombreUsuario);
     }
 
     /**
@@ -130,6 +130,24 @@ class UsuarioService {
 
         // Actualizar en BD
         $this->usuarioRepository->actualizarUsuario($datos);
+
+        return true;
+    }
+
+    public function actualizarPassword($datos)
+    {
+        // Validaciones
+        $this->validarPassword($datos, true);
+
+        // Si hay contraseña nueva, hashearla
+        if (!empty($datos['USU_pass'])) {
+            $datos['USU_pass'] = password_hash($datos['USU_pass'], PASSWORD_BCRYPT);
+        } else {
+            $datos['USU_pass'] = null; // No actualizar contraseña
+        }
+
+        // Actualizar en BD
+        $this->usuarioRepository->actualizarPassword($datos);
 
         return true;
     }
@@ -187,6 +205,26 @@ class UsuarioService {
         if (!empty($datos['PER_email']) && !filter_var($datos['PER_email'], FILTER_VALIDATE_EMAIL)) {
             $errores[] = 'Email inválido';
         }
+
+        if (!empty($errores)) {
+            throw new \Exception(implode(', ', $errores));
+        }
+    }
+
+    private function validarPassword($datos, $esActualizacion = false)
+    {
+        $errores = [];
+
+        // Validar ID en actualizaciones
+        if ($esActualizacion) {
+            if (empty($datos['USU_id'])) {
+                $errores[] = 'ID de usuario es requerido';
+            }
+            if (empty($datos['PER_id'])) {
+                $errores[] = 'ID de persona es requerido';
+            }
+        }
+
 
         if (!empty($errores)) {
             throw new \Exception(implode(', ', $errores));

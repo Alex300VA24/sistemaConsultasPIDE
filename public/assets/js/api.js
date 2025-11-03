@@ -120,6 +120,10 @@ class API {
         return this.put('/actualizar-usuario', { data })
     }
 
+    async actualizarPassword(data) {
+        return this.put('/actualizar-password', { data })
+    }
+
     async eliminarUsuario(usuario_id) {
         return this.post('/eliminar-usuario', { usuario_id });
     }
