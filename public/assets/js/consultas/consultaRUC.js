@@ -115,7 +115,11 @@ function llenarDatosRUC(datos) {
         'Referencia': datos.referencia || '-',
         'Condición del Domicilio': datos.condicion_domicilio,
         'Dependencia': datos.dependencia,
+<<<<<<< HEAD
         'Código Secuencia': datos.codigo_secuencia || '',
+=======
+        'Código Secuencia': datos.codigo_secuencia,
+>>>>>>> a5a762a (Probando ciertas mejoras)
         'Estado Activo': datos.estado_activo,
         'Estado Habido': datos.estado_habido,
         'Dirección Completa': datos.direccion_completa

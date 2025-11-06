@@ -104,6 +104,7 @@ class UsuarioController {
             }
 
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
+
             $debug->log_debug("Resultado del servicio", $resultado);
 
             // Guardar sesión completa
