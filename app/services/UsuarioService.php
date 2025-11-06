@@ -34,11 +34,18 @@ class UsuarioService {
         }
         
         $usuario = $this->usuarioRepository->validarCUI($nombreUsuario, $password, $cui);
-        
+
+        // Si el repositorio devuelve null -> inválido
         if ($usuario === null) {
             throw new \Exception("CUI incorrecto");
         }
-        
+
+        // Si el repositorio devuelve un array con 'valido' => false -> inválido
+        if (is_array($usuario) && isset($usuario['valido']) && $usuario['valido'] == false) {
+            $mensaje = $usuario['mensaje'] ?? 'CUI incorrecto';
+            throw new \Exception($mensaje);
+        }
+
         return $usuario;
     }
 
