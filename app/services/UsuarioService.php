@@ -24,6 +24,7 @@ class UsuarioService {
         return $usuario;
     }
     
+    // Service: validar la estructura devuelta por el repo
     public function validarCUI($nombreUsuario, $password, $cui) {
         if (empty($cui)) {
             throw new \Exception("Es requerido el CUI");
@@ -48,6 +49,9 @@ class UsuarioService {
 
         return $usuario;
     }
+
+
+
 
     public function crearUsuario($data) {
         try {

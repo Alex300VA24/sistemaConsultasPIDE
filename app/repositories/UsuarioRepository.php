@@ -42,7 +42,6 @@ class UsuarioRepository {
     /**
      * Validar CUI usando SP_S_USUARIO_VALIDAR_CUI
      */
-    // Repositorio: modificar la salida cuando VALID0 == 0
     public function validarCUI($nombreUsuario, $password, $cui) {
         try {
             $sql = "EXEC SP_S_USUARIO_VALIDAR_CUI @USU_login = :nombreUsuario, @USU_pass = :password, @CUI = :cui";
@@ -88,7 +87,6 @@ class UsuarioRepository {
             throw new \Exception("Error al validar CUI: " . $e->getMessage());
         }
     }
-
 
 
     public function crearUsuario(array $data) {
