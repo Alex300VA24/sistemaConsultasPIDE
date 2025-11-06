@@ -1,3 +1,7 @@
+// ============================================
+// 🔧 FUNCIONES DE VALIDACIÓN
+// ============================================
+
 function validarRUC(ruc) {
     if (!ruc || ruc.trim() === '') {
         return { valido: false, mensaje: 'El RUC es obligatorio' };
@@ -11,6 +15,10 @@ function validarRUC(ruc) {
 
     return { valido: true, ruc };
 }
+
+// ============================================
+// 🎨 FUNCIONES DE UI
+// ============================================
 
 /**
  * Mostrar loading en el botón de búsqueda
@@ -70,6 +78,10 @@ function mostrarAlerta(mensaje, tipo = 'info') {
     }
 }
 
+// ============================================
+// 📝 FUNCIONES DE LLENADO DE DATOS
+// ============================================
+
 /**
  * Llenar los campos del formulario con los datos del contribuyente
  */
@@ -79,40 +91,52 @@ function llenarDatosRUC(datos) {
 
     if (!datos) return;
 
-    // Función auxiliar para llenar un campo
-    const llenarCampo = (selector, valor) => {
-        const elemento = document.querySelector(selector);
-        if (elemento) {
-            elemento.textContent = valor || '-';
-        }
+    // Mapeo de campos: clave = texto del label, valor = campo de datos
+    const mapaCampos = {
+        'Código de Ubigeo': datos.codigo_ubigeo,
+        'Departamento': datos.departamento,
+        'Provincia': datos.provincia,
+        'Distrito': datos.distrito,
+        'Actividad Económica': datos.actividad_economica,
+        'Estado del Contribuyente': datos.estado_contribuyente,
+        'Fecha de Actualización': datos.fecha_actualizacion,
+        'Fecha de Alta': datos.fecha_alta,
+        'Fecha de Baja': datos.fecha_baja || '-',
+        'Tipo de Persona': datos.tipo_persona,
+        'Tipo de Contribuyente': datos.tipo_contribuyente,
+        'RUC': datos.ruc,
+        'Nombre y/o Razón Social': datos.razon_social,
+        'Tipo de Zona': datos.tipo_zona || '-',
+        'Tipo de Vía': datos.tipo_via,
+        'Nombre de Vía': datos.nombre_via,
+        'Número': datos.numero,
+        'Interior': datos.interior,
+        'Nombre de la Zona': datos.nombre_zona || '-',
+        'Referencia': datos.referencia || '-',
+        'Condición del Domicilio': datos.condicion_domicilio,
+        'Dependencia': datos.dependencia,
+        'Código Secuencia': datos.codigo_secuencia || '',
+        'Estado Activo': datos.estado_activo,
+        'Estado Habido': datos.estado_habido,
+        'Dirección Completa': datos.direccion_completa
     };
 
-    // Llenar todos los campos
-    llenarCampo('.info-item:has(.info-label:contains("Código de Ubigeo")) .info-value', datos.codigo_ubigeo);
-    llenarCampo('.info-item:has(.info-label:contains("Departamento")) .info-value', datos.departamento);
-    llenarCampo('.info-item:has(.info-label:contains("Provincia")) .info-value', datos.provincia);
-    llenarCampo('.info-item:has(.info-label:contains("Distrito")) .info-value', datos.distrito);
-    llenarCampo('.info-item:has(.info-label:contains("Actividad Económica")) .info-value', datos.actividad_economica);
-    llenarCampo('.info-item:has(.info-label:contains("Estado del Contribuyente")) .info-value', datos.estado_contribuyente);
-    llenarCampo('.info-item:has(.info-label:contains("Fecha de Actualización")) .info-value', datos.fecha_actualizacion);
-    llenarCampo('.info-item:has(.info-label:contains("Fecha de Alta")) .info-value', datos.fecha_alta);
-    llenarCampo('.info-item:has(.info-label:contains("Fecha de Baja")) .info-value', datos.fecha_baja);
-    llenarCampo('.info-item:has(.info-label:contains("Tipo de Persona")) .info-value', datos.tipo_persona);
-    llenarCampo('.info-item:has(.info-label:contains("Tipo de Contribuyente")) .info-value', datos.tipo_contribuyente);
-    llenarCampo('.info-item:has(.info-label:contains("RUC")) .info-value', datos.ruc);
-    llenarCampo('.info-item:has(.info-label:contains("Nombre y/o Razón Social")) .info-value', datos.razon_social);
-    llenarCampo('.info-item:has(.info-label:contains("Tipo de Zona")) .info-value', datos.tipo_zona);
-    llenarCampo('.info-item:has(.info-label:contains("Tipo de Vía")) .info-value', datos.tipo_via);
-    llenarCampo('.info-item:has(.info-label:contains("Nombre de Vía")) .info-value', datos.nombre_via);
-    llenarCampo('.info-item:has(.info-label:contains("Número")) .info-value', datos.numero);
-    llenarCampo('.info-item:has(.info-label:contains("Interior")) .info-value', datos.interior);
-    llenarCampo('.info-item:has(.info-label:contains("Nombre de la Zona")) .info-value', datos.nombre_zona);
-    llenarCampo('.info-item:has(.info-label:contains("Referencia")) .info-value', datos.referencia);
-    llenarCampo('.info-item:has(.info-label:contains("Condición del Domicilio")) .info-value', datos.condicion_domicilio);
-    llenarCampo('.info-item:has(.info-label:contains("Dependencia")) .info-value', datos.dependencia);
-    llenarCampo('.info-item:has(.info-label:contains("Código Secuencia")) .info-value', datos.codigo_secuencia);
-    llenarCampo('.info-item:has(.info-label:contains("Estado Activo")) .info-value', datos.estado_activo);
-    llenarCampo('.info-item:has(.info-label:contains("Estado Habido")) .info-value', datos.estado_habido);
+    // Llenar todos los campos usando el mapeo
+    Object.entries(mapaCampos).forEach(([labelText, valor]) => {
+        const infoItems = document.querySelectorAll('.info-item');
+        
+        infoItems.forEach(item => {
+            const label = item.querySelector('.info-label');
+            if (label && label.textContent.trim() === labelText) {
+                const valueElement = item.querySelector('.info-value');
+                if (valueElement) {
+                    valueElement.textContent = valor || '-';
+                }
+            }
+        });
+    });
+
+    console.log('✅ Datos cargados correctamente:', datos);
 }
 
 /**
@@ -121,9 +145,13 @@ function llenarDatosRUC(datos) {
 function limpiarCamposRUC() {
     const campos = document.querySelectorAll('.info-value');
     campos.forEach(campo => {
-        campo.textContent = '';
+        campo.textContent = '-';
     });
 }
+
+// ============================================
+// 🌐 FUNCIONES DE API
+// ============================================
 
 /**
  * Manejar el envío del formulario de búsqueda
@@ -146,6 +174,7 @@ async function buscarRUC(event) {
         mostrarLoading(true);
         limpiarCamposRUC();
 
+        // Realizar consulta a la API
         const resultado = await api.consultarRUC(validacion.ruc);
 
         if (resultado.success) {
@@ -165,6 +194,10 @@ async function buscarRUC(event) {
         mostrarLoading(false);
     }
 }
+
+// ============================================
+// 🧹 FUNCIONES DE LIMPIEZA
+// ============================================
 
 /**
  * Limpiar el formulario completamente
@@ -189,6 +222,10 @@ function limpiarFormularioRUC() {
         rucInput.focus();
     }
 }
+
+// ============================================
+// ✅ VALIDACIÓN EN TIEMPO REAL
+// ============================================
 
 /**
  * Validación en tiempo real del RUC
@@ -220,7 +257,8 @@ function validarRUCTiempoReal() {
 // 🚀 INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('si llega');
+    console.log('🚀 Inicializando sistema de consulta RUC...');
+    
     const form = document.querySelector('#searchFormRUC');
     
     if (form) {
@@ -228,7 +266,10 @@ document.addEventListener('DOMContentLoaded', function() {
         validarRUCTiempoReal();
         
         console.log('✅ Sistema de Consulta RUC inicializado correctamente');
+    } else {
+        console.error('❌ No se encontró el formulario #searchFormRUC');
     }
 });
 
+// Exponer función global para limpiar
 window.limpiarFormularioRUC = limpiarFormularioRUC;
