@@ -325,4 +325,412 @@
     [cui] => 6
 )
 
+<<<<<<< HEAD
 [2025-11-06 15:11:31] Error capturado -> CUI incorrecto
+=======
+[2025-11-03 22:27:38] Inicio validarCUI()
+[2025-11-03 22:27:38] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-03 22:27:38] JSON recibido -> {"cui":"1"}
+[2025-11-03 22:27:38] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-03 22:27:38] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-03 22:27:38] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 22:27:38] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-03 22:27:38] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 22:28:40] Inicio validarCUI()
+[2025-11-03 22:28:40] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-03 22:28:40] JSON recibido -> {"cui":"1"}
+[2025-11-03 22:28:40] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-03 22:28:40] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-03 22:28:40] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-03 22:28:40] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-03 22:28:40] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 14:24:47] Inicio validarCUI()
+[2025-11-06 14:24:47] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 14:24:47] JSON recibido -> {"cui":"1"}
+[2025-11-06 14:24:47] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-06 14:24:47] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-06 14:24:47] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 14:24:47] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-06 14:24:47] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 14:58:09] Inicio validarCUI()
+[2025-11-06 14:58:09] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 14:58:09] JSON recibido -> {"cui":"1"}
+[2025-11-06 14:58:09] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-06 14:58:09] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-06 14:58:09] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 14:58:09] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-06 14:58:09] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 15:04:48] Inicio validarCUI()
+[2025-11-06 15:04:48] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 15:04:48] JSON recibido -> {"cui":"1"}
+[2025-11-06 15:04:48] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-06 15:04:48] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-06 15:04:48] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 15:04:48] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-06 15:04:48] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 15:05:57] Inicio validarCUI()
+[2025-11-06 15:05:57] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 15:05:57] JSON recibido -> {"cui":"1"}
+[2025-11-06 15:05:57] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-06 15:05:57] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-06 15:05:57] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 15:05:57] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [authenticated] => 1
+)
+
+[2025-11-06 15:05:57] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+        )
+
+)
+
+[2025-11-06 15:20:19] Inicio validarCUI()
+[2025-11-06 15:20:19] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 15:20:19] JSON recibido -> {"cui":"5"}
+[2025-11-06 15:20:19] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-06 15:20:19] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 5
+)
+
+[2025-11-06 15:20:19] Error capturado -> CUI incorrecto
+[2025-11-06 15:20:23] Inicio validarCUI()
+[2025-11-06 15:20:23] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-06 15:20:23] JSON recibido -> {"cui":"1"}
+[2025-11-06 15:20:23] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-06 15:20:23] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-06 15:20:23] Resultado del servicio -> Array
+(
+    [USU_login] => ADMIN
+    [USU_id] => 1
+    [PER_documento_num] => 42761038
+)
+
+[2025-11-06 15:20:23] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 
+    [authenticated] => 1
+)
+
+[2025-11-06 15:20:23] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => Sin mensaje
+    [data] => Array
+        (
+        )
+
+)
+
+>>>>>>> a2757e4 (cambios necesarios)

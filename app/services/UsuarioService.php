@@ -123,7 +123,7 @@ class UsuarioService {
 
         // Si hay contraseña nueva, hashearla
         if (!empty($datos['USU_pass'])) {
-            $datos['USU_pass'] = password_hash($datos['USU_pass'], PASSWORD_BCRYPT);
+            $datos['USU_pass'] = $datos['USU_pass'];
         } else {
             $datos['USU_pass'] = null; // No actualizar contraseña
         }
@@ -141,7 +141,7 @@ class UsuarioService {
 
         // Si hay contraseña nueva, hashearla
         if (!empty($datos['USU_pass'])) {
-            $datos['USU_pass'] = password_hash($datos['USU_pass'], PASSWORD_BCRYPT);
+            $datos['USU_pass'] = $datos['USU_pass'];
         } else {
             $datos['USU_pass'] = null; // No actualizar contraseña
         }
