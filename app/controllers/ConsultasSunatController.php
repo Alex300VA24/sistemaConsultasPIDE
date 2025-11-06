@@ -15,7 +15,7 @@ class ConsultasSunatController {
         $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? "42761038"; // variable1
         $this->rucUsuario = $_ENV['PIDE_RUC_USUARIO'] ?? "20164091547";
         $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? "Muni2025@"; //variable
-        $this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
+        $this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://ws3.pide.gob.pe/services/SunatConsultaRuc.SunatConsultaRucHttpsSoap11Endpoint";
     }
 
     // ========================================

@@ -1,55 +1,3 @@
-// consultaRUC.js - Sistema PIDE - Consulta RUC SUNAT
-
-class ConsultaRUCAPI {
-    constructor() {
-        this.baseURL = '/api';
-    }
-
-    /**
-     * Realiza una petición POST al servidor
-     */
-    async post(endpoint, data) {
-        try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(result.message || 'Error en la petición');
-            }
-
-            return result;
-        } catch (error) {
-            console.error('Error en petición:', error);
-            throw error;
-        }
-    }
-
-    /**
-     * Consultar RUC en SUNAT
-     */
-    async consultarRUC(ruc) {
-        return this.post('/consultar-ruc', { ruc });
-    }
-}
-
-// Instancia global de la API
-const rucAPI = new ConsultaRUCAPI();
-
-// ============================================
-// 🔍 FUNCIONES DE CONSULTA RUC
-// ============================================
-
-/**
- * Validar formato de RUC
- */
 function validarRUC(ruc) {
     if (!ruc || ruc.trim() === '') {
         return { valido: false, mensaje: 'El RUC es obligatorio' };
@@ -198,7 +146,7 @@ async function buscarRUC(event) {
         mostrarLoading(true);
         limpiarCamposRUC();
 
-        const resultado = await rucAPI.consultarRUC(validacion.ruc);
+        const resultado = await api.consultarRUC(validacion.ruc);
 
         if (resultado.success) {
             mostrarAlerta(resultado.message || 'Consulta realizada exitosamente', 'success');
@@ -272,6 +220,7 @@ function validarRUCTiempoReal() {
 // 🚀 INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('si llega');
     const form = document.querySelector('#searchFormRUC');
     
     if (form) {
@@ -282,6 +231,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Exponer funciones globalmente si es necesario
-window.buscarRUC = buscarRUC;
 window.limpiarFormularioRUC = limpiarFormularioRUC;

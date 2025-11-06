@@ -42,6 +42,7 @@ class UsuarioRepository {
     /**
      * Validar CUI usando SP_S_USUARIO_VALIDAR_CUI
      */
+    // Repositorio: modificar la salida cuando VALID0 == 0
     public function validarCUI($nombreUsuario, $password, $cui) {
         try {
             $sql = "EXEC SP_S_USUARIO_VALIDAR_CUI @USU_login = :nombreUsuario, @USU_pass = :password, @CUI = :cui";
@@ -51,7 +52,6 @@ class UsuarioRepository {
             $stmt->bindParam(':cui', $cui, PDO::PARAM_STR);
             $stmt->execute();
 
-            // Puede devolver múltiples resultsets (SELECT + EXEC)
             $results = [];
             do {
                 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -61,32 +61,23 @@ class UsuarioRepository {
             } while ($stmt->nextRowset());
 
             if (empty($results)) {
-                return ['valido' => false, 'mensaje' => 'Sin datos devueltos'];
+                return null; // sin datos -> considerado inválido
             }
 
-            // El primer SELECT puede ser mensaje, el segundo los datos
-            $first = $results[0][0];
-
-            if (isset($first['VALIDO']) && $first['VALIDO'] == 0) {
-                return [
-                    'valido' => false,
-                    'mensaje' => $first['MENSAJE']
-                ];
+            $first = $results[0][0] ?? null;
+            if ($first && isset($first['VALIDO']) && $first['VALIDO'] == 0) {
+                // devolver null para indicar "no encontrado / inválido"
+                return null;
             }
 
-            // Si no hay error, asumimos que el último resultset es el usuario
-            $usuarioData = end($results)[0];
-
-            return [
-                'valido' => true,
-                'mensaje' => 'CUI validado correctamente',
-                'usuario' => $usuarioData
-            ];
+            $usuarioData = end($results)[0] ?? null;
+            return $usuarioData; // devuelve directamente el usuario al servicio
 
         } catch (PDOException $e) {
-            throw new \Exception("Error al validar CUI: " . $e->getMessage());
+            throw new \Exception("Error al validar CUI (repo): " . $e->getMessage());
         }
     }
+
 
 
     public function crearUsuario(array $data) {
