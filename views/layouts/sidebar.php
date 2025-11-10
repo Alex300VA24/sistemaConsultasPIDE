@@ -7,23 +7,37 @@
             <div class="sidebar-subtitle">Sistema de Consultas PIDE</div>
         </div>
 
+        <?php
+            // === Obtener datos de sesión ===
+            $rolID = $_SESSION['nombreCargo'] ?? '';
+
+            // === Definir permisos según rol ===
+            $accesoTotal = ($cargo === '000');
+            $accesoConsultas = ($cargo === '002');
+        ?>
+
         <!-- Inicio del Sistema -->
         <div class="option active" onclick="showPage('inicio', this)">
             <div class="containerIconOption"><i class="fas fa-home"></i></div>
             <p>Inicio</p>
         </div>
         <!-- Consultas del Sistema -->
+            <?php if ($accesoConsultas || $accesoTotal): ?>
             <div class="option has-submenu" onclick="toggleSubmenu(this)">
                 <div class="containerIconOption"><i class="fa-solid fa-database"></i></div>
                 <p>Consultas</p>
                 <i class="fa-solid fa-chevron-down submenu-icon"></i>
             </div>
-
+            <?php endif; ?>
+            
+            
             <div class="submenu">
+                <?php if ($accesoConsultas || $accesoTotal): ?>
                 <div class="suboption" onclick="showPage('consultaDNI', this)">
                     <i class="fa-solid fa-id-card"></i>
                     <p>Consulta DNI</p>
                 </div>
+                <?php endif; ?>
                 <div class="suboption" onclick="showPage('consultaRUC', this)">
                     <i class="fa-solid fa-building-columns"></i>
                     <p>Consulta RUC</p>
@@ -47,33 +61,46 @@
             </div>
 
         <!-- Mantenimiento del Sistema -->
+        <?php if ($accesoTotal): ?>
         <div class="option" onclick="showPage('mantenimiento', this)">
             <div class="containerIconOption"><i class="fa-solid fa-tools"></i></div>
             <p>Mantenimiento</p>
         </div>
+        <?php endif ?>
 
 
 
         <!-- Apartado de Sistemas -->
+         <?php if ($accesoTotal): ?>
         <div class="option has-submenu" onclick="toggleSubmenu(this)">
             <div class="containerIconOption"><i class="fa-solid fa-gear"></i></div>
             <p>Sistema</p>
             <i class="fa-solid fa-chevron-down submenu-icon"></i>
         </div>
+        <?php endif; ?>
 
         <div class="submenu">
+
+            <?php if ($accesoTotal): ?>
             <div class="suboption" onclick="showPage('crearUsuario', this)">
                 <i class="fa-solid fa-user-plus"></i>
                 <p>Crear Usuario</p>
             </div>
+            <?php endif; ?>
+
+            <?php if ($accesoTotal): ?>
             <div class="suboption" onclick="showPage('actualizarUsuario', this)">
                 <i class="fa-solid fa-pen-to-square"></i>
                 <p>Actualizar Usuario</p>
             </div>
+            <?php endif; ?>
+
+            <?php if ($accesoConsultas): ?>
             <div class="suboption" onclick="showPage('actualizarPassword', this)">
                 <i class="fas fa-lock"></i>
                 <p>Actualizar Contraseña</p>
             </div>
+            <?php endif; ?>
         </div>
 
 
