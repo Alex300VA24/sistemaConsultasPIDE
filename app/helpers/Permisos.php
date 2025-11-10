@@ -2,17 +2,18 @@
 namespace App\Helpers;
 
 class Permisos {
-    public static function obtenerPermisos($cargoID, $modoEmergencia = false) {
+    public static function obtenerPermisos($rolID) {
         $permisos = [
-            1 => ['inicio', 'practicantes', 'documentos', 
-                  'asistencias', 'reportes', 'certificados',
-                  'consultaDNI', 'consultaRUC', 'consultaPartidas', 
+            '000' => ['inicio', 'consultaDNI', 'consultaRUC', 'consultaPartidas', 
                   'consultaCobranza', 'consultaPapeletas', 'consultaCertificaciones',
-                  'crearUsuario', 'actualizarPassword'], // Gerente RRHH
-            2 => ['inicio', 'practicantes', 'asistencias'], // Encargado de Área
-            3 => ['inicio', 'asistencias'], // Usuario de Área
+                  'crearUsuario', 'actualizarPassword', 'actualizarPassword'], // ADMIN DEL SISTEMA
+            '001' => ['inicio', 'consultaDNI', 'actualizarPassword'], // CONSULTA TIPO 1
+            '002' => ['inicio', 'consultaRUC', 'actualizarPassword'], // CONSULTA TIPO 2
+            '003' => ['inicio', 'consultaPartidas', 'actualizarPassword'], // CONSULTA TIPO 3
+            '004' => ['inicio', 'consultaDNI', 'consultaRUC', 'actualizarPassword'], // CONSULTA TIPO 4
+            '005' => ['inicio', 'consultaDNI', 'consultaPartidas', 'actualizarPassword'], // CONSULTA TIPO 5
         ];
 
-        return $permisos[$cargoID] ?? ['inicio'];
+        return $permisos[$rolID] ?? ['inicio'];
     }
 }

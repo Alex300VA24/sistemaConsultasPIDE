@@ -108,6 +108,7 @@ class UsuarioController {
 
             // Guardar sesión completa
             $_SESSION['usuarioID'] = $resultado['usuario']['USU_id'] ?? null;
+            $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
             $debug->log_debug("Sesión actualizada", $_SESSION);
