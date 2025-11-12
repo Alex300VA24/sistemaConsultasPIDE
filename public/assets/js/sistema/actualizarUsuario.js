@@ -4,6 +4,22 @@ let personaIdActual = null;
 
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
+    // Función para alternar visibilidad de contraseña
+    function togglePasswordVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        icon.addEventListener('click', () => {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+
+    // Aplicar a ambos campos
+    togglePasswordVisibility('usu-pass', 'togglePassword');
+    togglePasswordVisibility('usu-passConfirm', 'togglePasswordConfirm');
     cargarListaUsuarios();
 });
 

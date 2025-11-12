@@ -22,17 +22,18 @@
                     <input type="password" id="usuPassActualPassword" maxlength="100" placeholder="Ingrese su contraseña actual" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="position: relative;">
                     <label>Nueva Contraseña <span style="color: red;">*</span></label>
                     <input type="password" id="usu-passPassword" maxlength="100" placeholder="Ingrese su nueva contraseña" required>
+                    <i id="togglePassword2" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
                     <small style="color: #666; font-size: 12px;">Mínimo 6 caracteres</small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="position: relative;">
                     <label>Confirmar Nueva Contraseña <span style="color: red;">*</span></label>
                     <input type="password" id="usu-passConfirmPassword" maxlength="100" placeholder="Confirme su nueva contraseña" required>
+                    <i id="togglePasswordConfirm2" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
                 </div>
-
             </div>
 
             <!-- Botones de acción -->

@@ -263,7 +263,7 @@ class UsuarioController {
                 "success" => true,
                 "data" => [
                     "DNI" => $resultado['DNI'],
-                    "Contraseña" => $passwordSesion
+                    "password" => $passwordSesion
                 ]
             ];
 

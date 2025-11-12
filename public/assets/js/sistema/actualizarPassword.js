@@ -15,6 +15,22 @@ let usuarioActual = {
  * Al cargar la página, obtener datos del usuario actual
  */
 document.addEventListener('DOMContentLoaded', async function() {
+    // Función para alternar visibilidad de contraseña
+    function togglePasswordVisibilityPass(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        icon.addEventListener('click', () => {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+    }
+
+    // Aplicar a ambos campos
+    togglePasswordVisibilityPass('usu-passPassword', 'togglePassword2');
+    togglePasswordVisibilityPass('usu-passConfirmPassword', 'togglePasswordConfirm2');
     await cargarDatosUsuarioActual();
 });
 

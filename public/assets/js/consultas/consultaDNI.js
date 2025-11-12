@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const dniUsuario = credencialesResponse.data.DNI;
-            const password = credencialesResponse.data.Contraseña;
+            const password = credencialesResponse.data.password;
 
             console.log(dniUsuario);
             console.log(password);
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // 🔹 Enviar solicitud a la API con credenciales + DNI
             const response = await api.consultarDNI(payload);
-
+            console.log('Response del dni: ', response);
             // 🔹 Manejar la respuesta
             if (response.success && response.data) {
                 mostrarResultados(response.data);
