@@ -115,31 +115,24 @@ class API {
     // 📌 --- CONSULTAS SUNARP ---
     /**
      * Buscar persona natural en SUNARP por DNI
-     * @param {string} dni - DNI de 8 dígitos
-     * @param {string} usuario - Usuario SUNARP
-     * @param {string} clave - Clave SUNARP
-     * @returns {Promise} - Lista de personas encontradas
+     * Primero consulta RENIEC y luego prepara datos para SUNARP
      */
-    async buscarPersonaNaturalSunarp(dni, usuario, clave) {
+    async buscarPersonaNaturalSunarp(dni, dniUsuario, password) {
         return this.post('/buscar-persona-natural-sunarp', { 
             dni, 
-            usuario, 
-            clave 
+            dniUsuario, 
+            password 
         });
     }
 
     /**
      * Buscar persona jurídica en SUNARP
-     * @param {string} parametro - RUC o Razón Social
-     * @param {string} tipoBusqueda - 'ruc' o 'razon'
-     * @param {string} usuario - Usuario SUNARP
-     * @param {string} clave - Clave SUNARP
-     * @returns {Promise} - Lista de empresas encontradas
+     * Si es por RUC, primero consulta SUNAT para obtener la razón social
      */
-    async buscarPersonaJuridicaSunarp(parametro, tipoBusqueda, usuario, clave) {
+    async buscarPersonaJuridicaSunarp(parametro, tipoBusqueda, dniUsuario, password) {
         const data = {
-            usuario,
-            clave,
+            dniUsuario,
+            password,
             tipoBusqueda
         };
 
@@ -153,22 +146,18 @@ class API {
     }
 
     /**
-     * Consultar partida registral
-     * @param {object} persona - Objeto con datos de la persona seleccionada
-     * @param {string} tipoPersona - 'natural' o 'juridica'
-     * @param {string} usuario - Usuario SUNARP
-     * @param {string} clave - Clave SUNARP
-     * @returns {Promise} - Datos de la partida registral
+     * Consultar partida registral en SUNARP
      */
-    async consultarPartidaRegistral(persona, tipoPersona, usuario, clave) {
+    async consultarPartidaRegistral(persona, dniUsuario, password) {
         return this.post('/consultar-partida-registral', {
             partida: persona.partida,
             zona: persona.zona,
             oficina: persona.oficina,
-            usuario,
-            clave
+            dniUsuario,
+            password
         });
-}
+    }
+
 
     async crearUsuario(data) {
         return this.post('/crear-usuario', { data })

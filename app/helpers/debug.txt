@@ -2771,3 +2771,1767 @@
 
 )
 
+[2025-11-12 14:27:04] Inicio validarCUI()
+[2025-11-12 14:27:04] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:27:04] JSON recibido -> {"cui":"1"}
+[2025-11-12 14:27:04] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 14:27:04] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-12 14:27:04] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 14:27:04] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 14:27:04] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 14:34:20] Inicio validarCUI()
+[2025-11-12 14:34:20] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:34:20] JSON recibido -> {"cui":"3"}
+[2025-11-12 14:34:20] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-12 14:34:20] Variables preparadas -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [cui] => 3
+)
+
+[2025-11-12 14:34:20] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JRAMOS
+            [USU_id] => 8
+            [PER_documento_num] => 45862233
+            [ROL_id] => 002
+            [ROL_nombre] => VERIFICADOR TIPO 01
+            [ROL_abrev] => VERIFICADOR TIPO 01
+        )
+
+)
+
+[2025-11-12 14:34:20] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 8
+    [rolID] => 002
+    [authenticated] => 1
+)
+
+[2025-11-12 14:34:20] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JRAMOS
+            [USU_id] => 8
+            [PER_documento_num] => 45862233
+            [ROL_id] => 002
+            [ROL_nombre] => VERIFICADOR TIPO 01
+            [ROL_abrev] => VERIFICADOR TIPO 01
+        )
+
+)
+
+[2025-11-12 14:43:45] Inicio validarCUI()
+[2025-11-12 14:43:45] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:43:45] JSON recibido -> {"cui":"3"}
+[2025-11-12 14:43:45] JSON decodificado -> Array
+(
+    [cui] => 3
+)
+
+[2025-11-12 14:43:45] Variables preparadas -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [cui] => 3
+)
+
+[2025-11-12 14:43:45] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JRAMOS
+            [USU_id] => 8
+            [PER_documento_num] => 45862233
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:43:45] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JRAMOS
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 8
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 14:43:45] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JRAMOS
+            [USU_id] => 8
+            [PER_documento_num] => 45862233
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:53:59] Inicio validarCUI()
+[2025-11-12 14:53:59] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:53:59] JSON recibido -> {"cui":"4"}
+[2025-11-12 14:53:59] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 14:53:59] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 14:53:59] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:53:59] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 14:53:59] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:55:54] Inicio validarCUI()
+[2025-11-12 14:55:54] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ACOLLANTES
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:55:54] JSON recibido -> {"cui":"2"}
+[2025-11-12 14:55:54] JSON decodificado -> Array
+(
+    [cui] => 2
+)
+
+[2025-11-12 14:55:54] Variables preparadas -> Array
+(
+    [nombreUsuario] => ACOLLANTES
+    [password] => 123456
+    [cui] => 2
+)
+
+[2025-11-12 14:55:54] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ACOLLANTES
+            [USU_id] => 2
+            [PER_documento_num] => 42761038
+            [ROL_id] => 002
+            [ROL_nombre] => VERIFICADOR TIPO 01
+            [ROL_abrev] => VERIFICADOR TIPO 01
+        )
+
+)
+
+[2025-11-12 14:55:54] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ACOLLANTES
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 2
+    [rolID] => 002
+    [authenticated] => 1
+)
+
+[2025-11-12 14:55:54] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ACOLLANTES
+            [USU_id] => 2
+            [PER_documento_num] => 42761038
+            [ROL_id] => 002
+            [ROL_nombre] => VERIFICADOR TIPO 01
+            [ROL_abrev] => VERIFICADOR TIPO 01
+        )
+
+)
+
+[2025-11-12 14:56:07] Inicio validarCUI()
+[2025-11-12 14:56:07] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:56:07] JSON recibido -> {"cui":"1"}
+[2025-11-12 14:56:07] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 14:56:07] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-12 14:56:07] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 14:56:07] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 14:56:07] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 14:56:29] Inicio validarCUI()
+[2025-11-12 14:56:29] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:56:29] JSON recibido -> {"cui":"4"}
+[2025-11-12 14:56:29] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 14:56:29] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 14:56:29] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:56:29] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 14:56:29] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:57:35] Inicio validarCUI()
+[2025-11-12 14:57:35] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 14:57:35] JSON recibido -> {"cui":"4"}
+[2025-11-12 14:57:35] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 14:57:35] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 14:57:35] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 14:57:35] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 14:57:35] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:04:29] Inicio validarCUI()
+[2025-11-12 15:04:29] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:04:29] JSON recibido -> {"cui":"5"}
+[2025-11-12 15:04:29] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 15:04:29] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 5
+)
+
+[2025-11-12 15:04:29] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:04:29] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 15:04:29] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:06:01] Inicio validarCUI()
+[2025-11-12 15:06:01] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:06:01] JSON recibido -> {"cui":"5"}
+[2025-11-12 15:06:01] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 15:06:01] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 5
+)
+
+[2025-11-12 15:06:01] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:06:01] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 15:06:01] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:06:16] Inicio validarCUI()
+[2025-11-12 15:06:16] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:06:16] JSON recibido -> {"cui":"1"}
+[2025-11-12 15:06:16] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 15:06:16] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-12 15:06:16] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:06:16] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 15:06:16] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:09:27] Inicio validarCUI()
+[2025-11-12 15:09:27] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:09:27] JSON recibido -> {"cui":"4"}
+[2025-11-12 15:09:27] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 15:09:27] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 15:09:27] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:09:27] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 15:09:27] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:24:26] Inicio validarCUI()
+[2025-11-12 15:24:26] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:24:26] JSON recibido -> {"cui":"5"}
+[2025-11-12 15:24:26] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 15:24:26] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 5
+)
+
+[2025-11-12 15:24:26] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:24:26] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 15:24:26] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:27:13] Inicio validarCUI()
+[2025-11-12 15:27:13] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:27:13] JSON recibido -> {"cui":"5"}
+[2025-11-12 15:27:13] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 15:27:13] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [cui] => 5
+)
+
+[2025-11-12 15:27:13] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:27:13] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 15:27:13] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 15:28:55] Inicio validarCUI()
+[2025-11-12 15:28:55] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:28:55] JSON recibido -> {"cui":"4"}
+[2025-11-12 15:28:55] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 15:28:55] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 15:28:55] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:28:55] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 15:28:55] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:29:24] Inicio validarCUI()
+[2025-11-12 15:29:24] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:29:24] JSON recibido -> {"cui":"4"}
+[2025-11-12 15:29:24] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 15:29:24] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 15:29:24] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:29:24] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 15:29:24] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:34:36] Inicio validarCUI()
+[2025-11-12 15:34:36] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:34:36] JSON recibido -> {"cui":"1"}
+[2025-11-12 15:34:36] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 15:34:36] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-12 15:34:36] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:34:36] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 15:34:36] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:45:13] Inicio validarCUI()
+[2025-11-12 15:45:13] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:45:13] JSON recibido -> {"cui":"1"}
+[2025-11-12 15:45:13] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 15:45:13] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [cui] => 1
+)
+
+[2025-11-12 15:45:13] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:45:13] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 15:45:13] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:47:50] Inicio validarCUI()
+[2025-11-12 15:47:50] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:47:50] JSON recibido -> {"cui":"4"}
+[2025-11-12 15:47:50] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 15:47:50] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 15:47:50] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:47:50] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 15:47:50] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 15:48:37] Inicio validarCUI()
+[2025-11-12 15:48:37] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 15:48:37] JSON recibido -> {"cui":"1"}
+[2025-11-12 15:48:37] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 15:48:37] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-12 15:48:37] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 15:48:37] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 15:48:37] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 17:04:09] Inicio validarCUI()
+[2025-11-12 17:04:09] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 17:04:09] JSON recibido -> {"cui":"1"}
+[2025-11-12 17:04:09] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 17:04:09] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-12 17:04:09] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 17:04:09] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 17:04:09] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 17:32:58] Inicio validarCUI()
+[2025-11-12 17:32:58] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 17:32:58] JSON recibido -> {"cui":"5"}
+[2025-11-12 17:32:58] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 17:32:58] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [cui] => 5
+)
+
+[2025-11-12 17:32:58] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 17:32:58] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 17:32:58] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 17:34:25] Inicio validarCUI()
+[2025-11-12 17:34:25] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 17:34:25] JSON recibido -> {"cui":"4"}
+[2025-11-12 17:34:25] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 17:34:25] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 17:34:25] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 17:34:25] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 17:34:25] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 17:36:01] Inicio validarCUI()
+[2025-11-12 17:36:01] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 17:36:01] JSON recibido -> {"cui":"1"}
+[2025-11-12 17:36:01] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 17:36:01] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-12 17:36:01] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 17:36:01] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 17:36:01] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 19:01:11] Inicio validarCUI()
+[2025-11-12 19:01:11] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 19:01:11] JSON recibido -> {"cui":"5"}
+[2025-11-12 19:01:11] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 19:01:11] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [cui] => 5
+)
+
+[2025-11-12 19:01:11] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 19:01:11] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 19:01:11] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 19:03:14] Inicio validarCUI()
+[2025-11-12 19:03:14] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 19:03:14] JSON recibido -> {"cui":"5"}
+[2025-11-12 19:03:14] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-11-12 19:03:14] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 5
+)
+
+[2025-11-12 19:03:14] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 19:03:14] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 22
+    [rolID] => 007
+    [authenticated] => 1
+)
+
+[2025-11-12 19:03:14] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => MGUTIERREZ
+            [USU_id] => 22
+            [PER_documento_num] => 42996278
+            [ROL_id] => 007
+            [ROL_nombre] => CONSULTA TIPO 2
+            [ROL_abrev] => TIPO 2
+        )
+
+)
+
+[2025-11-12 19:04:07] Inicio validarCUI()
+[2025-11-12 19:04:07] Sesión iniciada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-11-12 19:04:07] JSON recibido -> {"cui":"4"}
+[2025-11-12 19:04:07] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-11-12 19:04:07] Variables preparadas -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-11-12 19:04:07] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 19:04:07] Sesión actualizada -> Array
+(
+    [nombreUsuario] => JTIRADO
+    [password] => 123456
+    [requireCUI] => 
+    [usuarioID] => 21
+    [rolID] => 006
+    [authenticated] => 1
+)
+
+[2025-11-12 19:04:07] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => JTIRADO
+            [USU_id] => 21
+            [PER_documento_num] => 45216440
+            [ROL_id] => 006
+            [ROL_nombre] => CONSULTA TIPO 1
+            [ROL_abrev] => TIPO 1
+        )
+
+)
+
+[2025-11-12 19:05:31] Inicio validarCUI()
+[2025-11-12 19:05:31] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-12 19:05:31] JSON recibido -> {"cui":"1"}
+[2025-11-12 19:05:31] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-12 19:05:31] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-12 19:05:31] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-12 19:05:31] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-12 19:05:31] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+

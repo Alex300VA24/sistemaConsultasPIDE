@@ -98,16 +98,19 @@
                         <input type="password" id="usuPassActual" maxlength="100" placeholder="Contraseña segura">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>Nueva Contraseña</label>
                         <input type="password" id="usu-pass" maxlength="100" placeholder="Dejar vacío para no cambiar">
+                        <i id="togglePassword" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
                         <small style="color: #666; font-size: 12px;">Dejar vacío si no desea cambiar la contraseña</small>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label>Confirmar Nueva Contraseña</label>
                         <input type="password" id="usu-passConfirm" maxlength="100" placeholder="Confirmar contraseña">
+                        <i id="togglePasswordConfirm" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
                     </div>
+
 
                     <div class="form-group">
                         <label>Nivel de Permiso <span class="required">*</span></label>

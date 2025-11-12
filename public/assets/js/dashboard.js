@@ -10,11 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("🟦 Click en:", pageId);
         document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
 
+
         const targetId = 'page' + capitalize(pageId);
         console.log("🟩 Buscando elemento con id:", targetId);
 
         const targetPage = document.getElementById(targetId);
         console.log("🟨 Resultado del querySelector:", targetPage);
+
+        localStorage.setItem('paginaActiva', targetId);
 
         if (targetPage) {
             targetPage.classList.add('active');
@@ -44,6 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btnLogout').addEventListener('click', () => {
         const modal = document.getElementById('logoutModal');
         modal.style.display = 'flex';
+        localStorage.removeItem('paginaActiva');
+
     });
 
     document.getElementById('cancelLogout').addEventListener('click', () => {

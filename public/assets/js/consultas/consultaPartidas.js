@@ -3,29 +3,36 @@
 let personaSeleccionada = null;
 let tipoPersonaActual = 'natural';
 
-// Al inicio del archivo, obtener credenciales del usuario
-let credencialesSunarp = {
-    usuario: '',
-    clave: ''
+// Al inicio del archivo
+let credencialesUsuario = {
+    dni: '',
+    password: ''
 };
 
-// Función para cargar credenciales
-async function cargarCredencialesSunarp() {
+// Función para cargar credenciales del usuario actual
+async function cargarCredencialesUsuario() {
     try {
         const usuario = await api.obtenerUsuarioActual();
-        if (usuario && usuario.data) {
-            credencialesSunarp.usuario = usuario.data.dni || '';
-            // La clave debe ser obtenida de alguna forma segura
-            // Podrías tener un campo específico o pedirla al usuario
+        if (usuario.success && usuario.data) {
+            credencialesUsuario.dni = usuario.data.PER_documento_num || '';
+            
+            // Obtener también la password si está disponible
+            if (usuario.data.USU_login) {
+                const credenciales = await api.obtenerDniYPassword(usuario.data.USU_login);
+                if (credenciales && credenciales.success) {
+                    credencialesUsuario.password = credenciales.data.password || '';
+                }
+            }
         }
     } catch (error) {
         console.error('Error al cargar credenciales:', error);
+        mostrarAlertaPartidas('Error al cargar credenciales de usuario', 'danger');
     }
 }
 
 // Llamar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-    cargarCredencialesSunarp();
+    cargarCredencialesUsuario();
     initEventListeners();
 });
 
@@ -42,7 +49,7 @@ function initEventListeners() {
     document.getElementById('btnConsultar').addEventListener('click', consultarPartida);
 
     // Botón limpiar
-    document.getElementById('btnLimpiar').addEventListener('click', limpiarFormulario);
+    document.getElementById('btnLimpiar').addEventListener('click', limpiarFormularioPartidas);
 
     // Form búsqueda natural
     document.getElementById('formBusquedaNatural').addEventListener('submit', buscarPersonaNatural);
@@ -63,11 +70,20 @@ function initEventListeners() {
             }
         });
     });
+
+    // Validación solo números
+    document.getElementById('dniNatural').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    document.getElementById('rucJuridica').addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
 }
 
 function cambiarTipoPersona(e) {
     tipoPersonaActual = e.target.value;
-    limpiarFormulario();
+    limpiarFormularioPartidas();
     
     const labelPersona = document.getElementById('labelPersona');
     if (tipoPersonaActual === 'natural') {
@@ -93,34 +109,40 @@ function cerrarModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
 }
 
+// Actualizar función buscarPersonaNatural
 async function buscarPersonaNatural(e) {
     e.preventDefault();
     
     const dni = document.getElementById('dniNatural').value.trim();
     
     if (!dni || dni.length !== 8) {
-        mostrarAlerta('Por favor ingrese un DNI válido de 8 dígitos', 'warning');
+        mostrarAlertaPartidas('Por favor ingrese un DNI válido de 8 dígitos', 'warning');
         return;
     }
 
-    if (!credencialesSunarp.usuario || !credencialesSunarp.clave) {
-        mostrarAlerta('No se han configurado las credenciales de SUNARP', 'danger');
+    if (!credencialesUsuario.dni || !credencialesUsuario.password) {
+        mostrarAlertaPartidas('No se han cargado las credenciales del usuario. Recargue la página.', 'danger');
         return;
     }
 
-    mostrarLoading('formBusquedaNatural');
+    mostrarLoadingPartidas('formBusquedaNatural');
     
     try {
+        console.log('Credenciales:', { dni, credencialesUsuario });
         const resultado = await api.buscarPersonaNaturalSunarp(
             dni,
-            credencialesSunarp.usuario,
-            credencialesSunarp.clave
+            credencialesUsuario.dni,
+            credencialesUsuario.password
         );
+        console.log(resultado);
         mostrarResultadosNatural(resultado.data || []);
+        if (resultado.message) {
+            mostrarAlertaPartidas(resultado.message, 'info');
+        }
     } catch (error) {
-        mostrarAlerta(error.message || 'Error al buscar persona natural', 'danger');
+        mostrarAlertaPartidas(error.message || 'Error al buscar persona natural', 'danger');
     } finally {
-        ocultarLoading('formBusquedaNatural');
+        ocultarLoadingPartidas('formBusquedaNatural');
     }
 }
 
@@ -133,36 +155,36 @@ async function buscarPersonaJuridica(e) {
     if (tipoBusqueda === 'ruc') {
         parametro = document.getElementById('rucJuridica').value.trim();
         if (!parametro || parametro.length !== 11) {
-            mostrarAlerta('Por favor ingrese un RUC válido de 11 dígitos', 'warning');
+            mostrarAlertaPartidas('Por favor ingrese un RUC válido de 11 dígitos', 'warning');
             return;
         }
     } else {
         parametro = document.getElementById('razonSocial').value.trim();
         if (!parametro) {
-            mostrarAlerta('Por favor ingrese una razón social', 'warning');
+            mostrarAlertaPartidas('Por favor ingrese una razón social', 'warning');
             return;
         }
     }
 
-    if (!credencialesSunarp.usuario || !credencialesSunarp.clave) {
-        mostrarAlerta('No se han configurado las credenciales de SUNARP', 'danger');
+    if (!credencialesUsuario.dni || !credencialesUsuario.password) {
+        mostrarAlertaPartidas('No se han cargado las credenciales del usuario. Recargue la página.', 'danger');
         return;
     }
 
-    mostrarLoading('formBusquedaJuridica');
+    mostrarLoadingPartidas('formBusquedaJuridica');
     
     try {
         const resultado = await api.buscarPersonaJuridicaSunarp(
             parametro,
             tipoBusqueda,
-            credencialesSunarp.usuario,
-            credencialesSunarp.clave
+            credencialesUsuario.dni,
+            credencialesUsuario.password
         );
         mostrarResultadosJuridica(resultado.data || []);
     } catch (error) {
-        mostrarAlerta(error.message || 'Error al buscar persona jurídica', 'danger');
+        mostrarAlertaPartidas(error.message || 'Error al buscar persona jurídica', 'danger');
     } finally {
-        ocultarLoading('formBusquedaJuridica');
+        ocultarLoadingPartidas('formBusquedaJuridica');
     }
 }
 
@@ -183,6 +205,7 @@ function mostrarResultadosNatural(datos) {
                     <th>Nombres</th>
                     <th>Apellido Paterno</th>
                     <th>Apellido Materno</th>
+                    <th>Información Adicional</th>
                     <th>Acción</th>
                 </tr>
             </thead>
@@ -190,12 +213,27 @@ function mostrarResultadosNatural(datos) {
     `;
 
     datos.forEach(persona => {
+        let infoAdicional = '';
+        if (persona.profesion) {
+            infoAdicional += `<div><strong>Profesión:</strong> ${persona.profesion}</div>`;
+        }
+        if (persona.tipoVerificador) {
+            infoAdicional += `<div><strong>Tipo:</strong> ${persona.tipoVerificador}</div>`;
+        }
+        if (persona.zonaRegistral) {
+            infoAdicional += `<div><strong>Zona:</strong> ${persona.zonaRegistral}</div>`;
+        }
+        if (persona.estado) {
+            infoAdicional += `<div><strong>Estado:</strong> ${persona.estado === 'A' ? 'Activo' : 'Inactivo'}</div>`;
+        }
+
         html += `
             <tr>
                 <td>${persona.dni || '-'}</td>
                 <td>${persona.nombres || '-'}</td>
                 <td>${persona.apellidoPaterno || '-'}</td>
                 <td>${persona.apellidoMaterno || '-'}</td>
+                <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
                 <td>
                     <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(persona)})'>
                         Seleccionar
@@ -232,10 +270,31 @@ function mostrarResultadosJuridica(datos) {
     `;
 
     datos.forEach(empresa => {
+        let infoAdicional = '';
+        if (empresa.direccion) {
+            infoAdicional += `<div><strong>Dirección:</strong> ${empresa.direccion}</div>`;
+        }
+        if (empresa.departamento && empresa.provincia && empresa.distrito) {
+            infoAdicional += `<div><strong>Ubicación:</strong> ${empresa.departamento} / ${empresa.provincia} / ${empresa.distrito}</div>`;
+        }
+        if (empresa.tipo_contribuyente) {
+            infoAdicional += `<div><strong>Tipo:</strong> ${empresa.tipo_contribuyente}</div>`;
+        }
+        
+        // Información de partidas SUNARP
+        if (empresa.partidas_sunarp && empresa.partidas_sunarp.length > 0) {
+            infoAdicional += `<div style="margin-top: 5px;"><strong>Partidas SUNARP:</strong> ${empresa.partidas_sunarp.length} encontrada(s)</div>`;
+        }
+
+        const estadoClass = empresa.es_activo ? 'badge-success' : 'badge-danger';
+        const estadoTexto = empresa.es_activo ? 'Activo' : 'Inactivo';
+
         html += `
             <tr>
                 <td>${empresa.ruc || '-'}</td>
                 <td>${empresa.razonSocial || '-'}</td>
+                <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
+                <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
                 <td>
                     <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(empresa)})'>
                         Seleccionar
@@ -263,17 +322,17 @@ function seleccionarPersona(persona) {
     }
     
     document.getElementById('btnConsultar').disabled = false;
-    mostrarAlerta('Persona seleccionada correctamente', 'success');
+    mostrarAlertaPartidas('Persona seleccionada correctamente', 'success');
 }
 
 async function consultarPartida() {
     if (!personaSeleccionada) {
-        mostrarAlerta('Por favor seleccione una persona primero', 'warning');
+        mostrarAlertaPartidas('Por favor seleccione una persona primero', 'warning');
         return;
     }
 
-    if (!credencialesSunarp.usuario || !credencialesSunarp.clave) {
-        mostrarAlerta('No se han configurado las credenciales de SUNARP', 'danger');
+    if (!credencialesUsuario.dni || !credencialesUsuario.password) {
+        mostrarAlertaPartidas('No se han cargado las credenciales del usuario. Recargue la página.', 'danger');
         return;
     }
 
@@ -282,16 +341,16 @@ async function consultarPartida() {
     btnConsultar.innerHTML = '<span class="loading-spinner"></span> <span>Consultando...</span>';
 
     try {
+        console.log('Credenciales para consultar Partida registral: ', { personaSeleccionada, credencialesUsuario });
         const resultado = await api.consultarPartidaRegistral(
             personaSeleccionada,
-            tipoPersonaActual,
-            credencialesSunarp.usuario,
-            credencialesSunarp.clave
+            credencialesUsuario.dni,
+            credencialesUsuario.password
         );
         mostrarResultados(resultado.data);
-        mostrarAlerta('Consulta realizada exitosamente', 'success');
+        mostrarAlertaPartidas('Consulta realizada exitosamente', 'success');
     } catch (error) {
-        mostrarAlerta(error.message || 'Error al consultar partida registral', 'danger');
+        mostrarAlertaPartidas(error.message || 'Error al consultar partida registral', 'danger');
     } finally {
         btnConsultar.disabled = false;
         btnConsultar.innerHTML = '<i class="fas fa-search"></i> <span>Consultar</span>';
@@ -334,7 +393,7 @@ function mostrarResultados(datos) {
     document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
 }
 
-function limpiarFormulario() {
+function limpiarFormularioPartidas() {
     personaSeleccionada = null;
     document.getElementById('persona').value = '';
     document.getElementById('btnConsultar').disabled = true;
@@ -373,7 +432,7 @@ function cambiarTipoBusquedaJuridica(e) {
     limpiarModalJuridica();
 }
 
-function mostrarAlerta(mensaje, tipo) {
+function mostrarAlertaPartidas(mensaje, tipo) {
     const iconos = {
         success: 'check-circle',
         danger: 'exclamation-circle',
@@ -395,14 +454,14 @@ function mostrarAlerta(mensaje, tipo) {
     }, 5000);
 }
 
-function mostrarLoading(formId) {
+function mostrarLoadingPartidas(formId) {
     const form = document.getElementById(formId);
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="loading-spinner"></span> <span>Buscando...</span>';
 }
 
-function ocultarLoading(formId) {
+function ocultarLoadingPartidas(formId) {
     const form = document.getElementById(formId);
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = false;
