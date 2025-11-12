@@ -118,6 +118,31 @@ switch (true) {
         $controller->consultarRUC();
         break;
     
+    // RUTAS DE CONSULTAS SUNARP
+    case preg_match('#^/api/buscar-persona-natural-sunarp$#', $path):
+        $controller = new \App\Controllers\ConsultasSunarpController();
+        $controller->buscarPersonaNatural();
+        break;
+
+    case preg_match('#^/api/buscar-persona-juridica-sunarp$#', $path):
+        $controller = new \App\Controllers\ConsultasSunarpController();
+        $controller->buscarPersonaJuridica();
+        break;
+
+    case preg_match('#^/api/consultar-partida-registral$#', $path):
+        $controller = new \App\Controllers\ConsultasSunarpController();
+        $controller->consultarPartidaRegistral();
+        break;
+
+    // Vista de Partidas Registrales
+    case $path === '/consulta-partidas':
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            header('Location: /sistemaConsultasPIDE/public/login');
+            exit;
+        }
+        require __DIR__ . '/../views/consulta-partidas.php';
+        break;
+    
 
     // VISTAS
     
