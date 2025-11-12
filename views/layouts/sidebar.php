@@ -9,11 +9,11 @@
 
         <?php
             // === Obtener datos de sesión ===
-            $rolID = $_SESSION['nombreCargo'] ?? '';
+            $rolID = $_SESSION['rolID'] ?? '';
 
             // === Definir permisos según rol ===
-            $accesoTotal = ($cargo === '000');
-            $accesoConsultas = ($cargo === '002');
+            $accesoTotal = ($rolID === '000');
+            $accesoConsultas = ($rolID === '002');
         ?>
 
         <!-- Inicio del Sistema -->
@@ -22,43 +22,66 @@
             <p>Inicio</p>
         </div>
         <!-- Consultas del Sistema -->
-            <?php if ($accesoConsultas || $accesoTotal): ?>
-            <div class="option has-submenu" onclick="toggleSubmenu(this)">
-                <div class="containerIconOption"><i class="fa-solid fa-database"></i></div>
-                <p>Consultas</p>
-                <i class="fa-solid fa-chevron-down submenu-icon"></i>
-            </div>
-            <?php endif; ?>
-            
-            
-            <div class="submenu">
-                <?php if ($accesoConsultas || $accesoTotal): ?>
+            <!-- Bloque de Consultas -->
+        <?php if (in_array('consultaDNI', $permisos) 
+            || in_array('consultaRUC', $permisos) 
+            || in_array('consultaPartidas', $permisos)
+            || in_array('consultaCobranza', $permisos)
+            || in_array('consultaPapeletas', $permisos)
+            || in_array('consultaCertificaciones', $permisos)): ?>
+
+        <div class="option has-submenu" onclick="toggleSubmenu(this)">
+            <div class="containerIconOption"><i class="fa-solid fa-database"></i></div>
+            <p>Consultas</p>
+            <i class="fa-solid fa-chevron-down submenu-icon"></i>
+        </div>
+
+        <div class="submenu">
+            <?php if (in_array('consultaDNI', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaDNI', this)">
                     <i class="fa-solid fa-id-card"></i>
                     <p>Consulta DNI</p>
                 </div>
-                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if (in_array('consultaRUC', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaRUC', this)">
                     <i class="fa-solid fa-building-columns"></i>
                     <p>Consulta RUC</p>
                 </div>
+            <?php endif; ?>
+
+            <?php if (in_array('consultaCobranza', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaCobranza', this)">
                     <i class="fa-solid fa-scale-balanced"></i>
                     <p>Consulta Cobranza Coactiva</p>
                 </div>
+            <?php endif; ?>
+
+            <?php if (in_array('consultaPapeletas', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaPapeletas', this)">
                     <i class="fa-solid fa-car-burst"></i>
                     <p>Consulta Papeletas, Lic. Conduc. y Sanc.</p>
                 </div>
+            <?php endif; ?>
+
+            <?php if (in_array('consultaPartidas', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaPartidas', this)">
                     <i class="fa-solid fa-file-signature"></i>
                     <p>Consulta de Partidas Registrales</p>
                 </div>
+            <?php endif; ?>
+
+            <?php if (in_array('consultaCertificaciones', $permisos)): ?>
                 <div class="suboption" onclick="showPage('consultaCertificaciones', this)">
                     <i class="fa-solid fa-leaf"></i>
                     <p>Consulta Certificaciones Ambientales</p>
                 </div>
-            </div>
+            <?php endif; ?>
+        </div>
+
+        <?php endif; ?>
+
 
         <!-- Mantenimiento del Sistema -->
         <?php if ($accesoTotal): ?>
@@ -71,37 +94,39 @@
 
 
         <!-- Apartado de Sistemas -->
-         <?php if ($accesoTotal): ?>
-        <div class="option has-submenu" onclick="toggleSubmenu(this)">
-            <div class="containerIconOption"><i class="fa-solid fa-gear"></i></div>
-            <p>Sistema</p>
-            <i class="fa-solid fa-chevron-down submenu-icon"></i>
-        </div>
+        <?php if (in_array('crearUsuario', $permisos) 
+            || in_array('actualizarUsuario', $permisos) 
+            || in_array('actualizarPassword', $permisos)): ?>
+            <div class="option has-submenu" onclick="toggleSubmenu(this)">
+                <div class="containerIconOption"><i class="fa-solid fa-gear"></i></div>
+                <p>Sistema</p>
+                <i class="fa-solid fa-chevron-down submenu-icon"></i>
+            </div>
+
+            <div class="submenu">
+                <?php if (in_array('crearUsuario', $permisos)): ?>
+                <div class="suboption" onclick="showPage('crearUsuario', this)">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <p>Crear Usuario</p>
+                </div>
+                <?php endif; ?>
+
+                <?php if (in_array('actualizarUsuario', $permisos)): ?>
+                <div class="suboption" onclick="showPage('actualizarUsuario', this)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <p>Actualizar Usuario</p>
+                </div>
+                <?php endif; ?>
+
+                <?php if (in_array('actualizarPassword', $permisos)): ?>
+                <div class="suboption" onclick="showPage('actualizarPassword', this)">
+                    <i class="fas fa-lock"></i>
+                    <p>Actualizar Contraseña</p>
+                </div>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
 
-        <div class="submenu">
-
-            <?php if ($accesoTotal): ?>
-            <div class="suboption" onclick="showPage('crearUsuario', this)">
-                <i class="fa-solid fa-user-plus"></i>
-                <p>Crear Usuario</p>
-            </div>
-            <?php endif; ?>
-
-            <?php if ($accesoTotal): ?>
-            <div class="suboption" onclick="showPage('actualizarUsuario', this)">
-                <i class="fa-solid fa-pen-to-square"></i>
-                <p>Actualizar Usuario</p>
-            </div>
-            <?php endif; ?>
-
-            <?php if ($accesoConsultas): ?>
-            <div class="suboption" onclick="showPage('actualizarPassword', this)">
-                <i class="fas fa-lock"></i>
-                <p>Actualizar Contraseña</p>
-            </div>
-            <?php endif; ?>
-        </div>
 
 
         <!-- === Modal de Confirmación de Cierre de Sesión === -->
