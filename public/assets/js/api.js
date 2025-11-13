@@ -112,10 +112,53 @@ class API {
         return this.post('/consultar-ruc', { ruc });
     }
 
-    // 📌 --- CONSULTAS SUNARP ---
     /**
-     * Buscar persona natural en SUNARP por DNI
-     * Primero consulta RENIEC y luego prepara datos para SUNARP
+     * Buscar por razón social en SUNAT
+     * @param {string} razonSocial - Razón social a buscar
+     * @returns {Promise} - Lista de contribuyentes encontrados
+     */
+    async buscarRazonSocialSUNAT(razonSocial) {
+        return this.post('/buscar-razon-social', { razonSocial });
+    }
+
+    // ========================================
+    // 📌 CONSULTAS SUNARP (TSIRSARP)
+    // ========================================
+    
+    /**
+     * Buscar persona natural en SUNARP
+     * Flujo: RENIEC (obtener datos) → SUNARP TSIRSARP (buscar registros)
+     * 
+     * @param {string} dni - DNI de 8 dígitos
+     * @param {string} dniUsuario - DNI del usuario que consulta
+     * @param {string} password - Contraseña PIDE
+     * @returns {Promise} - Lista de registros encontrados en SUNARP
+     * 
+     * Respuesta esperada:
+     * {
+     *   success: true,
+     *   message: "Consulta exitosa",
+     *   data: [
+     *     {
+     *       tipo: "PERSONA_NATURAL",
+     *       dni: "12345678",
+     *       nombres: "JUAN",
+     *       apellidoPaterno: "PEREZ",
+     *       apellidoMaterno: "GOMEZ",
+     *       foto: "base64...",
+     *       registro: "...",
+     *       libro: "...",
+     *       partida: "...",
+     *       asiento: "...",
+     *       placa: "...",
+     *       zona: "...",
+     *       oficina: "...",
+     *       estado: "...",
+     *       descripcion: "..."
+     *     }
+     *   ],
+     *   total: 1
+     * }
      */
     async buscarPersonaNaturalSunarp(dni, dniUsuario, password) {
         return this.post('/buscar-persona-natural-sunarp', { 
@@ -127,13 +170,42 @@ class API {
 
     /**
      * Buscar persona jurídica en SUNARP
-     * Si es por RUC, primero consulta SUNAT para obtener la razón social
+     * Flujo: 
+     *   - Si es por RUC: SUNAT (obtener razón social) → SUNARP TSIRSARP (buscar registros)
+     *   - Si es por razón social: SUNARP TSIRSARP (buscar registros directamente)
+     * 
+     * @param {string} parametro - RUC (11 dígitos) o razón social
+     * @param {string} tipoBusqueda - 'ruc' o 'razonSocial'
+     * @param {string} dniUsuario - DNI del usuario que consulta
+     * @param {string} password - Contraseña PIDE
+     * @returns {Promise} - Lista de registros encontrados en SUNARP
+     * 
+     * Respuesta esperada:
+     * {
+     *   success: true,
+     *   message: "Consulta exitosa",
+     *   data: [
+     *     {
+     *       tipo: "PERSONA_JURIDICA",
+     *       razonSocial: "EMPRESA S.A.C.",
+     *       registro: "...",
+     *       libro: "...",
+     *       partida: "...",
+     *       asiento: "...",
+     *       zona: "...",
+     *       oficina: "...",
+     *       estado: "...",
+     *       descripcion: "..."
+     *     }
+     *   ],
+     *   total: 1
+     * }
      */
     async buscarPersonaJuridicaSunarp(parametro, tipoBusqueda, dniUsuario, password) {
         const data = {
+            tipoBusqueda,
             dniUsuario,
-            password,
-            tipoBusqueda
+            password
         };
 
         if (tipoBusqueda === 'ruc') {
@@ -141,21 +213,8 @@ class API {
         } else {
             data.razonSocial = parametro;
         }
-
+        console.log(data.razonSocial);
         return this.post('/buscar-persona-juridica-sunarp', data);
-    }
-
-    /**
-     * Consultar partida registral en SUNARP
-     */
-    async consultarPartidaRegistral(persona, dniUsuario, password) {
-        return this.post('/consultar-partida-registral', {
-            partida: persona.partida,
-            zona: persona.zona,
-            oficina: persona.oficina,
-            dniUsuario,
-            password
-        });
     }
 
 

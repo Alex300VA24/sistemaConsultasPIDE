@@ -129,10 +129,10 @@ switch (true) {
         $controller->buscarPersonaJuridica();
         break;
 
-    case preg_match('#^/api/consultar-partida-registral$#', $path):
+    /*case preg_match('#^/api/consultar-partida-registral$#', $path):
         $controller = new \App\Controllers\ConsultasSunarpController();
         $controller->consultarPartidaRegistral();
-        break;
+        break;*/
 
     // Vista de Partidas Registrales
     case $path === '/consulta-partidas':
