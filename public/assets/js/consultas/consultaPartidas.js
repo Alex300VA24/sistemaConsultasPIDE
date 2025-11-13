@@ -1,13 +1,18 @@
-// consulta-partidas.js
+// consulta-partidas.js - Actualizado para TSIRSARP
 
 let personaSeleccionada = null;
 let tipoPersonaActual = 'natural';
+let registrosEncontrados = [];
 
-// Al inicio del archivo
+// Credenciales del usuario actual
 let credencialesUsuario = {
     dni: '',
     password: ''
 };
+
+// ========================================
+// 📌 INICIALIZACIÓN
+// ========================================
 
 // Función para cargar credenciales del usuario actual
 async function cargarCredencialesUsuario() {
@@ -24,6 +29,10 @@ async function cargarCredencialesUsuario() {
                 }
             }
         }
+        console.log('Credenciales cargadas:', { 
+            dni: credencialesUsuario.dni, 
+            passwordLength: credencialesUsuario.password.length 
+        });
     } catch (error) {
         console.error('Error al cargar credenciales:', error);
         mostrarAlertaPartidas('Error al cargar credenciales de usuario', 'danger');
@@ -45,9 +54,6 @@ function initEventListeners() {
     // Botón buscar persona
     document.getElementById('btnBuscarPersona').addEventListener('click', abrirModalBusqueda);
 
-    // Botón consultar
-    document.getElementById('btnConsultar').addEventListener('click', consultarPartida);
-
     // Botón limpiar
     document.getElementById('btnLimpiar').addEventListener('click', limpiarFormularioPartidas);
 
@@ -60,6 +66,8 @@ function initEventListeners() {
     // Radio buttons de búsqueda jurídica
     document.querySelectorAll('input[name="tipoBusquedaJuridica"]').forEach(radio => {
         radio.addEventListener('change', cambiarTipoBusquedaJuridica);
+        // Form búsqueda jurídica
+        document.getElementById('formBusquedaJuridica').addEventListener('submit', buscarPersonaJuridica);
     });
 
     // Cerrar modal al hacer clic fuera
@@ -81,6 +89,10 @@ function initEventListeners() {
     });
 }
 
+// ========================================
+// 📌 CAMBIO DE TIPO DE PERSONA
+// ========================================
+
 function cambiarTipoPersona(e) {
     tipoPersonaActual = e.target.value;
     limpiarFormularioPartidas();
@@ -92,6 +104,10 @@ function cambiarTipoPersona(e) {
         labelPersona.textContent = 'Razón Social:';
     }
 }
+
+// ========================================
+// 📌 MODALES
+// ========================================
 
 function abrirModalBusqueda() {
     if (tipoPersonaActual === 'natural') {
@@ -109,7 +125,10 @@ function cerrarModal(modalId) {
     document.getElementById(modalId).classList.remove('show');
 }
 
-// Actualizar función buscarPersonaNatural
+// ========================================
+// 📌 BÚSQUEDA PERSONA NATURAL
+// ========================================
+
 async function buscarPersonaNatural(e) {
     e.preventDefault();
     
@@ -128,28 +147,47 @@ async function buscarPersonaNatural(e) {
     mostrarLoadingPartidas('formBusquedaNatural');
     
     try {
-        console.log('Credenciales:', { dni, credencialesUsuario });
+        console.log('Buscando persona natural:', dni);
+        
         const resultado = await api.buscarPersonaNaturalSunarp(
             dni,
             credencialesUsuario.dni,
             credencialesUsuario.password
         );
-        console.log(resultado);
-        mostrarResultadosNatural(resultado.data || []);
-        if (resultado.message) {
-            mostrarAlertaPartidas(resultado.message, 'info');
+        
+        console.log('Resultado búsqueda natural:', resultado);
+        
+        if (resultado.success && resultado.data) {
+            registrosEncontrados = resultado.data;
+            mostrarResultadosNatural(resultado.data);
+            
+            if (resultado.data.length === 0) {
+                mostrarAlertaPartidas('No se encontraron registros en SUNARP para este DNI', 'info');
+            }
+        } else {
+            mostrarAlertaPartidas(resultado.message || 'No se encontraron resultados', 'warning');
+            registrosEncontrados = [];
+            mostrarResultadosNatural([]);
         }
     } catch (error) {
+        console.error('Error en búsqueda natural:', error);
         mostrarAlertaPartidas(error.message || 'Error al buscar persona natural', 'danger');
+        registrosEncontrados = [];
+        mostrarResultadosNatural([]);
     } finally {
         ocultarLoadingPartidas('formBusquedaNatural');
     }
 }
 
+// ========================================
+// 📌 BÚSQUEDA PERSONA JURÍDICA
+// ========================================
+
 async function buscarPersonaJuridica(e) {
     e.preventDefault();
     
     const tipoBusqueda = document.querySelector('input[name="tipoBusquedaJuridica"]:checked').value;
+    console.log('Tipo de busqueda', tipoBusqueda);
     let parametro;
     
     if (tipoBusqueda === 'ruc') {
@@ -174,25 +212,49 @@ async function buscarPersonaJuridica(e) {
     mostrarLoadingPartidas('formBusquedaJuridica');
     
     try {
+        console.log('Buscando persona jurídica:', { parametro, tipoBusqueda, credencialesUsuario });
+        
         const resultado = await api.buscarPersonaJuridicaSunarp(
             parametro,
             tipoBusqueda,
             credencialesUsuario.dni,
             credencialesUsuario.password
         );
-        mostrarResultadosJuridica(resultado.data || []);
+        
+        console.log('Resultado búsqueda jurídica:', resultado);
+        
+        if (resultado.success && resultado.data) {
+            registrosEncontrados = resultado.data;
+            mostrarResultadosJuridica(resultado.data);
+            
+            if (resultado.data.length === 0) {
+                mostrarAlertaPartidas('No se encontraron registros en SUNARP', 'info');
+            }
+        } else {
+            mostrarAlertaPartidas(resultado.message || 'No se encontraron resultados', 'warning');
+            registrosEncontrados = [];
+            mostrarResultadosJuridica([]);
+        }
     } catch (error) {
+        console.error('Error en búsqueda jurídica:', error);
         mostrarAlertaPartidas(error.message || 'Error al buscar persona jurídica', 'danger');
+        registrosEncontrados = [];
+        mostrarResultadosJuridica([]);
     } finally {
         ocultarLoadingPartidas('formBusquedaJuridica');
     }
 }
 
-function mostrarResultadosNatural(datos) {
+// ========================================
+// 📌 MOSTRAR RESULTADOS PERSONA NATURAL
+// ========================================
+
+function mostrarResultadosNatural(data) {
     const contenedor = document.getElementById('resultadosNatural');
     
-    if (!datos || datos.length === 0) {
-        contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron resultados</div>';
+    console.log(data, Object.keys(data).length);
+    if (!data || Object.keys(data).length === 0) {
+        contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron registros en SUNARP</div>';
         contenedor.style.display = 'block';
         return;
     }
@@ -202,56 +264,40 @@ function mostrarResultadosNatural(datos) {
             <thead>
                 <tr>
                     <th>DNI</th>
-                    <th>Nombres</th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
-                    <th>Información Adicional</th>
+                    <th>Nombres Completos</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
     `;
 
-    datos.forEach(persona => {
-        let infoAdicional = '';
-        if (persona.profesion) {
-            infoAdicional += `<div><strong>Profesión:</strong> ${persona.profesion}</div>`;
-        }
-        if (persona.tipoVerificador) {
-            infoAdicional += `<div><strong>Tipo:</strong> ${persona.tipoVerificador}</div>`;
-        }
-        if (persona.zonaRegistral) {
-            infoAdicional += `<div><strong>Zona:</strong> ${persona.zonaRegistral}</div>`;
-        }
-        if (persona.estado) {
-            infoAdicional += `<div><strong>Estado:</strong> ${persona.estado === 'A' ? 'Activo' : 'Inactivo'}</div>`;
-        }
-
-        html += `
-            <tr>
-                <td>${persona.dni || '-'}</td>
-                <td>${persona.nombres || '-'}</td>
-                <td>${persona.apellidoPaterno || '-'}</td>
-                <td>${persona.apellidoMaterno || '-'}</td>
-                <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
-                <td>
-                    <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(persona)})'>
-                        Seleccionar
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+    const nombresCompletos = `${data.nombres || ''} ${data.apellido_paterno || ''} ${data.apellido_materno || ''}`.trim();
+        
+    html += `
+        <tr>
+            <td>${data.dni || '-'}</td>
+            <td><strong>${nombresCompletos || 'N/A'}</strong></td>
+            <td>
+                <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(data)})'>
+                    Seleccionar
+                </button>
+            </td>
+        </tr>
+    `;
 
     html += '</tbody></table>';
     contenedor.innerHTML = html;
     contenedor.style.display = 'block';
 }
 
+// ========================================
+// 📌 MOSTRAR RESULTADOS PERSONA JURÍDICA
+// ========================================
+
 function mostrarResultadosJuridica(datos) {
     const contenedor = document.getElementById('resultadosJuridica');
     
-    if (!datos || datos.length === 0) {
+    if (!datos || Object.keys(datos).length === 0) {
         contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron resultados</div>';
         contenedor.style.display = 'block';
         return;
@@ -263,50 +309,76 @@ function mostrarResultadosJuridica(datos) {
                 <tr>
                     <th>RUC</th>
                     <th>Razón Social</th>
+                    <th>Estado</th>
+                    <th>Informacion</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
     `;
 
-    datos.forEach(empresa => {
-        let infoAdicional = '';
-        if (empresa.direccion) {
-            infoAdicional += `<div><strong>Dirección:</strong> ${empresa.direccion}</div>`;
-        }
-        if (empresa.departamento && empresa.provincia && empresa.distrito) {
-            infoAdicional += `<div><strong>Ubicación:</strong> ${empresa.departamento} / ${empresa.provincia} / ${empresa.distrito}</div>`;
-        }
-        if (empresa.tipo_contribuyente) {
-            infoAdicional += `<div><strong>Tipo:</strong> ${empresa.tipo_contribuyente}</div>`;
-        }
-        
-        // Información de partidas SUNARP
-        if (empresa.partidas_sunarp && empresa.partidas_sunarp.length > 0) {
-            infoAdicional += `<div style="margin-top: 5px;"><strong>Partidas SUNARP:</strong> ${empresa.partidas_sunarp.length} encontrada(s)</div>`;
-        }
 
-        const estadoClass = empresa.es_activo ? 'badge-success' : 'badge-danger';
-        const estadoTexto = empresa.es_activo ? 'Activo' : 'Inactivo';
+    let infoAdicional = '';
+    if (datos.direccion_completa) {
+        infoAdicional += `<div><strong>Dirección:</strong> ${datos.direccion_completa}</div>`;
+    }
+    if (datos.departamento && datos.provincia && datos.distrito) {
+        infoAdicional += `<div><strong>Ubicación:</strong> ${datos.departamento} / ${datos.provincia} / ${datos.distrito}</div>`;
+    }
+    if (datos.condicion_domicilio) {
+        infoAdicional += `<div><strong>Condicion:</strong> ${datos.condicion_domicilio}</div>`;
+    }
+    
 
-        html += `
-            <tr>
-                <td>${empresa.ruc || '-'}</td>
-                <td>${empresa.razonSocial || '-'}</td>
-                <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
-                <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
-                <td>
-                    <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(empresa)})'>
-                        Seleccionar
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+    const estadoClass = datos.estado_contribuyente ? 'badge-success' : 'badge-danger';
+    const estadoTexto = datos.estado_contribuyente ? 'Activo' : 'Inactivo';
+
+    html += `
+        <tr>
+            <td>${datos.ruc || '-'}</td>
+            <td>${datos.razon_social || '-'}</td>
+            <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
+            <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
+            <td>
+                <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(datos)})'>
+                    Seleccionar
+                </button>
+            </td>
+        </tr>
+    `;
+
 
     html += '</tbody></table>';
     contenedor.innerHTML = html;
     contenedor.style.display = 'block';
+}
+
+// ========================================
+// 📌 SELECCIONAR REGISTRO
+// ========================================
+
+function seleccionarRegistro(index) {
+    if (!registrosEncontrados || !registrosEncontrados[index]) {
+        mostrarAlertaPartidas('Error al seleccionar el registro', 'danger');
+        return;
+    }
+
+    personaSeleccionada = registrosEncontrados[index];
+    
+    const inputPersona = document.getElementById('persona');
+    
+    if (tipoPersonaActual === 'natural') {
+        const nombresCompletos = `${personaSeleccionada.nombres || ''} ${personaSeleccionada.apellidoPaterno || ''} ${personaSeleccionada.apellidoMaterno || ''}`.trim();
+        inputPersona.value = nombresCompletos;
+        cerrarModal('modalBusquedaNatural');
+    } else {
+        inputPersona.value = personaSeleccionada.razonSocial || '';
+        cerrarModal('modalBusquedaJuridica');
+    }
+    
+    // Mostrar directamente los resultados
+    mostrarResultados(personaSeleccionada);
+    mostrarAlertaPartidas('Registro seleccionado correctamente', 'success');
 }
 
 function seleccionarPersona(persona) {
@@ -314,77 +386,71 @@ function seleccionarPersona(persona) {
     
     const inputPersona = document.getElementById('persona');
     if (tipoPersonaActual === 'natural') {
-        inputPersona.value = `${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno}`;
+        inputPersona.value = `${persona.nombres} ${persona.apellido_paterno} ${persona.apellido_materno}`;
         cerrarModal('modalBusquedaNatural');
     } else {
-        inputPersona.value = persona.razonSocial;
+        inputPersona.value = persona.razon_social;
         cerrarModal('modalBusquedaJuridica');
     }
-    
-    document.getElementById('btnConsultar').disabled = false;
+
     mostrarAlertaPartidas('Persona seleccionada correctamente', 'success');
 }
 
-async function consultarPartida() {
-    if (!personaSeleccionada) {
-        mostrarAlertaPartidas('Por favor seleccione una persona primero', 'warning');
-        return;
-    }
-
-    if (!credencialesUsuario.dni || !credencialesUsuario.password) {
-        mostrarAlertaPartidas('No se han cargado las credenciales del usuario. Recargue la página.', 'danger');
-        return;
-    }
-
-    const btnConsultar = document.getElementById('btnConsultar');
-    btnConsultar.disabled = true;
-    btnConsultar.innerHTML = '<span class="loading-spinner"></span> <span>Consultando...</span>';
-
-    try {
-        console.log('Credenciales para consultar Partida registral: ', { personaSeleccionada, credencialesUsuario });
-        const resultado = await api.consultarPartidaRegistral(
-            personaSeleccionada,
-            credencialesUsuario.dni,
-            credencialesUsuario.password
-        );
-        mostrarResultados(resultado.data);
-        mostrarAlertaPartidas('Consulta realizada exitosamente', 'success');
-    } catch (error) {
-        mostrarAlertaPartidas(error.message || 'Error al consultar partida registral', 'danger');
-    } finally {
-        btnConsultar.disabled = false;
-        btnConsultar.innerHTML = '<i class="fas fa-search"></i> <span>Consultar</span>';
-    }
-}
+// ========================================
+// 📌 MOSTRAR RESULTADOS EN LA VISTA PRINCIPAL
+// ========================================
 
 function mostrarResultados(datos) {
     // Mostrar sección de resultados
     document.getElementById('resultsSection').style.display = 'block';
 
-    // Llenar campos
-    document.getElementById('registro').textContent = datos.registro || '';
-    document.getElementById('libro').textContent = datos.libro || '';
-    document.getElementById('apellidoPaterno').textContent = datos.apellidoPaterno || '';
-    document.getElementById('apellidoMaterno').textContent = datos.apellidoMaterno || '';
-    document.getElementById('nombres').textContent = datos.nombres || '';
-    document.getElementById('tipoDoc').textContent = datos.tipoDocumento || '';
-    document.getElementById('nroDoc').textContent = datos.nroDocumento || '';
-    document.getElementById('nroPartida').textContent = datos.nroPartida || '';
-    document.getElementById('nroPlaca').textContent = datos.nroPlaca || '';
-    document.getElementById('estado').textContent = datos.estado || '';
-    document.getElementById('zona').textContent = datos.zona || '';
-    document.getElementById('oficina').textContent = datos.oficina || '';
-    document.getElementById('direccion').textContent = datos.direccion || '';
+    // Llenar campos según tipo de persona
+    if (tipoPersonaActual === 'natural') {
+        document.getElementById('registro').textContent = datos.registro || '-';
+        document.getElementById('libro').textContent = datos.libro || '-';
+        document.getElementById('apellidoPaterno').textContent = datos.apellidoPaterno || '-';
+        document.getElementById('apellidoMaterno').textContent = datos.apellidoMaterno || '-';
+        document.getElementById('nombres').textContent = datos.nombres || '-';
+        document.getElementById('tipoDoc').textContent = 'DNI';
+        document.getElementById('nroDoc').textContent = datos.dni || '-';
+        document.getElementById('nroPartida').textContent = datos.partida || '-';
+        document.getElementById('nroPlaca').textContent = datos.placa || '-';
+        document.getElementById('estado').textContent = datos.estado || '-';
+        document.getElementById('zona').textContent = datos.zona || '-';
+        document.getElementById('oficina').textContent = datos.oficina || '-';
+        document.getElementById('direccion').textContent = datos.descripcion || '-';
 
-    // Manejar foto
-    const imgFoto = document.getElementById('personaFoto');
-    const noFoto = document.getElementById('noFoto');
-    
-    if (datos.foto) {
-        imgFoto.src = datos.foto;
-        imgFoto.style.display = 'block';
-        noFoto.style.display = 'none';
+        // Manejar foto
+        const imgFoto = document.getElementById('personaFoto');
+        const noFoto = document.getElementById('noFoto');
+        
+        if (datos.foto) {
+            imgFoto.src = `data:image/jpeg;base64,${datos.foto}`;
+            imgFoto.style.display = 'block';
+            noFoto.style.display = 'none';
+        } else {
+            imgFoto.style.display = 'none';
+            noFoto.style.display = 'block';
+        }
     } else {
+        // Persona Jurídica
+        document.getElementById('registro').textContent = datos.registro || '-';
+        document.getElementById('libro').textContent = datos.libro || '-';
+        document.getElementById('apellidoPaterno').textContent = '-';
+        document.getElementById('apellidoMaterno').textContent = '-';
+        document.getElementById('nombres').textContent = datos.razonSocial || '-';
+        document.getElementById('tipoDoc').textContent = '-';
+        document.getElementById('nroDoc').textContent = '-';
+        document.getElementById('nroPartida').textContent = datos.partida || '-';
+        document.getElementById('nroPlaca').textContent = '-';
+        document.getElementById('estado').textContent = datos.estado || '-';
+        document.getElementById('zona').textContent = datos.zona || '-';
+        document.getElementById('oficina').textContent = datos.oficina || '-';
+        document.getElementById('direccion').textContent = datos.descripcion || '-';
+
+        // No hay foto para personas jurídicas
+        const imgFoto = document.getElementById('personaFoto');
+        const noFoto = document.getElementById('noFoto');
         imgFoto.style.display = 'none';
         noFoto.style.display = 'block';
     }
@@ -393,10 +459,14 @@ function mostrarResultados(datos) {
     document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
 }
 
+// ========================================
+// 📌 LIMPIAR FORMULARIOS
+// ========================================
+
 function limpiarFormularioPartidas() {
     personaSeleccionada = null;
+    registrosEncontrados = [];
     document.getElementById('persona').value = '';
-    document.getElementById('btnConsultar').disabled = true;
     document.getElementById('resultsSection').style.display = 'none';
     document.getElementById('alertContainer').innerHTML = '';
 }
@@ -413,6 +483,10 @@ function limpiarModalJuridica() {
     document.getElementById('resultadosJuridica').innerHTML = '';
     document.getElementById('resultadosJuridica').style.display = 'none';
 }
+
+// ========================================
+// 📌 CAMBIO TIPO DE BÚSQUEDA JURÍDICA
+// ========================================
 
 function cambiarTipoBusquedaJuridica(e) {
     const tipoBusqueda = e.target.value;
@@ -431,6 +505,10 @@ function cambiarTipoBusquedaJuridica(e) {
     
     limpiarModalJuridica();
 }
+
+// ========================================
+// 📌 UTILIDADES UI
+// ========================================
 
 function mostrarAlertaPartidas(mensaje, tipo) {
     const iconos = {
@@ -467,12 +545,3 @@ function ocultarLoadingPartidas(formId) {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fas fa-search"></i> <span>Buscar</span>';
 }
-
-// Validación solo números
-document.getElementById('dniNatural').addEventListener('input', function(e) {
-    this.value = this.value.replace(/[^0-9]/g, '');
-});
-
-document.getElementById('rucJuridica').addEventListener('input', function(e) {
-    this.value = this.value.replace(/[^0-9]/g, '');
-});

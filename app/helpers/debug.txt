@@ -4535,3 +4535,66 @@
 
 )
 
+[2025-11-13 15:11:53] Inicio validarCUI()
+[2025-11-13 15:11:53] Sesión iniciada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-11-13 15:11:53] JSON recibido -> {"cui":"1"}
+[2025-11-13 15:11:53] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-11-13 15:11:53] Variables preparadas -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-11-13 15:11:53] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+
+[2025-11-13 15:11:53] Sesión actualizada -> Array
+(
+    [nombreUsuario] => ADMIN
+    [password] => Muni2025@
+    [requireCUI] => 
+    [usuarioID] => 1
+    [rolID] => 000
+    [authenticated] => 1
+)
+
+[2025-11-13 15:11:53] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [USU_login] => ADMIN
+            [USU_id] => 1
+            [PER_documento_num] => 42761038
+            [ROL_id] => 000
+            [ROL_nombre] => ADMINISTRADOR DEL SISTEMA
+            [ROL_abrev] => ADMIN. SISTEMA
+        )
+
+)
+

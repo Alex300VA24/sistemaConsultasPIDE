@@ -198,7 +198,7 @@
                             <label for="porRuc">POR RUC</label>
                         </div>
                         <div class="modal-radio-option">
-                            <input type="radio" id="porRazonSocial" name="tipoBusquedaJuridica" value="razon">
+                            <input type="radio" id="porRazonSocial" name="tipoBusquedaJuridica" value="razonSocial">
                             <label for="porRazonSocial">POR RAZÓN SOCIAL</label>
                         </div>
                     </div>

@@ -13,7 +13,7 @@ class ConsultasSunarpController {
     }
 
     // ========================================
-    // 📌 BUSCAR PERSONA NATURAL POR DNI
+    // BUSCAR PERSONA NATURAL (RENIEC)
     // ========================================
     public function buscarPersonaNatural() {
         header('Content-Type: application/json');
@@ -33,7 +33,7 @@ class ConsultasSunarpController {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan datos como: dni, dniUsuario o password'
+                'message' => 'Faltan datos: dni, dniUsuario o password'
             ]);
             return;
         }
@@ -51,7 +51,7 @@ class ConsultasSunarpController {
             return;
         }
 
-        // Primero obtener datos de RENIEC
+        // 1. Obtener datos de RENIEC
         $datosReniec = $this->obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE);
         
         if (!$datosReniec['success']) {
@@ -59,29 +59,13 @@ class ConsultasSunarpController {
             echo json_encode($datosReniec);
             return;
         }
-
-        // Retornar datos de RENIEC (SUNARP requiere partida manual)
-        $resultado = [
-            'success' => true,
-            'message' => 'Datos obtenidos de RENIEC. Para consultar en SUNARP necesita el número de partida',
-            'data' => [[
-                'dni' => $datosReniec['data']['dni'],
-                'nombres' => $datosReniec['data']['nombres'],
-                'apellidoPaterno' => $datosReniec['data']['apellido_paterno'],
-                'apellidoMaterno' => $datosReniec['data']['apellido_materno'],
-                'foto' => $datosReniec['data']['foto'],
-                'partida' => '', // El usuario debe ingresarlo
-                'zona' => '',
-                'oficina' => ''
-            ]]
-        ];
         
-        http_response_code(200);
-        echo json_encode($resultado);
+        http_response_code($datosReniec['success'] ? 200 : 404);
+        echo json_encode($datosReniec);
     }
 
     // ========================================
-    // 📌 BUSCAR PERSONA JURÍDICA
+    // 📌 BUSCAR PERSONA JURÍDICA (SUNAT + SUNARP)
     // ========================================
     public function buscarPersonaJuridica() {
         header('Content-Type: application/json');
@@ -96,21 +80,23 @@ class ConsultasSunarpController {
         }
 
         $input = json_decode(file_get_contents('php://input'), true);
-        $tipoBusqueda = $input['tipoBusqueda'] ?? 'ruc';
 
-        // Validar credenciales PIDE para SUNARP
         if (!isset($input['dniUsuario']) || !isset($input['password'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan credenciales: dniUsuario o password'
+                'message' => 'Faltan datos: dniUsuario o password'
             ]);
             return;
         }
 
         $dniUsuario = trim($input['dniUsuario']);
         $passwordPIDE = trim($input['password']);
+        $tipoBusqueda = $input['tipoBusqueda'] ?? 'ruc';
 
+        $razonSocial = trim($input['razonSocial']) ?? '';
+
+        // 1. Obtener razón social según tipo de búsqueda
         if ($tipoBusqueda === 'ruc') {
             if (!isset($input['ruc'])) {
                 http_response_code(400);
@@ -131,42 +117,16 @@ class ConsultasSunarpController {
                 return;
             }
 
-            // Consultar en SUNAT para obtener datos básicos
-            $resultado = $this->obtenerDatosSUNAT($ruc);
+            // Consultar en SUNAT para obtener razón social
+            $datosSunat = $this->obtenerDatosPorRUC($ruc);
             
-            // Si tiene razón social, buscar en SUNARP
-            if ($resultado['success'] && !empty($resultado['data']['razon_social'])) {
-                $razonSocial = $resultado['data']['razon_social'];
-                $datosSunarp = $this->buscarEnSunarpPorRazonSocial($razonSocial, $dniUsuario, $passwordPIDE);
-                
-                // Combinar datos de SUNAT y SUNARP
-                if ($datosSunarp['success']) {
-                    $resultado['data']['partidas_sunarp'] = $datosSunarp['data'];
-                    $resultado['message'] = 'Datos obtenidos de SUNAT y SUNARP';
-                }
+            if (!$datosSunat['success']) {
+                http_response_code(404);
+                echo json_encode($datosSunat);
+                return;
             }
-            
-            // Formatear respuesta como array de resultados
-            if ($resultado['success']) {
-                $resultado['data'] = [[
-                    'ruc' => $resultado['data']['ruc'],
-                    'razonSocial' => $resultado['data']['razon_social'],
-                    'direccion' => $resultado['data']['direccion_completa'] ?? '',
-                    'departamento' => $resultado['data']['departamento'] ?? '',
-                    'provincia' => $resultado['data']['provincia'] ?? '',
-                    'distrito' => $resultado['data']['distrito'] ?? '',
-                    'estado' => $resultado['data']['estado_contribuyente'] ?? '',
-                    'condicion' => $resultado['data']['condicion_domicilio'] ?? '',
-                    'tipo_contribuyente' => $resultado['data']['tipo_contribuyente'] ?? '',
-                    'actividad_economica' => $resultado['data']['actividad_economica'] ?? '',
-                    'es_activo' => $resultado['data']['es_activo'] ?? false,
-                    'es_habido' => $resultado['data']['es_habido'] ?? false,
-                    // Datos de SUNARP
-                    'partidas_sunarp' => $resultado['data']['partidas_sunarp'] ?? [],
-                    // Campos adicionales de SUNAT
-                    'datosCompletos' => $resultado['data']
-                ]];
-            }
+
+            $razonSocial = $datosSunat['data']['razon_social'];
 
         } else if ($tipoBusqueda === 'razonSocial') {
             if (!isset($input['razonSocial'])) {
@@ -178,19 +138,15 @@ class ConsultasSunarpController {
                 return;
             }
 
-            $razonSocial = trim($input['razonSocial']);
-            if (empty($razonSocial)) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Razón social no puede estar vacía'
-                ]);
+            // Consultar en SUNAT para obtener razón social
+            $datosSunat = $this->obtenerDatosPorRazonSocial($razonSocial);
+            if (!$datosSunat['success']) {
+                http_response_code(404);
+                echo json_encode($datosSunat);
                 return;
             }
 
-            // Buscar directamente en SUNARP usando BPJRSocial
-            $resultado = $this->buscarEnSunarpPorRazonSocial($razonSocial, $dniUsuario, $passwordPIDE);
-
+            $razonSocial = $datosSunat['data']['razon_social'];
         } else {
             http_response_code(400);
             echo json_encode([
@@ -200,153 +156,12 @@ class ConsultasSunarpController {
             return;
         }
         
-        http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);
+        http_response_code($datosSunat['success'] ? 200 : 404);
+        echo json_encode($datosSunat);
     }
 
     // ========================================
-    // 📌 CONSULTAR PARTIDA REGISTRAL
-    // ========================================
-    public function consultarPartidaRegistral() {
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($input['partida']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Faltan datos: partida, dniUsuario o password'
-            ]);
-            return;
-        }
-
-        $partida = trim($input['partida']);
-        $dniUsuario = trim($input['dniUsuario']);
-        $passwordPIDE = trim($input['password']);
-        $zona = $input['zona'] ?? '';
-        $oficina = $input['oficina'] ?? '';
-
-        $resultado = $this->consultarTitularidadBienes($partida, $zona, $oficina, $dniUsuario, $passwordPIDE);
-        
-        http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);
-    }
-
-    // ========================================
-    // 🔍 BUSCAR EN SUNARP POR RAZÓN SOCIAL
-    // ========================================
-    private function buscarEnSunarpPorRazonSocial($razonSocial, $dniUsuario, $passwordPIDE) {
-        try {
-            $url = $this->urlSUNARP . "/BPJRSocial?out=json";
-
-            $data = [
-                "PIDE" => [
-                    "usuario" => $dniUsuario,
-                    "clave" => $passwordPIDE,
-                    "razonSocial" => $razonSocial
-                ]
-            ];
-
-            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-
-            $ch = curl_init($url);
-
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_HTTPHEADER => [
-                    "Content-Type: application/json; charset=UTF-8",
-                    "Accept: application/json"
-                ],
-                CURLOPT_POSTFIELDS => $jsonData,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT => 45
-            ]);
-
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if (curl_errno($ch)) {
-                $error = curl_error($ch);
-                curl_close($ch);
-                return [
-                    'success' => false,
-                    'message' => "Error de conexión con SUNARP: $error",
-                    'data' => []
-                ];
-            }
-
-            curl_close($ch);
-
-            if ($httpCode == 200) {
-                $jsonResponse = json_decode($response, true);
-                
-                if (isset($jsonResponse['BPJRSocialResponse']['return'])) {
-                    $datos = $jsonResponse['BPJRSocialResponse']['return'];
-                    
-                    // Si es un array de resultados
-                    if (is_array($datos)) {
-                        $resultados = [];
-                        
-                        // Normalizar: si no es array de arrays, convertirlo
-                        $items = isset($datos[0]) ? $datos : [$datos];
-                        
-                        foreach ($items as $item) {
-                            $resultados[] = [
-                                'zona' => $item['zona'] ?? '',
-                                'oficina' => $item['oficina'] ?? '',
-                                'partida' => $item['partida'] ?? '',
-                                'ficha' => $item['ficha'] ?? '',
-                                'tomo' => $item['tomo'] ?? '',
-                                'folio' => $item['folio'] ?? '',
-                                'tipo' => $item['tipo'] ?? '',
-                                'razonSocial' => $razonSocial
-                            ];
-                        }
-
-                        return [
-                            'success' => true,
-                            'message' => 'Se encontraron ' . count($resultados) . ' registro(s) en SUNARP',
-                            'data' => $resultados
-                        ];
-                    }
-                }
-                
-                return [
-                    'success' => false,
-                    'message' => 'No se encontraron registros en SUNARP para la razón social proporcionada',
-                    'data' => []
-                ];
-            }
-
-            return [
-                'success' => false,
-                'message' => "Error HTTP $httpCode en el servicio SUNARP",
-                'data' => []
-            ];
-
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Error al consultar SUNARP: ' . $e->getMessage(),
-                'data' => []
-            ];
-        }
-    }
-
-    // ========================================
-    // 🔍 OBTENER DATOS DE RENIEC
+    // OBTENER DATOS DE RENIEC
     // ========================================
     private function obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE) {
         try {
@@ -427,7 +242,7 @@ class ConsultasSunarpController {
     // ========================================
     // 🔍 OBTENER DATOS DE SUNAT
     // ========================================
-    private function obtenerDatosSUNAT($ruc) {
+    private function obtenerDatosPorRUC($ruc) {
         try {
             $urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? "https://ws3.pide.gob.pe/services/SunatConsultaRuc?wsdl";
 
@@ -498,34 +313,12 @@ XML;
                     'data' => [
                         'ruc' => (string)($datos->ddp_numruc ?? $ruc),
                         'razon_social' => (string)($datos->ddp_nombre ?? ''),
-                        
-                        // Ubicación
-                        'codigo_ubigeo' => (string)($datos->ddp_ubigeo ?? ''),
-                        'departamento' => (string)($datos->desc_dep ?? ''),
-                        'provincia' => (string)($datos->desc_prov ?? ''),
-                        'distrito' => (string)($datos->desc_dist ?? ''),
-                        
-                        // Dirección
                         'direccion_completa' => $this->construirDireccionSunat($datos),
-                        'tipo_via' => (string)($datos->desc_tipvia ?? ''),
-                        'nombre_via' => (string)($datos->ddp_nomvia ?? ''),
-                        'numero' => (string)($datos->ddp_numer1 ?? ''),
-                        
-                        // Estado
                         'estado_contribuyente' => (string)($datos->desc_estado ?? ''),
                         'condicion_domicilio' => (string)($datos->desc_flag22 ?? ''),
-                        
-                        // Tipo
-                        'tipo_contribuyente' => (string)($datos->desc_tpoemp ?? ''),
-                        'tipo_persona' => (string)($datos->desc_identi ?? ''),
-                        
-                        // Actividad
-                        'actividad_economica' => (string)($datos->desc_ciiu ?? ''),
-                        'codigo_ciiu' => (string)($datos->ddp_ciiu ?? ''),
-                        
-                        // Estados
-                        'es_activo' => $this->convertirBooleano($datos->esActivo ?? 'false'),
-                        'es_habido' => $this->convertirBooleano($datos->esHabido ?? 'false')
+                        'departamento' => (string)($datos->desc_dep ?? ''),
+                        'provincia' => (string)($datos->desc_prov ?? ''),
+                        'distrito' => (string)($datos->desc_dist ?? '')
                     ]
                 ];
             }
@@ -543,10 +336,30 @@ XML;
         }
     }
 
+    // RAZON SOCIAL
+    private function obtenerDatosPorRazonSocial($razonSocial) {
+        // Validar que no esté vacío
+        if (empty($razonSocial)) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Razón social no puede estar vacía'
+            ]);
+            return;
+        }
+
+        // Realizar consulta por razón social
+        $sunatController = new ConsultasSunatController;
+        $resultado = $sunatController->buscarPorRazonSocial($razonSocial);
+        
+        http_response_code($resultado['success'] ? 200 : 404);
+        echo json_encode($resultado);    
+    }
+
     // ========================================
-    // 🔍 CONSULTAR TITULARIDAD DE BIENES
+    // 🔍 CONSULTAR TSIRSARP - PERSONA NATURAL
     // ========================================
-    private function consultarTitularidadBienes($partida, $zona, $oficina, $dniUsuario, $passwordPIDE) {
+    private function consultarTSIRSARPPersonaNatural($datosPersona, $dniUsuario, $passwordPIDE) {
         try {
             $url = $this->urlSUNARP . "/TSIRSARP?out=json";
 
@@ -554,13 +367,17 @@ XML;
                 "PIDE" => [
                     "usuario" => $dniUsuario,
                     "clave" => $passwordPIDE,
-                    "partida" => $partida,
-                    "zona" => $zona,
-                    "oficina" => $oficina
+                    "tipoParticipante" => "N",
+                    "apellidoPaterno" => $datosPersona['apellido_paterno'],
+                    "apellidoMaterno" => $datosPersona['apellido_materno'],
+                    "nombres" => $datosPersona['nombres'],
+                    "razonSocial" => ""
                 ]
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+            error_log("SUNARP Request: " . $jsonData);
 
             $ch = curl_init($url);
 
@@ -586,57 +403,206 @@ XML;
                 return [
                     'success' => false,
                     'message' => "Error de conexión con SUNARP: $error",
-                    'data' => null
+                    'data' => []
                 ];
             }
 
             curl_close($ch);
 
+            error_log("SUNARP Response Code: $httpCode");
+            error_log("SUNARP Response: " . substr($response, 0, 500));
+
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
                 
-                if (isset($jsonResponse['titularidadResponse']['return'])) {
-                    $datos = $jsonResponse['titularidadResponse']['return'];
-
-                    return [
-                        'success' => true,
-                        'message' => 'Consulta exitosa',
-                        'data' => [
-                            'registro' => $datos['registro'] ?? '',
-                            'libro' => $datos['libro'] ?? '',
-                            'apellidoPaterno' => $datos['apellidoPaterno'] ?? '',
-                            'apellidoMaterno' => $datos['apellidoMaterno'] ?? '',
-                            'nombres' => $datos['nombres'] ?? '',
-                            'tipoDocumento' => $datos['tipoDocumento'] ?? '',
-                            'nroDocumento' => $datos['nroDocumento'] ?? '',
-                            'nroPartida' => $partida,
-                            'nroPlaca' => $datos['nroPlaca'] ?? '',
-                            'estado' => $datos['estado'] ?? '',
-                            'zona' => $zona,
-                            'oficina' => $oficina,
-                            'direccion' => $datos['direccion'] ?? '',
-                            'foto' => null
-                        ]
-                    ];
-                } else {
-                    return [
-                        'success' => false,
-                        'message' => 'No se encontró información para la partida proporcionada',
-                        'data' => null
-                    ];
-                }
+                return $this->procesarRespuestaTSIRSARP($jsonResponse, 'N', $datosPersona);
             } else {
                 return [
                     'success' => false,
                     'message' => "Error HTTP $httpCode en el servicio SUNARP",
-                    'data' => null
+                    'data' => []
                 ];
             }
+
         } catch (\Exception $e) {
+            error_log("Exception en consultarTSIRSARPPersonaNatural: " . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Error al consultar partida registral: ' . $e->getMessage(),
-                'data' => null
+                'message' => 'Error al consultar SUNARP: ' . $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    // ========================================
+    // 🔍 CONSULTAR TSIRSARP - PERSONA JURÍDICA
+    // ========================================
+    private function consultarTSIRSARPPersonaJuridica($razonSocial, $dniUsuario, $passwordPIDE) {
+        try {
+            $url = $this->urlSUNARP . "/TSIRSARP?out=json";
+
+            $data = [
+                "PIDE" => [
+                    "usuario" => $dniUsuario,
+                    "clave" => $passwordPIDE,
+                    "tipoParticipante" => "J",
+                    "apellidoPaterno" => "",
+                    "apellidoMaterno" => "",
+                    "nombres" => "",
+                    "razonSocial" => $razonSocial
+                ]
+            ];
+
+            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+            error_log("SUNARP Request: " . $jsonData);
+
+            $ch = curl_init($url);
+
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/json; charset=UTF-8",
+                    "Accept: application/json"
+                ],
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                return [
+                    'success' => false,
+                    'message' => "Error de conexión con SUNARP: $error",
+                    'data' => []
+                ];
+            }
+
+            curl_close($ch);
+
+            error_log("SUNARP Response Code: $httpCode");
+            error_log("SUNARP Response: " . substr($response, 0, 500));
+
+            if ($httpCode == 200) {
+                $jsonResponse = json_decode($response, true);
+                
+                return $this->procesarRespuestaTSIRSARP($jsonResponse, 'J', ['razon_social' => $razonSocial]);
+            } else {
+                return [
+                    'success' => false,
+                    'message' => "Error HTTP $httpCode en el servicio SUNARP",
+                    'data' => []
+                ];
+            }
+
+        } catch (\Exception $e) {
+            error_log("Exception en consultarTSIRSARPPersonaJuridica: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al consultar SUNARP: ' . $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
+
+    // ========================================
+    // 📄 PROCESAR RESPUESTA TSIRSARP
+    // ========================================
+    private function procesarRespuestaTSIRSARP($jsonResponse, $tipo, $datosOriginales) {
+        try {
+            // Verificar si hay resultados
+            if (!isset($jsonResponse['TSIRSARPResponse']) || 
+                !isset($jsonResponse['TSIRSARPResponse']['return'])) {
+                return [
+                    'success' => false,
+                    'message' => 'No se encontraron registros en SUNARP',
+                    'data' => []
+                ];
+            }
+
+            $return = $jsonResponse['TSIRSARPResponse']['return'];
+            
+            // Puede venir como array o como objeto único
+            $registros = [];
+            if (isset($return[0])) {
+                // Es un array
+                $registros = $return;
+            } else {
+                // Es un objeto único
+                $registros = [$return];
+            }
+
+            $resultados = [];
+
+            foreach ($registros as $registro) {
+                $item = [];
+
+                if ($tipo === 'N') {
+                    // Persona Natural
+                    $item = [
+                        'tipo' => 'PERSONA_NATURAL',
+                        'dni' => $datosOriginales['dni'] ?? '',
+                        'nombres' => $datosOriginales['nombres'] ?? '',
+                        'apellidoPaterno' => $datosOriginales['apellido_paterno'] ?? '',
+                        'apellidoMaterno' => $datosOriginales['apellido_materno'] ?? '',
+                        'foto' => $datosOriginales['foto'] ?? null,
+                        'registro' => $registro['registro'] ?? '',
+                        'libro' => $registro['libro'] ?? '',
+                        'partida' => $registro['partida'] ?? '',
+                        'asiento' => $registro['asiento'] ?? '',
+                        'placa' => $registro['placa'] ?? '',
+                        'zona' => $registro['zona'] ?? '',
+                        'oficina' => $registro['oficina'] ?? '',
+                        'estado' => $registro['estado'] ?? '',
+                        'descripcion' => $registro['descripcion'] ?? ''
+                    ];
+                } else {
+                    // Persona Jurídica
+                    $item = [
+                        'tipo' => 'PERSONA_JURIDICA',
+                        'razonSocial' => $datosOriginales['razon_social'] ?? '',
+                        'registro' => $registro['registro'] ?? '',
+                        'libro' => $registro['libro'] ?? '',
+                        'partida' => $registro['partida'] ?? '',
+                        'asiento' => $registro['asiento'] ?? '',
+                        'zona' => $registro['zona'] ?? '',
+                        'oficina' => $registro['oficina'] ?? '',
+                        'estado' => $registro['estado'] ?? '',
+                        'descripcion' => $registro['descripcion'] ?? ''
+                    ];
+                }
+
+                $resultados[] = $item;
+            }
+
+            if (empty($resultados)) {
+                return [
+                    'success' => false,
+                    'message' => 'No se encontraron registros válidos en SUNARP',
+                    'data' => []
+                ];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Consulta exitosa',
+                'data' => $resultados,
+                'total' => count($resultados)
+            ];
+
+        } catch (\Exception $e) {
+            error_log("Exception en procesarRespuestaTSIRSARP: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al procesar respuesta de SUNARP: ' . $e->getMessage(),
+                'data' => []
             ];
         }
     }
@@ -668,14 +634,6 @@ XML;
         }
         
         return implode(' ', $partes);
-    }
-
-    // ========================================
-    // 🔄 CONVERTIR STRING A BOOLEANO
-    // ========================================
-    private function convertirBooleano($valor) {
-        $valorStr = strtolower((string)$valor);
-        return in_array($valorStr, ['true', '1', 'yes', 'si', 'sí']);
     }
 
     // ========================================
