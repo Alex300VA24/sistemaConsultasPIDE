@@ -129,6 +129,16 @@ switch (true) {
         $controller->buscarPersonaJuridica();
         break;
 
+    case preg_match('#^/api/sunarp/tsirsarp-natural#', $path):
+        $controller = new \App\Controllers\ConsultasSunarpController();
+        $controller->consultarTSIRSARPNatural();
+        break;
+
+    case preg_match('#^/api/sunarp/tsirsarp-juridica$#', $path):
+        $controller = new \App\Controllers\ConsultasSunarpController();
+        $controller->consultarTSIRSARPJuridica();
+        break;
+
     /*case preg_match('#^/api/consultar-partida-registral$#', $path):
         $controller = new \App\Controllers\ConsultasSunarpController();
         $controller->consultarPartidaRegistral();
