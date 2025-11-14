@@ -1,0 +1,335 @@
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-15 00:29:39
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: ALCANTARA
+Apellido Materno: ESCALANTE
+Nombres: RITA
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "ALCANTARA",
+        "apellidoMaterno": "ESCALANTE",
+        "nombres": "RITA",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.42248s
+Connect Time: 0.023707s
+Size Download: 1272 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1272 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-15 00:33:15
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: ALCANTARA
+Apellido Materno: ESCALANTE
+Nombres: RITA
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "ALCANTARA",
+        "apellidoMaterno": "ESCALANTE",
+        "nombres": "RITA",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.461858s
+Connect Time: 0.035137s
+Size Download: 1272 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1272 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"ALCANTARA","apMaterno":"ESCALANTE","nombre":"RITA","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "ALCANTARA",
+                    "apMaterno": "ESCALANTE",
+                    "nombre": "RITA",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-15 00:34:26
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: J
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Jurídica ---
+Razón Social: AGROTECHNOLOGY SAC
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "J",
+        "apellidoPaterno": "",
+        "apellidoMaterno": "",
+        "nombres": "",
+        "razonSocial": "AGROTECHNOLOGY SAC"
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.683779s
+Connect Time: 0.011458s
+Size Download: 392 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 392 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","razonSocial":"AGROTECHNOLOGY SAC","tipoDocumento":"PARTIDA ","numeroDocumento":"11060082    ","numeroPartida":60026330,"numeroPlaca":"Z2B088 ","estado":"ACTIVA","zona":"ZONA REGISTRAL XIII - SEDE TACNA","oficina":"TACNA"}}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": {
+                "registro": "REGISTRO DE BIENES MUEBLES",
+                "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                "razonSocial": "AGROTECHNOLOGY SAC",
+                "tipoDocumento": "PARTIDA ",
+                "numeroDocumento": "11060082    ",
+                "numeroPartida": 60026330,
+                "numeroPlaca": "Z2B088 ",
+                "estado": "ACTIVA",
+                "zona": "ZONA REGISTRAL XIII - SEDE TACNA",
+                "oficina": "TACNA"
+            }
+        }
+    }
+}
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-15 00:35:00
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: J
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Jurídica ---
+Razón Social: CHAPARRAL AGROTECH S.A.C.
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "J",
+        "apellidoPaterno": "",
+        "apellidoMaterno": "",
+        "nombres": "",
+        "razonSocial": "CHAPARRAL AGROTECH S.A.C."
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.351446s
+Connect Time: 0.014012s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-15 00:35:30
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: J
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Jurídica ---
+Razón Social: AGROTECHNOLOGY SAC
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "J",
+        "apellidoPaterno": "",
+        "apellidoMaterno": "",
+        "nombres": "",
+        "razonSocial": "AGROTECHNOLOGY SAC"
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.330455s
+Connect Time: 0.011278s
+Size Download: 392 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 392 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","razonSocial":"AGROTECHNOLOGY SAC","tipoDocumento":"PARTIDA ","numeroDocumento":"11060082    ","numeroPartida":60026330,"numeroPlaca":"Z2B088 ","estado":"ACTIVA","zona":"ZONA REGISTRAL XIII - SEDE TACNA","oficina":"TACNA"}}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": {
+                "registro": "REGISTRO DE BIENES MUEBLES",
+                "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                "razonSocial": "AGROTECHNOLOGY SAC",
+                "tipoDocumento": "PARTIDA ",
+                "numeroDocumento": "11060082    ",
+                "numeroPartida": 60026330,
+                "numeroPlaca": "Z2B088 ",
+                "estado": "ACTIVA",
+                "zona": "ZONA REGISTRAL XIII - SEDE TACNA",
+                "oficina": "TACNA"
+            }
+        }
+    }
+}

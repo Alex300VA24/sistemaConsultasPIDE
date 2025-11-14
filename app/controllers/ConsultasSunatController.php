@@ -4,18 +4,16 @@ namespace App\Controllers;
 
 class ConsultasSunatController {
     
-    private $urlSUNAT;
-    private $urlPIDE;
+    private $urlSUNATRest;
     
     public function __construct() {
-        // URL del WSDL de SUNAT (sin espacios al final)
-        $this->urlSUNAT = $_ENV['PIDE_URL_SUNAT'] ?? 
-            "https://ws3.pide.gob.pe/services/SunatConsultaRuc?wsdl";
-        $this->urlPIDE = "https://ws3.pide.gob.pe/Rest/Sunat/RazonSocial";
+        // URL base del REST API de SUNAT (PIDE)
+        $this->urlSUNATRest = $_ENV['PIDE_URL_SUNAT_REST'] ?? 
+            "https://ws3.pide.gob.pe/Rest/Sunat";
     }
 
     // ========================================
-    // 📌 CONSULTAR RUC (SUNAT)
+    // 📌 CONSULTAR RUC (SUNAT) - REST/JSON
     // ========================================
     public function consultarRUC() {
         header('Content-Type: application/json');
@@ -52,15 +50,15 @@ class ConsultasSunatController {
             return;
         }
 
-        // Realizar consulta
-        $resultado = $this->consultarServicioSUNAT($ruc);
+        // Realizar consulta REST
+        $resultado = $this->consultarServicioSUNATRest($ruc);
         
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado);
     }
 
     // ========================================
-    // 📌 BUSCAR POR RAZÓN SOCIAL (SUNAT)
+    // 📌 BUSCAR POR RAZÓN SOCIAL (SUNAT) - REST/JSON
     // ========================================
     public function buscarRazonSocial() {
         header('Content-Type: application/json');
@@ -97,47 +95,33 @@ class ConsultasSunatController {
             return;
         }
 
-        // Realizar consulta por razón social
-        $resultado = $this->buscarPorRazonSocial($razonSocial);
+        // Realizar consulta REST por razón social
+        $resultado = $this->buscarPorRazonSocialSUNATRest($razonSocial);
         
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado);
     }
 
     // ========================================
-    // 🔍 SERVICIO SUNAT - CONSULTA POR RUC (CURL + SOAP)
+    // 🔍 SERVICIO SUNAT REST - CONSULTA POR RUC
     // ========================================
-    private function consultarServicioSUNAT($ruc) {
+    private function consultarServicioSUNATRest($ruc) {
         try {
-            $soapEnvelope = <<<XML
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-                  xmlns:ws="http://ws.registro.servicio.sunat.gob.pe">
-   <soapenv:Header/>
-   <soapenv:Body>
-      <ws:getDatosPrincipales>
-         <numRuc>$ruc</numRuc>
-      </ws:getDatosPrincipales>
-   </soapenv:Body>
-</soapenv:Envelope>
-XML;
-
-            $headers = [
-                'Content-Type: text/xml; charset=utf-8',
-                'SOAPAction: "getDatosPrincipales"',
-                'Content-Length: ' . strlen($soapEnvelope)
-            ];
+            // Construir URL con parámetros
+            $url = $this->urlSUNATRest . '/DatosPrincipales?numruc=' . urlencode($ruc) . '&out=json';
 
             // Inicializar CURL
-            $ch = curl_init($this->urlSUNAT);
+            $ch = curl_init($url);
 
             curl_setopt_array($ch, [
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => $soapEnvelope,
-                CURLOPT_HTTPHEADER => $headers,
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_SSL_VERIFYPEER => false, // En producción, cambiar a true
                 CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT => 45
+                CURLOPT_TIMEOUT => 45,
+                CURLOPT_HTTPHEADER => [
+                    'Accept: application/json',
+                    'Content-Type: application/json'
+                ]
             ]);
 
             $response = curl_exec($ch);
@@ -145,10 +129,10 @@ XML;
             $curlError = curl_error($ch);
             curl_close($ch);
 
-            // Log para debug (opcional)
-            error_log("SUNAT Response HTTP Code: $httpCode");
+            // Log para debug
+            error_log("SUNAT REST Response HTTP Code: $httpCode");
             if ($curlError) {
-                error_log("SUNAT CURL Error: $curlError");
+                error_log("SUNAT REST CURL Error: $curlError");
             }
 
             // Manejar errores de conexión
@@ -162,13 +146,17 @@ XML;
 
             // Procesar respuesta según código HTTP
             if ($httpCode == 200) {
-                return $this->parsearRespuestaSOAP($response, $ruc);
-            } elseif ($httpCode == 500) {
-                // Intentar extraer mensaje de error del SOAP Fault
-                $errorMsg = $this->extraerErrorSOAP($response);
+                return $this->procesarRespuestaJSON($response, $ruc);
+            } elseif ($httpCode == 404) {
                 return [
                     'success' => false,
-                    'message' => $errorMsg ?: 'Error interno del servidor SUNAT',
+                    'message' => 'No se encontró información para el RUC consultado',
+                    'data' => null
+                ];
+            } elseif ($httpCode == 500) {
+                return [
+                    'success' => false,
+                    'message' => 'Error interno del servidor SUNAT',
                     'data' => null
                 ];
             } else {
@@ -180,7 +168,7 @@ XML;
             }
 
         } catch (\Exception $e) {
-            error_log("Exception en consultarServicioSUNAT: " . $e->getMessage());
+            error_log("Exception en consultarServicioSUNATRest: " . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Error al consultar RUC: ' . $e->getMessage(),
@@ -189,336 +177,219 @@ XML;
         }
     }
 
-    /**
-     * Buscar contribuyentes por razón social en PIDE
-     * @param string $razonSocial Nombre o razón social a buscar
-     * @return array Resultado de la búsqueda
-     */
-    public function buscarPorRazonSocial($razonSocial) {
+    // ========================================
+    // 🔍 SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL
+    // ========================================
+    private function buscarPorRazonSocialSUNATRest($razonSocial) {
         try {
-            // Validar entrada
-            if (empty(trim($razonSocial))) {
-                return [
-                    'success' => false,
-                    'message' => 'Debe ingresar una razón social para buscar',
-                    'data' => []
-                ];
-            }
-            
-            // Construir URL con parámetros (aunque pida JSON, devuelve XML)
-            $url = $this->urlPIDE . '?RSocial=' . urlencode($razonSocial);
-            
-            error_log("Consultando PIDE: $url");
-            
-            // Configurar cURL
+            // Construir URL con parámetros
+            $url = $this->urlSUNATRest . '/RazonSocial?RSocial=' . urlencode($razonSocial) . '&out=json';
+
+            error_log("URL búsqueda razón social: $url");
+
             $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            
+
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45,
+                CURLOPT_HTTPHEADER => [
+                    'Accept: application/json',
+                    'Content-Type: application/json'
+                ]
+            ]);
+
             $response = curl_exec($ch);
-            $curlError = curl_error($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_error($ch);
             curl_close($ch);
-            
-            error_log("PIDE Response HTTP Code: $httpCode");
-            
+
+            error_log("SUNAT REST Búsqueda Response HTTP Code: $httpCode");
             if ($curlError) {
-                error_log("PIDE CURL Error: $curlError");
+                error_log("SUNAT REST Búsqueda CURL Error: $curlError");
+            }
+
+            if ($curlError) {
                 return [
                     'success' => false,
-                    'message' => "Error de conexión con PIDE: $curlError",
+                    'message' => "Error de conexión con SUNAT: $curlError",
                     'data' => []
                 ];
             }
-            
+
             if ($httpCode == 200) {
-                // La respuesta es XML/SOAP, no JSON
-                return $this->parsearRespuestaXML($response, $razonSocial);
+                return $this->procesarRespuestaBusquedaJSON($response);
             } elseif ($httpCode == 404) {
                 return [
                     'success' => false,
                     'message' => 'No se encontraron resultados para la razón social consultada',
                     'data' => []
                 ];
+            } elseif ($httpCode == 500) {
+                return [
+                    'success' => false,
+                    'message' => 'Error interno del servidor SUNAT',
+                    'data' => []
+                ];
             } else {
                 return [
                     'success' => false,
-                    'message' => "Error HTTP $httpCode al consultar PIDE",
+                    'message' => "Error HTTP $httpCode al buscar en SUNAT",
                     'data' => []
                 ];
             }
-            
+
         } catch (\Exception $e) {
-            error_log("Exception en buscarPorRazonSocial: " . $e->getMessage());
+            error_log("Exception en buscarPorRazonSocialSUNATRest: " . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Error al buscar razon social: ' . $e->getMessage(),
-                'data' => []
-            ];
-        }
-    }
-    
-    /**
-     * Parsear respuesta XML/SOAP de PIDE
-     * @param string $xmlResponse Respuesta XML del servicio
-     * @param string $razonSocialBuscada Razón social que se buscó
-     * @return array Datos parseados
-     */
-    private function parsearRespuestaXML($xmlResponse, $razonSocialBuscada) {
-        try {
-            // Verificar si la respuesta está vacía
-            if (empty($xmlResponse)) {
-                return [
-                    'success' => false,
-                    'message' => 'Respuesta vacía del servidor PIDE',
-                    'data' => []
-                ];
-            }
-            
-            // Cargar XML
-            libxml_use_internal_errors(true);
-            $xml = simplexml_load_string($xmlResponse);
-            
-            if ($xml === false) {
-                $errors = libxml_get_errors();
-                libxml_clear_errors();
-                error_log("Error al parsear XML: " . print_r($errors, true));
-                return [
-                    'success' => false,
-                    'message' => 'Error al procesar respuesta XML de PIDE',
-                    'data' => []
-                ];
-            }
-            
-            // Registrar namespaces
-            $namespaces = $xml->getNamespaces(true);
-            foreach ($namespaces as $prefix => $ns) {
-                $xml->registerXPathNamespace($prefix ?: 'default', $ns);
-            }
-            
-            // Buscar elementos multiRef (contienen los datos)
-            $multiRefs = $xml->xpath('//multiRef');
-            
-            if (empty($multiRefs)) {
-                return [
-                    'success' => false,
-                    'message' => 'No se encontraron resultados para: ' . $razonSocialBuscada,
-                    'data' => []
-                ];
-            }
-            
-            $resultados = [];
-            
-            foreach ($multiRefs as $item) {
-                // Validar que tenga RUC
-                $ruc = (string)$item->ddp_numruc;
-                if (empty($ruc)) {
-                    continue;
-                }
-                
-                $resultados[] = [
-                    // Datos principales
-                    'ruc' => $ruc,
-                    'razon_social' => (string)$item->ddp_nombre,
-                    'secuencia' => (int)$item->ddp_secuen,
-                    
-                    // Ubicación
-                    'codigo_ubigeo' => (string)$item->ddp_ubigeo,
-                    'codigo_departamento' => (string)$item->cod_dep,
-                    'codigo_provincia' => (string)$item->cod_prov,
-                    'codigo_distrito' => (string)$item->cod_dist,
-                    'departamento' => (string)$item->desc_dep,
-                    'provincia' => (string)$item->desc_prov,
-                    'distrito' => (string)$item->desc_dist,
-                    
-                    // Dirección
-                    'direccion_completa' => $this->construirDireccionXML($item),
-                    'tipo_via' => (string)$item->desc_tipvia,
-                    'codigo_tipo_via' => (string)$item->ddp_tipvia,
-                    'nombre_via' => (string)$item->ddp_nomvia,
-                    'numero' => (string)$item->ddp_numer1,
-                    'interior' => (string)$item->ddp_inter1,
-                    'nombre_zona' => (string)$item->ddp_nomzon,
-                    'tipo_zona' => (string)$item->desc_tipzon,
-                    'codigo_tipo_zona' => (string)$item->ddp_tipzon,
-                    'referencia' => (string)$item->ddp_refer1,
-                    
-                    // Estado
-                    'estado_contribuyente' => (string)$item->desc_estado,
-                    'codigo_estado' => (string)$item->ddp_estado,
-                    'condicion_domicilio' => (string)$item->desc_flag22,
-                    'codigo_condicion' => (string)$item->ddp_flag22,
-                    
-                    // Fechas
-                    'fecha_alta' => (string)$item->ddp_fecalt,
-                    'fecha_baja' => (string)$item->ddp_fecbaj,
-                    'fecha_actividad' => (string)$item->ddp_fecact,
-                    'fecha_reactivacion' => (string)$item->ddp_reacti,
-                    
-                    // Tipo
-                    'tipo_contribuyente' => (string)$item->desc_tpoemp,
-                    'codigo_tipo_contribuyente' => (string)$item->ddp_tpoemp,
-                    'tipo_persona' => (string)$item->desc_identi,
-                    'codigo_tipo_persona' => (string)$item->ddp_identi,
-                    
-                    // Actividad económica
-                    'actividad_economica' => (string)$item->desc_ciiu,
-                    'codigo_ciiu' => (string)$item->ddp_ciiu,
-                    
-                    // Tamaño
-                    'tamano_empresa' => (string)$item->desc_tamano,
-                    'codigo_tamano' => (string)$item->ddp_tamano,
-                    
-                    // Otros
-                    'numero_registro' => (string)$item->ddp_numreg,
-                    'desc_numero_registro' => (string)$item->desc_numreg,
-                    'usuario' => (string)$item->ddp_userna,
-                    'clasificacion' => (string)$item->ddp_mclase,
-                    'doble_tributacion' => (string)$item->ddp_doble,
-                    'latitud_longitud' => (string)$item->ddp_lllttt,
-                    
-                    // Estados booleanos
-                    'es_activo' => $this->convertirBooleanoXML((string)$item->esActivo),
-                    'es_habido' => $this->convertirBooleanoXML((string)$item->esHabido),
-                    'estado_activo' => $this->convertirBooleanoXML((string)$item->esActivo) ? 'SÍ' : 'NO',
-                    'estado_habido' => $this->convertirBooleanoXML((string)$item->esHabido) ? 'SÍ' : 'NO'
-                ];
-            }
-            
-            if (empty($resultados)) {
-                return [
-                    'success' => false,
-                    'message' => 'No se encontraron resultados válidos para: ' . $razonSocialBuscada,
-                    'data' => []
-                ];
-            }
-            
-            return [
-                'success' => true,
-                'message' => 'Búsqueda exitosa',
-                'data' => $resultados,
-                'total' => count($resultados)
-            ];
-            
-        } catch (\Exception $e) {
-            error_log("Exception en parsearRespuestaXML: " . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Error al procesar respuesta: ' . $e->getMessage(),
+                'message' => 'Error al buscar razón social: ' . $e->getMessage(),
                 'data' => []
             ];
         }
     }
 
     // ========================================
-    // 📄 PARSEAR RESPUESTA SOAP (CONSULTA POR RUC)
+    // 📄 PROCESAR RESPUESTA JSON (CONSULTA POR RUC)
     // ========================================
-    private function parsearRespuestaSOAP($xmlResponse, $ruc) {
+    private function procesarRespuestaJSON($jsonResponse, $ruc) {
         try {
-            libxml_use_internal_errors(true);
+            $respuesta = json_decode($jsonResponse, true);
             
-            $xml = simplexml_load_string($xmlResponse);
-            
-            if ($xml === false) {
-                $errors = libxml_get_errors();
-                libxml_clear_errors();
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 return [
                     'success' => false,
-                    'message' => 'Error al parsear respuesta XML de SUNAT',
+                    'message' => 'Error al decodificar respuesta JSON de SUNAT: ' . json_last_error_msg(),
                     'data' => null
                 ];
             }
 
-            $namespaces = $xml->getNamespaces(true);
-            foreach ($namespaces as $prefix => $ns) {
-                $xml->registerXPathNamespace($prefix ?: 'default', $ns);
+            // Verificar estructura de la respuesta
+            if (!isset($respuesta['list']['multiRef'])) {
+                error_log("Respuesta SUNAT inesperada: " . print_r($respuesta, true));
+                return [
+                    'success' => false,
+                    'message' => 'Formato de respuesta inválido de SUNAT',
+                    'data' => null
+                ];
             }
 
-            $multiRef = $xml->xpath('//multiRef');
+            // Extraer datos del multiRef
+            $datos = $respuesta['list']['multiRef'];
             
-            if (empty($multiRef)) {
+            // Función auxiliar para extraer valor
+            $extraerValor = function($campo) use ($datos) {
+                if (!isset($datos[$campo])) {
+                    return '';
+                }
+                
+                $valor = $datos[$campo];
+                
+                // Si tiene @nil=true, retornar vacío
+                if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
+                    return '';
+                }
+                
+                // Si tiene $, retornar ese valor
+                if (is_array($valor) && isset($valor['$'])) {
+                    return trim($valor['$']);
+                }
+                
+                // Si es string directo
+                if (is_string($valor)) {
+                    return trim($valor);
+                }
+                
+                return '';
+            };
+
+            // Verificar si hay datos válidos
+            $rucObtenido = $extraerValor('ddp_numruc');
+            if (empty($rucObtenido)) {
                 return [
                     'success' => false,
                     'message' => 'No se encontró información para el RUC consultado',
                     'data' => null
                 ];
             }
-            
-            $datos = $multiRef[0];
 
             $resultado = [
                 'success' => true,
                 'message' => 'Consulta exitosa',
                 'data' => [
                     // Datos principales
-                    'ruc' => (string)($datos->ddp_numruc ?? $ruc),
-                    'razon_social' => (string)($datos->ddp_nombre ?? ''),
+                    'ruc' => $rucObtenido,
+                    'razon_social' => $extraerValor('ddp_nombre'),
                     
                     // Ubicación
-                    'codigo_ubigeo' => (string)($datos->ddp_ubigeo ?? ''),
-                    'departamento' => (string)($datos->desc_dep ?? ''),
-                    'provincia' => (string)($datos->desc_prov ?? ''),
-                    'distrito' => (string)($datos->desc_dist ?? ''),
-                    'cod_dep' => (string)($datos->cod_dep ?? ''),
-                    'cod_prov' => (string)($datos->cod_prov ?? ''),
-                    'cod_dist' => (string)($datos->cod_dist ?? ''),
+                    'codigo_ubigeo' => $extraerValor('ddp_ubigeo'),
+                    'departamento' => $extraerValor('desc_dep'),
+                    'provincia' => $extraerValor('desc_prov'),
+                    'distrito' => $extraerValor('desc_dist'),
+                    'cod_dep' => $extraerValor('cod_dep'),
+                    'cod_prov' => $extraerValor('cod_prov'),
+                    'cod_dist' => $extraerValor('cod_dist'),
                     
                     // Dirección completa
-                    'tipo_via' => (string)($datos->desc_tipvia ?? ''),
-                    'codigo_tipo_via' => (string)($datos->ddp_tipvia ?? ''),
-                    'nombre_via' => (string)($datos->ddp_nomvia ?? ''),
-                    'numero' => (string)($datos->ddp_numer1 ?? ''),
-                    'interior' => (string)($datos->ddp_inter1 ?? ''),
-                    'tipo_zona' => (string)($datos->desc_tipzon ?? ''),
-                    'codigo_tipo_zona' => (string)($datos->ddp_tipzon ?? ''),
-                    'nombre_zona' => (string)($datos->ddp_nomzon ?? ''),
-                    'referencia' => (string)($datos->ddp_refer1 ?? ''),
-                    'direccion_completa' => $this->construirDireccion($datos),
+                    'tipo_via' => $extraerValor('desc_tipvia'),
+                    'codigo_tipo_via' => $extraerValor('ddp_tipvia'),
+                    'nombre_via' => $extraerValor('ddp_nomvia'),
+                    'numero' => $extraerValor('ddp_numer1'),
+                    'interior' => $extraerValor('ddp_inter1'),
+                    'tipo_zona' => $extraerValor('desc_tipzon'),
+                    'codigo_tipo_zona' => $extraerValor('ddp_tipzon'),
+                    'nombre_zona' => $extraerValor('ddp_nomzon'),
+                    'referencia' => $extraerValor('ddp_refer1'),
                     
                     // Estado y condición
-                    'estado_contribuyente' => (string)($datos->desc_estado ?? ''),
-                    'codigo_estado' => (string)($datos->ddp_estado ?? ''),
-                    'condicion_domicilio' => (string)($datos->desc_flag22 ?? ''),
-                    'codigo_condicion' => (string)($datos->ddp_flag22 ?? ''),
+                    'estado_contribuyente' => $extraerValor('desc_estado'),
+                    'codigo_estado' => $extraerValor('ddp_estado'),
+                    'condicion_domicilio' => $extraerValor('desc_flag22'),
+                    'codigo_condicion' => $extraerValor('ddp_flag22'),
                     
                     // Tipo de contribuyente
-                    'tipo_contribuyente' => (string)($datos->desc_tpoemp ?? ''),
-                    'codigo_tipo_contribuyente' => (string)($datos->ddp_tpoemp ?? ''),
-                    'tipo_persona' => (string)($datos->desc_identi ?? ''),
-                    'codigo_tipo_persona' => (string)($datos->ddp_identi ?? ''),
+                    'tipo_contribuyente' => $extraerValor('desc_tpoemp'),
+                    'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp'),
+                    'tipo_persona' => $extraerValor('desc_identi'),
+                    'codigo_tipo_persona' => $extraerValor('ddp_identi'),
                     
                     // Actividad económica
-                    'actividad_economica' => (string)($datos->desc_ciiu ?? ''),
-                    'codigo_ciiu' => (string)($datos->ddp_ciiu ?? ''),
+                    'actividad_economica' => $extraerValor('desc_ciiu'),
+                    'codigo_ciiu' => $extraerValor('ddp_ciiu'),
                     
                     // Dependencia
-                    'dependencia' => (string)($datos->desc_numreg ?? ''),
-                    'codigo_dependencia' => (string)($datos->ddp_numreg ?? ''),
+                    'dependencia' => $extraerValor('desc_numreg'),
+                    'codigo_dependencia' => $extraerValor('ddp_numreg'),
                     
                     // Fechas
-                    'fecha_actualizacion' => (string)($datos->ddp_fecact ?? ''),
-                    'fecha_alta' => (string)($datos->ddp_fecalt ?? ''),
-                    'fecha_baja' => (string)($datos->ddp_fecbaj ?? ''),
+                    'fecha_actualizacion' => $extraerValor('ddp_fecact'),
+                    'fecha_alta' => $extraerValor('ddp_fecalt'),
+                    'fecha_baja' => $extraerValor('ddp_fecbaj'),
                     
                     // Otros datos
-                    'codigo_secuencia' => (string)($datos->ddp_secuen ?? ''),
-                    'libreta_tributaria' => (string)($datos->ddp_lllttt ?? ''),
+                    'codigo_secuencia' => $extraerValor('ddp_secuen'),
+                    'libreta_tributaria' => $extraerValor('ddp_lllttt'),
+                    'tamaño' => $extraerValor('desc_tamano'),
                     
                     // Estados booleanos
-                    'es_activo' => $this->convertirBooleano($datos->esActivo ?? 'false'),
-                    'es_habido' => $this->convertirBooleano($datos->esHabido ?? 'false'),
-                    'estado_activo' => $this->convertirBooleano($datos->esActivo ?? 'false') ? 'SÍ' : 'NO',
-                    'estado_habido' => $this->convertirBooleano($datos->esHabido ?? 'false') ? 'SÍ' : 'NO'
+                    'es_activo' => $this->convertirBooleano($extraerValor('esActivo')),
+                    'es_habido' => $this->convertirBooleano($extraerValor('esHabido')),
+                    'estado_activo' => $this->convertirBooleano($extraerValor('esActivo')) ? 'SÍ' : 'NO',
+                    'estado_habido' => $this->convertirBooleano($extraerValor('esHabido')) ? 'SÍ' : 'NO'
                 ]
             ];
+
+            // Construir dirección completa
+            $resultado['data']['direccion_completa'] = $this->construirDireccionDesdeArray($resultado['data']);
 
             $this->registrarConsulta('RUC', $ruc, $resultado['data']);
 
             return $resultado;
 
         } catch (\Exception $e) {
-            error_log("Exception en parsearRespuestaSOAP: " . $e->getMessage());
+            error_log("Exception en procesarRespuestaJSON: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             return [
                 'success' => false,
                 'message' => 'Error al procesar respuesta: ' . $e->getMessage(),
@@ -527,162 +398,246 @@ XML;
         }
     }
 
-    /**
-     * Construir dirección completa desde XML
-     * @param SimpleXMLElement $item Elemento XML con los datos
-     * @return string Dirección formateada
-     */
-    private function construirDireccionXML($item) {
-        $partes = [];
-        
-        // Tipo y nombre de vía
-        $via = trim((string)$item->desc_tipvia);
-        $nombreVia = trim((string)$item->ddp_nomvia);
-        if (!empty($via) && !empty($nombreVia)) {
-            $partes[] = $via . ' ' . $nombreVia;
-        } elseif (!empty($nombreVia)) {
-            $partes[] = $nombreVia;
+    // ========================================
+    // 📄 PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL) - CORREGIDO
+    // ========================================
+    private function procesarRespuestaBusquedaJSON($jsonResponse) {
+        try {
+            error_log("Procesando respuesta de búsqueda por razón social");
+            error_log("Response raw: " . substr($jsonResponse, 0, 1000));
+
+            $respuesta = json_decode($jsonResponse, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log("Error JSON decode: " . json_last_error_msg());
+                return [
+                    'success' => false,
+                    'message' => 'Error al decodificar respuesta JSON de SUNAT: ' . json_last_error_msg(),
+                    'data' => []
+                ];
+            }
+
+            // Verificar estructura de la respuesta
+            if (!isset($respuesta['list']['multiRef'])) {
+                error_log("No se encontró multiRef en la respuesta");
+                error_log("Estructura completa: " . print_r($respuesta, true));
+                return [
+                    'success' => false,
+                    'message' => 'No se encontraron resultados para la razón social consultada',
+                    'data' => []
+                ];
+            }
+
+            $multiRef = $respuesta['list']['multiRef'];
+            
+            // Verificar si multiRef es un array de resultados
+            if (!is_array($multiRef)) {
+                error_log("multiRef no es un array");
+                return [
+                    'success' => false,
+                    'message' => 'Formato de respuesta inválido',
+                    'data' => []
+                ];
+            }
+
+            // Si multiRef no tiene índices numéricos, es un solo resultado
+            $esArrayMultiple = isset($multiRef[0]);
+            if (!$esArrayMultiple) {
+                // Es un solo resultado, convertirlo en array
+                $multiRef = [$multiRef];
+            }
+
+            error_log("Total de resultados encontrados: " . count($multiRef));
+
+            $resultados = [];
+
+            // Función auxiliar para extraer valor
+            $extraerValor = function($campo, $datos) {
+                if (!isset($datos[$campo])) {
+                    return '';
+                }
+                
+                $valor = $datos[$campo];
+                
+                if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
+                    return '';
+                }
+                
+                if (is_array($valor) && isset($valor['$'])) {
+                    return trim($valor['$']);
+                }
+                
+                if (is_string($valor)) {
+                    return trim($valor);
+                }
+                
+                return '';
+            };
+
+            foreach ($multiRef as $index => $datos) {
+                $ruc = $extraerValor('ddp_numruc', $datos);
+                $nombre = $extraerValor('ddp_nombre', $datos);
+                
+                error_log("Procesando resultado $index: RUC=$ruc, Nombre=$nombre");
+                
+                // Solo procesar si tiene RUC
+                if (!empty($ruc)) {
+                    $resultado = [
+                        // Datos principales
+                        'ruc' => $ruc,
+                        'razon_social' => $nombre,
+                        'secuencia' => (int)$extraerValor('ddp_secuen', $datos),
+                        
+                        // Ubicación
+                        'codigo_ubigeo' => $extraerValor('ddp_ubigeo', $datos),
+                        'departamento' => $extraerValor('desc_dep', $datos),
+                        'provincia' => $extraerValor('desc_prov', $datos),
+                        'distrito' => $extraerValor('desc_dist', $datos),
+                        'cod_dep' => $extraerValor('cod_dep', $datos),
+                        'cod_prov' => $extraerValor('cod_prov', $datos),
+                        'cod_dist' => $extraerValor('cod_dist', $datos),
+                        
+                        // Dirección
+                        'tipo_via' => $extraerValor('desc_tipvia', $datos),
+                        'codigo_tipo_via' => $extraerValor('ddp_tipvia', $datos),
+                        'nombre_via' => $extraerValor('ddp_nomvia', $datos),
+                        'numero' => $extraerValor('ddp_numer1', $datos),
+                        'interior' => $extraerValor('ddp_inter1', $datos),
+                        'tipo_zona' => $extraerValor('desc_tipzon', $datos),
+                        'codigo_tipo_zona' => $extraerValor('ddp_tipzon', $datos),
+                        'nombre_zona' => $extraerValor('ddp_nomzon', $datos),
+                        'referencia' => $extraerValor('ddp_refer1', $datos),
+                        
+                        // Estado
+                        'estado_contribuyente' => $extraerValor('desc_estado', $datos),
+                        'codigo_estado' => $extraerValor('ddp_estado', $datos),
+                        'condicion_domicilio' => $extraerValor('desc_flag22', $datos),
+                        'codigo_condicion' => $extraerValor('ddp_flag22', $datos),
+                        
+                        // Tipo
+                        'tipo_contribuyente' => $extraerValor('desc_tpoemp', $datos),
+                        'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp', $datos),
+                        'tipo_persona' => $extraerValor('desc_identi', $datos),
+                        'codigo_tipo_persona' => $extraerValor('ddp_identi', $datos),
+                        
+                        // Actividad
+                        'actividad_economica' => $extraerValor('desc_ciiu', $datos),
+                        'codigo_ciiu' => $extraerValor('ddp_ciiu', $datos),
+                        
+                        // Dependencia
+                        'dependencia' => $extraerValor('desc_numreg', $datos),
+                        'codigo_dependencia' => $extraerValor('ddp_numreg', $datos),
+                        
+                        // Fechas
+                        'fecha_actualizacion' => $extraerValor('ddp_fecact', $datos),
+                        'fecha_alta' => $extraerValor('ddp_fecalt', $datos),
+                        'fecha_baja' => $extraerValor('ddp_fecbaj', $datos),
+                        
+                        // Estados booleanos
+                        'es_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)),
+                        'es_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)),
+                        'estado_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)) ? 'SÍ' : 'NO',
+                        'estado_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)) ? 'SÍ' : 'NO'
+                    ];
+                    
+                    // Construir dirección completa
+                    $resultado['direccion_completa'] = $this->construirDireccionDesdeArray($resultado);
+                    
+                    $resultados[] = $resultado;
+                    error_log("Resultado procesado exitosamente");
+                } else {
+                    error_log("Registro sin RUC, se omite");
+                }
+            }
+
+            if (empty($resultados)) {
+                error_log("No se encontraron resultados válidos");
+                return [
+                    'success' => false,
+                    'message' => 'No se encontraron resultados válidos para la razón social consultada',
+                    'data' => []
+                ];
+            }
+
+            error_log("Total de resultados procesados: " . count($resultados));
+
+            return [
+                'success' => true,
+                'message' => 'Búsqueda exitosa',
+                'data' => $resultados,
+                'total' => count($resultados)
+            ];
+
+        } catch (\Exception $e) {
+            error_log("Exception en procesarRespuestaBusquedaJSON: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            return [
+                'success' => false,
+                'message' => 'Error al procesar respuesta: ' . $e->getMessage(),
+                'data' => []
+            ];
         }
-        
-        // Número
-        $numero = trim((string)$item->ddp_numer1);
-        if (!empty($numero)) {
-            $partes[] = 'Nro. ' . $numero;
-        }
-        
-        // Interior
-        $interior = trim((string)$item->ddp_inter1);
-        if (!empty($interior)) {
-            $partes[] = 'Int. ' . $interior;
-        }
-        
-        // Zona
-        $tipoZona = trim((string)$item->desc_tipzon);
-        $nombreZona = trim((string)$item->ddp_nomzon);
-        if (!empty($tipoZona) && !empty($nombreZona)) {
-            $partes[] = $tipoZona . ' ' . $nombreZona;
-        } elseif (!empty($nombreZona)) {
-            $partes[] = $nombreZona;
-        }
-        
-        // Distrito, Provincia, Departamento
-        $distrito = trim((string)$item->desc_dist);
-        $provincia = trim((string)$item->desc_prov);
-        $departamento = trim((string)$item->desc_dep);
-        
-        $ubicacion = array_filter([$distrito, $provincia, $departamento]);
-        if (!empty($ubicacion)) {
-            $partes[] = implode(' - ', $ubicacion);
-        }
-        
-        return !empty($partes) ? implode(', ', $partes) : 'Sin dirección registrada';
-    }
-    /**
-     * Convertir valor XML a booleano
-     * @param string $valor Valor del XML
-     * @return bool Valor booleano
-     */
-    private function convertirBooleanoXML($valor) {
-        $valor = strtolower(trim($valor));
-        return in_array($valor, ['true', '1', 'yes', 'si', 'sí']);
     }
 
-    /**
-     * Obtener valor de array con validación
-     * @param array $data Array de datos
-     * @param string $key Clave a buscar
-     * @param mixed $default Valor por defecto
-     * @return mixed Valor encontrado o valor por defecto
-     */
-    private function obtenerValor($data, $key, $default = '') {
-        if (!isset($data[$key])) {
-            return $default;
-        }
-        
-        $valor = $data[$key];
-        
-        // Si es null o string vacío, retornar default
-        if ($valor === null || $valor === '') {
-            return $default;
-        }
-        
-        return $valor;
-    }
-    
-
     // ========================================
-    // 🏠 CONSTRUIR DIRECCIÓN COMPLETA
+    // 🏠 CONSTRUIR DIRECCIÓN COMPLETA DESDE ARRAY
     // ========================================
-    private function construirDireccion($datos) {
+    private function construirDireccionDesdeArray($data) {
         $partes = [];
         
-        if (!empty((string)$datos->desc_tipvia) && (string)$datos->desc_tipvia !== '-') {
-            $partes[] = (string)$datos->desc_tipvia;
+        if (!empty($data['tipo_via']) && $data['tipo_via'] !== '-') {
+            $partes[] = $data['tipo_via'];
         }
         
-        if (!empty((string)$datos->ddp_nomvia) && (string)$datos->ddp_nomvia !== '-') {
-            $partes[] = (string)$datos->ddp_nomvia;
+        if (!empty($data['nombre_via']) && $data['nombre_via'] !== '-') {
+            $partes[] = $data['nombre_via'];
         }
         
-        if (!empty((string)$datos->ddp_numer1) && (string)$datos->ddp_numer1 !== '-') {
-            $partes[] = 'NRO. ' . (string)$datos->ddp_numer1;
+        if (!empty($data['numero']) && $data['numero'] !== '-') {
+            $partes[] = 'NRO. ' . $data['numero'];
         }
         
-        if (!empty((string)$datos->ddp_inter1) && (string)$datos->ddp_inter1 !== '-') {
-            $partes[] = 'INT. ' . (string)$datos->ddp_inter1;
+        if (!empty($data['interior']) && $data['interior'] !== '-') {
+            $partes[] = 'INT. ' . $data['interior'];
         }
         
-        if (!empty((string)$datos->ddp_nomzon) && (string)$datos->ddp_nomzon !== '-') {
-            $partes[] = (string)$datos->ddp_nomzon;
+        if (!empty($data['nombre_zona']) && $data['nombre_zona'] !== '-') {
+            $partes[] = $data['nombre_zona'];
         }
         
-        if (!empty((string)$datos->ddp_refer1) && (string)$datos->ddp_refer1 !== '-') {
-            $partes[] = '(' . (string)$datos->ddp_refer1 . ')';
+        if (!empty($data['referencia']) && $data['referencia'] !== '-') {
+            $partes[] = '(' . $data['referencia'] . ')';
         }
         
         return implode(' ', $partes);
     }
 
     // ========================================
-    // 🔄 CONVERTIR STRING A BOOLEANO
+    // 🔄 CONVERTIR A BOOLEANO
     // ========================================
     private function convertirBooleano($valor) {
+        // Si está vacío, retornar false
+        if (empty($valor)) {
+            return false;
+        }
+        
+        // Si ya es booleano, retornarlo directamente
+        if (is_bool($valor)) {
+            return $valor;
+        }
+        
+        // Si es numérico
+        if (is_numeric($valor)) {
+            return (int)$valor === 1;
+        }
+        
+        // Si es string, convertir
         $valorStr = strtolower((string)$valor);
         return in_array($valorStr, ['true', '1', 'yes', 'si', 'sí']);
     }
 
     // ========================================
-    // ⚠️ EXTRAER ERROR DE SOAP FAULT
-    // ========================================
-    private function extraerErrorSOAP($xmlResponse) {
-        try {
-            libxml_use_internal_errors(true);
-            $xml = simplexml_load_string($xmlResponse);
-            
-            if ($xml === false) {
-                return null;
-            }
-
-            $namespaces = $xml->getNamespaces(true);
-            foreach ($namespaces as $prefix => $ns) {
-                $xml->registerXPathNamespace($prefix ?: 'default', $ns);
-            }
-
-            $fault = $xml->xpath('//faultstring');
-            
-            if (!empty($fault)) {
-                return (string)$fault[0];
-            }
-
-            return null;
-
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    // ========================================
-    // 💾 REGISTRAR CONSULTA EN BD
+    // 💾 REGISTRAR CONSULTA EN LOG
     // ========================================
     private function registrarConsulta($tipo, $documento, $respuesta) {
         try {

@@ -217,6 +217,15 @@ class API {
         return this.post('/buscar-persona-juridica-sunarp', data);
     }
 
+    // Métodos TSIRSARP
+    async consultarTSIRSARPNatural(datos) {
+        return this.post('/sunarp/tsirsarp-natural', datos);
+    }
+
+    async consultarTSIRSARPJuridica(datos) {
+        return this.post('/sunarp/tsirsarp-juridica', datos);
+    }
+
 
     async crearUsuario(data) {
         return this.post('/crear-usuario', { data })
