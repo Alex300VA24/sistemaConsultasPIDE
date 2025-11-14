@@ -65,7 +65,7 @@ class ConsultasSunarpController {
     }
 
     // ========================================
-    // 📌 BUSCAR PERSONA JURÍDICA (SUNAT + SUNARP)
+    // BUSCAR PERSONA JURÍDICA (SUNAT)
     // ========================================
     public function buscarPersonaJuridica() {
         header('Content-Type: application/json');
@@ -343,17 +343,20 @@ XML;
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Razón social no puede estar vacía'
+                'message' => 'Razon social no puede estar vacia'
             ]);
-            return;
+            exit;
         }
-
+        
         // Realizar consulta por razón social
         $sunatController = new ConsultasSunatController;
-        $resultado = $sunatController->buscarPorRazonSocial($razonSocial);
+        $resultado = $sunatController->buscarPorRazonSocial($razonSocial);    
+        
+        // FIN LOG
         
         http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);    
+        echo json_encode($resultado);
+        exit;
     }
 
     // ========================================

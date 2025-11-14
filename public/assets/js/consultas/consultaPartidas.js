@@ -225,7 +225,7 @@ async function buscarPersonaJuridica(e) {
         
         if (resultado.success && resultado.data) {
             registrosEncontrados = resultado.data;
-            mostrarResultadosJuridica(resultado.data);
+            mostrarResultadosJuridica(resultado);
             
             if (resultado.data.length === 0) {
                 mostrarAlertaPartidas('No se encontraron registros en SUNARP', 'info');
@@ -246,7 +246,7 @@ async function buscarPersonaJuridica(e) {
 }
 
 // ========================================
-// 📌 MOSTRAR RESULTADOS PERSONA NATURAL
+// MOSTRAR RESULTADOS PERSONA NATURAL
 // ========================================
 
 function mostrarResultadosNatural(data) {
@@ -297,57 +297,109 @@ function mostrarResultadosNatural(data) {
 function mostrarResultadosJuridica(datos) {
     const contenedor = document.getElementById('resultadosJuridica');
     
-    if (!datos || Object.keys(datos).length === 0) {
+    // Verificar si hay datos válidos
+    if (!datos || (!datos.data && Object.keys(datos).length === 0)) {
         contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron resultados</div>';
         contenedor.style.display = 'block';
         return;
     }
-
-    let html = `
+    
+    // Determinar si es búsqueda por RUC (objeto simple) o por razón social (array en data)
+    let resultados = [];
+    
+    if (datos.data && Array.isArray(datos.data)) {
+        // Búsqueda por razón social - múltiples resultados
+        resultados = datos.data;
+    } else {
+        // Búsqueda por RUC - un solo resultado (objeto directo)
+        resultados = [datos.data];
+    }
+    
+    if (resultados.length === 0) {
+        contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron resultados</div>';
+        contenedor.style.display = 'block';
+        return;
+    }
+    
+    let html = '';
+    
+    // Si hay múltiples resultados, mostrar el contador
+    if (resultados.length > 1) {
+        html += `<div style="margin-bottom: 10px;"><strong>Resultados encontrados:</strong> ${resultados.length}</div>`;
+    }
+    console.log(resultados, resultados.length);
+    html += `
         <table>
             <thead>
                 <tr>
                     <th>RUC</th>
                     <th>Razón Social</th>
                     <th>Estado</th>
-                    <th>Informacion</th>
+                    <th>Información</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
     `;
-
-
-    let infoAdicional = '';
-    if (datos.direccion_completa) {
-        infoAdicional += `<div><strong>Dirección:</strong> ${datos.direccion_completa}</div>`;
-    }
-    if (datos.departamento && datos.provincia && datos.distrito) {
-        infoAdicional += `<div><strong>Ubicación:</strong> ${datos.departamento} / ${datos.provincia} / ${datos.distrito}</div>`;
-    }
-    if (datos.condicion_domicilio) {
-        infoAdicional += `<div><strong>Condicion:</strong> ${datos.condicion_domicilio}</div>`;
-    }
     
-
-    const estadoClass = datos.estado_contribuyente ? 'badge-success' : 'badge-danger';
-    const estadoTexto = datos.estado_contribuyente ? 'Activo' : 'Inactivo';
-
-    html += `
-        <tr>
-            <td>${datos.ruc || '-'}</td>
-            <td>${datos.razon_social || '-'}</td>
-            <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
-            <td style="font-size: 0.85em;">${infoAdicional || '-'}</td>
-            <td>
-                <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(datos)})'>
-                    Seleccionar
-                </button>
-            </td>
-        </tr>
-    `;
-
-
+    resultados.forEach((item) => {
+        let infoAdicional = '';
+        
+        // Verificar si hay dirección válida
+        if (item.direccion_completa && item.direccion_completa !== 'Sin dirección registrada') {
+            infoAdicional += `<div><strong>Dirección:</strong> ${item.direccion_completa}</div>`;
+        }
+        
+        // Verificar si hay ubicación válida
+        if (item.departamento && item.provincia && item.distrito) {
+            infoAdicional += `<div><strong>Ubicación:</strong> ${item.departamento} / ${item.provincia} / ${item.distrito}</div>`;
+        }
+        
+        // Verificar condición de domicilio
+        if (item.condicion_domicilio) {
+            infoAdicional += `<div><strong>Condición:</strong> ${item.condicion_domicilio}</div>`;
+        }
+        
+        // Si no hay info adicional
+        if (!infoAdicional) {
+            infoAdicional = '-';
+        }
+        
+        // Determinar estado - compatible con ambos formatos
+        const esActivo = item.estado_contribuyente || item.es_activo || item.estado_activo === 'SI' || item.estado_activo === 'SÍ';
+        const estadoClass = esActivo ? 'badge-success' : 'badge-danger';
+        const estadoTexto = esActivo ? 'Activo' : 'Inactivo';
+        
+        // Limpiar razón social
+        const razonSocialLimpia = item.razon_social ? item.razon_social.trim() : '-';
+        
+        // Crear objeto limpio para el onclick (sin comillas problemáticas)
+        const personaData = {
+            ruc: item.ruc,
+            razon_social: razonSocialLimpia,
+            direccion_completa: item.direccion_completa,
+            departamento: item.departamento,
+            provincia: item.provincia,
+            distrito: item.distrito,
+            condicion_domicilio: item.condicion_domicilio,
+            estado_contribuyente: esActivo
+        };
+        
+        html += `
+            <tr>
+                <td>${item.ruc || '-'}</td>
+                <td>${razonSocialLimpia}</td>
+                <td><span class="badge ${estadoClass}">${estadoTexto}</span></td>
+                <td style="font-size: 0.85em;">${infoAdicional}</td>
+                <td>
+                    <button class="btn-select" onclick='seleccionarPersona(${JSON.stringify(personaData).replace(/'/g, "&#39;")})'>
+                        Seleccionar
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
     html += '</tbody></table>';
     contenedor.innerHTML = html;
     contenedor.style.display = 'block';

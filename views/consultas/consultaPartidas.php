@@ -162,12 +162,12 @@
                         </div>
                         <div class="btn-group">
                             <button type="submit" class="btn btn-search">
-                                <i class="fas fa-search" style="color: black;"></i>
-                                <span style="color: black;">Buscar</span>
+                                <i class="fas fa-search"></i>
+                                <span>Buscar</span>
                             </button>
                             <button type="button" class="btn btn-clear" onclick="limpiarModalNatural()">
-                                <i class="fas fa-eraser" style="color: black;"></i>
-                                <span style="color: black;">Limpiar</span>
+                                <i class="fas fa-eraser"></i>
+                                <span>Limpiar</span>
                             </button>
                         </div>
                     </form>
@@ -224,12 +224,12 @@
                         </div>
                         <div class="btn-group">
                             <button type="submit" class="btn btn-search">
-                                <i class="fas fa-search" style="color: black;"></i>
-                                <span style="color: black;">Buscar</span>
+                                <i class="fas fa-search"></i>
+                                <span>Buscar</span>
                             </button>
                             <button type="button" class="btn btn-clear" onclick="limpiarModalJuridica()">
-                                <i class="fas fa-eraser" style="color: black;"></i>
-                                <span style="color: black;">Limpiar</span>
+                                <i class="fas fa-eraser"></i>
+                                <span>Limpiar</span>
                             </button>
                         </div>
                     </form>
