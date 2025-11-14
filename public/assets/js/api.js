@@ -17,10 +17,10 @@ class API {
         try {
             const response = await fetch(url, config);
             
-            // 🔹 Obtenemos el texto de la respuesta (puede estar vacío)
+            // Obtenemos el texto de la respuesta (puede estar vacío)
             const text = await response.text();
 
-            // 🔹 Si hay contenido, parseamos JSON
+            // Si hay contenido, parseamos JSON
             const data = text ? JSON.parse(text) : {};
 
             if (!response.ok) {

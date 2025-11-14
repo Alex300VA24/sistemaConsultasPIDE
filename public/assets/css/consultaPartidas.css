@@ -563,6 +563,80 @@
     cursor: pointer;
 }
 
+/* Botones del Modal - MEJORADOS */
+.modal-search-form .btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.modal-search-form .btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-search-form .btn-search {
+    background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.modal-search-form .btn-search:hover {
+    background: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-search-form .btn-search:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.modal-search-form .btn-search i,
+.modal-search-form .btn-search span {
+    color: white !important;
+}
+
+.modal-search-form .btn-clear {
+    background: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.modal-search-form .btn-clear:hover {
+    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-search-form .btn-clear:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.modal-search-form .btn-clear i,
+.modal-search-form .btn-clear span {
+    color: white !important;
+}
+
+.modal-search-form .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
 /* Results Table en Modal */
 .modal-results-table {
     max-height: 300px;
@@ -596,6 +670,33 @@
 
 .modal-results-table tr:hover {
     background: var(--background);
+}
+
+/* Botón Seleccionar en tabla de resultados */
+.modal-results-table .btn-select {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-results-table .btn-select:hover {
+    background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-results-table .btn-select:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
 }
 
 .btn-select {

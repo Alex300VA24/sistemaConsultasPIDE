@@ -253,7 +253,7 @@ XML;
             error_log("Exception en buscarPorRazonSocial: " . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Error al buscar razón social: ' . $e->getMessage(),
+                'message' => 'Error al buscar razon social: ' . $e->getMessage(),
                 'data' => []
             ];
         }
