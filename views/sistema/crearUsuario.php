@@ -57,8 +57,8 @@
                     <label>Sexo <span class="required">*</span></label>
                     <select id="perSexo">
                         <option value="">Seleccionar...</option>
-                        <option value="1">Masculino</option>
-                        <option value="2">Femenino</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
                     </select>
                 </div>
 
@@ -91,10 +91,11 @@
                 <div class="form-group">
                     <label>Nivel de Permiso <span class="required">*</span></label>
                     <select id="usuPermiso">
-                        <option value="0">Sin permisos</option>
-                        <option value="1">Usuario básico</option>
-                        <option value="2">Usuario avanzado</option>
-                        <option value="3">Administrador</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Supervisor</option>
+                        <option value="3">Empleado</option>
+                        <option value="4">Practicante</option>
+                        <option value="5">Externo</option>
                     </select>
                 </div>
 

@@ -272,9 +272,24 @@ function mostrarResultadosNatural(data) {
         const nombresCompletos = persona.nombres_completos || 
             `${persona.nombres || ''} ${persona.apellido_paterno || ''} ${persona.apellido_materno || ''}`.trim();
         
-        const fotoHtml = persona.foto 
-            ? `<img src="data:image/jpeg;base64,${persona.foto}" style="width: 50px; height: 50px; border-radius: 5px;" alt="Foto">`
-            : '<span style="color: #999;">Sin foto</span>';
+        let fotoBase64 = '';
+
+        if (persona.foto) {
+            fotoBase64 = persona.foto.startsWith('data:image')
+                ? persona.foto
+                : `data:image/jpeg;base64,${persona.foto}`;
+        }
+
+        const fotoHtml = `
+            <div class="photo-box">
+                ${
+                    persona.foto
+                    ? `<img src="${fotoBase64}" alt="Foto RENIEC">`
+                    : `<div class="photo-placeholder"></div>`
+                }
+            </div>
+        `;
+
         
         html += `
             <tr>
@@ -398,6 +413,8 @@ function seleccionarRegistro(index) {
     
     // Limpiar resultados anteriores
     document.getElementById('resultsSection').style.display = 'none';
+    document.getElementById('selectorPartidas').style.display = 'none';
+
 }
 
 // ========================================
@@ -436,7 +453,6 @@ async function consultarTSIRSARP() {
             });
         } else {
             // Consultar TSIRSARP para persona jurídica
-            console.log({credencialesUsuario, personaSeleccionada});
             resultado = await api.consultarTSIRSARPJuridica({
                 usuario: credencialesUsuario.dni,
                 clave: credencialesUsuario.password,
@@ -444,13 +460,26 @@ async function consultarTSIRSARP() {
             });
         }
 
-        console.log('📊 Resultado TSIRSARP:', resultado);
-
+        console.log('📊 Resultado TSIRSARP COMPLETO:', resultado);
+        
+        // Log detallado de cada partida
         if (resultado.success && resultado.data && resultado.data.length > 0) {
+            resultado.data.forEach((partida, index) => {
+                console.log(`📄 Partida ${index + 1}:`, {
+                    numero_partida: partida.numero_partida,
+                    tiene_asientos: !!partida.asientos,
+                    cantidad_asientos: partida.asientos?.length || 0,
+                    tiene_imagenes: !!partida.imagenes,
+                    cantidad_imagenes: partida.imagenes?.length || 0,
+                    tiene_vehiculo: !!partida.datos_vehiculo,
+                    placa: partida.numero_placa
+                });
+            });
+            
             mostrarResultadosTSIRSARP(resultado.data);
-            mostrarAlertaPartidas(`Se encontraron ${resultado.data.length} registro(s) en SUNARP`, 'success');
+            mostrarAlertaPartidas(`Se encontraron ${resultado.data.length} registro(s) en SUNARP con información completa`, 'success');
         } else {
-            mostrarAlertaPartidas(resultado.message || 'No se encontraron registros en SUNARP', 'info');
+            mostrarAlertaPartidas('No se encontraron registros en SUNARP', 'info');
             document.getElementById('resultsSection').style.display = 'none';
         }
     } catch (error) {
@@ -466,74 +495,370 @@ async function consultarTSIRSARP() {
 // 📌 MOSTRAR RESULTADOS TSIRSARP
 // ========================================
 
+let partidasEncontradas = []; // Guardar todas las partidas
+
 function mostrarResultadosTSIRSARP(data) {
     console.log('📊 Mostrando resultados TSIRSARP:', data);
+    
+    // Guardar todas las partidas
+    partidasEncontradas = data;
     
     // Mostrar sección de resultados
     const resultsSection = document.getElementById('resultsSection');
     resultsSection.style.display = 'block';
 
-    // Si hay múltiples resultados, mostrar el primero
-    const registro = data[0];
-
-    if (tipoPersonaActual === 'natural') {
-        // PERSONA NATURAL
-        document.getElementById('registro').textContent = registro.registro || '-';
-        document.getElementById('libro').textContent = registro.libro || '-';
-        document.getElementById('apellidoPaterno').textContent = personaSeleccionada.apellido_paterno || '-';
-        document.getElementById('apellidoMaterno').textContent = personaSeleccionada.apellido_materno || '-';
-        document.getElementById('nombres').textContent = personaSeleccionada.nombres || '-';
-        document.getElementById('tipoDoc').textContent = 'DNI';
-        document.getElementById('nroDoc').textContent = personaSeleccionada.dni || '-';
-        document.getElementById('nroPartida').textContent = registro.partida || '-';
-        document.getElementById('nroPlaca').textContent = registro.placa || '-';
-        document.getElementById('estado').textContent = registro.estado || '-';
-        document.getElementById('zona').textContent = registro.zona || '-';
-        document.getElementById('oficina').textContent = registro.oficina || '-';
-        document.getElementById('direccion').textContent = registro.descripcion || '-';
-
-        // Manejar foto
-        const imgFoto = document.getElementById('personaFoto');
-        const noFoto = document.getElementById('noFoto');
-        
-        if (personaSeleccionada.foto) {
-            imgFoto.src = `data:image/jpeg;base64,${personaSeleccionada.foto}`;
-            imgFoto.style.display = 'block';
-            noFoto.style.display = 'none';
-        } else {
-            imgFoto.style.display = 'none';
-            noFoto.style.display = 'block';
-        }
-    } else {
-        // PERSONA JURÍDICA
-        document.getElementById('registro').textContent = registro.registro || '-';
-        document.getElementById('libro').textContent = registro.libro || '-';
-        document.getElementById('apellidoPaterno').textContent = '-';
-        document.getElementById('apellidoMaterno').textContent = '-';
-        document.getElementById('nombres').textContent = personaSeleccionada.razon_social || '-';
-        document.getElementById('tipoDoc').textContent = 'RUC';
-        document.getElementById('nroDoc').textContent = personaSeleccionada.ruc || '-';
-        document.getElementById('nroPartida').textContent = registro.partida || '-';
-        document.getElementById('nroPlaca').textContent = '-';
-        document.getElementById('estado').textContent = registro.estado || '-';
-        document.getElementById('zona').textContent = registro.zona || '-';
-        document.getElementById('oficina').textContent = registro.oficina || '-';
-        document.getElementById('direccion').textContent = registro.descripcion || '-';
-
-        // No hay foto para personas jurídicas
-        const imgFoto = document.getElementById('personaFoto');
-        const noFoto = document.getElementById('noFoto');
-        imgFoto.style.display = 'none';
-        noFoto.style.display = 'block';
-    }
-
-    // Si hay múltiples resultados, mostrar notificación
+    // Si hay múltiples resultados, mostrar selector de partidas
     if (data.length > 1) {
-        mostrarAlertaPartidas(`Se encontraron ${data.length} registros. Mostrando el primero.`, 'info');
+        mostrarSelectorPartidas(data);
+        mostrarAlertaPartidas(`Se encontraron ${data.length} partidas registradas. Seleccione una para ver los detalles.`, 'info');
+    } else {
+        // Ocultar selector si solo hay una partida
+        const selectorPartidas = document.getElementById('selectorPartidas');
+        if (selectorPartidas) {
+            selectorPartidas.style.display = 'none';
+        }
     }
+
+    // Mostrar la primera partida por defecto
+    mostrarDetallePartida(data[0]);
 
     // Scroll a resultados
     resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ========================================
+// 📌 MOSTRAR SELECTOR DE PARTIDAS
+// ========================================
+
+function mostrarSelectorPartidas(partidas) {
+    let selectorPartidas = document.getElementById('selectorPartidas');
+    
+    // Crear el contenedor si no existe
+    if (!selectorPartidas) {
+        selectorPartidas = document.createElement('div');
+        selectorPartidas.id = 'selectorPartidas';
+        selectorPartidas.className = 'selector-partidas-container';
+        
+        // Insertar antes de resultsSection
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.parentNode.insertBefore(selectorPartidas, resultsSection);
+    }
+
+    let html = `
+        <div class="selector-partidas-header">
+            <h3><i class="fas fa-list"></i> Partidas Registradas (${partidas.length})</h3>
+            <p>Seleccione una partida para ver los detalles completos</p>
+        </div>
+        <div class="selector-partidas-grid">
+    `;
+
+    partidas.forEach((partida, index) => {
+        const partidaNumero = partida.numero_partida || 'S/N';
+        const estado = partida.estado || 'Sin estado';
+        const oficina = partida.oficina || 'Sin oficina';
+        
+        const estadoClass = estado.toUpperCase() === 'ACTIVA' ? 'activa' : 'inactiva';
+        
+        html += `
+            <div class="partida-card">
+                <input type="radio" 
+                       name="partidaSeleccionada" 
+                       id="partida${index}" 
+                       value="${index}" 
+                       ${index === 0 ? 'checked' : ''}
+                       onchange="cambiarPartida(${index})">
+                <label for="partida${index}">
+                    <div class="partida-info">
+                        <div class="partida-numero">
+                            <i class="fas fa-file-alt"></i>
+                            Partida N° <strong>${partidaNumero}</strong>
+                        </div>
+                        <div class="partida-detalles">
+                            <span class="partida-estado estado-${estadoClass}">
+                                <i class="fas fa-circle"></i> ${estado}
+                            </span>
+                            <span class="partida-oficina">
+                                <i class="fas fa-building"></i> ${oficina}
+                            </span>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        `;
+    });
+
+    html += `
+        </div>
+        <style>
+            .selector-partidas-container {
+                margin: 20px 0;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                border: 1px solid #dee2e6;
+            }
+            .selector-partidas-header h3 {
+                margin: 0 0 8px 0;
+                color: #2c3e50;
+                font-size: 1.2em;
+            }
+            .selector-partidas-header p {
+                margin: 0;
+                color: #6c757d;
+                font-size: 0.9em;
+            }
+            .selector-partidas-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .partida-card {
+                position: relative;
+            }
+            .partida-card input[type="radio"] {
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .partida-card label {
+                display: block;
+                padding: 15px;
+                background: white;
+                border: 2px solid #dee2e6;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .partida-card label:hover {
+                border-color: #3498db;
+                box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+            }
+            .partida-card input[type="radio"]:checked + label {
+                border-color: #3498db;
+                background: #e3f2fd;
+                box-shadow: 0 2px 12px rgba(52, 152, 219, 0.3);
+            }
+            .partida-numero {
+                font-size: 1.1em;
+                color: #2c3e50;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .partida-numero i {
+                color: #3498db;
+            }
+            .partida-detalles {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                font-size: 0.85em;
+            }
+            .partida-estado, .partida-oficina {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                color: #6c757d;
+            }
+            .partida-estado i {
+                font-size: 0.6em;
+            }
+            .partida-estado.estado-activa {
+                color: #27ae60;
+            }
+            .partida-estado.estado-activa i {
+                color: #27ae60;
+            }
+            .partida-estado.estado-inactiva {
+                color: #e74c3c;
+            }
+            .partida-estado.estado-inactiva i {
+                color: #e74c3c;
+            }
+        </style>
+    `;
+
+    selectorPartidas.innerHTML = html;
+    selectorPartidas.style.display = 'block';
+}
+
+// ========================================
+// 📌 CAMBIAR PARTIDA SELECCIONADA
+// ========================================
+
+function cambiarPartida(index) {
+    console.log('📌 Cambiando a partida:', index);
+    if (partidasEncontradas && partidasEncontradas[index]) {
+        mostrarDetallePartida(partidasEncontradas[index]);
+        mostrarAlertaPartidas('Mostrando detalles de la partida seleccionada', 'success');
+    }
+}
+
+// ========================================
+// 📌 MOSTRAR DETALLE DE UNA PARTIDA
+// ========================================
+
+function mostrarDetallePartida(registro) {
+    console.log('📄 Mostrando detalle de partida COMPLETO:', registro);
+
+    const photoSection = document.getElementById('photoSection');
+    const resultsLayout = document.querySelector('.results-layout');
+
+    if (tipoPersonaActual === 'natural') {
+        // PERSONA NATURAL
+        if (photoSection) photoSection.classList.remove('hidden');
+        if (resultsLayout) resultsLayout.classList.remove('no-photo');
+
+        // Usar los nombres de campos correctos del response
+        mostrarCampo('libro', registro.libro || '-');
+        mostrarCampo('nombres', registro.nombre || personaSeleccionada.nombres || '-', 'containerNombres');
+        mostrarCampo('apellidoPaterno', registro.apPaterno || personaSeleccionada.apellido_paterno || '-', 'containerApellidoPaterno');
+        mostrarCampo('apellidoMaterno', registro.apMaterno || personaSeleccionada.apellido_materno || '-', 'containerApellidoMaterno');
+        
+        ocultarCampo('campoRazonSocial', 'containerRazonSocial');
+        
+        mostrarCampo('tipoDoc', registro.tipo_documento || 'DNI');
+        mostrarCampo('nroDoc', registro.numero_documento || personaSeleccionada.dni || '-');
+        mostrarCampo('nroPartida', registro.numero_partida || '-');
+        mostrarCampo('nroPlaca', registro.numero_placa || '-');
+        mostrarCampo('estado', registro.estado || '-');
+        mostrarCampo('zona', registro.zona || '-');
+        mostrarCampo('oficina', registro.oficina || '-');
+        mostrarCampo('direccion', registro.direccion || '-');
+
+        const photoFrame = document.getElementById('photoSection');
+
+        // limpiar contenido previo
+        photoFrame.innerHTML = '';
+
+        let fotoBase64 = '';
+
+        if (personaSeleccionada && personaSeleccionada.foto) {
+
+            fotoBase64 = personaSeleccionada.foto.startsWith('data:image')
+                ? personaSeleccionada.foto
+                : `data:image/jpeg;base64,${personaSeleccionada.foto}`;
+
+            const img = document.createElement('img');
+            img.src = fotoBase64;
+            img.alt = "Foto de persona";
+
+            // mismo tamaño que DNI
+            photoFrame.style.width = "350px";
+            photoFrame.style.height = "320px";
+
+            photoFrame.appendChild(img);
+
+        } else {
+
+            // sin foto → placeholder
+            photoFrame.innerHTML = `<div class="photo-placeholder"></div>`;
+
+            // tamaño reducido (igual que en DNI)
+            photoFrame.style.width = "200px";
+            photoFrame.style.height = "200px";
+        }
+
+        
+    } else {
+        // PERSONA JURÍDICA
+        if (photoSection) photoSection.classList.add('hidden');
+        if (resultsLayout) resultsLayout.classList.add('no-photo');
+
+        mostrarCampo('libro', registro.libro || '-');
+        
+        // Usar los nombres de campos correctos del response
+        const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
+        
+        if (tieneNombres) {
+            mostrarCampo('nombres', registro.nombre || '-', 'containerNombres');
+            mostrarCampo('apellidoPaterno', registro.apPaterno || '-', 'containerApellidoPaterno');
+            mostrarCampo('apellidoMaterno', registro.apMaterno || '-', 'containerApellidoMaterno');
+        } else {
+            ocultarCampo('nombres', 'containerNombres');
+            ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
+            ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
+        }
+        
+        const razonSocial = registro.razon_social || personaSeleccionada.razon_social || '-';
+        mostrarCampo('campoRazonSocial', razonSocial, 'containerRazonSocial');
+        
+        mostrarCampo('tipoDoc', registro.tipo_documento || 'RUC');
+        mostrarCampo('nroDoc', registro.numero_documento || personaSeleccionada.ruc || '-');
+        mostrarCampo('nroPartida', registro.numero_partida || '-');
+        mostrarCampo('nroPlaca', registro.numero_placa || '-');
+        mostrarCampo('estado', registro.estado || '-');
+        mostrarCampo('zona', registro.zona || '-');
+        mostrarCampo('oficina', registro.oficina || '-');
+        mostrarCampo('direccion', registro.direccion || '-');
+    }
+
+
+    // ========================================
+    // MOSTRAR IMÁGENES (VASIRSARP)
+    // Para NATURAL y JURÍDICA
+    // ========================================
+    console.log('🔍 Verificando imágenes:', registro.imagenes);
+    if (registro.imagenes && Array.isArray(registro.imagenes) && registro.imagenes.length > 0) {
+        mostrarImagenes(registro.imagenes);
+    } else {
+        document.getElementById('imagenesSection').style.display = 'none';
+    }
+
+    // ========================================
+    // MOSTRAR DATOS VEHICULARES (VDRPVExtra)
+    // Para NATURAL y JURÍDICA (si tiene placa)
+    // ========================================
+    console.log('🔍 Verificando datos vehículo:', registro.datos_vehiculo);
+    if (registro.datos_vehiculo && Object.keys(registro.datos_vehiculo).length > 0) {
+        mostrarDatosVehiculo(registro.datos_vehiculo);
+    } else {
+        document.getElementById('vehiculoSection').style.display = 'none';
+    }
+}
+
+// ========================================
+// 📌 FUNCIONES AUXILIARES PARA MOSTRAR/OCULTAR CAMPOS
+// ========================================
+
+function mostrarCampo(idCampo, valor, idContenedor = null) {
+    const elemento = document.getElementById(idCampo);
+    if (elemento) {
+        elemento.textContent = valor;
+    }
+    
+    // Si se proporciona un ID de contenedor específico, usarlo
+    const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
+    
+    if (contenedor) {
+        contenedor.style.display = '';
+    } else {
+        // Si no hay contenedor específico, buscar el padre del elemento
+        const contenedorPadre = elemento ? elemento.closest('.info-item') : null;
+        if (contenedorPadre) {
+            contenedorPadre.style.display = '';
+        }
+    }
+}
+
+function ocultarCampo(idCampo, idContenedor = null) {
+    const elemento = document.getElementById(idCampo);
+    
+    // Si se proporciona un ID de contenedor específico, usarlo
+    const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
+    
+    if (contenedor) {
+        contenedor.style.display = 'none';
+    } else {
+        // Si no hay contenedor específico, buscar el padre del elemento
+        const contenedorPadre = elemento ? elemento.closest('.info-item') : null;
+        if (contenedorPadre) {
+            contenedorPadre.style.display = 'none';
+        }
+    }
 }
 
 // ========================================
@@ -541,16 +866,122 @@ function mostrarResultadosTSIRSARP(data) {
 // ========================================
 
 function limpiarFormularioPartidas() {
+    console.log('🧹 Limpiando formulario completo...');
+    
+    // Limpiar variables globales
     personaSeleccionada = null;
     registrosEncontrados = [];
+    partidasEncontradas = [];
+    
+    // Limpiar campo de persona
     document.getElementById('persona').value = '';
+    
+    // Ocultar sección de resultados
     document.getElementById('resultsSection').style.display = 'none';
+    
+    // Limpiar alertas
     document.getElementById('alertContainer').innerHTML = '';
+    
+    // Deshabilitar botón consultar
     document.getElementById('btnConsultar').disabled = true;
+    
+    // Ocultar y limpiar selector de partidas
+    const selectorPartidas = document.getElementById('selectorPartidas');
+    if (selectorPartidas) {
+        selectorPartidas.innerHTML = '';
+        selectorPartidas.style.display = 'none';
+    }
+    
+    // Limpiar todos los campos de resultados
+    limpiarCamposResultados();
     
     // Limpiar también los modales
     limpiarModalNatural();
     limpiarModalJuridica();
+    
+    console.log('✅ Formulario limpiado completamente');
+}
+
+function limpiarCamposResultados() {
+    // Limpiar todos los campos de texto
+    const camposTexto = [
+        'libro', 'nombres', 'apellidoPaterno', 'apellidoMaterno', 'razonSocial',
+        'tipoDoc', 'nroDoc', 'nroPartida', 'nroPlaca', 
+        'estado', 'zona', 'oficina', 'direccion'
+    ];
+    
+    camposTexto.forEach(campo => {
+        const elemento = document.getElementById(campo);
+        if (elemento) {
+            elemento.textContent = '-';
+        }
+    });
+    
+    // Mostrar todos los contenedores (por si estaban ocultos)
+    const contenedores = [
+        'containerNombres', 
+        'containerApellidoPaterno', 
+        'containerApellidoMaterno'
+    ];
+    
+    contenedores.forEach(idContenedor => {
+        const contenedor = document.getElementById(idContenedor);
+        if (contenedor) {
+            contenedor.style.display = '';
+        }
+    });
+    
+    // Ocultar razón social por defecto
+    const containerRazonSocial = document.getElementById('containerRazonSocial');
+    if (containerRazonSocial) {
+        containerRazonSocial.style.display = 'none';
+    }
+    
+    // Mostrar photo-section por defecto
+    const photoSection = document.getElementById('photoSection');
+    if (photoSection) {
+        photoSection.classList.remove('hidden');
+    }
+    
+    // Resetear layout
+    const resultsLayout = document.querySelector('.results-layout');
+    if (resultsLayout) {
+        resultsLayout.classList.remove('no-photo');
+    }
+    
+    // Limpiar foto
+    const imgFoto = document.getElementById('personaFoto');
+    const noFoto = document.getElementById('noFoto');
+    if (imgFoto) {
+        imgFoto.src = '';
+        imgFoto.style.display = 'none';
+    }
+    if (noFoto) {
+        noFoto.style.display = 'flex';
+    }
+
+    // Limpiar secciones adicionales
+    document.getElementById('asientosSection').style.display = 'none';
+    document.getElementById('imagenesSection').style.display = 'none';
+    document.getElementById('vehiculoSection').style.display = 'none';
+    
+    document.getElementById('asientosContainer').innerHTML = '';
+    document.getElementById('vehiculoContainer').innerHTML = '';
+    
+    const selectImagenes = document.getElementById('selectImagenes');
+    if (selectImagenes) {
+        selectImagenes.innerHTML = '';
+    }
+    
+    const imagenViewer = document.getElementById('imagenViewer');
+    const noImagen = document.getElementById('noImagen');
+    if (imagenViewer) {
+        imagenViewer.src = '';
+        imagenViewer.style.display = 'none';
+    }
+    if (noImagen) {
+        noImagen.style.display = 'flex';
+    }
 }
 
 function limpiarModalNatural() {
@@ -607,7 +1038,7 @@ function mostrarAlertaPartidas(mensaje, tipo) {
         </div>
     `;
 
-    document.getElementById('alertContainer').innerHTML = alerta;
+    document.getElementById('alertContainerPartidas').innerHTML = alerta;
     
     // Auto-ocultar solo si es success o info
     if (tipo === 'success' || tipo === 'info') {
@@ -630,3 +1061,150 @@ function ocultarLoadingPartidas(formId) {
     submitBtn.disabled = false;
     submitBtn.innerHTML = '<i class="fas fa-search"></i> <span>Buscar</span>';
 }
+
+// ========================================
+// 📌 MOSTRAR ASIENTOS REGISTRALES
+// ========================================
+function mostrarAsientos(asientos) {
+    console.log('📋 Mostrando asientos:', asientos);
+    
+    const asientosSection = document.getElementById('asientosSection');
+    const asientosContainer = document.getElementById('asientosContainer');
+    
+    let html = `
+        <table class="asientos-table">
+            <thead>
+                <tr>
+                    <th>ID Imagen</th>
+                    <th>Número Página</th>
+                    <th>Tipo</th>
+                    <th>Página Ref</th>
+                    <th>Página</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    asientos.forEach(asiento => {
+        html += `
+            <tr>
+                <td>${asiento.idImgAsiento || '-'}</td>
+                <td>${asiento.numPag || '-'}</td>
+                <td>${asiento.tipo || '-'}</td>
+                <td>${asiento.listPag?.nroPagRef || '-'}</td>
+                <td>${asiento.listPag?.pagina || '-'}</td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table>';
+    
+    asientosContainer.innerHTML = html;
+    asientosSection.style.display = 'block';
+}
+
+// ========================================
+// 📌 MOSTRAR IMÁGENES
+// ========================================
+function mostrarImagenes(imagenes) {
+    console.log('🖼️ Mostrando imágenes:', imagenes.length);
+    
+    const imagenesSection = document.getElementById('imagenesSection');
+    const selectImagenes = document.getElementById('selectImagenes');
+    const imagenViewer = document.getElementById('imagenViewer');
+    const noImagen = document.getElementById('noImagen');
+    
+    // Limpiar selector
+    selectImagenes.innerHTML = '';
+    
+    // Agregar opciones
+    imagenes.forEach((img, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = `Página ${img.pagina || (index + 1)}`;
+        selectImagenes.appendChild(option);
+    });
+    
+    // Función para cambiar imagen
+    const cambiarImagen = () => {
+        const index = parseInt(selectImagenes.value);
+        const imagenData = imagenes[index];
+        
+        if (imagenData && imagenData.imagen_base64) {
+            imagenViewer.src = `data:image/jpeg;base64,${imagenData.imagen_base64}`;
+            imagenViewer.style.display = 'block';
+            noImagen.style.display = 'none';
+        } else {
+            imagenViewer.src = '';
+            imagenViewer.style.display = 'none';
+            noImagen.style.display = 'flex';
+        }
+    };
+    
+    // Event listener
+    selectImagenes.addEventListener('change', cambiarImagen);
+    
+    // Mostrar primera imagen
+    cambiarImagen();
+    
+    imagenesSection.style.display = 'block';
+}
+
+// ========================================
+// 📌 MOSTRAR DATOS VEHICULARES
+// ========================================
+function mostrarDatosVehiculo(datosVehiculo) {
+    console.log('🚗 Mostrando datos vehiculares:', datosVehiculo);
+    
+    const vehiculoSection = document.getElementById('vehiculoSection');
+    const vehiculoContainer = document.getElementById('vehiculoContainer');
+    
+    // Mapeo de campos a etiquetas legibles
+    const camposVehiculo = {
+        'anoFabricacion': 'Año',
+        'placa': 'Placa',
+        'marca': 'Marca',
+        'modelo': 'Modelo',
+        'color': 'Color',
+        'nro_motor': 'Número de Motor',
+        'carroceria': 'Carroceria',
+        'codCategoria': 'Codigo de Categoria',
+        'codTipoCarr': 'Codigo de Tipo de Carro',
+        'estado': 'Estado'
+    };
+    
+    let html = '';
+    
+    for (const [campo, label] of Object.entries(camposVehiculo)) {
+        const valor = datosVehiculo[campo];
+        
+        // Solo mostrar si hay valor
+        if (valor !== undefined && valor !== null && valor !== '') {
+            html += `
+                <div class="vehiculo-item">
+                    <div class="label">${label}</div>
+                    <div class="value">${valor}</div>
+                </div>
+            `;
+        }
+    }
+    
+    // Si no hay campos, mostrar todos los campos disponibles
+    if (html === '') {
+        for (const [campo, valor] of Object.entries(datosVehiculo)) {
+            if (valor !== undefined && valor !== null && valor !== '') {
+                const labelFormateado = campo.replace(/([A-Z])/g, ' $1').trim();
+                html += `
+                    <div class="vehiculo-item">
+                        <div class="label">${labelFormateado}</div>
+                        <div class="value">${valor}</div>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    vehiculoContainer.innerHTML = html;
+    vehiculoSection.style.display = 'block';
+}
+

@@ -5,6 +5,7 @@
     
     <div class="content-wrapper">
         <div class="search-section">
+            <div id="alertContainerRUC"></div>
             <form method="POST" action="" class="search-form" id="searchFormRUC">
                 <div>
                     <label for="ruc">Nro. RUC:</label>

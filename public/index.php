@@ -6,6 +6,8 @@ error_reporting();
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 
+date_default_timezone_set('America/Lima');
+
 // Iniciar la sesion
 session_start();
 
@@ -129,7 +131,7 @@ switch (true) {
         $controller->buscarPersonaJuridica();
         break;
 
-    case preg_match('#^/api/sunarp/tsirsarp-natural#', $path):
+    case preg_match('#^/api/sunarp/tsirsarp-natural$#', $path):
         $controller = new \App\Controllers\ConsultasSunarpController();
         $controller->consultarTSIRSARPNatural();
         break;
@@ -138,11 +140,6 @@ switch (true) {
         $controller = new \App\Controllers\ConsultasSunarpController();
         $controller->consultarTSIRSARPJuridica();
         break;
-
-    /*case preg_match('#^/api/consultar-partida-registral$#', $path):
-        $controller = new \App\Controllers\ConsultasSunarpController();
-        $controller->consultarPartidaRegistral();
-        break;*/
 
     // Vista de Partidas Registrales
     case $path === '/consulta-partidas':
@@ -170,9 +167,6 @@ switch (true) {
         require __DIR__ . '/../views/dashboard/index.php';
         break;
     
-
-    
-
     // RUTA NO ENCONTRADA
     default:
         http_response_code(404);

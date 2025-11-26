@@ -240,7 +240,7 @@ class ConsultasSunarpController {
             ''
         );
 
-        http_response_code($resultado['success'] ? 200 : 404);
+        http_response_code(200);
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
     }
 
@@ -291,8 +291,319 @@ class ConsultasSunarpController {
             $razonSocial
         );
 
+        http_response_code(200);
+        echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+    }
+
+    // ========================================
+    // CONSULTAR GOficina - Obtener Catálogo de Oficinas
+    // ========================================
+    public function consultarGOficina() {
+        if (ob_get_level()) ob_clean();
+        header('Content-Type: application/json; charset=utf-8');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($input['usuario']) || !isset($input['clave'])) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Faltan credenciales: usuario o clave']);
+            return;
+        }
+
+        $usuario = trim($input['usuario']);
+        $clave = trim($input['clave']);
+
+        error_log("=== CONSULTA GOficina ===");
+
+        $resultado = $this->ejecutarGOficina($usuario, $clave);
+
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
+    }
+
+    private function ejecutarGOficina($usuario, $clave) {
+        try {
+            $url = $this->urlSUNARP . "/GOficina?out=json";
+            
+            $data = [
+                "PIDE" => [
+                    "usuario" => (string)$usuario,
+                    "clave" => (string)$clave
+                ]
+            ];
+
+            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            
+            error_log("GOficina Request: " . $jsonData);
+            
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/json; charset=UTF-8",
+                    "Content-Length: " . strlen($jsonData)
+                ],
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                error_log("CURL Error GOficina: $error");
+                return ['success' => false, 'message' => "Error: $error", 'data' => []];
+            }
+
+            curl_close($ch);
+
+            error_log("GOficina Response Code: $httpCode");
+
+            if ($httpCode == 200) {
+                $jsonResponse = json_decode($response, true);
+                
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return ['success' => false, 'message' => 'Error al decodificar JSON', 'data' => []];
+                }
+
+                // Extraer oficinas del response
+                $oficinas = $jsonResponse['oficina']['oficina'] ?? [];
+                
+                if (empty($oficinas)) {
+                    return ['success' => false, 'message' => 'No se encontraron oficinas', 'data' => []];
+                }
+
+                // Crear catálogo indexado por nombre de oficina
+                $catalogo = [];
+                foreach ($oficinas as $oficina) {
+                    $key = strtoupper(trim($oficina['descripcion']));
+                    $catalogo[$key] = [
+                        'codZona' => $oficina['codZona'],
+                        'codOficina' => $oficina['codOficina'],
+                        'descripcion' => $oficina['descripcion']
+                    ];
+                }
+
+                error_log("GOficina: " . count($catalogo) . " oficinas cargadas");
+
+                return [
+                    'success' => true,
+                    'message' => 'Catálogo de oficinas obtenido',
+                    'data' => $catalogo,
+                    'total' => count($catalogo)
+                ];
+            }
+
+            return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
+
+        } catch (\Exception $e) {
+            error_log("Exception en ejecutarGOficina: " . $e->getMessage());
+            return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
+        }
+    }
+
+    private function ejecutarLASIRSARP($usuario, $clave, $zona, $oficina, $partida, $registro) {
+        try {
+            $url = $this->urlSUNARP . "/LASIRSARP?out=json";
+            
+            $data = [
+                "PIDE" => [
+                    "usuario" => (string)$usuario,
+                    "clave" => (string)$clave,
+                    "zona" => (string)$zona,
+                    "oficina" => (string)$oficina,
+                    "partida" => (string)$partida,
+                    "registro" => (string)$registro
+                ]
+            ];
+
+            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/json; charset=UTF-8",
+                    "Content-Length: " . strlen($jsonData)
+                ],
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                return ['success' => false, 'message' => "Error: $error", 'data' => []];
+            }
+
+            curl_close($ch);
+
+            if ($httpCode == 200) {
+                $jsonResponse = json_decode($response, true);
+                
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    return ['success' => false, 'message' => 'Error al decodificar JSON', 'data' => []];
+                }
+
+                $asientos = $jsonResponse['listarAsientosSIRSARPResponse']['asientos']['listAsientos'] ?? [];
+                $transaccion = $jsonResponse['listarAsientosSIRSARPResponse']['asientos']['transaccion'] ?? '';
+                
+                return [
+                    'success' => true,
+                    'message' => 'Consulta exitosa',
+                    'data' => $asientos,
+                    'transaccion' => $transaccion,
+                    'nroTotalPag' => $jsonResponse['listarAsientosSIRSARPResponse']['asientos']['nroTotalPag'] ?? ''
+                ];
+            }
+
+            return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
+        }
+    }
+
+    private function ejecutarVASIRSARP($usuario, $clave, $transaccion, $idImg, $tipo, $nroTotalPag, $nroPagRef, $pagina) {
+        try {
+            $url = $this->urlSUNARP . "/VASIRSARP?out=json";
+            
+            $data = [
+                "PIDE" => [
+                    "usuario" => (string)$usuario,
+                    "clave" => (string)$clave,
+                    "transaccion" => (string)$transaccion,
+                    "idImg" => (string)$idImg,
+                    "tipo" => (string)$tipo,
+                    "nroTotalPag" => (string)$nroTotalPag,
+                    "nroPagRef" => (string)$nroPagRef,
+                    "pagina" => (string)$pagina
+                ]
+            ];
+
+            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/json; charset=UTF-8",
+                    "Content-Length: " . strlen($jsonData)
+                ],
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                return ['success' => false, 'message' => "Error: $error"];
+            }
+
+            curl_close($ch);
+
+            if ($httpCode == 200) {
+                $jsonResponse = json_decode($response, true);
+                
+                $img = $jsonResponse['verAsientoSIRSARPResponse']['img'] ?? null;
+                
+                return [
+                    'success' => true,
+                    'message' => 'Imagen obtenida',
+                    'img' => $img
+                ];
+            }
+
+            return ['success' => false, 'message' => "HTTP $httpCode"];
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
+    }
+
+    private function ejecutarVDRPVExtra($usuario, $clave, $zona, $oficina, $placa) {
+        try {
+            $url = $this->urlSUNARP . "/VDRPVExtra?out=json";
+            
+            $data = [
+                "PIDE" => [
+                    "usuario" => (string)$usuario,
+                    "clave" => (string)$clave,
+                    "zona" => (string)$zona,
+                    "oficina" => (string)$oficina,
+                    "placa" => (string)$placa
+                ]
+            ];
+
+            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => [
+                    "Content-Type: application/json; charset=UTF-8",
+                    "Content-Length: " . strlen($jsonData)
+                ],
+                CURLOPT_POSTFIELDS => $jsonData,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 45
+            ]);
+
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            if (curl_errno($ch)) {
+                $error = curl_error($ch);
+                curl_close($ch);
+                return ['success' => false, 'message' => "Error: $error", 'data' => []];
+            }
+
+            curl_close($ch);
+
+            if ($httpCode == 200) {
+                $jsonResponse = json_decode($response, true);
+                
+                $vehiculo = $jsonResponse['verDetalleRPVExtraResponse']['vehiculo'] ?? [];
+
+                error_log("Resultado de vehiculo" . print_r($vehiculo, true));
+                
+                return [
+                    'success' => true,
+                    'message' => 'Consulta vehicular exitosa',
+                    'data' => $vehiculo
+                ];
+            }
+
+            return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
+
+        } catch (\Exception $e) {
+            return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
+        }
     }
 
     // ========================================
@@ -304,13 +615,13 @@ class ConsultasSunarpController {
 
             $data = [
                 "PIDE" => [
-                    "usuario"         => trim((string)$usuario),
-                    "clave"           => trim((string)$clave),
-                    "tipoParticipante"=> trim((string)$tipoParticipante),
-                    "apellidoPaterno" => trim((string)$apellidoPaterno),
-                    "apellidoMaterno" => trim((string)$apellidoMaterno),
-                    "nombres"         => trim((string)$nombres),
-                    "razonSocial"     => trim((string)$razonSocial)
+                    "usuario" => $usuario,
+                    "clave" => $clave,
+                    "tipoParticipante" => $tipoParticipante,
+                    "apellidoPaterno" => $apellidoPaterno,
+                    "apellidoMaterno" => $apellidoMaterno,
+                    "nombres" => $nombres,
+                    "razonSocial" => $razonSocial
                 ]
             ];
 
@@ -468,10 +779,17 @@ class ConsultasSunarpController {
     private function procesarRespuestaTSIRSARP($jsonResponse, $tipoParticipante) {
         try {
             error_log("Procesando respuesta TSIRSARP. Tipo: $tipoParticipante");
-
+            
+            $debugFile = __DIR__ . '/../../logs/tsirsarp_debug_' . date('Y-m-d') . '.txt';
+            $debugInfo = "\n--- PROCESANDO RESPUESTA ---\n";
+            $debugInfo .= "Tipo Participante: $tipoParticipante\n";
+            
             if (!isset($jsonResponse['buscarTitularidadSIRSARPResponse']) || 
                 !isset($jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad'])) {
-                error_log("No se encontró TSIRSARPResponse en la respuesta");
+                
+                $debugInfo .= "\n❌ ERROR: No se encontró TSIRSARPResponse en la respuesta\n";
+                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
+                
                 return [
                     'success' => false,
                     'message' => 'No se encontraron registros en SUNARP',
@@ -479,7 +797,7 @@ class ConsultasSunarpController {
                 ];
             }
 
-            $return = $jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad'];
+            $return = $jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad']['respuestaTitularidad'];
             
             $registros = [];
             if (isset($return[0])) {
@@ -488,23 +806,165 @@ class ConsultasSunarpController {
                 $registros = [$return];
             }
 
+            $debugInfo .= "\nTotal de registros a procesar: " . count($registros) . "\n";
             $resultados = [];
 
-            foreach ($registros as $registro) {
+            // Obtener credenciales para consultas adicionales
+            $usuario = "20164091547-18066272";
+            $clave = "z#rxstzNYUb4NZQ";
+
+            // ========================================
+            // OBTENER CATÁLOGO DE OFICINAS PRIMERO
+            // ========================================
+            $catalogoOficinas = [];
+            $resultGOficina = $this->ejecutarGOficina($usuario, $clave);
+            
+            if ($resultGOficina['success']) {
+                $catalogoOficinas = $resultGOficina['data'];
+                $debugInfo .= "✓ Catálogo GOficina cargado: " . count($catalogoOficinas) . " oficinas\n";
+            } else {
+                $debugInfo .= "⚠️ No se pudo cargar catálogo GOficina\n";
+            }
+
+            foreach ($registros as $index => $registro) {
+                $debugInfo .= "\n--- Registro #" . ($index + 1) . " ---\n";
+                
                 $item = [
-                    'registro' => $registro['registro'] ?? '',
                     'libro' => $registro['libro'] ?? '',
-                    'partida' => $registro['partida'] ?? '',
-                    'asiento' => $registro['asiento'] ?? '',
-                    'placa' => $registro['placa'] ?? '',
-                    'zona' => $registro['zona'] ?? '',
+                    'apPaterno' => $registro['apPaterno'] ?? '',
+                    'apMaterno' => $registro['apMaterno'] ?? '',
+                    'nombre' => $registro['nombre'] ?? '',
+                    'razon_social' => $registro['razonSocial'] ?? '',
+                    'tipo_documento' => $registro['tipo_documento'] ?? '',
+                    'numero_documento' => $registro['numero_documento'] ?? '',
+                    'numero_partida' => $registro['numeroPartida'] ?? '',
+                    'numero_placa' => $registro['numeroPlaca'] ?? '',
                     'oficina' => $registro['oficina'] ?? '',
+                    'zona' => $registro['zona'] ?? '',
                     'estado' => $registro['estado'] ?? '',
-                    'descripcion' => $registro['descripcion'] ?? ''
+                    'direccion' => $registro['direccion'] ?? '',
+                    'registro' => $registro['registro'] ?? ''
                 ];
 
+                // ========================================
+                // OBTENER CÓDIGOS DE ZONA Y OFICINA
+                // ========================================
+                $codigoZona = $item['zona'];
+                $codigoOficina = $item['oficina'];
+                
+                if (!empty($catalogoOficinas) && !empty($item['oficina'])) {
+                    $oficinaKey = strtoupper(trim($item['oficina']));
+                    
+                    if (isset($catalogoOficinas[$oficinaKey])) {
+                        $codigoZona = $catalogoOficinas[$oficinaKey]['codZona'];
+                        $codigoOficina = $catalogoOficinas[$oficinaKey]['codOficina'];
+                        $debugInfo .= "✓ Códigos obtenidos de GOficina: Zona=$codigoZona, Oficina=$codigoOficina\n";
+                    } else {
+                        $debugInfo .= "⚠️ Oficina '$oficinaKey' no encontrada en catálogo, usando valores originales\n";
+                    }
+                }
+
+                // ========================================
+                // CONSULTA LASIRSARP (Asientos)
+                // ========================================
+                if (!empty($item['numero_partida']) && !empty($codigoZona) && !empty($codigoOficina)) {
+                    $debugInfo .= "Ejecutando LASIRSARP para partida: {$item['numero_partida']}\n";
+                    
+                    $registroCodigo = $tipoParticipante === 'N' ? '23000' : '22000';
+                    
+                    $resultLASIRSARP = $this->ejecutarLASIRSARP(
+                        $usuario,
+                        $clave,
+                        $codigoZona,
+                        $codigoOficina,
+                        $item['numero_partida'],
+                        $registroCodigo
+                    );
+                    
+                    if ($resultLASIRSARP['success']) {
+                        $item['asientos'] = $resultLASIRSARP['data'];
+                        $item['transaccion'] = $resultLASIRSARP['transaccion'] ?? '';
+                        $debugInfo .= "✓ LASIRSARP exitoso. Asientos: " . count($resultLASIRSARP['data']) . "\n";
+                        
+                        // ========================================
+                        // CONSULTA VASIRSARP (Imágenes)
+                        // ========================================
+                        if (!empty($resultLASIRSARP['data']) && !empty($item['transaccion'])) {
+                            $imagenes = [];
+                            $asientos = array_reverse($resultLASIRSARP['data']);
+                            
+                            foreach ($asientos as $indexAsiento => $asiento) {
+                                $resultVASIRSARP = $this->ejecutarVASIRSARP(
+                                    $usuario,
+                                    $clave,
+                                    $item['transaccion'],
+                                    $asiento['idImgAsiento'],
+                                    $asiento['tipo'] ?? 'A',
+                                    $resultLASIRSARP['nroTotalPag'] ?? '',
+                                    $asiento['listPag']['nroPagRef'] ?? '',
+                                    $asiento['listPag']['pagina'] ?? ''
+                                );
+                                
+                                if ($resultVASIRSARP['success'] && !empty($resultVASIRSARP['img'])) {
+                                    $imagenes[] = [
+                                        'pagina' => $indexAsiento + 1,
+                                        'imagen_base64' => $resultVASIRSARP['img']
+                                    ];
+                                }
+                            }
+                            
+                            $item['imagenes'] = $imagenes;
+                            $debugInfo .= "✓ VASIRSARP ejecutado. Imágenes obtenidas: " . count($imagenes) . "\n";
+                        }
+                    } else {
+                        $debugInfo .= "✗ LASIRSARP falló: {$resultLASIRSARP['message']}\n";
+                    }
+                }
+
+                // ========================================
+                // CONSULTA VDRPVExtra (Vehículos)
+                // ========================================
+                if (!empty($item['numero_placa']) && 
+                    trim($item['numero_placa']) !== '-' && 
+                    !empty($codigoZona) && 
+                    !empty($codigoOficina)) {
+                    
+                    $debugInfo .= "Ejecutando VDRPVExtra para placa: {$item['numero_placa']}\n";
+                    
+                    $resultVDRPVExtra = $this->ejecutarVDRPVExtra(
+                        $usuario,
+                        $clave,
+                        $codigoZona,
+                        $codigoOficina,
+                        $item['numero_placa']
+                    );
+                    
+                    if ($resultVDRPVExtra['success']) {
+                        $item['datos_vehiculo'] = $resultVDRPVExtra['data'];
+                        $debugInfo .= "✓ VDRPVExtra exitoso\n";
+                    } else {
+                        $debugInfo .= "✗ VDRPVExtra falló: {$resultVDRPVExtra['message']}\n";
+                    }
+                }
+
                 $resultados[] = $item;
-                error_log("Registro TSIRSARP procesado: " . json_encode($item));
+            }
+
+            $debugInfo .= "\n--- RESULTADO FINAL ---\n";
+            $debugInfo .= "Total de resultados procesados: " . count($resultados) . "\n";
+            $debugInfo .= "\n✅ PROCESAMIENTO EXITOSO\n";
+            
+            file_put_contents($debugFile, $debugInfo, FILE_APPEND);
+
+            // Al final de procesarRespuestaTSIRSARP, antes del return success
+            error_log("=== RESPONSE FINAL A ENVIAR ===");
+            error_log("Total partidas: " . count($resultados));
+            foreach ($resultados as $idx => $res) {
+                error_log("Partida $idx:");
+                error_log("  - Tiene asientos: " . (isset($res['asientos']) ? 'SÍ (' . count($res['asientos']) . ')' : 'NO'));
+                error_log("  - Tiene imágenes: " . (isset($res['imagenes']) ? 'SÍ (' . count($res['imagenes']) . ')' : 'NO'));
+                error_log("  - Tiene vehículo: " . (isset($res['datos_vehiculo']) ? 'SÍ' : 'NO'));
+                error_log("  - Placa: " . ($res['numero_placa'] ?? 'N/A'));
             }
 
             if (empty($resultados)) {
@@ -517,13 +977,18 @@ class ConsultasSunarpController {
 
             return [
                 'success' => true,
-                'message' => 'Consulta exitosa',
+                'message' => 'Consulta exitosa con datos adicionales',
                 'data' => $resultados,
                 'total' => count($resultados)
             ];
 
         } catch (\Exception $e) {
-            error_log("Exception en procesarRespuestaTSIRSARP: " . $e->getMessage());
+            if (isset($debugFile)) {
+                $debugInfo = "\n--- EXCEPTION EN PROCESAMIENTO ---\n";
+                $debugInfo .= "Message: " . $e->getMessage() . "\n";
+                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
+            }
+            
             return [
                 'success' => false,
                 'message' => 'Error al procesar respuesta de SUNARP: ' . $e->getMessage(),
@@ -531,6 +996,8 @@ class ConsultasSunarpController {
             ];
         }
     }
+
+    
 
     // ========================================
     // MÉTODOS INTERNOS SUNAT
