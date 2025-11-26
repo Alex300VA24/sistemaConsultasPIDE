@@ -520,3 +520,13 @@ body::after {
         font-size: 1.8rem;
     }
 }
+/* Ocultar el ícono automático de Edge */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
+/* Opcional: evitar que Edge reserve espacio */
+input[type="password"] {
+    padding-right: 40px; /* espacio para tu propio ojo */
+}

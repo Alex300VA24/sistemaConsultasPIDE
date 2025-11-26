@@ -1,0 +1,138 @@
+[2025-11-26 11:12:50] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Procedure or function 'sp_CrearUsuario' expects parameter '@PER_nacionalidad_id', which was not supplied.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 2
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-26 11:21:18] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Procedure or function 'sp_CrearUsuario' expects parameter '@PER_nacionalidad_id', which was not supplied.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 2
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-26 11:22:49] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Procedure or function 'sp_CrearUsuario' expects parameter '@NuevaPersonaID', which was not supplied.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 2
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-26 11:31:54] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Incorrect syntax near 'OUTPUT'.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 2
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-26 11:32:35] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Incorrect syntax near 'OUTPUT'.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 3
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-26 11:35:59] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The INSERT statement conflicted with the CHECK constraint "CK__PERSONA__PER_sex__628FA481". The conflict occurred in database "sistemaPIDE2", table "dbo.PERSONA", column 'PER_sexo'.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 75879519
+    [perNombre] => Alexander
+    [perApellidoPat] => Vasquez
+    [perApellidoMat] => Alcantara
+    [perSexo] => 1
+    [perEmail] => josuealcantara251@gmail.com
+    [usuLogin] => alex300
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 1
+    [usuEstado] => 1
+    [cui] => 2
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------

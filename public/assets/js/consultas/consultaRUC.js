@@ -1,4 +1,34 @@
 // ============================================
+// 🚀 INICIALIZACIÓN
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando sistema de consulta RUC...');
+    
+    const form = document.querySelector('#searchFormRUC');
+    const alertContainerRUC = document.getElementById('alertContainerRUC');
+    
+    if (form) {
+        form.addEventListener('submit', buscarRUC);
+        validarRUCTiempoReal();
+        
+        console.log('✅ Sistema de Consulta RUC inicializado correctamente');
+    } else {
+        console.error('❌ No se encontró el formulario #searchFormRUC');
+    }
+
+    function mostrarAlerta(mensaje, tipo) {
+        alertContainerRUC.innerHTML = `
+            <div class="alert alert-${tipo}">
+                ${mensaje}
+            </div>
+        `;
+
+        // Auto-ocultar después de 5 segundos
+        setTimeout(() => {
+            alertContainer.innerHTML = '';
+        }, 5000);
+    }
+    // ============================================
 // 🔧 FUNCIONES DE VALIDACIÓN
 // ============================================
 
@@ -39,44 +69,6 @@ function mostrarLoading(mostrar = true) {
     }
 }
 
-/**
- * Mostrar alerta en la interfaz
- */
-function mostrarAlerta(mensaje, tipo = 'info') {
-    const alertContainer = document.querySelector('.content-wrapper');
-    const searchSection = document.querySelector('.search-section');
-    
-    // Remover alertas anteriores
-    const alertaAnterior = document.querySelector('.alert');
-    if (alertaAnterior) {
-        alertaAnterior.remove();
-    }
-
-    const iconos = {
-        success: 'check-circle',
-        danger: 'exclamation-circle',
-        warning: 'exclamation-triangle',
-        info: 'info-circle'
-    };
-
-    const alerta = document.createElement('div');
-    alerta.className = `alert alert-${tipo}`;
-    alerta.innerHTML = `
-        <i class="fas fa-${iconos[tipo]}"></i>
-        <span>${mensaje}</span>
-    `;
-
-    searchSection.insertAdjacentElement('afterend', alerta);
-
-    // Auto-ocultar después de 5 segundos si es success o info
-    if (tipo === 'success' || tipo === 'info') {
-        setTimeout(() => {
-            alerta.style.transition = 'opacity 0.3s ease';
-            alerta.style.opacity = '0';
-            setTimeout(() => alerta.remove(), 300);
-        }, 5000);
-    }
-}
 
 // ============================================
 // 📝 FUNCIONES DE LLENADO DE DATOS
@@ -149,6 +141,8 @@ function limpiarCamposRUC() {
     });
 }
 
+
+
 // ============================================
 // 🌐 FUNCIONES DE API
 // ============================================
@@ -176,9 +170,11 @@ async function buscarRUC(event) {
 
         // Realizar consulta a la API
         const resultado = await api.consultarRUC(validacion.ruc);
+        console.log('esto es success: ', resultado.success, resultado.message);
 
         if (resultado.success) {
-            mostrarAlerta(resultado.message || 'Consulta realizada exitosamente', 'success');
+            mostrarAlerta('Consulta realizada exitosamente', 'success');
+            console.log('Consulta realizada exitosamente');
             llenarDatosRUC(resultado.data);
         } else {
             mostrarAlerta(resultado.message || 'No se encontraron datos para el RUC consultado', 'danger');
@@ -253,23 +249,8 @@ function validarRUCTiempoReal() {
     });
 }
 
-// ============================================
-// 🚀 INICIALIZACIÓN
-// ============================================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando sistema de consulta RUC...');
-    
-    const form = document.querySelector('#searchFormRUC');
-    
-    if (form) {
-        form.addEventListener('submit', buscarRUC);
-        validarRUCTiempoReal();
-        
-        console.log('✅ Sistema de Consulta RUC inicializado correctamente');
-    } else {
-        console.error('❌ No se encontró el formulario #searchFormRUC');
-    }
-});
 
 // Exponer función global para limpiar
 window.limpiarFormularioRUC = limpiarFormularioRUC;
+});
+
