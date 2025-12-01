@@ -79,6 +79,37 @@ switch (true) {
         $controller = new \App\Controllers\UsuarioController();
         $controller->listarUsuarios();
         break;
+    
+    // RUTAS DE ROLES
+    case preg_match('#^/api/rol/crear$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->crearRol();
+        break;
+
+    case preg_match('#^/api/rol/actualizar$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->actualizarRol();
+        break;
+
+    case preg_match('#^/api/rol/listar$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->listarRoles();
+        break;
+
+    case preg_match('#^/api/rol/obtener$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->obtenerRol();
+        break;
+
+    case preg_match('#^/api/rol/modulos$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->listarModulos();
+        break;
+
+    case preg_match('#^/api/rol/eliminar$#', $path):
+        $controller = new \App\Controllers\RolController();
+        $controller->eliminarRol();
+        break;
 
     case preg_match('#^/api/actualizar-usuario$#', $path):
         $controller = new \App\Controllers\UsuarioController();
@@ -100,6 +131,16 @@ switch (true) {
     case preg_match('#^/api/usuario/actual$#', $path):
         $controller = new \App\Controllers\UsuarioController();
         $controller->obtenerUsuarioActual();
+        break;
+    
+    case preg_match('#^/api/usuario/rol$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->obtenerRoles();
+        break;
+
+    case preg_match('#^/api/usuario/tipo-personal$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->obtenerTipoPersonal();
         break;
 
     // RUTA DE INICIO/DASHBOARD

@@ -1,418 +1,536 @@
-// Variables globales
-let usuarioIdActual = null;
-let personaIdActual = null;
+// ============================================
+// ✏️ MÓDULO DE ACTUALIZAR USUARIO
+// ============================================
 
-// Al cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    // Función para alternar visibilidad de contraseña
-    function togglePasswordVisibility(inputId, iconId) {
+const ModuloActualizarUsuario = {
+    elementos: {},
+    inicializado: false,
+    
+    // Estado del módulo
+    usuarioIdActual: null,
+    personaIdActual: null,
+
+    // Estado del usuario actual
+    usuarioElegido: {
+        id: null,
+        personaId: null,
+        dni: null,
+        login: null,
+        nombreCompleto: null,
+        modulos: [] // ← Agregar módulos del usuario
+    },
+
+    // ============================================
+    // 🚀 INICIALIZACIÓN
+    // ============================================
+    async init() {
+        if (this.inicializado) {
+            console.log('ℹ️ Módulo Actualizar Usuario ya está inicializado');
+            return;
+        }
+
+        console.log('✏️ Inicializando Módulo Actualizar Usuario...');
+        
+        this.cachearElementos();
+        this.setupEventListeners();
+        await this.cargarDatosIniciales();
+        
+        this.inicializado = true;
+        console.log('✅ Módulo Actualizar Usuario inicializado correctamente');
+    },
+
+    // ============================================
+    // 📦 CACHEAR ELEMENTOS DEL DOM
+    // ============================================
+    cachearElementos() {
+        this.elementos = {
+            selectorUsuario: document.getElementById('selectorUsuario'),
+            formularioEdicion: document.getElementById('formularioEdicion'),
+            btnActualizar: document.getElementById('btnActualizar'),
+            alertContainer: document.getElementById('alertContainerActualizarUsuario'),
+            
+            // Toggle password
+            togglePassword: document.getElementById('togglePassword'),
+            togglePasswordConfirm: document.getElementById('togglePasswordConfirm'),
+            
+            // Inputs
+            perTipoActualizar: document.getElementById('perTipo-actualizar'),
+            perTipoPersonal: document.getElementById('per-tipo-personal'),
+            perDocumentoTipoActualizar: document.getElementById('perDocumentoTipo-actualizar'),
+            perDocumentoNum: document.getElementById('per-documento-num'),
+            perNombre: document.getElementById('per-nombre'),
+            perApellidoPat: document.getElementById('per-apellido-pat'),
+            perApellidoMat: document.getElementById('per-apellido-mat'),
+            perSexoActualizar: document.getElementById('perSexo-actualizar'),
+            perEmail: document.getElementById('per-email'),
+            
+            usuLogin: document.getElementById('usu-login'),
+            usuPassActual: document.getElementById('usuPassActual'),
+            usuPass: document.getElementById('usu-pass'),
+            usuPassConfirm: document.getElementById('usu-passConfirm'),
+            usuPermisoActualizar: document.getElementById('usuPermiso-actualizar'),
+            usuEstadoActualizar: document.getElementById('usuEstado-actualizar'),
+            cui: document.getElementById('cui')
+        };
+    },
+
+    // ============================================
+    // 🎯 CONFIGURAR EVENT LISTENERS
+    // ============================================
+    setupEventListeners() {
+        // Selector de usuario
+        if (this.elementos.selectorUsuario) {
+            this.elementos.selectorUsuario.addEventListener('change', () => {
+                this.cargarDatosUsuarioSeleccionado();
+            });
+        }
+
+        // Toggle password visibility
+        this.configurarTogglePassword('usu-pass', 'togglePassword');
+        this.configurarTogglePassword('usu-passConfirm', 'togglePasswordConfirm');
+    },
+
+    // ============================================
+    // 👁️ CONFIGURAR TOGGLE PASSWORD
+    // ============================================
+    configurarTogglePassword(inputId, iconId) {
         const input = document.getElementById(inputId);
         const icon = document.getElementById(iconId);
 
-        icon.addEventListener('click', () => {
-            const isPassword = input.type === 'password';
-            input.type = isPassword ? 'text' : 'password';
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
-        });
-    }
+        if (input && icon) {
+            icon.addEventListener('click', () => {
+                const isPassword = input.type === 'password';
+                input.type = isPassword ? 'text' : 'password';
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+        }
+    },
 
-    // Aplicar a ambos campos
-    togglePasswordVisibility('usu-pass', 'togglePassword');
-    togglePasswordVisibility('usu-passConfirm', 'togglePasswordConfirm');
-    cargarListaUsuarios();
-});
+    // ============================================
+    // 📊 CARGAR DATOS INICIALES
+    // ============================================
+    async cargarDatosIniciales() {
+        try {
+            await Promise.all([
+                this.cargarListaUsuarios(),
+                this.cargarRoles(),
+                this.cargarTiposDePersonal()
+            ]);
+            console.log('✓ Datos iniciales cargados');
+        } catch (error) {
+            console.error('❌ Error al cargar datos iniciales:', error);
+        }
+    },
 
-/**
- * Cargar lista de usuarios en el combobox
- */
-async function cargarListaUsuarios() {
-    try {
-        const response = await api.listarUsuarios();
-        
-        if (response.success && response.data) {
-            const select = document.getElementById('selectorUsuario');
+    // ============================================
+    // 📋 CARGAR LISTA DE USUARIOS
+    // ============================================
+    async cargarListaUsuarios() {
+        try {
+            const response = await api.listarUsuarios();
             
-            // Limpiar opciones existentes (excepto la primera)
-            select.innerHTML = '<option value="">-- Seleccione un usuario --</option>';
-            
-            // Agregar usuarios al select
-            response.data.forEach(usuario => {
+            if (response.success && response.data) {
+                const select = this.elementos.selectorUsuario;
+                if (!select) return;
+                
+                select.innerHTML = '<option value="">-- Seleccione un usuario --</option>';
+                
+                response.data.forEach(usuario => {
+                    const option = document.createElement('option');
+                    option.value = usuario.USU_id;
+                    option.textContent = `${usuario.nombre_completo} (${usuario.PER_documento_numero})`;
+                    option.dataset.nombreCompleto = usuario.nombre_completo;
+                    option.dataset.documento = usuario.PER_documento_numero;
+                    option.dataset.login = usuario.USU_username;
+                    select.appendChild(option);
+                });
+
+                console.log('✓ Lista de usuarios cargada:', response.data.length);
+            } else {
+                mostrarAlerta(response.message || 'Error al cargar usuarios', 'error', 'alertContainerActualizarUsuario');
+            }
+        } catch (error) {
+            console.error('❌ Error al cargar lista de usuarios:', error);
+            mostrarAlerta('Error al cargar la lista de usuarios', 'error', 'alertContainerActualizarUsuario');
+        }
+    },
+
+    // ============================================
+    // 🔧 CARGAR ROLES
+    // ============================================
+    async cargarRoles() {
+        try {
+            const response = await api.listarRoles();
+
+            const select = this.elementos.usuPermisoActualizar;
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Seleccionar...</option>';
+
+            response.data.forEach(rol => {
                 const option = document.createElement('option');
-                option.value = usuario.USU_id;
-                option.textContent = `${usuario.nombre_completo} (${usuario.PER_documento_num})`;
-                option.dataset.nombreCompleto = usuario.nombre_completo;
-                option.dataset.documento = usuario.PER_documento_num;
-                option.dataset.login = usuario.USU_login;
+                option.value = rol.ROL_id;
+                option.textContent = rol.ROL_nombre;
                 select.appendChild(option);
             });
-            
-        } else {
-            mostrarAlerta(response.message || 'Error al cargar usuarios', 'error');
+
+            console.log('✓ Roles cargados:', response.data.length);
+        } catch (error) {
+            console.error('❌ Error cargando roles:', error);
+            mostrarAlerta('No se pudieron cargar los roles.', 'danger', 'alertContainerActualizarUsuario');
         }
-    } catch (error) {
-        console.error('Error al cargar lista de usuarios:', error);
-        mostrarAlerta('Error al cargar la lista de usuarios', 'error');
-    }
-}
+    },
 
-/**
- * Cargar datos del usuario seleccionado
- */
-async function cargarDatosUsuarioSeleccionado() {
-    const select = document.getElementById('selectorUsuario');
-    const usuarioId = select.value;
-    
-    if (!usuarioId) {
-        // Ocultar formulario si no hay selección
-        document.getElementById('formularioEdicion').style.display = 'none';
-        limpiarCamposFormulario();
-        return;
-    }
-    
-    await cargarDatosUsuario(usuarioId);
-}
+    // ============================================
+    // 🔧 CARGAR TIPOS DE PERSONAL
+    // ============================================
+    async cargarTiposDePersonal() {
+        try {
+            const response = await api.obtenerTipoPersonal();
 
+            const select = this.elementos.perTipoPersonal;
+            if (!select) return;
 
-
-/**
- * Cargar datos del usuario en el formulario
- */
-async function cargarDatosUsuario(usuarioId) {
-    try {
-        mostrarCargando(true);
-        
-        const response = await api.obtenerUsuario(usuarioId);
-        
-        if (response.success && response.data) {
-            const usuario = response.data;
-            
-            // Guardar IDs globales
-            usuarioIdActual = usuario.USU_id;
-            personaIdActual = usuario.PER_id;
-            
-            // Mostrar formulario
-            document.getElementById('formularioEdicion').style.display = 'block';
-
-            console.log(usuario)
-            
-            // === DATOS PERSONALES ===
-            document.getElementById('perTipo-actualizar').value = String(usuario.PER_tipo ?? '');
-            document.getElementById('perDocumentoTipo-actualizar').value = String(usuario.PER_documento_tipo ?? '');
-            document.getElementById('per-documento-num').value = usuario.PER_documento_num || '';  // corregido ID
-            document.getElementById('per-nombre').value = usuario.PER_nombre || '';
-            document.getElementById('per-apellido-pat').value = usuario.PER_apellido_pat || '';
-            document.getElementById('per-apellido-mat').value = usuario.PER_apellido_mat || '';
-            document.getElementById('perSexo-actualizar').value = String(usuario.PER_sexo ?? '');
-            document.getElementById('per-email').value = usuario.PER_email || '';
-            
-            // === DATOS DE USUARIO ===
-            document.getElementById('usu-login').value = usuario.USU_login || '';
-            document.getElementById('usuPermiso-actualizar').value = String(usuario.USU_permiso ?? '0');
-            document.getElementById('usuEstado-actualizar').value = String(usuario.USU_estado ?? '1');
-            document.getElementById('cui').value = usuario.cui || '';
-            
-            // Limpiar campos de contraseña (por seguridad)
-            document.getElementById('usu-pass').value = '';
-            document.getElementById('usu-passConfirm').value = '';
-            
-            // Desplazar al formulario
-            document.getElementById('formularioEdicion').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-        } else {
-            mostrarAlerta(response.message || 'Error al cargar usuario', 'error');
-        }
-    } catch (error) {
-        console.error('Error al cargar usuario:', error);
-        mostrarAlerta('Error al cargar los datos del usuario', 'error');
-    } finally {
-        mostrarCargando(false);
-    }
-}
-
-
-/**
- * Actualizar usuario
- */
-async function actualizarUsuario() {
-    try {
-        console.log('Esta entrando');
-        // Validar que tenemos los IDs necesarios
-        console.log(usuarioIdActual, personaIdActual);
-        if (!usuarioIdActual || !personaIdActual) {
-            alert('Debe seleccionar un usuario primero');
-            return;
-        }
-        console.log(validarFormulario());
-        // Validar formulario
-        if (!validarFormulario()) {
-            alert('No se esta validando el formulario correctamente');
-            return;
-        }
-        
-        // Obtener datos del formulario
-        const datos = obtenerDatosFormulario();
-        console.log(datos);
-        
-        // Si hay contraseña nueva, validar con RENIEC primero
-        if (datos.USU_pass && datos.USU_pass.trim() !== '') {
-            const dniUsuario = document.getElementById('per-documento-num').value;
-            
-            // Crear un modal personalizado para solicitar la contraseña actual
-            const passwordAnterior = await solicitarPasswordActual();
-            
-            if (!passwordAnterior) {
-                alert('Debe ingresar la contraseña actual para cambiarla', 'warning');
-                mostrarCargando(false);
-                return;
-            }
-            
-            alert('Actualizando contraseña en RENIEC...', 'info');
-            
-            // Actualizar en RENIEC primero
-            const resultadoRENIEC = await api.actualizarPasswordRENIEC({
-                credencialAnterior: passwordAnterior,
-                credencialNueva: datos.USU_pass,
-                nuDni: dniUsuario
+            response.data.forEach(tipo => {
+                const option = document.createElement('option');
+                option.value = tipo.TPE_id;
+                option.textContent = tipo.TPE_nombre;
+                select.appendChild(option);
             });
+
+            console.log('✓ Tipos de personal cargados:', response.data.length);
+        } catch (error) {
+            console.error('❌ Error cargando tipo de personal:', error);
+            mostrarAlerta('No se pudieron cargar los tipos de personal.', 'danger', 'alertContainerActualizarUsuario');
+        }
+    },
+
+    // ============================================
+    // 📥 CARGAR DATOS DEL USUARIO SELECCIONADO
+    // ============================================
+    async cargarDatosUsuarioSeleccionado() {
+        const usuarioId = this.elementos.selectorUsuario.value;
+        
+        if (!usuarioId) {
+            this.elementos.formularioEdicion.style.display = 'none';
+            this.limpiarCamposFormulario();
+            return;
+        }
+        
+        await this.cargarDatosUsuario(usuarioId);
+    },
+
+    // ============================================
+    // 📄 CARGAR DATOS DEL USUARIO
+    // ============================================
+    async cargarDatosUsuario(usuarioId) {
+        try {
+            this.mostrarCargando(true);
             
-            if (!resultadoRENIEC.success) {
-                alert('Error al actualizar contraseña en RENIEC: ' + resultadoRENIEC.message, 'error');
-                mostrarCargando(false);
+            const response = await api.obtenerUsuario(usuarioId);
+            
+            if (response.success && response.data) {
+                const usuario = response.data;
+                
+                // Guardar IDs
+                this.usuarioIdActual = usuario.USU_id;
+                this.personaIdActual = usuario.PER_id;
+                
+                // Mostrar formulario
+                this.elementos.formularioEdicion.style.display = 'block';
+
+                // Llenar campos
+                this.elementos.perTipoActualizar.value = String(usuario.PER_tipo_persona ?? '');
+                this.elementos.perTipoPersonal.value = String(usuario.PER_tipo_personal_id ?? '0');
+                this.elementos.perDocumentoTipoActualizar.value = String(usuario.PER_documento_tipo_id ?? '');
+                this.elementos.perDocumentoNum.value = usuario.PER_documento_numero || '';
+                this.elementos.perNombre.value = usuario.PER_nombres || '';
+                this.elementos.perApellidoPat.value = usuario.PER_apellido_paterno || '';
+                this.elementos.perApellidoMat.value = usuario.PER_apellido_materno || '';
+                this.elementos.perSexoActualizar.value = String(usuario.PER_sexo ?? '');
+                this.elementos.perEmail.value = usuario.USU_email || '';
+                
+                this.elementos.usuLogin.value = usuario.USU_username || '';
+                this.elementos.usuPermisoActualizar.value = String(usuario.rol_id ?? '0');
+                this.elementos.usuEstadoActualizar.value = String(usuario.PER_estado_id ?? '1');
+                this.elementos.cui.value = usuario.USU_cui || '';
+                
+                // Limpiar campos de contraseña
+                this.elementos.usuPassActual.value = '';
+                this.elementos.usuPass.value = '';
+                this.elementos.usuPassConfirm.value = '';
+
+                const listaModulos = usuario.modulos_acceso
+                ? usuario.modulos_acceso.split(',').map(m => m.trim())
+                : [];
+                this.usuarioElegido = {modulos: listaModulos};
+                
+                console.log('✓ Datos del usuario cargados');
+            } else {
+                mostrarAlerta(response.message || 'Error al cargar usuario', 'error', 'alertContainerActualizarUsuario');
+            }
+        } catch (error) {
+            console.error('❌ Error al cargar usuario:', error);
+            mostrarAlerta('Error al cargar los datos del usuario', 'error', 'alertContainerActualizarUsuario');
+        } finally {
+            this.mostrarCargando(false);
+        }
+    },
+
+    tieneAccesoRENIEC() {
+        const modulosRENIEC = ['DNI', 'PAR'];
+
+        // this.usuarioElegio.modulos es un array de strings
+        const tieneAcceso = this.usuarioElegido.modulos.some(modulo =>
+            modulosRENIEC.includes(modulo) ||
+            modulosRENIEC.some(cod => modulo.includes(cod))
+        );
+
+        console.log('🔍 ¿Tiene acceso a RENIEC?:', tieneAcceso);
+        console.log('📋 Módulos del usuario:', this.usuarioElegido.modulos);
+
+        return tieneAcceso;
+    },
+
+    // ============================================
+    // 💾 ACTUALIZAR USUARIO
+    // ============================================
+    async actualizarUsuario() {
+        try {
+            const alerta = document.getElementById('alertContainerActualizarUsuario');
+            const titulo = document.getElementById("tituloActualizarUsuario");
+            if (alerta) {
+                titulo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (!this.usuarioIdActual || !this.personaIdActual) {
+                mostrarAlerta('Debe seleccionar un usuario primero', 'warning', 'alertContainerActualizarUsuario');
+                return;
+            }
+
+            // Validar formulario
+            if (!this.validarFormulario()) {
                 return;
             }
             
-            alert('Contraseña actualizada en RENIEC correctamente', 'success');
+            this.mostrarCargando(true);
+            
+            // Obtener datos
+            const datos = this.obtenerDatosFormulario();
+            console.log('Estos son los datos: ', datos);
+            
+            // Verificar si tiene acceso a RENIEC
+            const tieneAccesoRENIEC = this.tieneAccesoRENIEC();
+            // Si hay contraseña nueva, actualizar en RENIEC primero
+            if (datos.USU_pass && datos.USU_pass.trim() !== '' && tieneAccesoRENIEC) {
+                const dniUsuario = this.elementos.perDocumentoNum.value;
+                const passwordAnterior = this.elementos.usuPassActual.value;
+                
+                if (!passwordAnterior) {
+                    mostrarAlerta('Debe ingresar la contraseña actual para cambiarla', 'warning', 'alertContainerActualizarUsuario');
+                    this.mostrarCargando(false);
+                    return;
+                }
+                
+                mostrarAlerta('Actualizando contraseña en RENIEC...', 'info', 'alertContainerActualizarUsuario');
+                
+                const resultadoRENIEC = await api.actualizarPasswordRENIEC({
+                    credencialAnterior: passwordAnterior,
+                    credencialNueva: datos.USU_pass,
+                    nuDni: dniUsuario
+                });
+                
+                if (!resultadoRENIEC.success) {
+                    mostrarAlerta('Error al actualizar contraseña en RENIEC: ' + resultadoRENIEC.message, 'error', 'alertContainerActualizarUsuario');
+                    this.mostrarCargando(false);
+                    return;
+                }
+                
+                mostrarAlerta('✓ Contraseña actualizada en RENIEC', 'success', 'alertContainerActualizarUsuario');
+            }
+            
+            // Actualizar en base de datos
+            mostrarAlerta('Actualizando datos en el sistema...', 'info', 'alertContainerActualizarUsuario');
+            const response = await api.actualizarUsuario(datos);
+            
+            if (response.success) {
+                mostrarAlerta('✓ Usuario actualizado correctamente', 'success', 'alertContainerActualizarUsuario');
+                
+                // Limpiar campos de contraseña
+                this.elementos.usuPassActual.value = '';
+                this.elementos.usuPass.value = '';
+                this.elementos.usuPassConfirm.value = '';
+                
+                // Recargar datos
+                setTimeout(() => {
+                    this.cargarDatosUsuario(this.usuarioIdActual);
+                }, 1500);
+                
+            } else {
+                mostrarAlerta('❌ ' + (response.message || 'Error al actualizar usuario'), 'error', 'alertContainerActualizarUsuario');
+            }
+        } catch (error) {
+            console.error('❌ Error al actualizar usuario:', error);
+            mostrarAlerta('❌ Error al actualizar el usuario: ' + error.message, 'error', 'alertContainerActualizarUsuario');
+        } finally {
+            this.mostrarCargando(false);
+        }
+    },
+
+    // ============================================
+    // 📝 OBTENER DATOS DEL FORMULARIO
+    // ============================================
+    obtenerDatosFormulario() {
+        return {
+            USU_id: this.usuarioIdActual,
+            PER_id: this.personaIdActual,
+            PER_tipo: parseInt(this.elementos.perTipoActualizar.value),
+            PER_tipoPersonal: parseInt(this.elementos.perTipoPersonal.value),
+            PER_documento_tipo: parseInt(this.elementos.perDocumentoTipoActualizar.value),
+            PER_documento_num: this.elementos.perDocumentoNum.value.trim(),
+            PER_nombre: this.elementos.perNombre.value.trim(),
+            PER_apellido_pat: this.elementos.perApellidoPat.value.trim(),
+            PER_apellido_mat: this.elementos.perApellidoMat.value.trim() || null,
+            PER_sexo: this.elementos.perSexoActualizar.value,
+            PER_email: this.elementos.perEmail.value.trim() || null,
+            USU_login: this.elementos.usuLogin.value.trim(),
+            USU_passActual: this.elementos.usuPassActual.value.trim() || null,
+            USU_pass: this.elementos.usuPass.value.trim() || null,
+            USU_permiso: parseInt(this.elementos.usuPermisoActualizar.value),
+            USU_estado: parseInt(this.elementos.usuEstadoActualizar.value)
+        };
+    },
+
+    // ============================================
+    // ✅ VALIDAR FORMULARIO
+    // ============================================
+    validarFormulario() {
+        const camposRequeridos = [
+            { elem: this.elementos.perTipoActualizar, nombre: 'Tipo de Persona' },
+            { elem: this.elementos.perDocumentoTipoActualizar, nombre: 'Tipo de Documento' },
+            { elem: this.elementos.perDocumentoNum, nombre: 'Número de Documento' },
+            { elem: this.elementos.perNombre, nombre: 'Nombres' },
+            { elem: this.elementos.perApellidoPat, nombre: 'Apellido Paterno' },
+            { elem: this.elementos.perSexoActualizar, nombre: 'Sexo' },
+            { elem: this.elementos.usuLogin, nombre: 'Login/Usuario' }
+        ];
+        
+        for (const campo of camposRequeridos) {
+            if (!campo.elem.value || campo.elem.value.trim() === '') {
+                mostrarAlerta(`El campo "${campo.nombre}" es requerido`, 'warning', 'alertContainerActualizarUsuario');
+                campo.elem.focus();
+                return false;
+            }
         }
         
-        // Actualizar en base de datos
-        alert('Actualizando datos en el sistema...', 'info');
-        const response = await api.actualizarUsuario(datos);
+        // Validar contraseñas
+        const password = this.elementos.usuPass.value;
+        const passwordConfirm = this.elementos.usuPassConfirm.value;
         
-        if (response.success) {
-            alert('Usuario actualizado correctamente', 'success');
+        if (password || passwordConfirm) {
+            if (password !== passwordConfirm) {
+                mostrarAlerta('Las contraseñas no coinciden', 'warning', 'alertContainerActualizarUsuario');
+                this.elementos.usuPassConfirm.focus();
+                return false;
+            }
             
-            // Limpiar campos de contraseña
-            document.getElementById('usu-pass').value = '';
-            document.getElementById('usu-passConfirm').value = '';
-            
-            // Recargar datos después de 1.5 segundos
-            setTimeout(() => {
-                cargarDatosUsuario(usuarioIdActual);
-            }, 1500);
+            if (password.length < 6) {
+                mostrarAlerta('La contraseña debe tener al menos 6 caracteres', 'warning', 'alertContainerActualizarUsuario');
+                this.elementos.usuPass.focus();
+                return false;
+            }
+        }
+        
+        // Validar email
+        const email = this.elementos.perEmail.value;
+        if (email && !this.validarEmail(email)) {
+            mostrarAlerta('El formato del email no es válido', 'warning', 'alertContainerActualizarUsuario');
+            this.elementos.perEmail.focus();
+            return false;
+        }
+        
+        return true;
+    },
+
+    validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    },
+
+    // ============================================
+    // 🔧 UTILIDADES
+    // ============================================
+    mostrarCargando(mostrar) {
+        const btnActualizar = this.elementos.btnActualizar;
+        if (!btnActualizar) return;
+        
+        const loading = btnActualizar.querySelector('.loading');
+        const icon = btnActualizar.querySelector('i.fa-save');
+        
+        if (mostrar) {
+            btnActualizar.disabled = true;
+            if (loading) loading.style.display = 'inline-block';
+            if (icon) icon.style.display = 'none';
         } else {
-            alert('❌ ' + (response.message || 'Error al actualizar usuario'), 'error');
+            btnActualizar.disabled = false;
+            if (loading) loading.style.display = 'none';
+            if (icon) icon.style.display = 'inline';
         }
-    } catch (error) {
-        console.error('Error al actualizar usuario:', error);
-        alert('❌ Error al actualizar el usuario: ' + error.message, 'error');
-    } finally {
-        mostrarCargando(false);
-    }
-}
+    },
 
-/**
- * Solicitar contraseña actual mediante prompt
- */
-function solicitarPasswordActual() {
-    return new Promise((resolve) => {
-        const password = prompt('🔐 Ingrese su contraseña actual de RENIEC para actualizarla:');
-        resolve(password);
-    });
-}
-
-/**
- * Obtener datos del formulario
- */
-function obtenerDatosFormulario() {
-    return {
-        USU_id: usuarioIdActual,
-        PER_id: personaIdActual,
-        PER_tipo: parseInt(document.getElementById('perTipo-actualizar').value),
-        PER_documento_tipo: parseInt(document.getElementById('perDocumentoTipo-actualizar').value),
-        PER_documento_num: document.getElementById('per-documento-num').value.trim(),
-        PER_nombre: document.getElementById('per-nombre').value.trim(),
-        PER_apellido_pat: document.getElementById('per-apellido-pat').value.trim(),
-        PER_apellido_mat: document.getElementById('per-apellido-mat').value.trim() || null,
-        PER_sexo: parseInt(document.getElementById('perSexo-actualizar').value),
-        PER_email: document.getElementById('per-email').value.trim() || null,
-        USU_login: document.getElementById('usu-login').value.trim(),
-        USU_pass: document.getElementById('usu-pass').value.trim() || null,
-        USU_permiso: parseInt(document.getElementById('usuPermiso-actualizar').value),
-        USU_estado: parseInt(document.getElementById('usuEstado-actualizar').value),
-    };
-}
-
-/**
- * Validar formulario
- */
-function validarFormulario() {
-    // Validar campos requeridos
-    const camposRequeridos = [
-        { id: 'perTipo-actualizar', nombre: 'Tipo de Persona' },
-        { id: 'perDocumentoTipo-actualizar', nombre: 'Tipo de Documento' },
-        { id: 'per-documento-num', nombre: 'Número de Documento' },
-        { id: 'per-nombre', nombre: 'Nombres' },
-        { id: 'per-apellido-pat', nombre: 'Apellido Paterno' },
-        { id: 'perSexo-actualizar', nombre: 'Sexo' },
-        { id: 'usu-login', nombre: 'Login/Usuario' }
-    ];
-    
-    for (const campo of camposRequeridos) {
-        const elemento = document.getElementById(campo.id);
-        if (!elemento.value || elemento.value.trim() === '') {
-            mostrarAlerta(`El campo "${campo.nombre}" es requerido`, 'warning');
-            elemento.focus();
-            return false;
-        }
-    }
-    
-    // Validar contraseñas si se están actualizando
-    const passwordActual = document.getElementById('usuPassActual').value;
-    const password = document.getElementById('usu-pass').value;
-    const passwordConfirm = document.getElementById('usu-passConfirm').value;
-    
-    if (password || passwordConfirm) {
-        if (password !== passwordConfirm) {
-            mostrarAlerta('Las contraseñas no coinciden', 'warning');
-            document.getElementById('usu-passConfirm').focus();
-            return false;
+    // ============================================
+    // 🧹 LIMPIAR FORMULARIO
+    // ============================================
+    limpiarFormulario() {
+        if (!this.usuarioIdActual) {
+            this.limpiarCamposFormulario();
+            return;
         }
         
-        if (password.length < 6) {
-            mostrarAlerta('La contraseña debe tener al menos 6 caracteres', 'warning');
-            document.getElementById('usu-pass').focus();
-            return false;
+        if (confirm('¿Está seguro de que desea recargar los datos originales del usuario?')) {
+            this.cargarDatosUsuario(this.usuarioIdActual);
         }
-    }
-    
-    // Validar email si se proporciona
-    const email = document.getElementById('per-email').value;
-    if (email && !validarEmail(email)) {
-        mostrarAlerta('El formato del email no es válido', 'warning');
-        document.getElementById('per-email').focus();
-        return false;
-    }
-    
-    // Validar DNI según tipo de documento
-    const tipoDoc = document.getElementById('perDocumentoTipo').value;
-    const numDoc = document.getElementById('per-documento-num').value.trim();
-    
-    if (tipoDoc === '1' && numDoc.length !== 8) {
-        mostrarAlerta('El DNI debe tener 8 dígitos', 'warning');
-        document.getElementById('per-documento-num').focus();
-        return false;
-    }
-    
-    if (tipoDoc === '2' && numDoc.length !== 11) {
-        mostrarAlerta('El RUC debe tener 11 dígitos', 'warning');
-        document.getElementById('per-documento-num').focus();
-        return false;
-    }
-    
-    return true;
-}
+    },
 
-/**
- * Validar formato de email
- */
-function validarEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-}
-
-/**
- * Limpiar formulario (recargar datos originales)
- */
-function limpiarFormulario() {
-    if (!usuarioIdActual) {
-        limpiarCamposFormulario();
-        return;
+    limpiarCamposFormulario() {
+        Object.values(this.elementos).forEach(elem => {
+            if (elem && (elem.tagName === 'INPUT' || elem.tagName === 'SELECT')) {
+                elem.value = '';
+            }
+        });
+        
+        this.usuarioIdActual = null;
+        this.personaIdActual = null;
+        
+        console.log('🧹 Formulario de actualizar usuario limpiado');
     }
-    
-    if (confirm('¿Está seguro de que desea recargar los datos originales del usuario?')) {
-        cargarDatosUsuario(usuarioIdActual);
+};
+
+// ============================================
+// 🌐 FUNCIONES GLOBALES
+// ============================================
+window.cargarListaUsuarios = async function() {
+    if (ModuloActualizarUsuario.inicializado) {
+        await ModuloActualizarUsuario.cargarListaUsuarios();
     }
-}
+};
 
-/**
- * Limpiar todos los campos del formulario
- */
-function limpiarCamposFormulario() {
-    // Limpiar datos personales
-    document.getElementById('perTipo-actualizar').value = '';
-    document.getElementById('perDocumentoTipo-actualizar').value = '';
-    document.getElementById('per-documento-num').value = '';
-    document.getElementById('per-nombre').value = '';
-    document.getElementById('per-apellido-pat').value = '';
-    document.getElementById('per-apellido-mat').value = '';
-    document.getElementById('perSexo-actualizar').value = '';
-    document.getElementById('per-email').value = '';
-    
-    // Limpiar datos de usuario
-    document.getElementById('usu-login').value = '';
-    document.getElementById('usuPassActual').value = '';
-    document.getElementById('usu-pass').value = '';
-    document.getElementById('usu-passConfirm').value = '';
-    document.getElementById('usuPermiso-actualizar').value = '';
-    document.getElementById('usuEstado-actualizar').value = '1';
-    
-    // Resetear variables globales
-    usuarioIdActual = null;
-    personaIdActual = null;
-}
+window.cargarDatosUsuarioSeleccionado = async function() {
+    if (ModuloActualizarUsuario.inicializado) {
+        await ModuloActualizarUsuario.cargarDatosUsuarioSeleccionado();
+    }
+};
 
-/**
- * Mostrar alerta
- */
-function mostrarAlerta(mensaje, tipo = 'info') {
-    const alertContainer = document.getElementById('alertContainer');
-    
-    const tiposIconos = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        warning: 'fa-exclamation-triangle',
-        info: 'fa-info-circle'
-    };
-    
-    const alerta = document.createElement('div');
-    alerta.className = `alert alert-${tipo}`;
-    alerta.innerHTML = `
-        <i class="fas ${tiposIconos[tipo]}"></i>
-        <span>${mensaje}</span>
-        <button class="alert-close" onclick="this.parentElement.remove()">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-    
-    alertContainer.innerHTML = '';
-    alertContainer.appendChild(alerta);
-    
-    // Auto-cerrar después de 5 segundos
-    setTimeout(() => {
-        if (alerta.parentElement) {
-            alerta.remove();
-        }
-    }, 5000);
-}
-
-/**
- * Mostrar/ocultar indicador de carga
- */
-function mostrarCargando(mostrar) {
-    const btnActualizar = document.getElementById('btnActualizar');
-    if (!btnActualizar) return;
-    
-    const loading = btnActualizar.querySelector('.loading');
-    const icon = btnActualizar.querySelector('i.fa-save');
-    
-    if (mostrar) {
-        btnActualizar.disabled = true;
-        if (loading) loading.style.display = 'inline-block';
-        if (icon) icon.style.display = 'none';
+window.actualizarUsuario = async function() {
+    if (ModuloActualizarUsuario.inicializado) {
+        await ModuloActualizarUsuario.actualizarUsuario();
     } else {
-        btnActualizar.disabled = false;
-        if (loading) loading.style.display = 'none';
-        if (icon) icon.style.display = 'inline';
+        console.warn('⚠️ Módulo Actualizar Usuario no está inicializado');
     }
-}
+};
+
+window.limpiarFormulario = function() {
+    if (ModuloActualizarUsuario.inicializado) {
+        ModuloActualizarUsuario.limpiarFormulario();
+    }
+};

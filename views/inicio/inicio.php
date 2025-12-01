@@ -10,7 +10,7 @@
         </div>
         <div class="user-info">
             <i class="fas fa-user-circle"></i>
-            <span id="usuarioNombre">Usuario Admin</span>
+            <span id="usuarioNombre">Usuario <?= htmlspecialchars($_SESSION['ROL_nombre'] ?? '') ?></span>
         </div>
     </div>
 

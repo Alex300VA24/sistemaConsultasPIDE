@@ -5,7 +5,7 @@
     <div class="content-wrapper">
         <!-- Formulario de búsqueda -->
         <div class="search-section">
-            <div id="alertContainer"></div>
+            <div id="alertContainerDNI"></div>
             <form method="POST" action="" class="search-form" id="searchFormDNI">
                 <div class="form-group">
                     <label for="dniInput">Número de DNI:</label>

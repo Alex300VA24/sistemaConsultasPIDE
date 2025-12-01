@@ -1,176 +1,235 @@
-document.addEventListener("DOMContentLoaded", async () => {
-    const form = document.getElementById('searchFormDNI');
-    const dniInput = document.getElementById('dniInput');
-    const btnBuscar = document.getElementById('btnBuscarDNI');
-    const alertContainer = document.getElementById('alertContainer');
+// ============================================
+// 🆔 MÓDULO DE CONSULTA DNI
+// ============================================
 
-    console.log("El valor del dni es: ", dniInput.value);
+const ModuloDNI = {
+    elementos: {},
+    inicializado: false,
 
-    // Validar solo números en el campo DNI
-    dniInput.addEventListener('input', function(e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
+    // ============================================
+    // 🚀 INICIALIZACIÓN
+    // ============================================
+    init() {
+        if (this.inicializado) {
+            console.log('ℹ️ Módulo DNI ya está inicializado');
+            return;
+        }
 
-    async function consultarDNI(dni) {
+        console.log('🆔 Inicializando Módulo DNI...');
+        
+        this.cachearElementos();
+        this.setupEventListeners();
+        
+        this.inicializado = true;
+        console.log('✅ Módulo DNI inicializado correctamente');
+    },
+
+    // ============================================
+    // 📦 CACHEAR ELEMENTOS DEL DOM
+    // ============================================
+    cachearElementos() {
+        this.elementos = {
+            form: document.getElementById('searchFormDNI'),
+            dniInput: document.getElementById('dniInput'),
+            btnBuscar: document.getElementById('btnBuscarDNI'),
+            alertContainer: document.getElementById('alertContainerDNI'),
+            photoContainer: document.getElementById('photoContainer'),
+            resultados: {
+                dni: document.getElementById('result-dni'),
+                nombres: document.getElementById('result-nombres'),
+                paterno: document.getElementById('result-paterno'),
+                materno: document.getElementById('result-materno'),
+                estadoCivil: document.getElementById('result-estado-civil'),
+                direccion: document.getElementById('result-direccion'),
+                restriccion: document.getElementById('result-restriccion'),
+                ubigeo: document.getElementById('result-ubigeo')
+            }
+        };
+    },
+
+    // ============================================
+    // 🎯 CONFIGURAR EVENT LISTENERS
+    // ============================================
+    setupEventListeners() {
+        // Validar solo números en el campo DNI
+        this.elementos.dniInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+
+        // Manejar envío del formulario
+        this.elementos.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleSubmit();
+        });
+    },
+
+    // ============================================
+    // 📝 MANEJAR ENVÍO DEL FORMULARIO
+    // ============================================
+    async handleSubmit() {
+        const dni = this.elementos.dniInput.value.trim();
+        
+        if (dni.length !== 8) {
+            mostrarAlerta('El DNI debe tener 8 dígitos', 'warning', 'alertContainerDNI');
+            return;
+        }
+
+        await this.consultarDNI(dni);
+    },
+
+    // ============================================
+    // 🔍 CONSULTAR DNI
+    // ============================================
+    async consultarDNI(dni) {
         try {
-            // 🔹 Deshabilitar botón y mostrar loading
-            btnBuscar.disabled = true;
-            btnBuscar.innerHTML = '<span class="loading"></span>';
-            limpiarResultados();
-            alertContainer.innerHTML = '';
+            // Deshabilitar botón y mostrar loading
+            this.mostrarLoading(true);
+            this.limpiarResultados();
+            this.elementos.alertContainer.innerHTML = '';
 
-            // 🔹 Obtener credenciales guardadas según el usuario actual
+            // Obtener credenciales del usuario actual
             const usuario = localStorage.getItem('usuario');
-            console.log('Este es el usuario', usuario)
+            console.log('👤 Usuario actual:', usuario);
+            
             const credencialesResponse = await api.obtenerDniYPassword(usuario);
-            console.log(credencialesResponse.data);
+            console.log('🔑 Credenciales obtenidas:', credencialesResponse.data);
 
             if (!credencialesResponse.success || !credencialesResponse.data) {
-                mostrarAlerta('No se pudieron obtener las credenciales del usuario', 'danger');
+                mostrarAlerta('No se pudieron obtener las credenciales del usuario', 'danger', 'alertContainerDNI');
                 return;
             }
 
             const dniUsuario = credencialesResponse.data.DNI;
             const password = credencialesResponse.data.password;
 
-            console.log(dniUsuario);
-            console.log(password);
-
-            // 🔹 Armar payload para la API de consulta
+            // Armar payload para la API
             const payload = {
-                dniConsulta: dni,           // DNI que se quiere consultar
-                dniUsuario: dniUsuario,     // DNI del usuario logueado
-                password: password          // Contraseña asociada
+                dniConsulta: dni,
+                dniUsuario: dniUsuario,
+                password: password
             };
 
-            console.log(payload);
+            console.log('📤 Enviando consulta:', payload);
 
-            // 🔹 Enviar solicitud a la API con credenciales + DNI
+            // Realizar consulta a la API
             const response = await api.consultarDNI(payload);
-            console.log('Response del dni: ', response);
-            // 🔹 Manejar la respuesta
+            console.log('📥 Response del DNI:', response);
+
+            // Manejar respuesta
             if (response.success && response.data) {
-                mostrarResultados(response.data);
-                mostrarAlerta('Consulta realizada exitosamente', 'success');
+                this.mostrarResultados(response.data);
+                mostrarAlerta('Consulta realizada exitosamente', 'success', 'alertContainerDNI');
             } else {
-                mostrarAlerta(response.message || 'No se encontraron datos', 'warning');
+                mostrarAlerta(response.message || 'No se encontraron datos', 'warning', 'alertContainerDNI');
             }
 
         } catch (error) {
-            console.error('Error al consultar DNI:', error);
-            mostrarAlerta('Error al realizar la consulta: ' + error.message, 'danger');
+            console.error('❌ Error al consultar DNI:', error);
+            mostrarAlerta('Error al realizar la consulta: ' + error.message, 'danger', 'alertContainerDNI');
         } finally {
-            // 🔹 Rehabilitar botón
-            btnBuscar.disabled = false;
-            btnBuscar.innerHTML = '🔍';
+            this.mostrarLoading(false);
         }
-    }
+    },
 
+    // ============================================
+    // 📊 MOSTRAR RESULTADOS
+    // ============================================
+    mostrarResultados(data) {
+        // Mapear los datos según la estructura de la API
+        this.elementos.resultados.dni.textContent = data.dni || '';
+        this.elementos.resultados.nombres.textContent = data.nombres || data.prenombres || '';
+        this.elementos.resultados.paterno.textContent = data.apellido_paterno || data.apPrimer || '';
+        this.elementos.resultados.materno.textContent = data.apellido_materno || data.apSegundo || '';
+        this.elementos.resultados.estadoCivil.textContent = data.estado_civil || data.estadoCivil || '';
+        this.elementos.resultados.direccion.textContent = data.direccion || '';
+        this.elementos.resultados.restriccion.textContent = data.restriccion || '';
+        this.elementos.resultados.ubigeo.textContent = data.ubigeo || '';
 
-    function mostrarResultados(data) {
-        // Mapear los datos según la estructura de tu API
-        document.getElementById('result-dni').textContent = data.dni || '';
-        document.getElementById('result-nombres').textContent = data.nombres || data.prenombres || '';
-        document.getElementById('result-paterno').textContent = data.apellido_paterno || data.apPrimer || '';
-        document.getElementById('result-materno').textContent = data.apellido_materno || data.apSegundo || '';
-        document.getElementById('result-estado-civil').textContent = data.estado_civil || data.estadoCivil || '';
-        document.getElementById('result-direccion').textContent = data.direccion || '';
-        document.getElementById('result-restriccion').textContent = data.restriccion || '';
-        document.getElementById('result-ubigeo').textContent = data.ubigeo || '';
+        // Manejar foto
+        this.mostrarFoto(data.foto);
+    },
 
-        const photoContainer = document.getElementById('photoContainer');
-
-        // Limpiar contenido previo
+    // ============================================
+    // 🖼️ MOSTRAR FOTO
+    // ============================================
+    mostrarFoto(foto) {
+        const photoContainer = this.elementos.photoContainer;
         photoContainer.innerHTML = '';
 
-        if (data.foto) {
-            const fotoBase64 = data.foto.startsWith('data:image')
-                ? data.foto
-                : `data:image/jpeg;base64,${data.foto}`;
+        if (foto) {
+            const fotoBase64 = foto.startsWith('data:image')
+                ? foto
+                : `data:image/jpeg;base64,${foto}`;
 
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = 'Foto del DNI';
 
-            // ✅ Restablecer tamaño del contenedor
+            // Restablecer tamaño del contenedor
             photoContainer.style.width = '350px';
             photoContainer.style.height = '450px';
-
-            photoContainer.innerHTML = ''; // limpiar
             photoContainer.appendChild(img);
         } else {
             // Mostrar placeholder si no hay foto
-            photoContainer.innerHTML = `
-                <div class="photo-placeholder"></div>
-            `;
-            // ✅ Solo se aplica cuando no hay foto
+            photoContainer.innerHTML = '<div class="photo-placeholder"></div>';
             photoContainer.style.width = '200px';
             photoContainer.style.height = '200px';
         }
+    },
 
-    }
+    // ============================================
+    // 🧹 LIMPIAR RESULTADOS
+    // ============================================
+    limpiarResultados() {
+        // Limpiar campos de texto
+        Object.values(this.elementos.resultados).forEach(elemento => {
+            elemento.textContent = '';
+        });
 
-    function limpiarResultados() {
-        document.getElementById('result-dni').textContent = '';
-        document.getElementById('result-nombres').textContent = '';
-        document.getElementById('result-paterno').textContent = '';
-        document.getElementById('result-materno').textContent = '';
-        document.getElementById('result-estado-civil').textContent = '';
-        document.getElementById('result-direccion').textContent = '';
-        document.getElementById('result-restriccion').textContent = '';
-        document.getElementById('result-ubigeo').textContent = '';
-
-        const photoContainer = document.getElementById('photoContainer');
-        photoContainer.innerHTML = `
-            <div class="photo-placeholder"></div>
-        `;
+        // Limpiar foto
+        const photoContainer = this.elementos.photoContainer;
+        photoContainer.innerHTML = '<div class="photo-placeholder"></div>';
         photoContainer.style.width = '200px';
         photoContainer.style.height = '200px';
-    }
+    },
 
-
-
-    function mostrarAlerta(mensaje, tipo) {
-        alertContainer.innerHTML = `
-            <div class="alert alert-${tipo}">
-                ${mensaje}
-            </div>
-        `;
-
-        // Auto-ocultar después de 5 segundos
-        setTimeout(() => {
-            alertContainer.innerHTML = '';
-        }, 5000);
-    }
-
-    // Función global para limpiar
-    window.limpiarFormularioDNI = function() {
-        form.reset();
-        limpiarResultados();
-        alertContainer.innerHTML = '';
-    };
-
-    // Función global para volver al inicio
-    window.volverInicio = function() {
-        if (typeof showPage === 'function') {
-            showPage('pageInicio');
-        }
-    };
-
-
-    // Manejar el envío del formulario
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    // ============================================
+    // ⏳ MOSTRAR/OCULTAR LOADING
+    // ============================================
+    mostrarLoading(mostrar) {
+        const btnBuscar = this.elementos.btnBuscar;
         
-        const dni = dniInput.value.trim();
-        
-        if (dni.length !== 8) {
-            mostrarAlerta('El DNI debe tener 8 dígitos', 'warning');
-            return;
+        if (mostrar) {
+            btnBuscar.disabled = true;
+            btnBuscar.innerHTML = '<span class="loading"></span>';
+        } else {
+            btnBuscar.disabled = false;
+            btnBuscar.innerHTML = '🔍';
         }
+    },
 
-        await consultarDNI(dni);
-    });
-});
+    // ============================================
+    // 🧹 LIMPIAR FORMULARIO COMPLETO
+    // ============================================
+    limpiarFormulario() {
+        this.elementos.form.reset();
+        this.limpiarResultados();
+        this.elementos.alertContainer.innerHTML = '';
+        console.log('🧹 Formulario DNI limpiado');
+    }
+};
 
+// ============================================
+// 🌐 FUNCIONES GLOBALES PARA HTML
+// ============================================
+window.limpiarFormularioDNI = function() {
+    if (ModuloDNI.inicializado) {
+        ModuloDNI.limpiarFormulario();
+    }
+};
 
+window.volverInicio = function() {
+    if (typeof showPage === 'function') {
+        showPage('inicio');
+    }
+};

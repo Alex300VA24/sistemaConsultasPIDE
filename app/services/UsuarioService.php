@@ -26,29 +26,37 @@ class UsuarioService {
     
     // Service: validar la estructura devuelta por el repo
     public function validarCUI($nombreUsuario, $password, $cui) {
+
         if (empty($cui)) {
             throw new \Exception("Es requerido el CUI");
         }
-        
+
         if (strlen($cui) !== 1) {
             throw new \Exception("El CUI debe ser de 1 dígito");
         }
-        
+
         $usuario = $this->usuarioRepository->validarCUI($nombreUsuario, $password, $cui);
 
-        // Si el repositorio devuelve null -> inválido
+        // Usuario inválido
         if ($usuario === null) {
             throw new \Exception("CUI incorrecto");
         }
-
-        // Si el repositorio devuelve un array con 'valido' => false -> inválido
         if (is_array($usuario) && isset($usuario['valido']) && $usuario['valido'] == false) {
-            $mensaje = $usuario['mensaje'] ?? 'CUI incorrecto';
-            throw new \Exception($mensaje);
+            throw new \Exception($usuario['mensaje'] ?? 'CUI incorrecto');
         }
+
+        // ===============================
+        //   🔴 AQUI AGREGAS LA SESIÓN
+        // ===============================
+        $usuarioData = $usuario['usuario'];   // datos que vienen del SP
+
+        $_SESSION['ROL_nombre'] = $usuarioData['ROL_nombre']; 
+        $_SESSION['usuario_id'] = $usuarioData['USU_id'];
+        $_SESSION['usuario'] = $usuarioData; // opcional
 
         return $usuario;
     }
+
 
 
 
@@ -80,7 +88,8 @@ class UsuarioService {
             file_put_contents($logFile, $errorMsg, FILE_APPEND);
 
             // Re-lanzar la excepción para que el controlador la maneje
-            throw new \Exception("Error al crear usuario. Revisa logs/error_crear_usuario.txt para más detalles.");
+            throw new \Exception($e->getMessage());
+
         }
     }
 
@@ -90,6 +99,14 @@ class UsuarioService {
     public function listarUsuarios()
     {
         return $this->usuarioRepository->listarUsuarios();
+    }
+
+    public function obtenerRoles(){
+        return $this->usuarioRepository->obtenerRoles();
+    }
+
+    public function obtenerTipoPersonal(){
+        return $this->usuarioRepository->obtenerTipoPersonal();
     }
 
     /**
@@ -140,9 +157,9 @@ class UsuarioService {
         }
 
         // Actualizar en BD
-        $this->usuarioRepository->actualizarUsuario($datos);
+        $response = $this->usuarioRepository->actualizarUsuario($datos);
 
-        return true;
+        return $response;
     }
 
     public function actualizarPassword($datos)
@@ -158,9 +175,9 @@ class UsuarioService {
         }
 
         // Actualizar en BD
-        $this->usuarioRepository->actualizarPassword($datos);
+        $response = $this->usuarioRepository->actualizarPassword($datos);
 
-        return true;
+        return $response;
     }
 
     /**
@@ -230,9 +247,6 @@ class UsuarioService {
         if ($esActualizacion) {
             if (empty($datos['USU_id'])) {
                 $errores[] = 'ID de usuario es requerido';
-            }
-            if (empty($datos['PER_id'])) {
-                $errores[] = 'ID de persona es requerido';
             }
         }
 

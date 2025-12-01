@@ -112,12 +112,18 @@ class UsuarioController {
             $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
+
+            $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
+            $_SESSION['permisos'] = $permisos;
             $debug->log_debug("Sesión actualizada", $_SESSION);
 
             $respuesta = [
                 'success' => true,
                 'message' => $resultado['mensaje'] ?? 'Sin mensaje',
-                'data' => $resultado['usuario'] ?? []
+                'data' => [
+                    'usuario' => $resultado['usuario'] ?? [],
+                    'permisos' => $permisos  // ⭐ Enviar permisos al frontend
+                ]
             ];
             $debug->log_debug("Respuesta JSON", $respuesta);
 
@@ -201,8 +207,8 @@ class UsuarioController {
         } catch (\Throwable $e) {
             $this->jsonResponse([
                 'success' => false,
-                'error' => $e->getMessage()
-            ], 500);
+                'message' => $e->getMessage()
+            ], 200);
         }
     }
 
@@ -251,7 +257,7 @@ class UsuarioController {
                 return;
             }
 
-            // ✅ Obtener la contraseña desde la sesión
+            // Obtener la contraseña desde la sesión
             $passwordSesion = $_SESSION['password'] ?? null;
 
             if (empty($passwordSesion)) {
@@ -306,6 +312,67 @@ class UsuarioController {
             echo json_encode([
                 'success' => false,
                 'message' => 'Error al listar usuarios: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    /* Obtener roles de usuario */
+    public function obtenerRoles()
+    {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            $roles = $this->usuarioService->obtenerRoles();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Roles obteniedo correctamente',
+                'data' => $roles
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al obtener roles: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function obtenerTipoPersonal()
+    {
+        header('Content-Type: application/json');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            http_response_code(405);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Método no permitido'
+            ]);
+            return;
+        }
+
+        try {
+            $tipos = $this->usuarioService->obtenerTipoPersonal();
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Tipo de personal obtenido correctamente',
+                'data' => $tipos
+            ]);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al obtener los tipos: ' . $e->getMessage()
             ]);
         }
     }
@@ -384,12 +451,9 @@ class UsuarioController {
 
             $datos = $input['data'];
 
-            $this->usuarioService->actualizarUsuario($datos);
+            $response = $this->usuarioService->actualizarUsuario($datos);
 
-            echo json_encode([
-                'success' => true,
-                'message' => 'Usuario actualizado correctamente'
-            ]);
+            echo json_encode($response);
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode([
@@ -425,12 +489,9 @@ class UsuarioController {
 
             $datos = $input['data'];
 
-            $this->usuarioService->actualizarPassword($datos);
+            $response = $this->usuarioService->actualizarPassword($datos);
 
-            echo json_encode([
-                'success' => true,
-                'message' => 'Contraseña actualizada correctamente'
-            ]);
+            echo json_encode($response);
         } catch (\Exception $e) {
             http_response_code(500);
             echo json_encode([
