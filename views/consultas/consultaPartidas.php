@@ -191,7 +191,7 @@
                     <i class="fas fa-user"></i>
                     Búsqueda de Personas Naturales
                 </h5>
-                <button class="modal-close" onclick="cerrarModal('modalBusquedaNatural')">&times;</button>
+                <button class="modal-close" data-modal="modalBusquedaNatural">&times;</button>
             </div>
             <div class="modal-body-partidas">
                 <form id="formBusquedaNatural" class="modal-search-form">
@@ -233,7 +233,7 @@
                     <i class="fas fa-building"></i>
                     Búsqueda de Personas Jurídicas
                 </h5>
-                <button class="modal-close" onclick="cerrarModal('modalBusquedaJuridica')">&times;</button>
+                <button class="modal-close" data-modal="modalBusquedaJuridica">&times;</button>
             </div>
             <div class="modal-body-partidas">
                 <!-- Radio buttons para tipo de búsqueda -->

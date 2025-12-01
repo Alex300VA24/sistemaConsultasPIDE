@@ -136,3 +136,265 @@ Array
 )
 
 ------------------------------------------------------------
+[2025-11-27 15:05:22] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Must declare the scalar variable "@p_usuario_id".
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Gustavo
+    [perApellidoPat] => Varas
+    [perApellidoMat] => Rojas
+    [perSexo] => M
+    [perEmail] => gustavo@example.com
+    [usuLogin] => gus_varas
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 2
+    [usuEstado] => 1
+    [cui] => 3
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-27 15:07:51] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Procedure or function 'SP_CREAR_USUARIO' expects parameter '@p_tipo_personal_id', which was not supplied.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Gustavo
+    [perApellidoPat] => Varas
+    [perApellidoMat] => Rojas
+    [perSexo] => M
+    [perEmail] => gus@example.com
+    [usuLogin] => gus_varas
+    [usuPass] => 12345678
+    [usuPassConfirm] => 12345678
+    [usuPermiso] => 2
+    [usuEstado] => 1
+    [cui] => 3
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-27 15:29:57] ERROR: Error al crear usuario: SQLSTATE[42000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Procedure or function 'SP_CREAR_USUARIO' expects parameter '@p_tipo_personal_id', which was not supplied.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Gustavo
+    [perApellidoPat] => Varas
+    [perApellidoMat] => Rojas
+    [perSexo] => M
+    [perEmail] => varas@example.com
+    [perTipoPersonal] => 3
+    [usuLogin] => gus_varas
+    [usuPass] => 12345678
+    [usuPassConfirm] => 12345678
+    [usuPermiso] => 2
+    [usuEstado] => 1
+    [cui] => 3
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:06:38] ERROR: Error al crear usuario: SQLSTATE[25000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 1, current count = 0.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:07:38] ERROR: Error al crear usuario: SQLSTATE[25000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 1, current count = 0.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:11:57] ERROR: Error al crear usuario: SQLSTATE[25000]: [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Transaction count after EXECUTE indicates a mismatching number of BEGIN and COMMIT statements. Previous count = 1, current count = 0.
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:15:29] ERROR: SP Error: El número de documento ya está registrado
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:41:55] ERROR: SP Error: 
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:44:50] ERROR: SP Error: 
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => F
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:51:49] ERROR: SP Error: El número de documento ya está registrado
+Datos enviados:
+Array
+(
+    [perTipo] => 1
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => M
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------
+[2025-11-30 13:57:40] ERROR: SP Error: El número de documento ya está registrado
+Datos enviados:
+Array
+(
+    [perTipo] => 2
+    [perDocumentoTipo] => 1
+    [perDocumentoNum] => 12345678
+    [perNombre] => Elizabeth
+    [perApellidoPat] => Quiñones
+    [perApellidoMat] => Martines
+    [perSexo] => M
+    [perEmail] => eliza@example.com
+    [perTipoPersonal] => 2
+    [usuLogin] => eliza123
+    [usuPass] => 123456
+    [usuPassConfirm] => 123456
+    [usuPermiso] => 7
+    [usuEstado] => 1
+    [cui] => 6
+    [reniecDni] => 
+    [reniecRuc] => 
+)
+
+------------------------------------------------------------

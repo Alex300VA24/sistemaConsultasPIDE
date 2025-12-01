@@ -1,0 +1,50 @@
+
+================================================================================
+CONSULTA TSIRSARP - 2025-11-30 12:35:55
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: ALCANTARA
+Nombres: ALEXANDER JOSUE
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "ALCANTARA",
+        "nombres": "ALEXANDER JOSUE",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.657408s
+Connect Time: 0.010242s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta

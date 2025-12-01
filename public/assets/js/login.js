@@ -45,10 +45,17 @@ document.addEventListener('DOMContentLoaded', function() {
             btnConfirmar.disabled = true;
             btnConfirmar.value = 'Validando...';
             
+            console.log('este es el cui: ', cui);
             const response = await api.validarCUI(cui);
             console.log(response);
             if (response.success) {
-                window.location.href = 'dashboard';
+                console.log('este es response: ', response);
+                if (response.data.permisos) {
+                    sessionStorage.setItem('permisos', JSON.stringify(response.data.permisos));
+                }
+                setTimeout(() => {
+                    window.location.href = 'dashboard';
+                }, 1000);
             }
         } catch (error) {
             alert('Error: ' + error.message);

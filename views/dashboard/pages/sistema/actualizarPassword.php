@@ -38,7 +38,7 @@
 
             <!-- Botones de acción -->
             <div class="action-buttons">
-                <button class="btn btn-secondary" onclick="limpiarCamposFormularioPassword()">
+                <button class="btn btn-secondary" onclick="limpiarFormularioPassword()">
                     <i class="fas fa-broom"></i> Limpiar
                 </button>
                 <button id="btnActualizarPassword" class="btn btn-primary" onclick="actualizarPasswordUsuarioActual()">

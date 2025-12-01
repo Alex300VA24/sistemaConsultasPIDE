@@ -82,10 +82,41 @@ class API {
     async obtenerUsuarioActual() {
         return this.get(`/usuario/actual`);
     }
-    
+    async obtenerRoles(){
+        return this.get('/usuario/rol');
+    }
+
+    async obtenerTipoPersonal(){
+        return this.get('/usuario/tipo-personal');
+    }
 
     async listarUsuarios() {
         return this.get('/listar-usuarios');
+    }
+
+    // Métodos de Roles
+    async crearRol(data) {
+        return this.post('/rol/crear', data);
+    }
+
+    async actualizarRol(data) {
+        return this.put('/rol/actualizar', data);
+    }
+
+    async listarRoles() {
+        return this.get('/rol/listar');
+    }
+
+    async obtenerRol(rolId) {
+        return this.get(`/rol/obtener?id=${rolId}`);
+    }
+
+    async listarModulos() {
+        return this.get('/rol/modulos');
+    }
+
+    async eliminarRol(rolId) {
+        return this.post('/rol/eliminar', { rol_id: rolId });
     }
 
     // 📌 --- CONSULTAS RENIEC ---
@@ -213,7 +244,7 @@ class API {
         } else {
             data.razonSocial = parametro;
         }
-        console.log(data.razonSocial);
+
         return this.post('/buscar-persona-juridica-sunarp', data);
     }
 

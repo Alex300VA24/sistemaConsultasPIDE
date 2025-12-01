@@ -17,7 +17,7 @@ class UsuarioRepository {
 
     public function login($nombreUsuario, $password) {
         try {
-            $sql = "EXEC SP_S_USUARIO_LOGIN @USU_login = :nombreUsuario, @USU_pass = :password";
+            $sql = "EXEC SP_USUARIO_LOGIN @USU_username = :nombreUsuario, @USU_pass = :password";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
             $stmt->bindParam(':password', $password, PDO::PARAM_STR);
@@ -44,7 +44,7 @@ class UsuarioRepository {
      */
     public function validarCUI($nombreUsuario, $password, $cui) {
         try {
-            $sql = "EXEC SP_S_USUARIO_VALIDAR_CUI @USU_login = :nombreUsuario, @USU_pass = :password, @CUI = :cui";
+            $sql = "EXEC SP_USUARIO_VALIDAR_CUI @USU_username = :nombreUsuario, @USU_pass = :password, @USU_cui = :cui";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
             $stmt->bindParam(':password', $password, PDO::PARAM_STR);
@@ -89,61 +89,85 @@ class UsuarioRepository {
     }
 
 
-    public function crearUsuario(array $data) {
+    public function crearUsuario(array $data)
+    {
         try {
-            // Iniciar transacción
-            $this->db->beginTransaction();
+            // ⚠️ NO usar beginTransaction() porque el SP maneja las transacciones
+            // $this->db->beginTransaction();
 
             $sql = "
-                DECLARE @NuevoUsuarioID INT;
-                EXEC sp_CrearUsuario
-                    @PER_tipo = :PER_tipo,
-                    @PER_documento_tipo = :PER_documento_tipo,
-                    @PER_documento_num = :PER_documento_num,
-                    @PER_nombre = :PER_nombre,
-                    @PER_apellido_pat = :PER_apellido_pat,
-                    @PER_apellido_mat = :PER_apellido_mat,
-                    @PER_sexo = :PER_sexo,
-                    @PER_email = :PER_email,
-                    @USU_login = :USU_login,
-                    @USU_pass = :USU_pass,
-                    @USU_permiso = :USU_permiso,
-                    @USU_estado = :USU_estado,
-                    @cui = :cui,
-                    @NuevoUsuarioID = @NuevoUsuarioID OUTPUT;
-                SELECT @NuevoUsuarioID AS NuevoUsuarioID;
+                DECLARE @resultado INT;
+                DECLARE @mensaje VARCHAR(500);
+                DECLARE @usuario_id INT;
+                DECLARE @persona_id INT;
+
+                EXEC SP_CREAR_USUARIO
+                    @p_tipo_persona = :PER_tipo,
+                    @p_tipo_personal_id = :PER_tipoPersonal,
+                    @p_documento_tipo_id = :PER_documento_tipo,
+                    @p_documento_numero = :PER_documento_num,
+                    @p_nombres = :PER_nombre,
+                    @p_apellido_paterno = :PER_apellido_pat,
+                    @p_apellido_materno = :PER_apellido_mat,
+                    @p_sexo = :PER_sexo,
+                    @p_email = :PER_email,
+                    @p_username = :USU_login,
+                    @p_password = :USU_pass,
+                    @p_permiso = :USU_permiso,
+                    @p_estado_id = :USU_estado,
+                    @p_cui = :cui,
+                    @p_resultado = @resultado OUTPUT,
+                    @p_mensaje = @mensaje OUTPUT,
+                    @p_usuario_id = @usuario_id OUTPUT,
+                    @p_persona_id = @persona_id OUTPUT;
+
+                SELECT @persona_id AS NuevoUsuarioID, 
+                    @resultado AS Resultado,
+                    @mensaje AS Mensaje;
             ";
 
             $stmt = $this->db->prepare($sql);
 
+            // PERSONA
             $stmt->bindValue(':PER_tipo', $data['perTipo'] ?? null, PDO::PARAM_INT);
+            $stmt->bindValue(':PER_tipoPersonal', $data['perTipoPersonal'] ?? null, PDO::PARAM_INT);
             $stmt->bindValue(':PER_documento_tipo', $data['perDocumentoTipo'] ?? null, PDO::PARAM_INT);
             $stmt->bindValue(':PER_documento_num', $data['perDocumentoNum'] ?? null, PDO::PARAM_STR);
             $stmt->bindValue(':PER_nombre', $data['perNombre'] ?? null, PDO::PARAM_STR);
             $stmt->bindValue(':PER_apellido_pat', $data['perApellidoPat'] ?? null, PDO::PARAM_STR);
             $stmt->bindValue(':PER_apellido_mat', $data['perApellidoMat'] ?? null, PDO::PARAM_STR);
-            $stmt->bindValue(':PER_sexo', $data['perSexo'] ?? null, PDO::PARAM_INT);
+            $stmt->bindValue(':PER_sexo', $data['perSexo'] ?? null, PDO::PARAM_STR); // CHAR(1)
             $stmt->bindValue(':PER_email', $data['perEmail'] ?? null, PDO::PARAM_STR);
+
+            // USUARIO
             $stmt->bindValue(':USU_login', $data['usuLogin'], PDO::PARAM_STR);
             $stmt->bindValue(':USU_pass', $data['usuPass'], PDO::PARAM_STR);
             $stmt->bindValue(':USU_permiso', $data['usuPermiso'] ?? 0, PDO::PARAM_INT);
             $stmt->bindValue(':USU_estado', $data['usuEstado'] ?? 1, PDO::PARAM_INT);
-            $stmt->bindValue(':cui', $data['cui'] ?? null, PDO::PARAM_INT);
+            $stmt->bindValue(':cui', $data['cui'] ?? null, PDO::PARAM_STR); // CHAR(1)
 
             $stmt->execute();
 
-            // Obtener el ID de salida
+            // Obtener resultados del SELECT final
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $nuevoUsuarioID = $row['NuevoUsuarioID'] ?? null;
 
-            $this->db->commit();
+            if (!$row) {
+                throw new \Exception("No se recibió respuesta del stored procedure.");
+            }
 
-            return $nuevoUsuarioID;
+            // Puedes validar errores del SP
+            if ($row["Resultado"] <= 0) {
+                throw new \Exception("SP Error: " . $row["Mensaje"]);
+            }
+
+            return $row["NuevoUsuarioID"];
+
+
         } catch (PDOException $e) {
-            $this->db->rollBack();
             throw new \Exception("Error al crear usuario: " . $e->getMessage());
         }
     }
+
 
     /**
      * Eliminar un usuario (llama al procedimiento sp_EliminarUsuario)
@@ -162,7 +186,7 @@ class UsuarioRepository {
 
     public function obtenerDni($nombreUsuario)
     {
-        $sql = "EXEC sp_ObtenerDni @usuLogin = ?";
+        $sql = "EXEC SP_USUARIO_OBTENER_DNI @USU_username = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(1, $nombreUsuario);
         $stmt->execute();
@@ -177,7 +201,7 @@ class UsuarioRepository {
     public function listarUsuarios()
     {
         try {
-            $stmt = $this->db->prepare("EXEC sp_ListarUsuarios");
+            $stmt = $this->db->prepare("EXEC SP_LISTAR_USUARIOS");
             $stmt->execute();
             
             $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -195,7 +219,7 @@ class UsuarioRepository {
     public function obtenerUsuarioPorId($usuarioId)
     {
         try {
-            $stmt = $this->db->prepare("EXEC sp_ObtenerUsuarioPorId @USU_id = :usuarioId");
+            $stmt = $this->db->prepare("EXEC SP_OBTENER_USUARIO @p_usuario_id = :usuarioId");
             $stmt->bindParam(':usuarioId', $usuarioId, PDO::PARAM_INT);
             $stmt->execute();
             
@@ -208,58 +232,106 @@ class UsuarioRepository {
         }
     }
 
-    
+    public function obtenerRoles(){
+        try{
+            $sql = "SELECT ROL_id, ROL_nombre FROM ROL";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            error_log("Error obteniendo los roles:" . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function obtenerTipoPersonal(){
+        try{
+            $sql = "SELECT TPE_id, TPE_nombre FROM TIPO_PERSONAL";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            error_log("Error obteniendo los tipos de personal:" . $e->getMessage());
+            throw $e;
+        }
+    }
+
 
     /**
      * Actualizar usuario
      */
-    public function actualizarUsuario($datos)
-    {
+    public function actualizarUsuario($datos){
+        error_log(print_r($datos, true));
         try {
-            $sql = "EXEC sp_ActualizarUsuario 
-                @USU_id = :usuarioId,
-                @PER_id = :personaId,
-                @PER_tipo = :perTipo,
-                @PER_documento_tipo = :perDocumentoTipo,
-                @PER_documento_num = :perDocumentoNum,
-                @PER_nombre = :perNombre,
-                @PER_apellido_pat = :perApellidoPat,
-                @PER_apellido_mat = :perApellidoMat,
-                @PER_sexo = :perSexo,
-                @PER_email = :perEmail,
-                @USU_login = :usuLogin,
-                @USU_pass = :usuPass,
-                @USU_permiso = :usuPermiso,
-                @USU_estado = :usuEstado,
-                @cui = :cui";
+            $sql = "
+            
+            DECLARE @resultado INT;
+            DECLARE @mensaje VARCHAR(500);
+
+            EXEC SP_ACTUALIZAR_USUARIO 
+                @p_usuario_id = :usuarioId,
+                @p_tipo_persona = :perTipo,
+                @p_tipo_personal_id = :perTipoPersonal,
+                @p_documento_tipo_id = :perDocumentoTipo,
+                @p_documento_numero = :perDocumentoNum,
+                @p_nombres = :perNombre,
+                @p_apellido_paterno = :perApellidoPat,
+                @p_apellido_materno = :perApellidoMat,
+                @p_sexo = :perSexo,
+                @p_email = :perEmail,
+                @p_username = :usuLogin,
+                @p_password_actual = :usuPassActual,
+                @p_password_nueva = :usuPass,
+                @p_permiso = :usuPermiso,
+                @p_estado_id = :usuEstado,
+                @p_resultado = @resultado OUTPUT,
+                @p_mensaje = @mensaje OUTPUT;
+            SELECT @resultado AS resultado, @mensaje AS mensaje;
+                ";
 
             $stmt = $this->db->prepare($sql);
             
             $stmt->bindParam(':usuarioId', $datos['USU_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':personaId', $datos['PER_id'], PDO::PARAM_INT);
             $stmt->bindParam(':perTipo', $datos['PER_tipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perTipoPersonal', $datos['PER_tipoPersonal'], PDO::PARAM_INT);
             $stmt->bindParam(':perDocumentoTipo', $datos['PER_documento_tipo'], PDO::PARAM_INT);
             $stmt->bindParam(':perDocumentoNum', $datos['PER_documento_num'], PDO::PARAM_STR);
             $stmt->bindParam(':perNombre', $datos['PER_nombre'], PDO::PARAM_STR);
             $stmt->bindParam(':perApellidoPat', $datos['PER_apellido_pat'], PDO::PARAM_STR);
             $stmt->bindParam(':perApellidoMat', $datos['PER_apellido_mat'], PDO::PARAM_STR);
-            $stmt->bindParam(':perSexo', $datos['PER_sexo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perSexo', $datos['PER_sexo'], PDO::PARAM_STR);
             $stmt->bindParam(':perEmail', $datos['PER_email'], PDO::PARAM_STR);
             $stmt->bindParam(':usuLogin', $datos['USU_login'], PDO::PARAM_STR);
-            
-            // La contraseña puede ser NULL si no se actualiza
+            $stmt->bindParam(':usuPassActual', $datos['USU_passActual'], PDO::PARAM_STR);
+
+            // contraseña nueva puede ser null
             $usuPass = !empty($datos['USU_pass']) ? $datos['USU_pass'] : null;
             $stmt->bindParam(':usuPass', $usuPass, PDO::PARAM_STR);
-            
+
             $stmt->bindParam(':usuPermiso', $datos['USU_permiso'], PDO::PARAM_INT);
             $stmt->bindParam(':usuEstado', $datos['USU_estado'], PDO::PARAM_INT);
-            
-            $cui = $datos['cui'] ?? null;
-            $stmt->bindParam(':cui', $cui, PDO::PARAM_INT);
+
 
             $stmt->execute();
-            
-            return true;
+
+            // leer resultados de salida
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($res['resultado'] != 1) {
+                // error del procedimiento
+                return [
+                    "success" => false,
+                    "message" => $res['mensaje']
+                ];
+            }
+
+            return [
+                "success" => true,
+                "message" => $res['mensaje']
+            ];
+
         } catch (PDOException $e) {
             error_log("Error en actualizarUsuario: " . $e->getMessage());
             throw $e;
@@ -269,15 +341,22 @@ class UsuarioRepository {
     public function actualizarPassword($datos)
     {
         try {
-            $sql = "EXEC sp_ActualizarUsuario 
-                @USU_id = :usuarioId,
-                @PER_id = :personaId,
-                @USU_pass = :usuPass";
+            $sql = "
+            DECLARE @resultado INT;
+            DECLARE @mensaje VARCHAR(500);
+            EXEC SP_ACTUALIZAR_PASSWORD
+                @p_usuario_id = :usuarioId,
+                @p_password_actual = :usuPassActual,
+                @p_password_nueva = :usuPass,
+                @p_resultado = @resultado OUTPUT,
+                @p_mensaje = @mensaje OUTPUT;
+            SELECT @resultado AS resultado, @mensaje AS mensaje;
+                ";
 
             $stmt = $this->db->prepare($sql);
 
             $stmt->bindParam(':usuarioId', $datos['USU_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':personaId', $datos['PER_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':usuPassActual', $datos['USU_passActual'], PDO::PARAM_STR);
             
             
             // La contraseña puede ser NULL si no se actualiza
@@ -286,8 +365,22 @@ class UsuarioRepository {
             
 
             $stmt->execute();
-            
-            return true;
+
+            // leer resultados de salida
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($res['resultado'] != 1) {
+                // error del procedimiento
+                return [
+                    "success" => false,
+                    "message" => $res['mensaje']
+                ];
+            }
+
+            return [
+                "success" => true,
+                "message" => $res['mensaje']
+            ];
         } catch (PDOException $e) {
             error_log("Error en actualizar password: " . $e->getMessage());
             throw $e;

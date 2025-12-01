@@ -1,0 +1,784 @@
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:35:48
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: PORTILLA
+Apellido Materno: LEÓN
+Nombres: ANA MARIA
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "PORTILLA",
+        "apellidoMaterno": "LEÓN",
+        "nombres": "ANA MARIA",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.564296s
+Connect Time: 0.012426s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:35:56
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: PORTILLA
+Apellido Materno: LEÓN
+Nombres: ANA MARIA
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "PORTILLA",
+        "apellidoMaterno": "LEÓN",
+        "nombres": "ANA MARIA",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.374135s
+Connect Time: 0.020777s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:36:25
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: DIAZ
+Apellido Materno: BARDALES
+Nombres: LUIS FILADELFO
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "DIAZ",
+        "apellidoMaterno": "BARDALES",
+        "nombres": "LUIS FILADELFO",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.445119s
+Connect Time: 0.012206s
+Size Download: 1644 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1644 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"DIAZ","apMaterno":"BARDALES","nombre":"LUIS FILADELFO","tipoDocumento":"DNI","numeroDocumento":27047471,"numeroPartida":"P32003341","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CAJAMARCA","direccion":"CELENDIN-CELENDIN- MZ 59 LOTE 12 - CENTRO POBLADO CELENDIN"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"SECCION ESPECIAL DE PREDIOS RURALES","apPaterno":"DIAZ","apMaterno":"BARDALES","nombre":"LUIS FILADELFO","numeroPartida":"02258665","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CAJAMARCA","direccion":"UBICACION RURAL SECTOR PAMPA GRANDE/PREDIO EL TRAGADERO I COD.PRED. 7_8159240_19132 AREA Ha. 0.2122 U.C. 19132 CELENDIN - CELENDIN - CAJAMARCA"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"SECCION ESPECIAL DE PREDIOS RURALES","apPaterno":"DIAZ","apMaterno":"BARDALES","nombre":"LUIS FILADELFO","numeroPartida":"02258668","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CAJAMARCA","direccion":"UBICACION RURAL SECTOR PAMPA GRANDE/PREDIO EL TRAGADERO II COD.PRED. 7_8159240_19165 AREA Ha. 0.3550 U.C. 19165 CELENDIN - CELENDIN - CAJAMARCA"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"DIAZ","apMaterno":"BARDALES","nombre":"LUIS FILADELFO","tipoDocumento":"DNI","numeroDocumento":27047471,"numeroPartida":52440789,"numeroPlaca":"C24788 ","estado":"ACTIVA","zona":"ZONA REGISTRAL IX - SEDE LIMA","oficina":"LIMA"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "DIAZ",
+                    "apMaterno": "BARDALES",
+                    "nombre": "LUIS FILADELFO",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 27047471,
+                    "numeroPartida": "P32003341",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CAJAMARCA",
+                    "direccion": "CELENDIN-CELENDIN- MZ 59 LOTE 12 - CENTRO POBLADO CELENDIN"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "SECCION ESPECIAL DE PREDIOS RURALES",
+                    "apPaterno": "DIAZ",
+                    "apMaterno": "BARDALES",
+                    "nombre": "LUIS FILADELFO",
+                    "numeroPartida": "02258665",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CAJAMARCA",
+                    "direccion": "UBICACION RURAL SECTOR PAMPA GRANDE\/PREDIO EL TRAGADERO I COD.PRED. 7_8159240_19132 AREA Ha. 0.2122 U.C. 19132 CELENDIN - CELENDIN - CAJAMARCA"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "SECCION ESPECIAL DE PREDIOS RURALES",
+                    "apPaterno": "DIAZ",
+                    "apMaterno": "BARDALES",
+                    "nombre": "LUIS FILADELFO",
+                    "numeroPartida": "02258668",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CAJAMARCA",
+                    "direccion": "UBICACION RURAL SECTOR PAMPA GRANDE\/PREDIO EL TRAGADERO II COD.PRED. 7_8159240_19165 AREA Ha. 0.3550 U.C. 19165 CELENDIN - CELENDIN - CAJAMARCA"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "DIAZ",
+                    "apMaterno": "BARDALES",
+                    "nombre": "LUIS FILADELFO",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 27047471,
+                    "numeroPartida": 52440789,
+                    "numeroPlaca": "C24788 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL IX - SEDE LIMA",
+                    "oficina": "LIMA"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 4
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=02
+Ejecutando LASIRSARP para partida: P32003341
+✓ LASIRSARP exitoso. Asientos: 2
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 2
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=02
+Ejecutando LASIRSARP para partida: 02258665
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=02
+Ejecutando LASIRSARP para partida: 02258668
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=01, Oficina=01
+Ejecutando LASIRSARP para partida: 52440789
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: C24788 
+✓ VDRPVExtra exitoso
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 4
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:42:01
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: CISNEROS
+Apellido Materno: SANTAMARIA
+Nombres: ADRIANO
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "CISNEROS",
+        "apellidoMaterno": "SANTAMARIA",
+        "nombres": "ADRIANO",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.573114s
+Connect Time: 0.056044s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:42:21
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: SANTAMARIA
+Apellido Materno: CHAPOÑAN
+Nombres: YSABEL
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "SANTAMARIA",
+        "apellidoMaterno": "CHAPOÑAN",
+        "nombres": "YSABEL",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.541154s
+Connect Time: 0.093689s
+Size Download: 1760 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1760 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"SECCION ESPECIAL DE PREDIOS RURALES","apPaterno":"SANTAMARIA","apMaterno":"CHAPOÑAN","nombre":"YSABEL","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":"02271376","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CHICLAYO","direccion":"UBICACION RURAL VALLE LA LECHE/SECTOR ILMA/PREDIO FUNDO TRES CORRALES COD.PRED. 7_6259285_44992 AREA Ha. 3.6100 U.C. 44992 ILLIMO - LAMBAYEQUE - LAMBAYEQUE"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"SECCION ESPECIAL DE PREDIOS RURALES","apPaterno":"SANTAMARIA","apMaterno":"CHAPOÑAN","nombre":"YSABEL","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":"02277234","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CHICLAYO","direccion":"UBICACION RURAL VALLE LA LECHE/SECTOR LEONA/PREDIO CASTILLO COD.PRED. 7_6259285_51412 AREA Ha. 3.6127 U.C. 51412 PACORA - LAMBAYEQUE - LAMBAYEQUE"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"SANTAMARIA","apMaterno":"CHAPOÑAN","nombre":"YSABEL","tipoDocumento":"DNI","numeroDocumento":16498114,"numeroPartida":"P10188960","estado":"ACTIVA","zona":"ZONA REGISTRAL II - SEDE CHICLAYO","oficina":"CHICLAYO","direccion":"LAMBAYEQUE-ILLIMO- MZ 30 SUB LOTE 11B - PUEBLO TRADICIONAL CERCADO DE ILLIMO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"SANTAMARIA","apMaterno":"CHAPOÑAN","nombre":"YSABEL","tipoDocumento":"DNI","numeroDocumento":16498114,"numeroPartida":54554427,"numeroPlaca":"1397PB ","estado":"ACTIVA","zona":"ZONA REGISTRAL IX - SEDE LIMA","oficina":"LIMA"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "SECCION ESPECIAL DE PREDIOS RURALES",
+                    "apPaterno": "SANTAMARIA",
+                    "apMaterno": "CHAPOÑAN",
+                    "nombre": "YSABEL",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": "02271376",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CHICLAYO",
+                    "direccion": "UBICACION RURAL VALLE LA LECHE\/SECTOR ILMA\/PREDIO FUNDO TRES CORRALES COD.PRED. 7_6259285_44992 AREA Ha. 3.6100 U.C. 44992 ILLIMO - LAMBAYEQUE - LAMBAYEQUE"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "SECCION ESPECIAL DE PREDIOS RURALES",
+                    "apPaterno": "SANTAMARIA",
+                    "apMaterno": "CHAPOÑAN",
+                    "nombre": "YSABEL",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": "02277234",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CHICLAYO",
+                    "direccion": "UBICACION RURAL VALLE LA LECHE\/SECTOR LEONA\/PREDIO CASTILLO COD.PRED. 7_6259285_51412 AREA Ha. 3.6127 U.C. 51412 PACORA - LAMBAYEQUE - LAMBAYEQUE"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "SANTAMARIA",
+                    "apMaterno": "CHAPOÑAN",
+                    "nombre": "YSABEL",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 16498114,
+                    "numeroPartida": "P10188960",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL II - SEDE CHICLAYO",
+                    "oficina": "CHICLAYO",
+                    "direccion": "LAMBAYEQUE-ILLIMO- MZ 30 SUB LOTE 11B - PUEBLO TRADICIONAL CERCADO DE ILLIMO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "SANTAMARIA",
+                    "apMaterno": "CHAPOÑAN",
+                    "nombre": "YSABEL",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 16498114,
+                    "numeroPartida": 54554427,
+                    "numeroPlaca": "1397PB ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL IX - SEDE LIMA",
+                    "oficina": "LIMA"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 4
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=01
+Ejecutando LASIRSARP para partida: 02271376
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=01
+Ejecutando LASIRSARP para partida: 02277234
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=11, Oficina=01
+Ejecutando LASIRSARP para partida: P10188960
+✓ LASIRSARP exitoso. Asientos: 3
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 3
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=01, Oficina=01
+Ejecutando LASIRSARP para partida: 54554427
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: 1397PB 
+✓ VDRPVExtra exitoso
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 4
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 10:45:32
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: CISNEROS
+Apellido Materno: SANTAMARIA
+Nombres: ERICK JHONATAN
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "CISNEROS",
+        "apellidoMaterno": "SANTAMARIA",
+        "nombres": "ERICK JHONATAN",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.377527s
+Connect Time: 0.041543s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 12:19:54
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 1.64728s
+Connect Time: 0.020676s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 12:21:08
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 1.530822s
+Connect Time: 1.047871s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO

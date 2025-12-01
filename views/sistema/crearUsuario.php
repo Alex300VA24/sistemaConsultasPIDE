@@ -66,6 +66,13 @@
                     <label>Email</label>
                     <input type="email" id="perEmail" maxlength="50" placeholder="correo@ejemplo.com">
                 </div>
+
+                <div class="form-group">
+                    <label>Tipo de Personal <span class="required">*</span></label>
+                    <select id="perTipoPersonal">
+                        <option value="">Seleccionar...</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Datos de Usuario -->
@@ -89,13 +96,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Nivel de Permiso <span class="required">*</span></label>
+                    <label>Rol de Usuario <span class="required">*</span></label>
                     <select id="usuPermiso">
-                        <option value="1">Administrador</option>
-                        <option value="2">Supervisor</option>
-                        <option value="3">Empleado</option>
-                        <option value="4">Practicante</option>
-                        <option value="5">Externo</option>
                     </select>
                 </div>
 
