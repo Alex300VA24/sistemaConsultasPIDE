@@ -15635,3 +15635,1241 @@
 
 )
 
+[2025-12-01 22:39:01] Inicio validarCUI()
+[2025-12-01 22:39:01] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 1
+)
+
+[2025-12-01 22:39:01] JSON recibido -> {"cui":"1"}
+[2025-12-01 22:39:01] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-01 22:39:01] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [cui] => 1
+)
+
+[2025-12-01 22:39:01] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-01 22:39:01.4500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-01 22:39:01] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-01 22:39:01.4500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CON
+            [3] => CROL
+            [4] => DNI
+            [5] => INI
+            [6] => MAN
+            [7] => PAR
+            [8] => RUC
+            [9] => RUSU
+            [10] => SIS
+        )
+
+)
+
+[2025-12-01 22:39:01] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-01 22:39:01.4500000
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CON
+                    [3] => CROL
+                    [4] => DNI
+                    [5] => INI
+                    [6] => MAN
+                    [7] => PAR
+                    [8] => RUC
+                    [9] => RUSU
+                    [10] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 15:02:25] Inicio validarCUI()
+[2025-12-02 15:02:25] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 1
+)
+
+[2025-12-02 15:02:25] JSON recibido -> {"cui":"1"}
+[2025-12-02 15:02:25] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-02 15:02:25] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [cui] => 1
+)
+
+[2025-12-02 15:02:25] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 15:02:25.5266667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 15:02:25] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 15:02:25.5266667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CON
+            [3] => CROL
+            [4] => DNI
+            [5] => INI
+            [6] => MAN
+            [7] => PAR
+            [8] => RUC
+            [9] => RUSU
+            [10] => SIS
+        )
+
+)
+
+[2025-12-02 15:02:25] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 15:02:25.5266667
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CON
+                    [3] => CROL
+                    [4] => DNI
+                    [5] => INI
+                    [6] => MAN
+                    [7] => PAR
+                    [8] => RUC
+                    [9] => RUSU
+                    [10] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 19:23:43] Inicio validarCUI()
+[2025-12-02 19:23:43] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 1
+)
+
+[2025-12-02 19:23:43] JSON recibido -> {"cui":"1"}
+[2025-12-02 19:23:43] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-02 19:23:43] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [cui] => 1
+)
+
+[2025-12-02 19:23:43] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 19:23:43.2500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 19:23:43] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 19:23:43.2500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CMOD
+            [3] => CON
+            [4] => CROL
+            [5] => DNI
+            [6] => INI
+            [7] => MAN
+            [8] => PAR
+            [9] => RUC
+            [10] => RUSU
+            [11] => SIS
+        )
+
+)
+
+[2025-12-02 19:23:43] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 19:23:43.2500000
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CMOD
+                    [3] => CON
+                    [4] => CROL
+                    [5] => DNI
+                    [6] => INI
+                    [7] => MAN
+                    [8] => PAR
+                    [9] => RUC
+                    [10] => RUSU
+                    [11] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 23:12:43] Inicio validarCUI()
+[2025-12-02 23:12:43] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:12:43] JSON recibido -> {"cui":"4"}
+[2025-12-02 23:12:43] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-12-02 23:12:43] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 4
+)
+
+[2025-12-02 23:12:43] Error capturado -> CUI incorrecto. Intentos restantes: 4
+[2025-12-02 23:12:46] Inicio validarCUI()
+[2025-12-02 23:12:46] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:12:46] JSON recibido -> {"cui":"5"}
+[2025-12-02 23:12:46] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-12-02 23:12:46] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [cui] => 5
+)
+
+[2025-12-02 23:12:46] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 5
+            [USU_username] => MGUTIERREZ
+            [USU_email] => mirla@example.com
+            [USU_estado_id] => 1
+            [USU_cui] => 5
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:12:46.7500000
+            [PER_id] => 5
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 1
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42996278
+            [PER_nombres] => MIRLA ROCIO
+            [PER_apellido_paterno] => GUTIERREZ
+            [PER_apellido_materno] => TORRES
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 2
+            [ROL_nombre] => EMPLEADO
+            [ROL_nivel] => 3
+            [ROLES] => EMPLEADO
+            [ROLES_IDS] => 2
+            [TIPO_PERSONAL] => Empleado
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 23:12:46] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => 123456
+    [requireCUI] => 
+    [ROL_nombre] => EMPLEADO
+    [usuario_id] => 5
+    [usuario] => Array
+        (
+            [USU_id] => 5
+            [USU_username] => MGUTIERREZ
+            [USU_email] => mirla@example.com
+            [USU_estado_id] => 1
+            [USU_cui] => 5
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:12:46.7500000
+            [PER_id] => 5
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 1
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42996278
+            [PER_nombres] => MIRLA ROCIO
+            [PER_apellido_paterno] => GUTIERREZ
+            [PER_apellido_materno] => TORRES
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 2
+            [ROL_nombre] => EMPLEADO
+            [ROL_nivel] => 3
+            [ROLES] => EMPLEADO
+            [ROLES_IDS] => 2
+            [TIPO_PERSONAL] => Empleado
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 5
+    [rolID] => 2
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => CON
+            [2] => DNI
+            [3] => INI
+            [4] => PAR
+            [5] => RUC
+            [6] => SIS
+        )
+
+)
+
+[2025-12-02 23:12:46] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 5
+                    [USU_username] => MGUTIERREZ
+                    [USU_email] => mirla@example.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 5
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 23:12:46.7500000
+                    [PER_id] => 5
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 1
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42996278
+                    [PER_nombres] => MIRLA ROCIO
+                    [PER_apellido_paterno] => GUTIERREZ
+                    [PER_apellido_materno] => TORRES
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 2
+                    [ROL_nombre] => EMPLEADO
+                    [ROL_nivel] => 3
+                    [ROLES] => EMPLEADO
+                    [ROLES_IDS] => 2
+                    [TIPO_PERSONAL] => Empleado
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => CON
+                    [2] => DNI
+                    [3] => INI
+                    [4] => PAR
+                    [5] => RUC
+                    [6] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 23:14:10] Inicio validarCUI()
+[2025-12-02 23:14:10] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:14:10] JSON recibido -> {"cui":"4"}
+[2025-12-02 23:14:10] JSON decodificado -> Array
+(
+    [cui] => 4
+)
+
+[2025-12-02 23:14:10] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [cui] => 4
+)
+
+[2025-12-02 23:14:10] Error capturado -> CUI incorrecto. Intentos restantes: 4
+[2025-12-02 23:14:14] Inicio validarCUI()
+[2025-12-02 23:14:14] Sesión iniciada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:14:14] JSON recibido -> {"cui":"5"}
+[2025-12-02 23:14:14] JSON decodificado -> Array
+(
+    [cui] => 5
+)
+
+[2025-12-02 23:14:14] Variables preparadas -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [cui] => 5
+)
+
+[2025-12-02 23:14:14] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 5
+            [USU_username] => MGUTIERREZ
+            [USU_email] => mirla@example.com
+            [USU_estado_id] => 1
+            [USU_cui] => 5
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:14.1766667
+            [PER_id] => 5
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 1
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42996278
+            [PER_nombres] => MIRLA ROCIO
+            [PER_apellido_paterno] => GUTIERREZ
+            [PER_apellido_materno] => TORRES
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 2
+            [ROL_nombre] => EMPLEADO
+            [ROL_nivel] => 3
+            [ROLES] => EMPLEADO
+            [ROLES_IDS] => 2
+            [TIPO_PERSONAL] => Empleado
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 23:14:14] Sesión actualizada -> Array
+(
+    [nombreUsuario] => MGUTIERREZ
+    [password] => Muni2025@
+    [requireCUI] => 
+    [ROL_nombre] => EMPLEADO
+    [usuario_id] => 5
+    [usuario] => Array
+        (
+            [USU_id] => 5
+            [USU_username] => MGUTIERREZ
+            [USU_email] => mirla@example.com
+            [USU_estado_id] => 1
+            [USU_cui] => 5
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:14.1766667
+            [PER_id] => 5
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 1
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42996278
+            [PER_nombres] => MIRLA ROCIO
+            [PER_apellido_paterno] => GUTIERREZ
+            [PER_apellido_materno] => TORRES
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 2
+            [ROL_nombre] => EMPLEADO
+            [ROL_nivel] => 3
+            [ROLES] => EMPLEADO
+            [ROLES_IDS] => 2
+            [TIPO_PERSONAL] => Empleado
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 5
+    [rolID] => 2
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => CON
+            [2] => DNI
+            [3] => INI
+            [4] => PAR
+            [5] => RUC
+            [6] => SIS
+        )
+
+)
+
+[2025-12-02 23:14:14] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 5
+                    [USU_username] => MGUTIERREZ
+                    [USU_email] => mirla@example.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 5
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:14.1766667
+                    [PER_id] => 5
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 1
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42996278
+                    [PER_nombres] => MIRLA ROCIO
+                    [PER_apellido_paterno] => GUTIERREZ
+                    [PER_apellido_materno] => TORRES
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => MIRLA ROCIO GUTIERREZ TORRES
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 2
+                    [ROL_nombre] => EMPLEADO
+                    [ROL_nivel] => 3
+                    [ROLES] => EMPLEADO
+                    [ROLES_IDS] => 2
+                    [TIPO_PERSONAL] => Empleado
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => CON
+                    [2] => DNI
+                    [3] => INI
+                    [4] => PAR
+                    [5] => RUC
+                    [6] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 23:14:31] Inicio validarCUI()
+[2025-12-02 23:14:31] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:14:31] JSON recibido -> {"cui":"1"}
+[2025-12-02 23:14:31] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-02 23:14:31] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [cui] => 1
+)
+
+[2025-12-02 23:14:31] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:31.7166667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 23:14:31] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:31.7166667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CMOD
+            [3] => CON
+            [4] => CROL
+            [5] => DNI
+            [6] => INI
+            [7] => MAN
+            [8] => PAR
+            [9] => RUC
+            [10] => RUSU
+            [11] => SIS
+        )
+
+)
+
+[2025-12-02 23:14:31] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 23:14:31.7166667
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CMOD
+                    [3] => CON
+                    [4] => CROL
+                    [5] => DNI
+                    [6] => INI
+                    [7] => MAN
+                    [8] => PAR
+                    [9] => RUC
+                    [10] => RUSU
+                    [11] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-02 23:21:45] Inicio validarCUI()
+[2025-12-02 23:21:45] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 1
+)
+
+[2025-12-02 23:21:45] JSON recibido -> {"cui":"1"}
+[2025-12-02 23:21:45] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-02 23:21:45] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [cui] => 1
+)
+
+[2025-12-02 23:21:45] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:21:45.4633333
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-02 23:21:45] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => 12345678
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-02 23:21:45.4633333
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CMOD
+            [3] => CON
+            [4] => CROL
+            [5] => DNI
+            [6] => INI
+            [7] => MAN
+            [8] => PAR
+            [9] => RUC
+            [10] => RUSU
+            [11] => SIS
+        )
+
+)
+
+[2025-12-02 23:21:45] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-02 23:21:45.4633333
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CMOD
+                    [3] => CON
+                    [4] => CROL
+                    [5] => DNI
+                    [6] => INI
+                    [7] => MAN
+                    [8] => PAR
+                    [9] => RUC
+                    [10] => RUSU
+                    [11] => SIS
+                )
+
+        )
+
+)
+

@@ -782,3 +782,2237 @@ Ejecutando LASIRSARP para partida: 11545327
 Total de resultados procesados: 5
 
 ✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 22:39:14
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: ALCANTARA
+Nombres: ALEXANDER JOSUE
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "ALCANTARA",
+        "nombres": "ALEXANDER JOSUE",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.390079s
+Connect Time: 0.033963s
+Size Download: 66 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 66 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":null}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": null
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+❌ ERROR: No se encontró TSIRSARPResponse en la respuesta
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 22:39:27
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.363081s
+Connect Time: 0.011896s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 22:47:55
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.369966s
+Connect Time: 0.011812s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 22:59:31
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.915037s
+Connect Time: 0.020409s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:01:38
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.424225s
+Connect Time: 0.035449s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:06:08
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.445332s
+Connect Time: 0.015081s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:09:15
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.411755s
+Connect Time: 0.018362s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:14:12
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.354157s
+Connect Time: 0.011087s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:17:41
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.499071s
+Connect Time: 0.01186s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:21:02
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.531782s
+Connect Time: 0.016297s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:25:01
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.351913s
+Connect Time: 0.009467s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:28:41
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.455033s
+Connect Time: 0.010823s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:29:59
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.326188s
+Connect Time: 0.010438s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:33:12
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.379156s
+Connect Time: 0.026697s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO
+
+================================================================================
+CONSULTA TSIRSARP - 2025-12-01 23:35:46
+================================================================================
+URL: https://ws2.pide.gob.pe/Rest/SUNARP/TSIRSARP?out=json
+Tipo Participante: N
+Usuario: 20164091547-18066272
+Clave: ***************
+--- Persona Natural ---
+Apellido Paterno: VASQUEZ
+Apellido Materno: TIBURCIO
+Nombres: FRANCISCO EVER
+
+--- REQUEST JSON ---
+{
+    "PIDE": {
+        "usuario": "20164091547-18066272",
+        "clave": "z#rxstzNYUb4NZQ",
+        "tipoParticipante": "N",
+        "apellidoPaterno": "VASQUEZ",
+        "apellidoMaterno": "TIBURCIO",
+        "nombres": "FRANCISCO EVER",
+        "razonSocial": ""
+    }
+}
+
+--- CURL INFO ---
+HTTP Code: 200
+Total Time: 0.407397s
+Connect Time: 0.033518s
+Size Download: 1932 bytes
+
+--- RESPONSE ---
+HTTP Code: 200
+Response Length: 1932 caracteres
+
+--- RESPONSE BODY (primeros 2000 caracteres) ---
+{"buscarTitularidadSIRSARPResponse":{"respuestaTitularidad":{"respuestaTitularidad":[{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":"P14017559","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE BIENES MUEBLES","libro":"REGISTRO DE PROPIEDAD VEHICULAR","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"DNI","numeroDocumento":17815970,"numeroPartida":60653568,"numeroPlaca":"T3P554 ","estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545293,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545325,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"},{"registro":"REGISTRO DE PROPIEDAD INMUEBLE","libro":"REGISTRO DE PREDIOS","apPaterno":"VASQUEZ","apMaterno":"TIBURCIO","nombre":"FRANCISCO EVER","tipoDocumento":"SD","numeroDocumento":"S/D","numeroPartida":11545327,"estado":"ACTIVA","zona":"ZONA REGISTRAL V - SEDE TRUJILLO","oficina":"TRUJILLO","direccion":"  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"}]}}}
+
+--- JSON DECODIFICADO ---
+{
+    "buscarTitularidadSIRSARPResponse": {
+        "respuestaTitularidad": {
+            "respuestaTitularidad": [
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": "P14017559",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE BIENES MUEBLES",
+                    "libro": "REGISTRO DE PROPIEDAD VEHICULAR",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "DNI",
+                    "numeroDocumento": 17815970,
+                    "numeroPartida": 60653568,
+                    "numeroPlaca": "T3P554 ",
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545293,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ A LOTE 10  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545325,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ D LOTE 15  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                },
+                {
+                    "registro": "REGISTRO DE PROPIEDAD INMUEBLE",
+                    "libro": "REGISTRO DE PREDIOS",
+                    "apPaterno": "VASQUEZ",
+                    "apMaterno": "TIBURCIO",
+                    "nombre": "FRANCISCO EVER",
+                    "tipoDocumento": "SD",
+                    "numeroDocumento": "S\/D",
+                    "numeroPartida": 11545327,
+                    "estado": "ACTIVA",
+                    "zona": "ZONA REGISTRAL V - SEDE TRUJILLO",
+                    "oficina": "TRUJILLO",
+                    "direccion": "  MZ E LOTE 2  POSESION INFORMAL JARDINES DEL PROGRESO TRUJILLO - TRUJILLO - LA LIBERTAD"
+                }
+            ]
+        }
+    }
+}
+
+--- PROCESANDO RESPUESTA ---
+Tipo Participante: N
+
+Total de registros a procesar: 5
+✓ Catálogo GOficina cargado: 59 oficinas
+
+--- Registro #1 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: P14017559
+✓ LASIRSARP exitoso. Asientos: 11
+✓ VASIRSARP ejecutado. Imágenes obtenidas: 11
+
+--- Registro #2 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 60653568
+✓ LASIRSARP exitoso. Asientos: 0
+Ejecutando VDRPVExtra para placa: T3P554 
+✓ VDRPVExtra exitoso
+
+--- Registro #3 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545293
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #4 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545325
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- Registro #5 ---
+✓ Códigos obtenidos de GOficina: Zona=08, Oficina=01
+Ejecutando LASIRSARP para partida: 11545327
+✓ LASIRSARP exitoso. Asientos: 0
+
+--- RESULTADO FINAL ---
+Total de resultados procesados: 5
+
+✅ PROCESAMIENTO EXITOSO

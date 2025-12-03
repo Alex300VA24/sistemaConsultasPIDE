@@ -274,6 +274,35 @@ class API {
         return this.post('/eliminar-usuario', { usuario_id });
     }
 
+    // Métodos de Módulos
+    async crearModulo(data) {
+        return this.post('/modulo/crear', data);
+    }
+
+    async actualizarModulo(data) {
+        return this.put('/modulo/actualizar', data);
+    }
+
+    async listarModulos() {
+        return this.get('/modulo/listar');
+    }
+
+    async obtenerModulo(moduloId) {
+        return this.get(`/modulo/obtener?id=${moduloId}`);
+    }
+
+    async eliminarModulo(moduloId) {
+        return this.post('/modulo/eliminar', { modulo_id: moduloId });
+    }
+
+    async toggleEstadoModulo(moduloId, estado) {
+        return this.post('/modulo/toggle-estado', { modulo_id: moduloId, estado });
+    }
+
+    async obtenerModulosUsuario() {
+        return this.get('/modulo/usuario');
+    }
+
     async obtenerDniYPassword(nombreUsuario) {
         return this.post('/obtener-dni-pass', {
             nombreUsuario

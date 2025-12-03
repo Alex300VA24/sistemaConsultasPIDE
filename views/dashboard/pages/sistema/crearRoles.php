@@ -1,9 +1,9 @@
-<div class="usuario-container">
+<div class="rol-container usuario-container">
     <div class="page-title" id=tituloRoles>
         <h1><i class="fas fa-user-shield"></i> Gestión de Roles</h1>
     </div>
 
-    
+    <div id="alertContainerRoles"></div>
 
     <div class="content-wrapper">
         <!-- Tabs -->
@@ -16,7 +16,6 @@
             </button>
         </div>
 
-        <div id="alertContainerRoles"></div>
 
         <!-- Tab Crear -->
         <div id="tab-crear" class="tab-content active">
@@ -73,7 +72,6 @@
                 <table id="tablaRoles">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Nivel</th>

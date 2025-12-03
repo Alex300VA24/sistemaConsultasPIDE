@@ -13,9 +13,18 @@ class ConsultasReniecController {
     private $urlSUNAT;
     
     public function __construct() {
+        $envFile = __DIR__ . '/../../.env';
+        if (file_exists($envFile)) {
+            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                if (strpos(trim($line), '#') === 0) continue;
+                list($name, $value) = explode('=', $line, 2);
+                $_ENV[trim($name)] = trim($value);
+            }
+        }
         // Cargar desde configuración o variables de entorno
-        $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'] ?? "20164091547";
-        $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
+        $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'];
+        $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'];
     }
 
     // 📌 CONSULTAR DNI (RENIEC)

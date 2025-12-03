@@ -1,3 +1,4 @@
+
 <div class="consulta-partidas-container">
     <div class="page-title">
         <h1><i class="fas fa-file-contract"></i> Consulta de Partidas Registrales - SUNARP</h1>
@@ -155,16 +156,44 @@
                     <div class="section-header">
                         <h3><i class="fas fa-images"></i> Imágenes de Documentos</h3>
                     </div>
+                    
                     <div class="imagenes-viewer">
+                        <!-- Selector de página -->
                         <div class="imagenes-selector">
                             <label for="selectImagenes"><strong>Seleccionar página:</strong></label>
                             <select id="selectImagenes" class="imagen-select"></select>
                         </div>
+                        
+                        <!-- Controles de Zoom y Descarga -->
+                        <div class="image-controls">
+                            <button type="button" id="btnZoomOut" class="btn-zoom" title="Alejar">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" id="btnZoomReset" class="btn-zoom" title="Restablecer zoom">
+                                <i class="fas fa-undo"></i>
+                            </button>
+                            <button type="button" id="btnZoomIn" class="btn-zoom" title="Acercar">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <span id="zoomLabel" class="zoom-label">100%</span>
+                            <button type="button" id="btnVerImagen" class="btn-view" title="Ver imagen en nueva pestaña">
+                                <i class="fas fa-external-link-alt"></i>
+                                <span>Ver</span>
+                            </button>
+                            <button type="button" id="btnDescargar" class="btn-download" title="Descargar imagen">
+                                <i class="fas fa-download"></i>
+                                <span>Descargar</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Contenedor de la imagen con scroll -->
                         <div class="imagen-container">
-                            <img id="imagenViewer" src="" alt="Documento" style="display: none;">
-                            <div class="no-imagen" id="noImagen">
-                                <i class="fas fa-image"></i>
-                                <span>Seleccione una página</span>
+                            <div class="imagen-wrapper">
+                                <img id="imagenViewer" src="" alt="Documento" style="display: none;">
+                                <div class="no-imagen" id="noImagen">
+                                    <i class="fas fa-image"></i>
+                                    <span>Seleccione una página</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -287,6 +316,8 @@
 </div>
 
 <style>
+
+
 /* Estilos para la sección de foto */
 .photo-section {
     display: flex;
@@ -445,23 +476,6 @@
     font-size: 0.95em;
 }
 
-.imagen-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 600px;
-    border: 2px solid #dee2e6;
-    border-radius: 8px;
-    background: #f8f9fa;
-    overflow: hidden;
-}
-
-.imagen-container img {
-    max-width: 100%;
-    max-height: 800px;
-    object-fit: contain;
-}
-
 .no-imagen {
     display: flex;
     flex-direction: column;
@@ -554,5 +568,191 @@
     .info-item.full-width {
         grid-column: 1;
     }
+}
+
+/* Estilos para los controles de imagen */
+.image-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin: 15px 0;
+    border: 1px solid #dee2e6;
+}
+
+.btn-zoom {
+    padding: 8px 14px;
+    border: 1px solid #ced4da;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    color: #495057;
+}
+
+.btn-zoom:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+}
+
+.btn-zoom:active {
+    transform: translateY(0);
+}
+
+.btn-zoom i {
+    font-size: 14px;
+}
+
+.zoom-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 55px;
+    text-align: center;
+    font-size: 14px;
+    padding: 0 8px;
+}
+
+.btn-download {
+    margin-left: auto;
+    padding: 8px 16px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-download:hover {
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-download:active {
+    transform: translateY(0);
+}
+
+.btn-download i {
+    font-size: 14px;
+}
+
+.imagen-container {
+    position: relative;
+    overflow: auto;
+    max-height: 600px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    background: #fafafa;
+    min-height: 400px;
+    display: flex;  /* AGREGAR */
+    justify-content: center;  /* AGREGAR */
+    align-items: flex-start;  /* AGREGAR */
+}
+
+.imagen-wrapper {
+    display: inline-block;
+    min-width: 100%;  /* CAMBIAR de min-content a 100% */
+    min-height: 300px;
+    text-align: center;
+    position: relative;  /* AGREGAR */
+}
+
+#imagenViewer {
+    transition: all 0.3s ease;  /* Cambiar de transform a all */
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+#imagenViewer.with-zoom {
+    max-width: none;
+}
+
+.no-imagen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.no-imagen i {
+    font-size: 48px;
+    opacity: 0.5;
+}
+
+/* Mejorar el selector de páginas */
+.imagenes-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.imagen-select {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+.imagen-select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .image-controls {
+        flex-wrap: wrap;
+    }
+    
+    .btn-download {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+.btn-view {
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-view:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 </style>

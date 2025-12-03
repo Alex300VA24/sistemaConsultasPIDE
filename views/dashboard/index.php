@@ -1,100 +1,94 @@
 <?php
 session_start();
-
 use App\Helpers\Permisos;
-
 
 // 🔹 Obtener permisos según id del usuario
 $usuarioID = $_SESSION['usuarioID'];
 $permisos = Permisos::obtenerPermisos($usuarioID);
 
+
+// 🔹 Cargar módulos del usuario para generación dinámica
+//require_once __DIR__ . '/../../app/Repositories/ModuloRepository.php';
+use App\Repositories\ModuloRepository;
+
+$moduloRepo = new ModuloRepository();
+$modulosUsuario = $moduloRepo->obtenerModulosPorUsuario($usuarioID);
+error_log(print_r($modulosUsuario, true));
+// 🔹 Organizar módulos jerárquicamente
+function organizarModulosJerarquicos($modulos) {
+    $modulosPorId = [];
+    $modulosOrganizados = [];
+
+    // Indexar módulos por ID
+    foreach ($modulos as $modulo) {
+        $modulosPorId[$modulo['MOD_id']] = $modulo;
+        $modulosPorId[$modulo['MOD_id']]['hijos'] = [];
+    }
+
+    // Organizar en jerarquía
+    foreach ($modulosPorId as $id => $modulo) {
+        if ($modulo['MOD_padre_id'] === null) {
+            $modulosOrganizados[] = &$modulosPorId[$id];
+        } else {
+            if (isset($modulosPorId[$modulo['MOD_padre_id']])) {
+                $modulosPorId[$modulo['MOD_padre_id']]['hijos'][] = &$modulosPorId[$id];
+            }
+        }
+    }
+
+    // Ordenar por orden
+    usort($modulosOrganizados, function($a, $b) {
+        return $a['MOD_orden'] - $b['MOD_orden'];
+    });
+
+    // Ordenar hijos
+    foreach ($modulosOrganizados as &$moduloPadre) {
+        if (!empty($moduloPadre['hijos'])) {
+            usort($moduloPadre['hijos'], function($a, $b) {
+                return $a['MOD_orden'] - $b['MOD_orden'];
+            });
+        }
+    }
+
+    return $modulosOrganizados;
+}
+
+$modulosJerarquicos = organizarModulosJerarquicos($modulosUsuario);
+
+// 🔹 Incluir helper para generación de páginas
+require_once __DIR__ . '../../../app/helpers/generarPaginasDinamicas.php';
 ?>
-
-
 <?php $titulo = "Dashboard Principal"; ?>
 <?php include __DIR__ . "/../layouts/header.php"; ?>
 
 <div class="dashboard-container" id="dashboardContainer">
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
-
+    
     <div class="main-content">
-
-        <?php if (in_array('INI', $permisos)): ?>
+        <!-- ============================================ -->
+        <!-- PÁGINA DE INICIO (SIEMPRE VISIBLE) -->
+        <!-- ============================================ -->
         <div id="pageInicio" class="page-content active">
             <?php include __DIR__ . "/pages/inicio.php"; ?>
         </div>
-        <?php endif; ?>
 
+        <!-- ============================================ -->
+        <!-- PÁGINAS ESTÁTICAS EXISTENTES -->
+        <!-- (Mantener compatibilidad con código anterior) -->
+        <!-- ============================================ -->
         
-        <?php if (in_array('MAN', $permisos)): ?>
-        <div id="pageMantenimiento" class="page-content">
-            <?php include __DIR__ . "/pages/mantenimiento.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <!-- SubPages-->
-         <?php if (in_array('DNI', $permisos)): ?>
-        <div id="pageConsultaDNI" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaDNI.php"; ?>
-        </div>
-        <?php endif; ?>
         
-        <?php if (in_array('RUC', $permisos)): ?>
-        <div id="pageConsultaRUC" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaRUC.php"; ?>
-        </div>
-        <?php endif; ?>
 
-        <?php if (in_array('PAR', $permisos)): ?>
-        <div id="pageConsultaPartidas" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaPartidas.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('COB', $permisos)): ?>
-        <div id="pageConsultaCobranza" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaCobranza.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('PAP', $permisos)): ?>
-        <div id="pageConsultaPapeletas" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaPapeletas.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('CER', $permisos)): ?>
-        <div id="pageConsultaCertificaciones" class="page-content">
-            <?php include __DIR__ . "/pages/subpages/consultaCertificaciones.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('RUSU', $permisos)): ?>
-        <div id="pageCrearUsuario" class="page-content">
-            <?php include __DIR__ . "/pages/sistema/crearUsuario.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('AUSU', $permisos)): ?>
-        <div id="pageActualizarUsuario" class="page-content">
-            <?php include __DIR__ . "/pages/sistema/actualizarUsuario.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('APAS', $permisos)): ?>
-        <div id="pageActualizarPassword" class="page-content">
-            <?php include __DIR__ . "/pages/sistema/actualizarPassword.php"; ?>
-        </div>
-        <?php endif; ?>
-
-        <?php if (in_array('CROL', $permisos)): ?>
-        <div id="pageCrearRoles" class="page-content">
-            <?php include __DIR__ . "/pages/sistema/crearRoles.php"; ?>
-        </div>
-        <?php endif; ?>
-
+        <!-- ============================================ -->
+        <!-- PÁGINAS DINÁMICAS (NUEVOS MÓDULOS) -->
+        <!-- ============================================ -->
+        <?php 
+        // Generar páginas dinámicamente para módulos nuevos
+        // Esto generará automáticamente las páginas de los módulos
+        // que no están en la lista estática de arriba
+        generarPaginasDinamicas($modulosJerarquicos, $permisos); 
+        ?>
     </div>
 </div>
-
 
 <?php include __DIR__ . "/../layouts/footer.php"; ?>

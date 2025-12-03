@@ -6,10 +6,43 @@ class ConsultasSunarpController {
     
     private $urlSUNARP;
     private $rucUsuario;
+    private $nombreUsuario;
+    private $passUsuario;
     
     public function __construct() {
-        $this->urlSUNARP = $_ENV['PIDE_URL_SUNARP'] ?? "https://ws2.pide.gob.pe/Rest/SUNARP";
-        $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'] ?? "20164091547";
+        $envFile = __DIR__ . '/../../.env';
+        if (file_exists($envFile)) {
+            $content = file_get_contents($envFile);
+            
+            // Parsear manualmente manejando comillas
+            $lines = preg_split('/\r\n|\n|\r/', $content);
+            
+            foreach ($lines as $line) {
+                $line = trim($line);
+                
+                // Ignorar líneas vacías o comentarios
+                if (empty($line) || $line[0] === '#') {
+                    continue;
+                }
+                
+                // Usar regex para dividir correctamente
+                if (preg_match('/^([^=]+)=(.*)$/', $line, $matches)) {
+                    $name = trim($matches[1]);
+                    $value = trim($matches[2]);
+                    
+                    // Manejar comillas
+                    if (preg_match('/^["\'](.*)["\']$/', $value, $quoteMatches)) {
+                        $value = $quoteMatches[1];
+                    }
+                    
+                    $_ENV[$name] = $value;
+                }
+            }
+        }
+        $this->urlSUNARP = $_ENV['PIDE_URL_SUNARP'];
+        $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'];
+        $this->nombreUsuario = $_ENV['PIDE_SUNARP_USUARIO'];
+        $this->passUsuario = $_ENV['PIDE_SUNARP_PASS'];
     }
 
     // ========================================
@@ -221,8 +254,8 @@ class ConsultasSunarpController {
             return;
         }
 
-        $usuario = "20164091547-18066272";
-        $clave = "z#rxstzNYUb4NZQ";
+        $usuario = $this->nombreUsuario;
+        $clave = $this->passUsuario;
         $apellidoPaterno = trim($input['apellidoPaterno'] ?? '');
         $apellidoMaterno = trim($input['apellidoMaterno'] ?? '');
         $nombres = trim($input['nombres'] ?? '');
@@ -274,8 +307,8 @@ class ConsultasSunarpController {
             return;
         }
 
-        $usuario = "20164091547-18066272";
-        $clave = "z#rxstzNYUb4NZQ";
+        $usuario = $this->nombreUsuario;
+        $clave = $this->passUsuario;
         $razonSocial = trim($input['razonSocial']);
 
         error_log("=== CONSULTA TSIRSARP PERSONA JURÍDICA ===");

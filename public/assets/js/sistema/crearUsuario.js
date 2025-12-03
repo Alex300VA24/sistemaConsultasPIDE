@@ -302,3 +302,18 @@ window.limpiarFormularioCrearUsuario = function() {
         ModuloCrearUsuario.limpiarFormulario();
     }
 };
+
+// ============================================
+// 🔧 AUTO-REGISTRO DEL MÓDULO
+// ============================================
+if (typeof window.registrarModulo === 'function') {
+    window.registrarModulo('crearusuario', ModuloCrearUsuario);
+    console.log('✅ crearusuario registrado en Dashboard');
+}
+
+// Auto-inicializar cuando se cargue el DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // No auto-inicializar, esperar a que Dashboard lo llame
+    });
+}

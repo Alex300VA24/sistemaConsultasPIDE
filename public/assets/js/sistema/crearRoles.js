@@ -429,7 +429,6 @@ const ModuloRoles = {
         roles.forEach(rol => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${rol.ROL_id}</td>
                 <td><strong>${rol.ROL_codigo}</strong></td>
                 <td>${rol.ROL_nombre}</td>
                 <td>${rol.ROL_nivel}</td>
@@ -618,20 +617,22 @@ const ModuloRoles = {
     // 📑 CAMBIAR TAB
     // ============================================
     cambiarTab(tab) {
+        if (!['crear','listar'].includes(tab)) return;
+
         console.log('📑 Cambiando a tab:', tab);
         
         this.tabActual = tab;
         
         // Remover clases activas
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.querySelectorAll('.rol-container .tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.rol-container .tab-content').forEach(content => content.classList.remove('active'));
         
         // Activar tab correspondiente
         if (tab === 'crear') {
-            document.querySelector('.tab-btn:first-child').classList.add('active');
+            document.querySelector('.rol-container .tab-btn:first-child').classList.add('active');
             document.getElementById('tab-crear').classList.add('active');
         } else if (tab === 'listar') {
-            document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+            document.querySelector('.rol-container .tab-btn:nth-child(2)').classList.add('active');
             document.getElementById('tab-listar').classList.add('active');
             this.cargarRoles();
         }
@@ -694,3 +695,18 @@ window.limpiarFormulario = function() {
         ModuloRoles.limpiarFormulario();
     }
 };
+
+// ============================================
+// 🔧 AUTO-REGISTRO DEL MÓDULO
+// ============================================
+if (typeof window.registrarModulo === 'function') {
+    window.registrarModulo('crearroles', ModuloRoles);
+    console.log('✅ crearroles registrado en Dashboard');
+}
+
+// Auto-inicializar cuando se cargue el DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // No auto-inicializar, esperar a que Dashboard lo llame
+    });
+}
