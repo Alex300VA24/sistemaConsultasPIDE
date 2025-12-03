@@ -413,3 +413,18 @@ if (!document.getElementById('password-module-styles')) {
     `;
     document.head.appendChild(style);
 }
+
+// ============================================
+// 🔧 AUTO-REGISTRO DEL MÓDULO
+// ============================================
+if (typeof window.registrarModulo === 'function') {
+    window.registrarModulo('actualizarpass', ModuloActualizarPassword);
+    console.log('✅ actualizarpass registrado en Dashboard');
+}
+
+// Auto-inicializar cuando se cargue el DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // No auto-inicializar, esperar a que Dashboard lo llame
+    });
+}

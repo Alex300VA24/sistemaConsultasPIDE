@@ -7,6 +7,7 @@
 <script src="<?= BASE_URL ?>assets/js/sistema/actualizarUsuario.js"></script>
 <script src="<?= BASE_URL ?>assets/js/sistema/actualizarPassword.js"></script>
 <script src="<?= BASE_URL ?>assets/js/sistema/crearRoles.js"></script>
+<script src="<?= BASE_URL ?>assets/js/sistema/crearModulo.js"></script>
 
 </body>
 </html>

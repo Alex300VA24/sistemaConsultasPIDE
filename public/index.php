@@ -191,6 +191,41 @@ switch (true) {
         require __DIR__ . '/../views/consulta-partidas.php';
         break;
     
+    // RUTAS DE MÓDULOS
+    case preg_match('#^/api/modulo/crear$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->crearModulo();
+        break;
+
+    case preg_match('#^/api/modulo/actualizar$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->actualizarModulo();
+        break;
+
+    case preg_match('#^/api/modulo/listar$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->listarModulos();
+        break;
+
+    case preg_match('#^/api/modulo/obtener$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->obtenerModulo();
+        break;
+
+    case preg_match('#^/api/modulo/eliminar$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->eliminarModulo();
+        break;
+
+    case preg_match('#^/api/modulo/toggle-estado$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->toggleEstadoModulo();
+        break;
+
+    case preg_match('#^/api/modulo/usuario$#', $path):
+        $controller = new \App\Controllers\ModuloController();
+        $controller->obtenerModulosUsuario();
+        break;
 
     // VISTAS
     

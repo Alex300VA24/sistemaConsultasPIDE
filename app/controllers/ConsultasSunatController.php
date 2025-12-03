@@ -7,9 +7,17 @@ class ConsultasSunatController {
     private $urlSUNATRest;
     
     public function __construct() {
+        $envFile = __DIR__ . '/../../.env';
+        if (file_exists($envFile)) {
+            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                if (strpos(trim($line), '#') === 0) continue;
+                list($name, $value) = explode('=', $line, 2);
+                $_ENV[trim($name)] = trim($value);
+            }
+        }
         // URL base del REST API de SUNAT (PIDE)
-        $this->urlSUNATRest = $_ENV['PIDE_URL_SUNAT_REST'] ?? 
-            "https://ws3.pide.gob.pe/Rest/Sunat";
+        $this->urlSUNATRest = $_ENV['PIDE_URL_SUNAT'];
     }
 
     // ========================================

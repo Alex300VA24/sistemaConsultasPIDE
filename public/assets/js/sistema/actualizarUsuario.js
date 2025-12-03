@@ -534,3 +534,17 @@ window.limpiarFormulario = function() {
         ModuloActualizarUsuario.limpiarFormulario();
     }
 };
+// ============================================
+// 🔧 AUTO-REGISTRO DEL MÓDULO
+// ============================================
+if (typeof window.registrarModulo === 'function') {
+    window.registrarModulo('actualizarusuario', ModuloActualizarUsuario);
+    console.log('✅ actualizarusuario registrado en Dashboard');
+}
+
+// Auto-inicializar cuando se cargue el DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // No auto-inicializar, esperar a que Dashboard lo llame
+    });
+}

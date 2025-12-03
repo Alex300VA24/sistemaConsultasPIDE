@@ -30,6 +30,8 @@ const ModuloPartidas = {
         
         this.inicializado = true;
         console.log('✅ Módulo Partidas inicializado correctamente');
+        this.zoomLevel = 1;
+        this.imagenActual = null;
     },
 
     // ============================================
@@ -388,9 +390,9 @@ const ModuloPartidas = {
 
         this.personaSeleccionada = this.registrosEncontrados[index];
         console.log('✅ Registro seleccionado:', this.personaSeleccionada);
-        
+
         const inputPersona = document.getElementById('persona');
-        
+
         if (this.tipoPersonaActual === 'natural') {
             const nombresCompletos = this.personaSeleccionada.nombres_completos ||
                 `${this.personaSeleccionada.nombres || ''} ${this.personaSeleccionada.apellido_paterno || ''} ${this.personaSeleccionada.apellido_materno || ''}`.trim();
@@ -400,16 +402,18 @@ const ModuloPartidas = {
             inputPersona.value = this.personaSeleccionada.razon_social || '';
             this.cerrarModal('modalBusquedaJuridica');
         }
-        
+
         mostrarAlerta('Persona seleccionada. Haga clic en "Consultar" para buscar en SUNARP', 'info', "alertContainerPartidas");
-        
-        // Habilitar botón consultar
+
         document.getElementById('btnConsultar').disabled = false;
-        
-        // Limpiar resultados anteriores
-        document.getElementById('resultsSection').style.display = 'none';
-        document.getElementById('selectorPartidas').style.display = 'none';
+
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) resultsSection.style.display = 'none';
+
+        const selectorPartidas = document.getElementById('selectorPartidas');
+        if (selectorPartidas) selectorPartidas.style.display = 'none';
     },
+
 
     // ============================================
     // 🔍 CONSULTAR TSIRSARP
@@ -655,11 +659,9 @@ const ModuloPartidas = {
     mostrarDetallePartida(registro) {
         const photoSection = document.getElementById('photoSection');
         const resultsLayout = document.querySelector('.results-layout');
-
         if (this.tipoPersonaActual === 'natural') {
             if (photoSection) photoSection.classList.remove('hidden');
             if (resultsLayout) resultsLayout.classList.remove('no-photo');
-
             this.mostrarCampo('libro', registro.libro || '-');
             this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada.nombres || '-', 'containerNombres');
             this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada.apellido_paterno || '-', 'containerApellidoPaterno');
@@ -671,7 +673,6 @@ const ModuloPartidas = {
         } else {
             if (photoSection) photoSection.classList.add('hidden');
             if (resultsLayout) resultsLayout.classList.add('no-photo');
-
             this.mostrarCampo('libro', registro.libro || '-');
             
             const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
@@ -688,7 +689,6 @@ const ModuloPartidas = {
             const razonSocial = registro.razon_social || this.personaSeleccionada.razon_social || '-';
             this.mostrarCampo('campoRazonSocial', razonSocial, 'containerRazonSocial');
         }
-
         // Campos comunes
         this.mostrarCampo('tipoDoc', registro.tipo_documento || (this.tipoPersonaActual === 'natural' ? 'DNI' : 'RUC'));
         this.mostrarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada.dni : this.personaSeleccionada.ruc) || '-');
@@ -698,14 +698,12 @@ const ModuloPartidas = {
         this.mostrarCampo('zona', registro.zona || '-');
         this.mostrarCampo('oficina', registro.oficina || '-');
         this.mostrarCampo('direccion', registro.direccion || '-');
-
         // Secciones adicionales
         if (registro.imagenes && registro.imagenes.length > 0) {
             this.mostrarImagenes(registro.imagenes);
         } else {
             document.getElementById('imagenesSection').style.display = 'none';
         }
-
         if (registro.datos_vehiculo && Object.keys(registro.datos_vehiculo).length > 0) {
             this.mostrarDatosVehiculo(registro.datos_vehiculo);
         } else {
@@ -773,6 +771,15 @@ const ModuloPartidas = {
         const imagenViewer = document.getElementById('imagenViewer');
         const noImagen = document.getElementById('noImagen');
         
+        // Resetear zoom al cambiar de partida
+        this.zoomLevel = 1;
+        if (imagenViewer) {
+            imagenViewer.style.width = '';
+            imagenViewer.style.height = '';
+            imagenViewer.style.maxWidth = '100%';
+            imagenViewer.classList.remove('with-zoom');
+        }
+        
         selectImagenes.innerHTML = '';
         
         imagenes.forEach((img, index) => {
@@ -786,11 +793,24 @@ const ModuloPartidas = {
             const index = parseInt(selectImagenes.value);
             const imagenData = imagenes[index];
             
+            // Resetear zoom al cambiar de imagen
+            this.zoomLevel = 1;
+            
             if (imagenData && imagenData.imagen_base64) {
+                this.imagenActual = imagenData;
+                console.log('Imagen actual:', imagenData);  // AGREGAR para debuggear
                 imagenViewer.src = `data:image/jpeg;base64,${imagenData.imagen_base64}`;
                 imagenViewer.style.display = 'block';
+                imagenViewer.style.transform = 'scale(1)';
                 noImagen.style.display = 'none';
+                
+                // Actualizar el label de zoom
+                const zoomLabel = document.getElementById('zoomLabel');
+                if (zoomLabel) {
+                    zoomLabel.textContent = '100%';
+                }
             } else {
+                this.imagenActual = null;
                 imagenViewer.src = '';
                 imagenViewer.style.display = 'none';
                 noImagen.style.display = 'flex';
@@ -798,8 +818,216 @@ const ModuloPartidas = {
         };
         
         selectImagenes.addEventListener('change', cambiarImagen);
+        
+        // Configurar controles de zoom
+        this.configurarControlesZoom();
+        
         cambiarImagen();
         imagenesSection.style.display = 'block';
+    },
+    configurarControlesZoom() {
+        const btnZoomIn = document.getElementById('btnZoomIn');
+        const btnZoomOut = document.getElementById('btnZoomOut');
+        const btnZoomReset = document.getElementById('btnZoomReset');
+        const btnDescargar = document.getElementById('btnDescargar');
+        const imagenViewer = document.getElementById('imagenViewer');
+        const zoomLabel = document.getElementById('zoomLabel');
+        
+        // Remover listeners anteriores
+        const newBtnZoomIn = btnZoomIn?.cloneNode(true);
+        const newBtnZoomOut = btnZoomOut?.cloneNode(true);
+        const newBtnZoomReset = btnZoomReset?.cloneNode(true);
+        const newBtnDescargar = btnDescargar?.cloneNode(true);
+        
+        if (btnZoomIn && newBtnZoomIn) {
+            btnZoomIn.parentNode.replaceChild(newBtnZoomIn, btnZoomIn);
+        }
+        if (btnZoomOut && newBtnZoomOut) {
+            btnZoomOut.parentNode.replaceChild(newBtnZoomOut, btnZoomOut);
+        }
+        if (btnZoomReset && newBtnZoomReset) {
+            btnZoomReset.parentNode.replaceChild(newBtnZoomReset, btnZoomReset);
+        }
+        if (btnDescargar && newBtnDescargar) {
+            btnDescargar.parentNode.replaceChild(newBtnDescargar, btnDescargar);
+        }
+        
+        // Zoom In
+        newBtnZoomIn?.addEventListener('click', () => {
+            if (this.zoomLevel < 3) {
+                this.zoomLevel += 0.25;
+                this.aplicarZoom(imagenViewer, zoomLabel);
+            }
+        });
+
+        // Zoom Out
+        newBtnZoomOut?.addEventListener('click', () => {
+            if (this.zoomLevel > 0.5) {
+                this.zoomLevel -= 0.25;
+                this.aplicarZoom(imagenViewer, zoomLabel);
+            }
+        });
+
+        // Reset Zoom
+        newBtnZoomReset?.addEventListener('click', () => {
+            this.zoomLevel = 1;
+            this.aplicarZoom(imagenViewer, zoomLabel);
+        });
+
+        // Ver imagen
+        const btnVerImagen = document.getElementById('btnVerImagen');
+        const newBtnVerImagen = btnVerImagen?.cloneNode(true);
+        if (btnVerImagen && newBtnVerImagen) {
+            btnVerImagen.parentNode.replaceChild(newBtnVerImagen, btnVerImagen);
+        }
+
+        newBtnVerImagen?.addEventListener('click', () => {
+            this.verImagen();
+        });
+        
+        // Descargar
+        newBtnDescargar?.addEventListener('click', () => {
+            this.descargarImagen();
+        });
+    },
+    aplicarZoom(imagenViewer, zoomLabel) {
+        if (!imagenViewer) return;
+        
+        // Obtener dimensiones originales de la imagen
+        const anchoOriginal = imagenViewer.naturalWidth;
+        const altoOriginal = imagenViewer.naturalHeight;
+        
+        if (this.zoomLevel === 1) {
+            // Sin zoom: imagen responsiva
+            imagenViewer.style.width = '';
+            imagenViewer.style.height = '';
+            imagenViewer.style.maxWidth = '100%';
+            imagenViewer.classList.remove('with-zoom');
+        } else {
+            // Con zoom: tamaño fijo escalado
+            imagenViewer.style.width = `${anchoOriginal * this.zoomLevel}px`;
+            imagenViewer.style.height = `${altoOriginal * this.zoomLevel}px`;
+            imagenViewer.style.maxWidth = 'none';
+            imagenViewer.classList.add('with-zoom');
+        }
+        
+        // Actualizar label
+        if (zoomLabel) {
+            zoomLabel.textContent = `${Math.round(this.zoomLevel * 100)}%`;
+        }
+    },
+    descargarImagen() {
+        if (!this.imagenActual || !this.imagenActual.imagen_base64) {
+            mostrarAlerta('No hay imagen disponible para descargar', 'warning', "alertContainerPartidas");
+            return;
+        }
+        
+        try {
+            const selectImagenes = document.getElementById('selectImagenes');
+            const paginaActual = selectImagenes.options[selectImagenes.selectedIndex].textContent;
+            const base64Data = this.imagenActual.imagen_base64;
+            
+            // Crear canvas temporal
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                
+                // Descargar desde canvas
+                canvas.toBlob(function(blob) {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `partida_${paginaActual.replace(/\s+/g, '_')}.jpg`;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    setTimeout(() => {
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(link);
+                    }, 100);
+                }, 'image/jpeg', 0.95);
+            };
+            img.src = `data:image/jpeg;base64,${base64Data}`;
+            
+            mostrarAlerta('Descargando imagen...', 'success', "alertContainerPartidas");
+            
+        } catch (error) {
+            console.error('Error al descargar:', error);
+            mostrarAlerta('Error al descargar la imagen', 'danger', "alertContainerPartidas");
+        }
+    },
+    verImagen() {
+        if (!this.imagenActual || !this.imagenActual.imagen_base64) {
+            mostrarAlerta('No hay imagen disponible', 'warning', "alertContainerPartidas");
+            return;
+        }
+        
+        try {
+            const base64Data = this.imagenActual.imagen_base64;
+            
+            // Crear una nueva ventana con el HTML de la imagen
+            const nuevaVentana = window.open('', '_blank');
+            nuevaVentana.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Imagen de Partida</title>
+                    <style>
+                        body { margin: 0; display: flex; justify-content: center; align-items: center; background: #333; }
+                        img { max-width: 100%; height: auto; }
+                    </style>
+                </head>
+                <body>
+                    <img src="data:image/jpeg;base64,${base64Data}" alt="Imagen de partida">
+                </body>
+                </html>
+            `);
+            nuevaVentana.document.close();
+            
+            mostrarAlerta('Imagen abierta en nueva pestaña', 'success', "alertContainerPartidas");
+        } catch (error) {
+            console.error('Error al abrir imagen:', error);
+            mostrarAlerta('Error al abrir la imagen', 'danger', "alertContainerPartidas");
+        }
+    },
+
+    // Método adicional para descargar como PDF (requiere jsPDF)
+    descargarImagenPDF() {
+        if (!this.imagenActual || !this.imagenActual.imagen_base64) {
+            alert('No hay imagen disponible para descargar');
+            return;
+        }
+        
+        // Verifica si jsPDF está disponible
+        if (typeof window.jspdf === 'undefined') {
+            console.error('jsPDF no está cargado. Descargando como imagen JPG.');
+            this.descargarImagen();
+            return;
+        }
+        
+        const { jsPDF } = window.jspdf;
+        const selectImagenes = document.getElementById('selectImagenes');
+        const paginaActual = selectImagenes.options[selectImagenes.selectedIndex].textContent;
+        const base64Data = this.imagenActual.imagen_base64;
+        
+        // Crear una imagen temporal para obtener dimensiones
+        const img = new Image();
+        img.onload = function() {
+            const pdf = new jsPDF({
+                orientation: img.width > img.height ? 'landscape' : 'portrait',
+                unit: 'px',
+                format: [img.width, img.height]
+            });
+            
+            pdf.addImage(`data:image/jpeg;base64,${base64Data}`, 'JPEG', 0, 0, img.width, img.height);
+            pdf.save(`partida_${paginaActual.replace(/\s+/g, '_')}.pdf`);
+        };
+        img.src = `data:image/jpeg;base64,${base64Data}`;
     },
 
     mostrarDatosVehiculo(datosVehiculo) {
@@ -947,3 +1175,15 @@ window.limpiarModalJuridica = function() {
     document.getElementById('resultadosJuridica').innerHTML = '';
     document.getElementById('resultadosJuridica').style.display = 'none';
 };
+
+if (typeof window.registrarModulo === 'function') {
+    window.registrarModulo('consultaspartidas', ModuloPartidas);
+    console.log('✅ consultaspartidas registrado en Dashboard');
+}
+
+// Auto-inicializar cuando se cargue el DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        // No auto-inicializar, esperar a que Dashboard lo llame
+    });
+}

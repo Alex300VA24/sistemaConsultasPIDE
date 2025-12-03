@@ -1,13 +1,16 @@
 // ============================================
-// 🚀 DASHBOARD - SISTEMA DE NAVEGACIÓN MODULAR
+// 🚀 DASHBOARD - SISTEMA DE NAVEGACIÓN MODULAR DINÁMICO
 // ============================================
 
 const Dashboard = {
     BASE_URL: '/sistemaConsultasPIDE/public/',
     modulosInicializados: new Set(),
     
+    // Registro de módulos disponibles (se auto-registran)
+    modulosDisponibles: {},
+    
     init() {
-        console.log('🚀 Inicializando Dashboard...');
+        console.log('🚀 Inicializando Dashboard Dinámico...');
         this.setupEventListeners();
         this.restaurarPaginaActiva();
     },
@@ -28,6 +31,14 @@ const Dashboard = {
     },
 
     // ============================================
+    // 📌 REGISTRO DINÁMICO DE MÓDULOS
+    // ============================================
+    registrarModulo(nombreModulo, objetoModulo) {
+        console.log(`📦 Registrando módulo: ${nombreModulo}`);
+        this.modulosDisponibles[nombreModulo.toLowerCase()] = objetoModulo;
+    },
+
+    // ============================================
     // 📌 NAVEGACIÓN ENTRE PÁGINAS
     // ============================================
     showPage(pageId, element) {
@@ -39,18 +50,20 @@ const Dashboard = {
             p.classList.remove('active');
         });
 
-        // Construir ID de la página (sin capitalizar, usar tal cual)
-        const targetId = `page${pageId}`;
+        // Convertir pageId a formato de ID de página
+        const convertir = s =>
+            s.replace(/\/(.)/g, (_, c) => c.toUpperCase())
+            .replace(/^\w/, c => c.toUpperCase());
+        const targetId = `page${convertir(pageId)}`;
         const targetPage = document.getElementById(targetId);
 
         if (targetPage) {
             targetPage.classList.add('active');
             console.log(`✅ Página activada: ${targetId}`);
             
-            // Guardar página activa Y el elemento del menú
+            // Guardar página activa
             localStorage.setItem('paginaActiva', targetId);
             if (element) {
-                // Guardar el pageId para restaurar el menú activo
                 localStorage.setItem('menuActivo', pageId);
             }
             
@@ -69,15 +82,10 @@ const Dashboard = {
     // 🎨 ACTIVAR OPCIÓN DEL MENÚ
     // ============================================
     activarOpcionMenu(element) {
-        console.log('🎨 Activando opción del menú');
-        
         // Remover active de TODAS las opciones
         document.querySelectorAll('.option, .suboption').forEach(o => {
             o.classList.remove('active');
         });
-        
-        // NO cerrar submenús aquí si el elemento es subopción
-        // porque queremos mantener abierto el submenú de la opción activa
         
         // Activar el elemento clickeado
         if (element) {
@@ -87,10 +95,7 @@ const Dashboard = {
             if (element.classList.contains('suboption')) {
                 const submenu = element.closest('.submenu');
                 if (submenu) {
-                    // Mantener este submenú abierto
                     submenu.style.display = 'flex';
-                    
-                    // Marcar el padre como open
                     const parentOption = submenu.previousElementSibling;
                     if (parentOption && parentOption.classList.contains('has-submenu')) {
                         parentOption.classList.add('open');
@@ -101,7 +106,7 @@ const Dashboard = {
     },
 
     // ============================================
-    // 🔧 INICIALIZACIÓN DE MÓDULOS
+    // 🔧 INICIALIZACIÓN DINÁMICA DE MÓDULOS
     // ============================================
     inicializarModulo(pageId) {
         // Evitar inicializar el mismo módulo dos veces
@@ -110,70 +115,97 @@ const Dashboard = {
             return;
         }
 
-        console.log(`🔧 Inicializando módulo: ${pageId}`);
+        console.log(`🔧 Intentando inicializar módulo: ${pageId}`);
 
-        // Normalizar el pageId para el switch (convertir a minúsculas para comparar)
-        const pageIdLower = pageId.toLowerCase();
+        // Normalizar el pageId
+        const pageIdNormalizado = pageId
+            .toLowerCase()
+            .replace('sistema', '')      // elimina la palabra sistema
+            .replace(/[\/\-]/g, '');
+        console.log(`Valor de pageIdNormalizado: ${pageIdNormalizado}`);
+        console.log('estos son los modulos: ', this.modulosDisponibles);
 
-        switch(pageIdLower) {
-            case 'inicio':
-                this.cargarInicio();
-                break;
-            
-            // Módulos de consulta
-            case 'consultadni':
-                if (typeof ModuloDNI !== 'undefined') {
-                    ModuloDNI.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
-            
-            case 'consultaruc':
-                if (typeof ModuloRUC !== 'undefined') {
-                    ModuloRUC.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
-            
-            case 'consultapartidas':
-                if (typeof ModuloPartidas !== 'undefined') {
-                    ModuloPartidas.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
+        // Método 1: Buscar en módulos registrados dinámicamente
+        if (this.modulosDisponibles[pageIdNormalizado]) {
+            console.log(`✅ Módulo encontrado en registro dinámico: ${pageIdNormalizado}`);
+            const modulo = this.modulosDisponibles[pageIdNormalizado];
+            if (typeof modulo.init === 'function') {
+                modulo.init();
+                this.modulosInicializados.add(pageId);
+                return;
+            }
+        }
 
-            // Módulos de gestión de usuarios
-            case 'crearusuario':
-                if (typeof ModuloCrearUsuario !== 'undefined') {
-                    ModuloCrearUsuario.init();
+        // Método 2: Intentar inicializar por convención de nombres
+        const nombresModulosPosibles = this.generarNombresModulos(pageId);
+        console.log("Estos son los nombres modulos posibles: ", nombresModulosPosibles);
+        console.log("Esto es el window: ", window['Dashboard']['modulosDisponibles']);
+        for (const nombreModulo of nombresModulosPosibles) {
+            console.log('entro al for: ', typeof window[nombreModulo]);
+            if (typeof window['Dashboard']['modulosDisponibles'][nombreModulo] !== 'undefined') {
+                console.log(`✅ Módulo encontrado por convención: ${nombreModulo}`);
+                const modulo = window[nombreModulo];
+                if (typeof modulo.init === 'function') {
+                    modulo.init();
                     this.modulosInicializados.add(pageId);
+                    return;
                 }
-                break;
+            }
+        }
 
-            case 'actualizarusuario':
-                if (typeof ModuloActualizarUsuario !== 'undefined') {
-                    ModuloActualizarUsuario.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
+        // Método 3: Casos especiales (compatibilidad con código anterior)
+        const inicializacionesEspeciales = {
+            'inicio': () => this.cargarInicio(),
+            'consultadni': () => this.inicializarSiExiste('ModuloDNI', pageId),
+            'consultaruc': () => this.inicializarSiExiste('ModuloRUC', pageId),
+            'consultapartidas': () => this.inicializarSiExiste('ModuloPartidas', pageId),
+            'crearusuario': () => this.inicializarSiExiste('ModuloCrearUsuario', pageId),
+            'actualizarusuario': () => this.inicializarSiExiste('ModuloActualizarUsuario', pageId),
+            'actualizarpassword': () => this.inicializarSiExiste('ModuloActualizarPassword', pageId),
+            'crearroles': () => this.inicializarSiExiste('ModuloRoles', pageId),
+            'crearmodulo': () => this.inicializarSiExiste('ModuloCrearModulo', pageId),
+        };
 
-            case 'actualizarpassword':
-                if (typeof ModuloActualizarPassword !== 'undefined') {
-                    ModuloActualizarPassword.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
+        const pageIdLower = pageIdNormalizado;
+        if (inicializacionesEspeciales[pageIdLower]) {
+            console.log(`🔄 Usando inicialización especial para: ${pageIdLower}`);
+            inicializacionesEspeciales[pageIdLower]();
+            return;
+        }
 
-            // Módulos de administración
-            case 'crearroles':
-                if (typeof ModuloRoles !== 'undefined') {
-                    ModuloRoles.init();
-                    this.modulosInicializados.add(pageId);
-                }
-                break;
+        console.log(`ℹ️ No se encontró inicialización específica para: ${pageId}`);
+    },
 
-            default:
-                console.log(`ℹ️ No hay módulo específico para: ${pageId}`);
+    // ============================================
+    // 🔧 GENERAR NOMBRES DE MÓDULOS POSIBLES
+    // ============================================
+    generarNombresModulos(pageId) {
+        // Limpiar el pageId
+        const limpio = pageId.replace(/[\/\-]/g, '');
+        
+        // Generar variaciones posibles del nombre
+        const variaciones = [
+            // Formato: ModuloNombre
+            `Modulo${this.capitalize(limpio)}`,
+            // Formato: Nombre (sin prefijo)
+            this.capitalize(limpio),
+            // Formato: ModuloNombreNombre (para casos con guiones)
+            `Modulo${pageId.split(/[\/\-]/).map(p => this.capitalize(p)).join('')}`,
+        ];
+
+        return [...new Set(variaciones)]; // Eliminar duplicados
+    },
+
+    // ============================================
+    // 🔧 INICIALIZAR SI EXISTE
+    // ============================================
+    inicializarSiExiste(nombreModulo, pageId) {
+        if (typeof window[nombreModulo] !== 'undefined') {
+            console.log(`✅ Inicializando módulo: ${nombreModulo}`);
+            window[nombreModulo].init();
+            this.modulosInicializados.add(pageId);
+        } else {
+            console.warn(`⚠️ Módulo no encontrado: ${nombreModulo}`);
         }
     },
 
@@ -187,12 +219,11 @@ const Dashboard = {
             if (actividadDiv) {
                 actividadDiv.innerHTML = '<p>No hay actividad reciente.</p>';
             }
+            this.modulosInicializados.add('inicio');
         } catch (error) {
             console.error('❌ Error al cargar el inicio:', error);
         }
     },
-
-    
 
     // ============================================
     // 🔓 LOGOUT
@@ -216,6 +247,7 @@ const Dashboard = {
         try {
             await api.logout();
             localStorage.removeItem('paginaActiva');
+            localStorage.removeItem('menuActivo');
             window.location.href = this.BASE_URL + 'login';
         } catch (error) {
             console.error('❌ Error al cerrar sesión:', error);
@@ -227,6 +259,7 @@ const Dashboard = {
     // 🔧 UTILIDADES
     // ============================================
     capitalize(str) {
+        if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
     },
 
@@ -237,29 +270,22 @@ const Dashboard = {
         console.log('🔄 Restaurando página:', paginaGuardada);
         console.log('🔄 Restaurando menú:', menuGuardado);
         
-        // IMPORTANTE: Primero ocultar TODAS las páginas
+        // Ocultar TODAS las páginas
         document.querySelectorAll('.page-content').forEach(p => {
             p.classList.remove('active');
         });
         
         if (paginaGuardada) {
-            // Mostrar la página guardada
             const pagina = document.getElementById(paginaGuardada);
             if (pagina) {
                 pagina.classList.add('active');
                 console.log('✅ Página restaurada:', paginaGuardada);
                 
-                // Extraer el pageId del paginaGuardada (remover "page")
                 const pageId = paginaGuardada.replace('page', '');
-                
-                // Restaurar el menú activo
                 this.restaurarMenuActivo(menuGuardado || pageId);
-                
-                // Inicializar el módulo
                 this.inicializarModulo(pageId);
             }
         } else {
-            // Si no hay página guardada, mostrar inicio por defecto
             console.log('ℹ️ No hay página guardada, mostrando Inicio');
             const paginaInicio = document.getElementById('pageInicio');
             if (paginaInicio) {
@@ -269,13 +295,10 @@ const Dashboard = {
         }
     },
 
-    // ============================================
-    // 🎨 RESTAURAR MENÚ ACTIVO
-    // ============================================
     restaurarMenuActivo(pageId) {
         console.log('🎨 Restaurando menú para pageId:', pageId);
         
-        // IMPORTANTE: Primero remover TODAS las clases active
+        // Remover TODAS las clases active
         document.querySelectorAll('.option, .suboption').forEach(o => {
             o.classList.remove('active');
         });
@@ -285,29 +308,25 @@ const Dashboard = {
             s.style.display = 'none';
         });
         
-        // Remover clase open de todos los padres
+        // Remover clase open
         document.querySelectorAll('.has-submenu').forEach(o => {
             o.classList.remove('open');
         });
         
-        // Buscar la opción o subopción con onclick que contenga este pageId EXACTO
+        // Buscar la opción con el pageId
         const opciones = document.querySelectorAll('.option, .suboption');
         let encontrado = false;
         
         opciones.forEach(opcion => {
             const onclick = opcion.getAttribute('onclick');
-            
-            // Verificar que el onclick contiene showPage con el pageId EXACTO
-            // Usar regex para match exacto: showPage('pageId', ...)
             const regex = new RegExp(`showPage\\s*\\(\\s*['"]${pageId}['"]\\s*,`);
             
             if (onclick && regex.test(onclick)) {
                 opcion.classList.add('active');
                 encontrado = true;
                 
-                console.log('✅ Opción encontrada y activada:', opcion.textContent.trim());
+                console.log('✅ Opción encontrada:', opcion.textContent.trim());
                 
-                // Si es subopción, abrir el submenú padre
                 if (opcion.classList.contains('suboption')) {
                     const submenu = opcion.closest('.submenu');
                     if (submenu) {
@@ -315,7 +334,6 @@ const Dashboard = {
                         const parentOption = submenu.previousElementSibling;
                         if (parentOption && parentOption.classList.contains('has-submenu')) {
                             parentOption.classList.add('open');
-                            console.log('✅ Submenú padre abierto');
                         }
                     }
                 }
@@ -336,8 +354,9 @@ const Dashboard = {
 };
 
 // ============================================
-// 🔧 FUNCIONES GLOBALES PARA SUBMENU
+// 🔧 FUNCIONES GLOBALES
 // ============================================
+
 function toggleSubmenu(element) {
     const submenu = element.nextElementSibling;
     const isOpen = submenu.style.display === 'flex';
@@ -357,31 +376,22 @@ function toggleSubmenu(element) {
     }
 }
 
-// ============================================
-// 📌 EXPONER FUNCIÓN GLOBAL showPage
-// ============================================
+// Función global showPage
 window.showPage = function(pageId, element) {
     Dashboard.showPage(pageId, element);
 };
 
+// Función para registrar módulos (los módulos se auto-registran)
+window.registrarModulo = function(nombre, modulo) {
+    Dashboard.registrarModulo(nombre, modulo);
+};
 
-
-
+// Función de alertas
 window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertContainer') {
-
-    console.log('🔔 Intentando mostrar alerta:', {mensaje, tipo, contenedorId});
-    
-    const contenedorPrueba = document.getElementById(contenedorId);
-    console.log('📦 Contenedor encontrado:', contenedorPrueba);
-    
-    if (!contenedorPrueba) {
-        console.error(`❌ Contenedor ${contenedorId} no encontrado`);
-        return;
-    }
     const alertContainer = document.getElementById(contenedorId);
     
     if (!alertContainer) {
-        console.warn('No se encontró el contenedor de alertas');
+        console.warn('No se encontró el contenedor de alertas:', contenedorId);
         return;
     }
     
@@ -434,14 +444,12 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
         </button>
     `;
     
-    // Limpiar alertas anteriores si es de tipo error o warning
     if (tipo === 'error' || tipo === 'warning') {
         alertContainer.innerHTML = '';
     }
     
     alertContainer.appendChild(alerta);
     
-    // Auto-cerrar después de 5 segundos (excepto errores que se cierran en 8 segundos)
     const timeout = tipo === 'error' ? 8000 : 5000;
     setTimeout(() => {
         if (alerta.parentElement) {
@@ -451,14 +459,12 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
     }, timeout);
 };
 
-// Función para verificar si el usuario tiene acceso a un módulo
+// Función para verificar acceso
 function verificarAcceso(codigoModulo) {
     try {
         const permisosStr = sessionStorage.getItem('permisos');
-        console.log("Estos son los permiso: ", permisosStr);
-        if (!permisosStr) {
-            return false;
-        }
+        console.log(permisosStr);
+        if (!permisosStr) return false;
         const permisos = JSON.parse(permisosStr);
         return permisos.includes(codigoModulo);
     } catch (error) {
@@ -467,14 +473,13 @@ function verificarAcceso(codigoModulo) {
     }
 }
 
-// Funciones para las consultas con validación de permisos
+// Funciones de navegación con validación
 window.irConsultaReniec = function() {
     if (!verificarAcceso('DNI')) {
         alert('No tienes permisos para acceder al módulo de RENIEC');
         return;
     }
-    // Si tiene acceso, redirigir o mostrar el módulo
-    showPage('ConsultaDNI');
+    showPage('ConsultasDni');
 };
 
 window.irConsultaSunat = function() {
@@ -482,7 +487,7 @@ window.irConsultaSunat = function() {
         alert('No tienes permisos para acceder al módulo de SUNAT');
         return;
     }
-    showPage('ConsultaRUC');
+    showPage('ConsultasRuc');
 };
 
 window.irConsultaSunarp = function() {
@@ -490,13 +495,17 @@ window.irConsultaSunarp = function() {
         alert('No tienes permisos para acceder al módulo de SUNARP');
         return;
     }
-    showPage('ConsultaPartidas');
+    showPage('ConsultasPartidas');
 };
 
-
 // ============================================
-// 🚀 INICIALIZACIÓN AL CARGAR EL DOM
+// 🚀 INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     Dashboard.init();
 });
+
+// ============================================
+// 📝 EXPONER Dashboard GLOBALMENTE
+// ============================================
+window.Dashboard = Dashboard;
