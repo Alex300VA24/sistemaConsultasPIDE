@@ -102,7 +102,7 @@ const Dashboard = {
     },
 
     // ============================================
-    // 🔧 INICIALIZACIÓN DINÁMICA DE MÓDULOS
+    // INICIALIZACIÓN DINÁMICA DE MÓDULOS
     // ============================================
     inicializarModulo(pageId) {
         // Evitar inicializar el mismo módulo dos veces

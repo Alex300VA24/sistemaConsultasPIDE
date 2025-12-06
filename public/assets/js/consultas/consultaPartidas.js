@@ -274,7 +274,6 @@ const ModuloPartidas = {
                     : `data:image/jpeg;base64,${persona.foto}`;
                 fotoHtml = `<img src="${fotoBase64}" alt="Foto RENIEC" style="max-width: 80px; max-height: 100px;">`;
             }
-
             html += `
                 <tr>
                     <td><strong>${persona.dni || '-'}</strong></td>
@@ -628,6 +627,7 @@ const ModuloPartidas = {
             mostrarAlerta('Mostrando detalles de la partida seleccionada', 'success', "alertContainerPartidas");
         }
     },
+
     // ============================================
     // MOSTRAR DETALLE DE PARTIDA
     // ============================================
