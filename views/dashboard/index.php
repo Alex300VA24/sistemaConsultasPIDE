@@ -1,19 +1,18 @@
 <?php
-session_start();
 use App\Helpers\Permisos;
 
-// 🔹 Obtener permisos según id del usuario
+// Obtener permisos según id del usuario
 $usuarioID = $_SESSION['usuarioID'];
 $permisos = Permisos::obtenerPermisos($usuarioID);
 
 
-// 🔹 Cargar módulos del usuario para generación dinámica
+// Cargar módulos del usuario para generación dinámica
 //require_once __DIR__ . '/../../app/Repositories/ModuloRepository.php';
 use App\Repositories\ModuloRepository;
 
 $moduloRepo = new ModuloRepository();
 $modulosUsuario = $moduloRepo->obtenerModulosPorUsuario($usuarioID);
-error_log(print_r($modulosUsuario, true));
+
 // 🔹 Organizar módulos jerárquicamente
 function organizarModulosJerarquicos($modulos) {
     $modulosPorId = [];
@@ -71,13 +70,6 @@ require_once __DIR__ . '../../../app/helpers/generarPaginasDinamicas.php';
         <div id="pageInicio" class="page-content active">
             <?php include __DIR__ . "/pages/inicio.php"; ?>
         </div>
-
-        <!-- ============================================ -->
-        <!-- PÁGINAS ESTÁTICAS EXISTENTES -->
-        <!-- (Mantener compatibilidad con código anterior) -->
-        <!-- ============================================ -->
-        
-        
 
         <!-- ============================================ -->
         <!-- PÁGINAS DINÁMICAS (NUEVOS MÓDULOS) -->

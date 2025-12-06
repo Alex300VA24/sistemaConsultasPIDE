@@ -10,7 +10,6 @@ const Dashboard = {
     modulosDisponibles: {},
     
     init() {
-        console.log('🚀 Inicializando Dashboard Dinámico...');
         this.setupEventListeners();
         this.restaurarPaginaActiva();
     },
@@ -34,7 +33,6 @@ const Dashboard = {
     // 📌 REGISTRO DINÁMICO DE MÓDULOS
     // ============================================
     registrarModulo(nombreModulo, objetoModulo) {
-        console.log(`📦 Registrando módulo: ${nombreModulo}`);
         this.modulosDisponibles[nombreModulo.toLowerCase()] = objetoModulo;
     },
 
@@ -43,7 +41,6 @@ const Dashboard = {
     // ============================================
     showPage(pageId, element) {
         console.clear();
-        console.log(`🟦 Navegando a: ${pageId}`);
         
         // Ocultar todas las páginas
         document.querySelectorAll('.page-content').forEach(p => {
@@ -59,7 +56,6 @@ const Dashboard = {
 
         if (targetPage) {
             targetPage.classList.add('active');
-            console.log(`✅ Página activada: ${targetId}`);
             
             // Guardar página activa
             localStorage.setItem('paginaActiva', targetId);
@@ -111,23 +107,17 @@ const Dashboard = {
     inicializarModulo(pageId) {
         // Evitar inicializar el mismo módulo dos veces
         if (this.modulosInicializados.has(pageId)) {
-            console.log(`ℹ️ Módulo ${pageId} ya está inicializado`);
             return;
         }
-
-        console.log(`🔧 Intentando inicializar módulo: ${pageId}`);
 
         // Normalizar el pageId
         const pageIdNormalizado = pageId
             .toLowerCase()
             .replace('sistema', '')      // elimina la palabra sistema
             .replace(/[\/\-]/g, '');
-        console.log(`Valor de pageIdNormalizado: ${pageIdNormalizado}`);
-        console.log('estos son los modulos: ', this.modulosDisponibles);
 
         // Método 1: Buscar en módulos registrados dinámicamente
         if (this.modulosDisponibles[pageIdNormalizado]) {
-            console.log(`✅ Módulo encontrado en registro dinámico: ${pageIdNormalizado}`);
             const modulo = this.modulosDisponibles[pageIdNormalizado];
             if (typeof modulo.init === 'function') {
                 modulo.init();
@@ -138,12 +128,8 @@ const Dashboard = {
 
         // Método 2: Intentar inicializar por convención de nombres
         const nombresModulosPosibles = this.generarNombresModulos(pageId);
-        console.log("Estos son los nombres modulos posibles: ", nombresModulosPosibles);
-        console.log("Esto es el window: ", window['Dashboard']['modulosDisponibles']);
         for (const nombreModulo of nombresModulosPosibles) {
-            console.log('entro al for: ', typeof window[nombreModulo]);
             if (typeof window['Dashboard']['modulosDisponibles'][nombreModulo] !== 'undefined') {
-                console.log(`✅ Módulo encontrado por convención: ${nombreModulo}`);
                 const modulo = window[nombreModulo];
                 if (typeof modulo.init === 'function') {
                     modulo.init();
@@ -168,12 +154,10 @@ const Dashboard = {
 
         const pageIdLower = pageIdNormalizado;
         if (inicializacionesEspeciales[pageIdLower]) {
-            console.log(`🔄 Usando inicialización especial para: ${pageIdLower}`);
             inicializacionesEspeciales[pageIdLower]();
             return;
         }
 
-        console.log(`ℹ️ No se encontró inicialización específica para: ${pageId}`);
     },
 
     // ============================================
@@ -201,7 +185,6 @@ const Dashboard = {
     // ============================================
     inicializarSiExiste(nombreModulo, pageId) {
         if (typeof window[nombreModulo] !== 'undefined') {
-            console.log(`✅ Inicializando módulo: ${nombreModulo}`);
             window[nombreModulo].init();
             this.modulosInicializados.add(pageId);
         } else {
@@ -214,7 +197,6 @@ const Dashboard = {
     // ============================================
     async cargarInicio() {
         try {
-            console.log('🏠 Cargando página de inicio...');
             const actividadDiv = document.getElementById('actividadReciente');
             if (actividadDiv) {
                 actividadDiv.innerHTML = '<p>No hay actividad reciente.</p>';
@@ -267,9 +249,6 @@ const Dashboard = {
         const paginaGuardada = localStorage.getItem('paginaActiva');
         const menuGuardado = localStorage.getItem('menuActivo');
         
-        console.log('🔄 Restaurando página:', paginaGuardada);
-        console.log('🔄 Restaurando menú:', menuGuardado);
-        
         // Ocultar TODAS las páginas
         document.querySelectorAll('.page-content').forEach(p => {
             p.classList.remove('active');
@@ -279,14 +258,12 @@ const Dashboard = {
             const pagina = document.getElementById(paginaGuardada);
             if (pagina) {
                 pagina.classList.add('active');
-                console.log('✅ Página restaurada:', paginaGuardada);
                 
                 const pageId = paginaGuardada.replace('page', '');
                 this.restaurarMenuActivo(menuGuardado || pageId);
                 this.inicializarModulo(pageId);
             }
         } else {
-            console.log('ℹ️ No hay página guardada, mostrando Inicio');
             const paginaInicio = document.getElementById('pageInicio');
             if (paginaInicio) {
                 paginaInicio.classList.add('active');
@@ -296,8 +273,6 @@ const Dashboard = {
     },
 
     restaurarMenuActivo(pageId) {
-        console.log('🎨 Restaurando menú para pageId:', pageId);
-        
         // Remover TODAS las clases active
         document.querySelectorAll('.option, .suboption').forEach(o => {
             o.classList.remove('active');
@@ -325,8 +300,6 @@ const Dashboard = {
                 opcion.classList.add('active');
                 encontrado = true;
                 
-                console.log('✅ Opción encontrada:', opcion.textContent.trim());
-                
                 if (opcion.classList.contains('suboption')) {
                     const submenu = opcion.closest('.submenu');
                     if (submenu) {
@@ -346,9 +319,8 @@ const Dashboard = {
     },
 
     listarPaginasDisponibles() {
-        console.log('📋 Páginas disponibles:');
         document.querySelectorAll('.page-content').forEach(p => {
-            console.log(`   → ${p.id}`);
+            // console.log(`   → ${p.id}`);
         });
     }
 };
@@ -463,7 +435,6 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
 function verificarAcceso(codigoModulo) {
     try {
         const permisosStr = sessionStorage.getItem('permisos');
-        console.log(permisosStr);
         if (!permisosStr) return false;
         const permisos = JSON.parse(permisosStr);
         return permisos.includes(codigoModulo);

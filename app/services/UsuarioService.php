@@ -46,7 +46,7 @@ class UsuarioService {
         }
 
         // ===============================
-        //   🔴 AQUI AGREGAS LA SESIÓN
+        //   AQUI AGREGAS LA SESIÓN
         // ===============================
         $usuarioData = $usuario['usuario'];   // datos que vienen del SP
 
@@ -63,28 +63,28 @@ class UsuarioService {
 
     public function crearUsuario($data) {
         try {
-            // ✅ Validaciones mínimas
+            // Validaciones mínimas
             if (empty($data['usuLogin']) || empty($data['usuPass'])) {
                 throw new \Exception("El login y la contraseña son obligatorios");
             }
 
-            // ✅ Llamada al repositorio
+            // Llamada al repositorio
             return $this->usuarioRepository->crearUsuario($data);
 
         } catch (\Throwable $e) {
-            // 🧾 Crear carpeta de logs si no existe
+            // Crear carpeta de logs si no existe
             $logDir = __DIR__ . '/../../logs';
             if (!is_dir($logDir)) {
                 mkdir($logDir, 0777, true);
             }
 
-            // 🧠 Contenido del log
+            // Contenido del log
             $logFile = $logDir . '/error_crear_usuario.txt';
             $errorMsg = "[" . date('Y-m-d H:i:s') . "] ERROR: " . $e->getMessage() . PHP_EOL;
             $errorMsg .= "Datos enviados:" . PHP_EOL . print_r($data, true) . PHP_EOL;
             $errorMsg .= str_repeat("-", 60) . PHP_EOL;
 
-            // 🖊️ Escribir log
+            // Escribir log
             file_put_contents($logFile, $errorMsg, FILE_APPEND);
 
             // Re-lanzar la excepción para que el controlador la maneje

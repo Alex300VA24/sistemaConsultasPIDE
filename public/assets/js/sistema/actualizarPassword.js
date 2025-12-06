@@ -22,22 +22,18 @@ const ModuloActualizarPassword = {
     // ============================================
     async init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo Actualizar Password ya está inicializado');
             return;
         }
-
-        console.log('🔐 Inicializando Módulo Actualizar Password...');
         
         this.cachearElementos();
         this.setupEventListeners();
         await this.cargarDatosUsuarioActual();
         
         this.inicializado = true;
-        console.log('✅ Módulo Actualizar Password inicializado correctamente');
     },
 
     // ============================================
-    // 📦 CACHEAR ELEMENTOS DEL DOM
+    // CACHEAR ELEMENTOS DEL DOM
     // ============================================
     cachearElementos() {
         this.elementos = {
@@ -106,11 +102,7 @@ const ModuloActualizarPassword = {
                     modulos: listaModulos || [] // ← Módulos del usuario
                 };
 
-                console.log('👤 Usuario actual:', this.usuarioActual);
-                console.log('📦 Módulos del usuario:', this.usuarioActual.modulos);
-
                 this.mostrarInfoUsuario();
-                console.log('✓ Datos del usuario actual cargados');
                 
             } else {
                 mostrarAlerta('Error al cargar datos del usuario actual', 'error', 'alertContainerPassword');
@@ -148,9 +140,6 @@ const ModuloActualizarPassword = {
             modulosRENIEC.includes(modulo) ||
             modulosRENIEC.some(cod => modulo.includes(cod))
         );
-
-        console.log('🔍 ¿Tiene acceso a RENIEC?:', tieneAcceso);
-        console.log('📋 Módulos del usuario:', this.usuarioActual.modulos);
 
         return tieneAcceso;
     },
@@ -198,10 +187,8 @@ const ModuloActualizarPassword = {
                     return;
                 }
                 
-                console.log('✓ Contraseña actualizada en RENIEC');
                 mostrarAlerta('✓ Contraseña actualizada en RENIEC correctamente', 'success', 'alertContainerPassword');
             } else {
-                console.log('ℹ️ Usuario sin acceso a RENIEC, omitiendo actualización en RENIEC');
                 mostrarAlerta('ℹ️ Actualizando solo en el sistema local (sin acceso a RENIEC)', 'info', 'alertContainerPassword');
             }
             
@@ -354,8 +341,6 @@ const ModuloActualizarPassword = {
         if (this.elementos.alertContainer) {
             this.elementos.alertContainer.innerHTML = '';
         }
-        
-        console.log('🧹 Formulario de contraseña limpiado');
     }
 };
 
@@ -419,7 +404,6 @@ if (!document.getElementById('password-module-styles')) {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('actualizarpass', ModuloActualizarPassword);
-    console.log('✅ actualizarpass registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

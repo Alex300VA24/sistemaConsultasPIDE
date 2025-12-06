@@ -11,17 +11,13 @@ const ModuloRUC = {
     // ============================================
     init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo RUC ya está inicializado');
             return;
         }
-
-        console.log('🏢 Inicializando Módulo RUC...');
         
         this.cachearElementos();
         this.setupEventListeners();
         
         this.inicializado = true;
-        console.log('✅ Módulo RUC inicializado correctamente');
     },
 
     // ============================================
@@ -76,7 +72,6 @@ const ModuloRUC = {
 
             // Realizar consulta a la API
             const resultado = await api.consultarRUC(validacion.ruc);
-            console.log('📊 Resultado RUC:', resultado);
 
             if (resultado.success) {
                 mostrarAlerta('Consulta realizada exitosamente', 'success', 'alertContainerRUC');
@@ -194,22 +189,20 @@ const ModuloRUC = {
                 }
             });
         });
-
-        console.log('✅ Datos RUC cargados correctamente');
     },
 
     // ============================================
-    // 🧹 LIMPIAR CAMPOS RUC
+    // LIMPIAR CAMPOS RUC
     // ============================================
     limpiarCamposRUC() {
-        const campos = document.querySelectorAll('#pageConsultaRUC .info-value');
+        const campos = document.querySelectorAll('.consulta-ruc-container .info-value');
         campos.forEach(campo => {
             campo.textContent = '-';
         });
     },
 
     // ============================================
-    // ⏳ MOSTRAR/OCULTAR LOADING
+    // MOSTRAR/OCULTAR LOADING
     // ============================================
     mostrarLoading(mostrar) {
         const btnBuscar = this.elementos.btnBuscar;
@@ -249,8 +242,6 @@ const ModuloRUC = {
         if (this.elementos.rucInput) {
             this.elementos.rucInput.focus();
         }
-
-        console.log('🧹 Formulario RUC limpiado');
     }
 };
 
@@ -265,7 +256,6 @@ window.limpiarFormularioRUC = function() {
 
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('consultasruc', ModuloRUC);
-    console.log('✅ consultasruc registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

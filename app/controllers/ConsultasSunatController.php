@@ -111,7 +111,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 🔍 SERVICIO SUNAT REST - CONSULTA POR RUC
+    // SERVICIO SUNAT REST - CONSULTA POR RUC
     // ========================================
     private function consultarServicioSUNATRest($ruc) {
         try {
@@ -186,7 +186,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 🔍 SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL
+    // SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL
     // ========================================
     private function buscarPorRazonSocialSUNATRest($razonSocial) {
         try {
@@ -259,7 +259,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 📄 PROCESAR RESPUESTA JSON (CONSULTA POR RUC)
+    // PROCESAR RESPUESTA JSON (CONSULTA POR RUC)
     // ========================================
     private function procesarRespuestaJSON($jsonResponse, $ruc) {
         try {
@@ -407,7 +407,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 📄 PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL) - CORREGIDO
+    // PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL) - CORREGIDO
     // ========================================
     private function procesarRespuestaBusquedaJSON($jsonResponse) {
         try {
@@ -588,7 +588,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 🏠 CONSTRUIR DIRECCIÓN COMPLETA DESDE ARRAY
+    // CONSTRUIR DIRECCIÓN COMPLETA DESDE ARRAY
     // ========================================
     private function construirDireccionDesdeArray($data) {
         $partes = [];
@@ -621,7 +621,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 🔄 CONVERTIR A BOOLEANO
+    // CONVERTIR A BOOLEANO
     // ========================================
     private function convertirBooleano($valor) {
         // Si está vacío, retornar false
@@ -645,7 +645,7 @@ class ConsultasSunatController {
     }
 
     // ========================================
-    // 💾 REGISTRAR CONSULTA EN LOG
+    // REGISTRAR CONSULTA EN LOG
     // ========================================
     private function registrarConsulta($tipo, $documento, $respuesta) {
         try {
