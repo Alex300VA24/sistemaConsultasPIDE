@@ -40,6 +40,7 @@
                     <button type="button" class="btn btn-search" id="btnConsultar" title="Consultar" disabled>
                         <i class="fas fa-search"></i>
                         <span>Consultar</span>
+
                     </button>
                     <button type="button" class="btn btn-clear" id="btnLimpiar" title="Limpiar">
                         <i class="fas fa-eraser"></i>
@@ -48,8 +49,6 @@
                 </div>
             </form>
         </div>
-
-
         <!-- Sección de Resultados -->
         <div class="results-section" id="resultsSection" style="display: none;">
             <div class="results-layout">
@@ -62,6 +61,8 @@
                             <span>Sin foto</span>
                         </div>
                     </div>
+
+
                 </div>
 
                 <!-- Información -->
@@ -205,6 +206,7 @@
                         <h3><i class="fas fa-car"></i> Información Vehicular</h3>
                     </div>
                     <div id="vehiculoContainer" class="vehiculo-container"></div>
+
                 </div>
             </div>
         </div>
@@ -756,3 +758,4 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 </style>
+

@@ -90,8 +90,6 @@ const ModuloPartidas = {
                 this.cerrarModal(modalId);
             });
         });
-
-
         // Validación solo números
         document.getElementById('dniNatural')?.addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -151,7 +149,6 @@ const ModuloPartidas = {
             mostrarAlerta('No se han cargado las credenciales del usuario. Recargue la página.', 'danger', "alertContainerPartidas");
             return;
         }
-
         this.mostrarLoadingPartidas('formBusquedaNatural');
         
         try {
@@ -631,9 +628,8 @@ const ModuloPartidas = {
             mostrarAlerta('Mostrando detalles de la partida seleccionada', 'success', "alertContainerPartidas");
         }
     },
-
     // ============================================
-    // 📄 MOSTRAR DETALLE DE PARTIDA
+    // MOSTRAR DETALLE DE PARTIDA
     // ============================================
     mostrarDetallePartida(registro) {
         const photoSection = document.getElementById('photoSection');

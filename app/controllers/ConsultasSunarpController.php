@@ -87,9 +87,9 @@ class ConsultasSunarpController {
             ]);
             return;
         }
-
         error_log("=== INICIO BÚSQUEDA PERSONA NATURAL (RENIEC) ===");
         error_log("DNI: $dni");
+
 
         $datosReniec = $this->obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE);
         
@@ -99,8 +99,12 @@ class ConsultasSunarpController {
             echo json_encode($datosReniec, JSON_UNESCAPED_UNICODE);
             return;
         }
+<<<<<<< HEAD
 
         error_log("Datos RENIEC obtenidos correctamente");
+=======
+        error_log("✅ Datos RENIEC obtenidos correctamente");
+>>>>>>> c06798e (Arreglando compatibilidad)
         http_response_code(200);
         echo json_encode($datosReniec, JSON_UNESCAPED_UNICODE);
     }
@@ -142,6 +146,9 @@ class ConsultasSunarpController {
         error_log("=== INICIO BÚSQUEDA PERSONA JURÍDICA (SUNAT) ===");
         error_log("Tipo de búsqueda: $tipoBusqueda");
 
+        $razonSocial = '';
+
+        // 1. Obtener razón social según tipo de búsqueda
         if ($tipoBusqueda === 'ruc') {
             if (!isset($input['ruc'])) {
                 http_response_code(400);
@@ -161,7 +168,6 @@ class ConsultasSunarpController {
                 ]);
                 return;
             }
-
             error_log("Buscando por RUC: $ruc");
 
             $sunatController = new ConsultasSunatController();
@@ -212,6 +218,7 @@ class ConsultasSunarpController {
             http_response_code(200);
             echo json_encode($resultadosSunat, JSON_UNESCAPED_UNICODE);
             
+
         } else {
             http_response_code(400);
             echo json_encode([
@@ -942,6 +949,7 @@ class ConsultasSunarpController {
 
     // ========================================
     // OBTENER DATOS DE RENIEC
+
     // ========================================
     private function obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE) {
         try {
