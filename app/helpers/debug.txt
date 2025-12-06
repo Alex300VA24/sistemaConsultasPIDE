@@ -1,0 +1,724 @@
+[2025-12-05 10:12:53] Inicio validarCUI()
+[2025-12-05 10:12:53] Sesión iniciada -> Array
+(
+    [user] => Array
+        (
+            [codUsuario] => 1
+            [nombresApellidos] => Larri Rodrigo Estrada León
+            [dni] => 71086437
+            [cui] => 9
+            [nombreUsuario] => lestradal
+            [codRol] => 1
+            [rol] => administrador
+            [codEstado] => 1
+            [estado] => activo
+        )
+
+    [autenticado] => 1
+    [base_url] => http://localhost/provaleMde/
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-12-05 10:12:53] JSON recibido -> {"cui":"1"}
+[2025-12-05 10:12:53] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-05 10:12:53] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-12-05 10:12:54] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-05 10:12:54.1500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-05 10:12:54] Sesión actualizada -> Array
+(
+    [user] => Array
+        (
+            [codUsuario] => 1
+            [nombresApellidos] => Larri Rodrigo Estrada León
+            [dni] => 71086437
+            [cui] => 9
+            [nombreUsuario] => lestradal
+            [codRol] => 1
+            [rol] => administrador
+            [codEstado] => 1
+            [estado] => activo
+        )
+
+    [autenticado] => 1
+    [base_url] => http://localhost/provaleMde/
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-05 10:12:54.1500000
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CCOB
+            [3] => CMOD
+            [4] => CON
+            [5] => CROL
+            [6] => DNI
+            [7] => INI
+            [8] => MAN
+            [9] => PAR
+            [10] => RUC
+            [11] => RUSU
+            [12] => SIS
+        )
+
+)
+
+[2025-12-05 10:12:54] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-05 10:12:54.1500000
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CCOB
+                    [3] => CMOD
+                    [4] => CON
+                    [5] => CROL
+                    [6] => DNI
+                    [7] => INI
+                    [8] => MAN
+                    [9] => PAR
+                    [10] => RUC
+                    [11] => RUSU
+                    [12] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-05 12:18:36] Inicio validarCUI()
+[2025-12-05 12:18:36] Sesión iniciada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [requireCUI] => 1
+)
+
+[2025-12-05 12:18:36] JSON recibido -> {"cui":"1"}
+[2025-12-05 12:18:36] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-05 12:18:36] Variables preparadas -> Array
+(
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [cui] => 1
+)
+
+[2025-12-05 12:18:36] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:18:36.2966667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-05 12:18:36] Sesión actualizada -> Array
+(
+    [nombreUsuario] => admin
+    [password] => Muni2025@
+    [requireCUI] => 
+    [ROL_nombre] => Administrador
+    [usuario_id] => 1
+    [usuario] => Array
+        (
+            [USU_id] => 1
+            [USU_username] => admin
+            [USU_email] => admin@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 1
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:18:36.2966667
+            [PER_id] => 1
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 5
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 42761038
+            [PER_nombres] => ALAN
+            [PER_apellido_paterno] => COLLANTES
+            [PER_apellido_materno] => ARANA
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 1
+            [ROL_nombre] => Administrador
+            [ROL_nivel] => 10
+            [ROLES] => Administrador
+            [ROLES_IDS] => 1
+            [TIPO_PERSONAL] => Directivo
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 1
+    [rolID] => 1
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => AUSU
+            [2] => CCOB
+            [3] => CMOD
+            [4] => CON
+            [5] => CROL
+            [6] => DNI
+            [7] => INI
+            [8] => MAN
+            [9] => PAR
+            [10] => RUC
+            [11] => RUSU
+            [12] => SIS
+        )
+
+)
+
+[2025-12-05 12:18:36] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 1
+                    [USU_username] => admin
+                    [USU_email] => admin@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 1
+                    [USU_fecha_ultimo_acceso] => 2025-12-05 12:18:36.2966667
+                    [PER_id] => 1
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 5
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 42761038
+                    [PER_nombres] => ALAN
+                    [PER_apellido_paterno] => COLLANTES
+                    [PER_apellido_materno] => ARANA
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => ALAN COLLANTES ARANA
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 1
+                    [ROL_nombre] => Administrador
+                    [ROL_nivel] => 10
+                    [ROLES] => Administrador
+                    [ROLES_IDS] => 1
+                    [TIPO_PERSONAL] => Directivo
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => AUSU
+                    [2] => CCOB
+                    [3] => CMOD
+                    [4] => CON
+                    [5] => CROL
+                    [6] => DNI
+                    [7] => INI
+                    [8] => MAN
+                    [9] => PAR
+                    [10] => RUC
+                    [11] => RUSU
+                    [12] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-05 12:20:48] Inicio validarCUI()
+[2025-12-05 12:20:48] Sesión iniciada -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex123
+    [requireCUI] => 1
+)
+
+[2025-12-05 12:20:48] JSON recibido -> {"cui":"1"}
+[2025-12-05 12:20:48] JSON decodificado -> Array
+(
+    [cui] => 1
+)
+
+[2025-12-05 12:20:48] Variables preparadas -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex123
+    [cui] => 1
+)
+
+[2025-12-05 12:20:49] Error capturado -> CUI incorrecto. Intentos restantes: 4
+[2025-12-05 12:20:53] Inicio validarCUI()
+[2025-12-05 12:20:53] Sesión iniciada -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex123
+    [requireCUI] => 1
+)
+
+[2025-12-05 12:20:53] JSON recibido -> {"cui":"2"}
+[2025-12-05 12:20:53] JSON decodificado -> Array
+(
+    [cui] => 2
+)
+
+[2025-12-05 12:20:53] Variables preparadas -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex123
+    [cui] => 2
+)
+
+[2025-12-05 12:20:53] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 2
+            [USU_username] => alex123
+            [USU_email] => alex123@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 2
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:20:53.0333333
+            [PER_id] => 2
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 2
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 75879519
+            [PER_nombres] => Alexander Josue
+            [PER_apellido_paterno] => Vásquez
+            [PER_apellido_materno] => Alcántara
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 3
+            [ROL_nombre] => PRACTICANTE
+            [ROL_nivel] => 3
+            [ROLES] => PRACTICANTE
+            [ROLES_IDS] => 3
+            [TIPO_PERSONAL] => Practicante
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-05 12:20:53] Sesión actualizada -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex123
+    [requireCUI] => 
+    [ROL_nombre] => PRACTICANTE
+    [usuario_id] => 2
+    [usuario] => Array
+        (
+            [USU_id] => 2
+            [USU_username] => alex123
+            [USU_email] => alex123@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 2
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:20:53.0333333
+            [PER_id] => 2
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 2
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 75879519
+            [PER_nombres] => Alexander Josue
+            [PER_apellido_paterno] => Vásquez
+            [PER_apellido_materno] => Alcántara
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 3
+            [ROL_nombre] => PRACTICANTE
+            [ROL_nivel] => 3
+            [ROLES] => PRACTICANTE
+            [ROLES_IDS] => 3
+            [TIPO_PERSONAL] => Practicante
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 2
+    [rolID] => 3
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => CON
+            [2] => INI
+            [3] => RUC
+            [4] => SIS
+        )
+
+)
+
+[2025-12-05 12:20:53] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 2
+                    [USU_username] => alex123
+                    [USU_email] => alex123@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 2
+                    [USU_fecha_ultimo_acceso] => 2025-12-05 12:20:53.0333333
+                    [PER_id] => 2
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 2
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 75879519
+                    [PER_nombres] => Alexander Josue
+                    [PER_apellido_paterno] => Vásquez
+                    [PER_apellido_materno] => Alcántara
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 3
+                    [ROL_nombre] => PRACTICANTE
+                    [ROL_nivel] => 3
+                    [ROLES] => PRACTICANTE
+                    [ROLES_IDS] => 3
+                    [TIPO_PERSONAL] => Practicante
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => CON
+                    [2] => INI
+                    [3] => RUC
+                    [4] => SIS
+                )
+
+        )
+
+)
+
+[2025-12-05 12:21:56] Inicio validarCUI()
+[2025-12-05 12:21:56] Sesión iniciada -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex456
+    [requireCUI] => 1
+)
+
+[2025-12-05 12:21:56] JSON recibido -> {"cui":"2"}
+[2025-12-05 12:21:56] JSON decodificado -> Array
+(
+    [cui] => 2
+)
+
+[2025-12-05 12:21:56] Variables preparadas -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex456
+    [cui] => 2
+)
+
+[2025-12-05 12:21:56] Resultado del servicio -> Array
+(
+    [valido] => 1
+    [mensaje] => CUI validado correctamente
+    [usuario] => Array
+        (
+            [USU_id] => 2
+            [USU_username] => alex123
+            [USU_email] => alex123@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 2
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:21:56.8433333
+            [PER_id] => 2
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 2
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 75879519
+            [PER_nombres] => Alexander Josue
+            [PER_apellido_paterno] => Vásquez
+            [PER_apellido_materno] => Alcántara
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 3
+            [ROL_nombre] => PRACTICANTE
+            [ROL_nivel] => 3
+            [ROLES] => PRACTICANTE
+            [ROLES_IDS] => 3
+            [TIPO_PERSONAL] => Practicante
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+)
+
+[2025-12-05 12:21:56] Sesión actualizada -> Array
+(
+    [nombreUsuario] => alex123
+    [password] => alex456
+    [requireCUI] => 
+    [ROL_nombre] => PRACTICANTE
+    [usuario_id] => 2
+    [usuario] => Array
+        (
+            [USU_id] => 2
+            [USU_username] => alex123
+            [USU_email] => alex123@sistema.com
+            [USU_estado_id] => 1
+            [USU_cui] => 2
+            [USU_fecha_ultimo_acceso] => 2025-12-05 12:21:56.8433333
+            [PER_id] => 2
+            [PER_tipo_persona] => 1
+            [PER_tipo_personal_id] => 2
+            [PER_documento_tipo_id] => 1
+            [PER_documento_numero] => 75879519
+            [PER_nombres] => Alexander Josue
+            [PER_apellido_paterno] => Vásquez
+            [PER_apellido_materno] => Alcántara
+            [PER_sexo] => M
+            [PER_telefono_movil] => 
+            [PER_direccion] => 
+            [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+            [ESTADO_NOMBRE] => Activo
+            [ROL_id] => 3
+            [ROL_nombre] => PRACTICANTE
+            [ROL_nivel] => 3
+            [ROLES] => PRACTICANTE
+            [ROLES_IDS] => 3
+            [TIPO_PERSONAL] => Practicante
+            [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+            [TIPO_DOCUMENTO_ABREV] => DNI
+        )
+
+    [usuarioID] => 2
+    [rolID] => 3
+    [authenticated] => 1
+    [permisos] => Array
+        (
+            [0] => APAS
+            [1] => CON
+            [2] => INI
+            [3] => RUC
+            [4] => SIS
+        )
+
+)
+
+[2025-12-05 12:21:56] Respuesta JSON -> Array
+(
+    [success] => 1
+    [message] => CUI validado correctamente
+    [data] => Array
+        (
+            [usuario] => Array
+                (
+                    [USU_id] => 2
+                    [USU_username] => alex123
+                    [USU_email] => alex123@sistema.com
+                    [USU_estado_id] => 1
+                    [USU_cui] => 2
+                    [USU_fecha_ultimo_acceso] => 2025-12-05 12:21:56.8433333
+                    [PER_id] => 2
+                    [PER_tipo_persona] => 1
+                    [PER_tipo_personal_id] => 2
+                    [PER_documento_tipo_id] => 1
+                    [PER_documento_numero] => 75879519
+                    [PER_nombres] => Alexander Josue
+                    [PER_apellido_paterno] => Vásquez
+                    [PER_apellido_materno] => Alcántara
+                    [PER_sexo] => M
+                    [PER_telefono_movil] => 
+                    [PER_direccion] => 
+                    [NOMBRE_COMPLETO] => Alexander Josue Vásquez Alcántara
+                    [ESTADO_NOMBRE] => Activo
+                    [ROL_id] => 3
+                    [ROL_nombre] => PRACTICANTE
+                    [ROL_nivel] => 3
+                    [ROLES] => PRACTICANTE
+                    [ROLES_IDS] => 3
+                    [TIPO_PERSONAL] => Practicante
+                    [TIPO_DOCUMENTO] => Documento Nacional de Identidad
+                    [TIPO_DOCUMENTO_ABREV] => DNI
+                )
+
+            [permisos] => Array
+                (
+                    [0] => APAS
+                    [1] => CON
+                    [2] => INI
+                    [3] => RUC
+                    [4] => SIS
+                )
+
+        )
+
+)
+
