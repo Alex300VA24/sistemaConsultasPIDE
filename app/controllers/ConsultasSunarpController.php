@@ -100,7 +100,7 @@ class ConsultasSunarpController {
             return;
         }
 
-        error_log("✅ Datos RENIEC obtenidos correctamente");
+        error_log("Datos RENIEC obtenidos correctamente");
         http_response_code(200);
         echo json_encode($datosReniec, JSON_UNESCAPED_UNICODE);
     }
@@ -174,8 +174,6 @@ class ConsultasSunarpController {
                 return;
             }
 
-            error_log("✅ Datos obtenidos de SUNAT");
-
             $resultado = [
                 'success' => true,
                 'message' => 'Consulta exitosa',
@@ -209,7 +207,7 @@ class ConsultasSunarpController {
                 return;
             }
 
-            error_log("✅ Encontrados " . count($resultadosSunat['data']) . " resultados en SUNAT");
+            error_log("Encontrados " . count($resultadosSunat['data']) . " resultados en SUNAT");
 
             http_response_code(200);
             echo json_encode($resultadosSunat, JSON_UNESCAPED_UNICODE);
@@ -659,36 +657,7 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-
-            // ============= ARCHIVO DE DEPURACIÓN =============
-            $debugFile = __DIR__ . '/../../logs/tsirsarp_debug_' . date('Y-m-d') . '.txt';
-            $debugDir = dirname($debugFile);
-            if (!file_exists($debugDir)) {
-                mkdir($debugDir, 0755, true);
-            }
             
-            $debugInfo = "\n" . str_repeat("=", 80) . "\n";
-            $debugInfo .= "CONSULTA TSIRSARP - " . date('Y-m-d H:i:s') . "\n";
-            $debugInfo .= str_repeat("=", 80) . "\n";
-            $debugInfo .= "URL: $url\n";
-            $debugInfo .= "Tipo Participante: $tipoParticipante\n";
-            $debugInfo .= "Usuario: $usuario\n";
-            $debugInfo .= "Clave: " . str_repeat("*", strlen($clave)) . "\n";
-            
-            if ($tipoParticipante === 'N') {
-                $debugInfo .= "--- Persona Natural ---\n";
-                $debugInfo .= "Apellido Paterno: $apellidoPaterno\n";
-                $debugInfo .= "Apellido Materno: $apellidoMaterno\n";
-                $debugInfo .= "Nombres: $nombres\n";
-            } else {
-                $debugInfo .= "--- Persona Jurídica ---\n";
-                $debugInfo .= "Razón Social: $razonSocial\n";
-            }
-            
-            $debugInfo .= "\n--- REQUEST JSON ---\n";
-            $debugInfo .= json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n";
-            // ================================================
-
             error_log("TSIRSARP Request: " . $jsonData);
 
             $ch = curl_init($url);
@@ -710,23 +679,9 @@ class ConsultasSunarpController {
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlInfo = curl_getinfo($ch);
 
-            // ============= DEPURACIÓN CURL INFO =============
-            $debugInfo .= "\n--- CURL INFO ---\n";
-            $debugInfo .= "HTTP Code: $httpCode\n";
-            $debugInfo .= "Total Time: " . $curlInfo['total_time'] . "s\n";
-            $debugInfo .= "Connect Time: " . $curlInfo['connect_time'] . "s\n";
-            $debugInfo .= "Size Download: " . $curlInfo['size_download'] . " bytes\n";
-            // ================================================
-
             if (curl_errno($ch)) {
                 $error = curl_error($ch);
                 curl_close($ch);
-                
-                // ============= DEPURACIÓN ERROR =============
-                $debugInfo .= "\n--- CURL ERROR ---\n";
-                $debugInfo .= "Error: $error\n";
-                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
-                // ============================================
                 
                 error_log("CURL Error TSIRSARP: $error");
                 return [
@@ -737,34 +692,13 @@ class ConsultasSunarpController {
             }
 
             curl_close($ch);
-
-            // ============= DEPURACIÓN RESPONSE =============
-            $debugInfo .= "\n--- RESPONSE ---\n";
-            $debugInfo .= "HTTP Code: $httpCode\n";
-            $debugInfo .= "Response Length: " . strlen($response) . " caracteres\n";
-            $debugInfo .= "\n--- RESPONSE BODY (primeros 2000 caracteres) ---\n";
-            $debugInfo .= substr($response, 0, 2000) . "\n";
-            
-            if (strlen($response) > 2000) {
-                $debugInfo .= "\n... (respuesta truncada, total: " . strlen($response) . " caracteres)\n";
-            }
             
             // Intentar decodificar JSON y mostrar estructura
             $jsonResponse = json_decode($response, true);
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $debugInfo .= "\n--- JSON DECODIFICADO ---\n";
-                $debugInfo .= json_encode($jsonResponse, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) . "\n";
-            } else {
-                $debugInfo .= "\n--- ERROR JSON ---\n";
-                $debugInfo .= "Error al decodificar JSON: " . json_last_error_msg() . "\n";
-            }
-            
-            file_put_contents($debugFile, $debugInfo, FILE_APPEND);
-            // ================================================
+
 
             error_log("TSIRSARP Response Code: $httpCode");
             error_log("TSIRSARP Response: " . $response);
-            error_log("TSIRSARP Debug file: $debugFile");
 
             if ($httpCode == 200) {
                 if (json_last_error() !== JSON_ERROR_NONE) {
@@ -780,22 +714,12 @@ class ConsultasSunarpController {
             } else {
                 return [
                     'success' => false,
-                    'message' => "Error HTTP $httpCode en el servicio SUNARP. Ver log: $debugFile",
+                    'message' => "Error HTTP $httpCode en el servicio SUNARP.",
                     'data' => []
                 ];
             }
 
         } catch (\Exception $e) {
-            // ============= DEPURACIÓN EXCEPTION =============
-            if (isset($debugFile)) {
-                $debugInfo = "\n--- EXCEPTION ---\n";
-                $debugInfo .= "Message: " . $e->getMessage() . "\n";
-                $debugInfo .= "File: " . $e->getFile() . "\n";
-                $debugInfo .= "Line: " . $e->getLine() . "\n";
-                $debugInfo .= "Stack Trace:\n" . $e->getTraceAsString() . "\n";
-                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
-            }
-            // ================================================
             
             error_log("Exception en consultarTSIRSARP: " . $e->getMessage());
             return [
@@ -813,15 +737,8 @@ class ConsultasSunarpController {
         try {
             error_log("Procesando respuesta TSIRSARP. Tipo: $tipoParticipante");
             
-            $debugFile = __DIR__ . '/../../logs/tsirsarp_debug_' . date('Y-m-d') . '.txt';
-            $debugInfo = "\n--- PROCESANDO RESPUESTA ---\n";
-            $debugInfo .= "Tipo Participante: $tipoParticipante\n";
-            
             if (!isset($jsonResponse['buscarTitularidadSIRSARPResponse']) || 
                 !isset($jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad'])) {
-                
-                $debugInfo .= "\n❌ ERROR: No se encontró TSIRSARPResponse en la respuesta\n";
-                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
                 
                 return [
                     'success' => false,
@@ -839,12 +756,11 @@ class ConsultasSunarpController {
                 $registros = [$return];
             }
 
-            $debugInfo .= "\nTotal de registros a procesar: " . count($registros) . "\n";
             $resultados = [];
 
             // Obtener credenciales para consultas adicionales
-            $usuario = "20164091547-18066272";
-            $clave = "z#rxstzNYUb4NZQ";
+            $usuario = $this->nombreUsuario;
+            $clave = $this->passUsuario;
 
             // ========================================
             // OBTENER CATÁLOGO DE OFICINAS PRIMERO
@@ -854,13 +770,11 @@ class ConsultasSunarpController {
             
             if ($resultGOficina['success']) {
                 $catalogoOficinas = $resultGOficina['data'];
-                $debugInfo .= "✓ Catálogo GOficina cargado: " . count($catalogoOficinas) . " oficinas\n";
             } else {
-                $debugInfo .= "⚠️ No se pudo cargar catálogo GOficina\n";
+                
             }
 
             foreach ($registros as $index => $registro) {
-                $debugInfo .= "\n--- Registro #" . ($index + 1) . " ---\n";
                 
                 $item = [
                     'libro' => $registro['libro'] ?? '',
@@ -891,9 +805,7 @@ class ConsultasSunarpController {
                     if (isset($catalogoOficinas[$oficinaKey])) {
                         $codigoZona = $catalogoOficinas[$oficinaKey]['codZona'];
                         $codigoOficina = $catalogoOficinas[$oficinaKey]['codOficina'];
-                        $debugInfo .= "✓ Códigos obtenidos de GOficina: Zona=$codigoZona, Oficina=$codigoOficina\n";
                     } else {
-                        $debugInfo .= "⚠️ Oficina '$oficinaKey' no encontrada en catálogo, usando valores originales\n";
                     }
                 }
 
@@ -901,7 +813,6 @@ class ConsultasSunarpController {
                 // CONSULTA LASIRSARP (Asientos)
                 // ========================================
                 if (!empty($item['numero_partida']) && !empty($codigoZona) && !empty($codigoOficina)) {
-                    $debugInfo .= "Ejecutando LASIRSARP para partida: {$item['numero_partida']}\n";
                     
                     $registroCodigo = $tipoParticipante === 'N' ? '23000' : '22000';
                     
@@ -917,7 +828,6 @@ class ConsultasSunarpController {
                     if ($resultLASIRSARP['success']) {
                         $item['asientos'] = $resultLASIRSARP['data'];
                         $item['transaccion'] = $resultLASIRSARP['transaccion'] ?? '';
-                        $debugInfo .= "✓ LASIRSARP exitoso. Asientos: " . count($resultLASIRSARP['data']) . "\n";
                         
                         // ========================================
                         // CONSULTA VASIRSARP (Imágenes)
@@ -947,10 +857,8 @@ class ConsultasSunarpController {
                             }
                             
                             $item['imagenes'] = $imagenes;
-                            $debugInfo .= "✓ VASIRSARP ejecutado. Imágenes obtenidas: " . count($imagenes) . "\n";
                         }
                     } else {
-                        $debugInfo .= "✗ LASIRSARP falló: {$resultLASIRSARP['message']}\n";
                     }
                 }
 
@@ -962,8 +870,6 @@ class ConsultasSunarpController {
                     !empty($codigoZona) && 
                     !empty($codigoOficina)) {
                     
-                    $debugInfo .= "Ejecutando VDRPVExtra para placa: {$item['numero_placa']}\n";
-                    
                     $resultVDRPVExtra = $this->ejecutarVDRPVExtra(
                         $usuario,
                         $clave,
@@ -974,20 +880,12 @@ class ConsultasSunarpController {
                     
                     if ($resultVDRPVExtra['success']) {
                         $item['datos_vehiculo'] = $resultVDRPVExtra['data'];
-                        $debugInfo .= "✓ VDRPVExtra exitoso\n";
-                    } else {
-                        $debugInfo .= "✗ VDRPVExtra falló: {$resultVDRPVExtra['message']}\n";
                     }
                 }
 
                 $resultados[] = $item;
             }
-
-            $debugInfo .= "\n--- RESULTADO FINAL ---\n";
-            $debugInfo .= "Total de resultados procesados: " . count($resultados) . "\n";
-            $debugInfo .= "\n✅ PROCESAMIENTO EXITOSO\n";
             
-            file_put_contents($debugFile, $debugInfo, FILE_APPEND);
 
             // Al final de procesarRespuestaTSIRSARP, antes del return success
             error_log("=== RESPONSE FINAL A ENVIAR ===");
@@ -1016,12 +914,6 @@ class ConsultasSunarpController {
             ];
 
         } catch (\Exception $e) {
-            if (isset($debugFile)) {
-                $debugInfo = "\n--- EXCEPTION EN PROCESAMIENTO ---\n";
-                $debugInfo .= "Message: " . $e->getMessage() . "\n";
-                file_put_contents($debugFile, $debugInfo, FILE_APPEND);
-            }
-            
             return [
                 'success' => false,
                 'message' => 'Error al procesar respuesta de SUNARP: ' . $e->getMessage(),

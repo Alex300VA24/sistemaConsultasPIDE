@@ -11,17 +11,13 @@ const ModuloDNI = {
     // ============================================
     init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo DNI ya está inicializado');
             return;
         }
-
-        console.log('🆔 Inicializando Módulo DNI...');
         
         this.cachearElementos();
         this.setupEventListeners();
         
         this.inicializado = true;
-        console.log('✅ Módulo DNI inicializado correctamente');
     },
 
     // ============================================
@@ -89,10 +85,8 @@ const ModuloDNI = {
 
             // Obtener credenciales del usuario actual
             const usuario = localStorage.getItem('usuario');
-            console.log('👤 Usuario actual:', usuario);
             
             const credencialesResponse = await api.obtenerDniYPassword(usuario);
-            console.log('🔑 Credenciales obtenidas:', credencialesResponse.data);
 
             if (!credencialesResponse.success || !credencialesResponse.data) {
                 mostrarAlerta('No se pudieron obtener las credenciales del usuario', 'danger', 'alertContainerDNI');
@@ -109,11 +103,8 @@ const ModuloDNI = {
                 password: password
             };
 
-            console.log('📤 Enviando consulta:', payload);
-
             // Realizar consulta a la API
             const response = await api.consultarDNI(payload);
-            console.log('📥 Response del DNI:', response);
 
             // Manejar respuesta
             if (response.success && response.data) {
@@ -215,7 +206,6 @@ const ModuloDNI = {
         this.elementos.form.reset();
         this.limpiarResultados();
         this.elementos.alertContainer.innerHTML = '';
-        console.log('🧹 Formulario DNI limpiado');
     }
 };
 
@@ -238,7 +228,6 @@ window.volverInicio = function() {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('consultasdni', ModuloDNI);
-    console.log('✅ consultasdni registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

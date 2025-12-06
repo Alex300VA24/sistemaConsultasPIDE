@@ -27,7 +27,7 @@ class ConsultasReniecController {
         $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'];
     }
 
-    // 📌 CONSULTAR DNI (RENIEC)
+    // CONSULTAR DNI (RENIEC)
     public function consultarDNI()
     {
         header('Content-Type: application/json');
@@ -78,7 +78,7 @@ class ConsultasReniecController {
         echo json_encode($resultado);
     }
 
-    // 📌 ACTUALIZAR CONTRASEÑA RENIEC
+    // ACTUALIZAR CONTRASEÑA RENIEC
     public function actualizarPasswordRENIEC()
     {
         header('Content-Type: application/json');
@@ -127,7 +127,7 @@ class ConsultasReniecController {
         echo json_encode($resultado);
     }
 
-    // 🔍 SERVICIO ACTUALIZAR CONTRASEÑA RENIEC
+    // SERVICIO ACTUALIZAR CONTRASEÑA RENIEC
     private function actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni)
     {
         try {
@@ -216,7 +216,7 @@ class ConsultasReniecController {
 
 
     // ========================================
-    // 🔍 SERVICIO RENIEC (CURL)
+    // SERVICIO RENIEC (CURL)
     // ========================================
     private function consultarServicioRENIEC($dni, $dniUsuario, $passwordPIDE)
     {

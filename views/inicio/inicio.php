@@ -93,7 +93,7 @@
     </div>
 
     <!-- Sección de Actividad Reciente -->
-    <div class="activity-section">
+    <!-- <div class="activity-section">
         <div class="section-title">
             <i class="fas fa-history"></i>
             <h3>Actividad Reciente</h3>
@@ -140,7 +140,7 @@
                 <span class="activity-status error">Fallida</span>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="footer-section">

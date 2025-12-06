@@ -6,6 +6,11 @@ error_reporting();
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 
+/*error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);*/
+
+
 date_default_timezone_set('America/Lima');
 
 // Iniciar la sesion

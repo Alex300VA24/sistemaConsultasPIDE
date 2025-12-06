@@ -25,18 +25,14 @@ const ModuloActualizarUsuario = {
     // ============================================
     async init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo Actualizar Usuario ya está inicializado');
             return;
         }
-
-        console.log('✏️ Inicializando Módulo Actualizar Usuario...');
         
         this.cachearElementos();
         this.setupEventListeners();
         await this.cargarDatosIniciales();
         
         this.inicializado = true;
-        console.log('✅ Módulo Actualizar Usuario inicializado correctamente');
     },
 
     // ============================================
@@ -117,7 +113,6 @@ const ModuloActualizarUsuario = {
                 this.cargarRoles(),
                 this.cargarTiposDePersonal()
             ]);
-            console.log('✓ Datos iniciales cargados');
         } catch (error) {
             console.error('❌ Error al cargar datos iniciales:', error);
         }
@@ -146,7 +141,6 @@ const ModuloActualizarUsuario = {
                     select.appendChild(option);
                 });
 
-                console.log('✓ Lista de usuarios cargada:', response.data.length);
             } else {
                 mostrarAlerta(response.message || 'Error al cargar usuarios', 'error', 'alertContainerActualizarUsuario');
             }
@@ -174,8 +168,6 @@ const ModuloActualizarUsuario = {
                 option.textContent = rol.ROL_nombre;
                 select.appendChild(option);
             });
-
-            console.log('✓ Roles cargados:', response.data.length);
         } catch (error) {
             console.error('❌ Error cargando roles:', error);
             mostrarAlerta('No se pudieron cargar los roles.', 'danger', 'alertContainerActualizarUsuario');
@@ -199,7 +191,6 @@ const ModuloActualizarUsuario = {
                 select.appendChild(option);
             });
 
-            console.log('✓ Tipos de personal cargados:', response.data.length);
         } catch (error) {
             console.error('❌ Error cargando tipo de personal:', error);
             mostrarAlerta('No se pudieron cargar los tipos de personal.', 'danger', 'alertContainerActualizarUsuario');
@@ -266,7 +257,6 @@ const ModuloActualizarUsuario = {
                 : [];
                 this.usuarioElegido = {modulos: listaModulos};
                 
-                console.log('✓ Datos del usuario cargados');
             } else {
                 mostrarAlerta(response.message || 'Error al cargar usuario', 'error', 'alertContainerActualizarUsuario');
             }
@@ -286,9 +276,6 @@ const ModuloActualizarUsuario = {
             modulosRENIEC.includes(modulo) ||
             modulosRENIEC.some(cod => modulo.includes(cod))
         );
-
-        console.log('🔍 ¿Tiene acceso a RENIEC?:', tieneAcceso);
-        console.log('📋 Módulos del usuario:', this.usuarioElegido.modulos);
 
         return tieneAcceso;
     },
@@ -317,7 +304,6 @@ const ModuloActualizarUsuario = {
             
             // Obtener datos
             const datos = this.obtenerDatosFormulario();
-            console.log('Estos son los datos: ', datos);
             
             // Verificar si tiene acceso a RENIEC
             const tieneAccesoRENIEC = this.tieneAccesoRENIEC();
@@ -502,7 +488,6 @@ const ModuloActualizarUsuario = {
         this.usuarioIdActual = null;
         this.personaIdActual = null;
         
-        console.log('🧹 Formulario de actualizar usuario limpiado');
     }
 };
 
@@ -539,7 +524,6 @@ window.limpiarFormulario = function() {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('actualizarusuario', ModuloActualizarUsuario);
-    console.log('✅ actualizarusuario registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

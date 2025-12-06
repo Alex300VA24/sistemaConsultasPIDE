@@ -1,5 +1,5 @@
 // ============================================
-// 📋 MÓDULO DE CONSULTA PARTIDAS REGISTRALES
+// MÓDULO DE CONSULTA PARTIDAS REGISTRALES
 // ============================================
 
 const ModuloPartidas = {
@@ -15,27 +15,23 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 🚀 INICIALIZACIÓN
+    // INICIALIZACIÓN
     // ============================================
     async init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo Partidas ya está inicializado');
             return;
         }
-
-        console.log('📋 Inicializando Módulo Partidas...');
         
         await this.cargarCredencialesUsuario();
         this.setupEventListeners();
         
         this.inicializado = true;
-        console.log('✅ Módulo Partidas inicializado correctamente');
         this.zoomLevel = 1;
         this.imagenActual = null;
     },
 
     // ============================================
-    // 🔑 CARGAR CREDENCIALES
+    // CARGAR CREDENCIALES
     // ============================================
     async cargarCredencialesUsuario() {
         try {
@@ -50,10 +46,6 @@ const ModuloPartidas = {
                     }
                 }
             }
-            console.log('✅ Credenciales cargadas:', { 
-                dni: this.credencialesUsuario.dni, 
-                passwordLength: this.credencialesUsuario.password.length 
-            });
         } catch (error) {
             console.error('❌ Error al cargar credenciales:', error);
             mostrarAlerta('Error al cargar credenciales de usuario', 'danger', "alertContainerPartidas");
@@ -61,7 +53,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 🎯 CONFIGURAR EVENT LISTENERS
+    // CONFIGURAR EVENT LISTENERS
     // ============================================
     setupEventListeners() {
         // Radio buttons tipo de persona
@@ -111,7 +103,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 📌 CAMBIO DE TIPO DE PERSONA
+    // CAMBIO DE TIPO DE PERSONA
     // ============================================
     cambiarTipoPersona(e) {
         this.tipoPersonaActual = e.target.value;
@@ -143,7 +135,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 🔍 BÚSQUEDA PERSONA NATURAL
+    // BÚSQUEDA PERSONA NATURAL
     // ============================================
     async buscarPersonaNatural(e) {
         e.preventDefault();
@@ -163,15 +155,11 @@ const ModuloPartidas = {
         this.mostrarLoadingPartidas('formBusquedaNatural');
         
         try {
-            console.log('🔍 Buscando persona natural en RENIEC:', dni);
-            
             const resultado = await api.buscarPersonaNaturalSunarp(
                 dni,
                 this.credencialesUsuario.dni,
                 this.credencialesUsuario.password
             );
-            
-            console.log('📊 Resultado búsqueda natural:', resultado);
             
             if (resultado.success && resultado.data && resultado.data.length > 0) {
                 this.registrosEncontrados = resultado.data;
@@ -193,7 +181,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 🔍 BÚSQUEDA PERSONA JURÍDICA
+    // BÚSQUEDA PERSONA JURÍDICA
     // ============================================
     async buscarPersonaJuridica(e) {
         e.preventDefault();
@@ -223,16 +211,12 @@ const ModuloPartidas = {
         this.mostrarLoadingPartidas('formBusquedaJuridica');
         
         try {
-            console.log('🔍 Buscando persona jurídica en SUNAT:', { parametro, tipoBusqueda });
-            
             const resultado = await api.buscarPersonaJuridicaSunarp(
                 parametro,
                 tipoBusqueda,
                 this.credencialesUsuario.dni,
                 this.credencialesUsuario.password
             );
-            
-            console.log('📊 Resultado búsqueda jurídica:', resultado);
             
             if (resultado.success && resultado.data && resultado.data.length > 0) {
                 this.registrosEncontrados = resultado.data;
@@ -254,7 +238,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 📊 MOSTRAR RESULTADOS NATURALES
+    // MOSTRAR RESULTADOS NATURALES
     // ============================================
     mostrarResultadosNatural(data) {
         const contenedor = document.getElementById('resultadosNatural');
@@ -267,7 +251,7 @@ const ModuloPartidas = {
 
         let html = `
             <div style="margin-bottom: 15px; padding: 10px; background: #e8f5e9; border-radius: 5px;">
-                <strong>✅ Datos obtenidos de RENIEC</strong>
+                <strong>Datos obtenidos de RENIEC</strong>
             </div>
             <table>
                 <thead>
@@ -314,7 +298,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // 📊 MOSTRAR RESULTADOS JURÍDICOS
+    // MOSTRAR RESULTADOS JURÍDICOS
     // ============================================
     mostrarResultadosJuridica(data) {
         const contenedor = document.getElementById('resultadosJuridica');
@@ -327,7 +311,7 @@ const ModuloPartidas = {
         
         let html = `
             <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                <strong>✅ ${data.length} resultado(s) obtenido(s) de SUNAT</strong>
+                <strong>${data.length} resultado(s) obtenido(s) de SUNAT</strong>
             </div>
             <table>
                 <thead>
@@ -380,7 +364,7 @@ const ModuloPartidas = {
     },
 
     // ============================================
-    // ✅ SELECCIONAR REGISTRO
+    // SELECCIONAR REGISTRO
     // ============================================
     seleccionarRegistro(index) {
         if (!this.registrosEncontrados || !this.registrosEncontrados[index]) {
@@ -389,7 +373,6 @@ const ModuloPartidas = {
         }
 
         this.personaSeleccionada = this.registrosEncontrados[index];
-        console.log('✅ Registro seleccionado:', this.personaSeleccionada);
 
         const inputPersona = document.getElementById('persona');
 
@@ -416,7 +399,7 @@ const ModuloPartidas = {
 
 
     // ============================================
-    // 🔍 CONSULTAR TSIRSARP
+    // CONSULTAR TSIRSARP
     // ============================================
     async consultarTSIRSARP() {
         if (!this.personaSeleccionada) {
@@ -435,8 +418,6 @@ const ModuloPartidas = {
         btnConsultar.innerHTML = '<span class="loading-spinner"></span> Consultando SUNARP...';
 
         try {
-            console.log('🔍 Consultando TSIRSARP para:', this.personaSeleccionada);
-
             let resultado;
 
             if (this.tipoPersonaActual === 'natural') {
@@ -454,8 +435,6 @@ const ModuloPartidas = {
                     razonSocial: this.personaSeleccionada.razon_social || ''
                 });
             }
-
-            console.log('📊 Resultado TSIRSARP:', resultado);
             
             if (resultado.success && resultado.data && resultado.data.length > 0) {
                 this.mostrarResultadosTSIRSARP(resultado.data);
@@ -798,7 +777,6 @@ const ModuloPartidas = {
             
             if (imagenData && imagenData.imagen_base64) {
                 this.imagenActual = imagenData;
-                console.log('Imagen actual:', imagenData);  // AGREGAR para debuggear
                 imagenViewer.src = `data:image/jpeg;base64,${imagenData.imagen_base64}`;
                 imagenViewer.style.display = 'block';
                 imagenViewer.style.transform = 'scale(1)';
@@ -1086,8 +1064,7 @@ const ModuloPartidas = {
         
         this.limpiarModalNatural();
         this.limpiarModalJuridica();
-        
-        console.log('🧹 Formulario Partidas limpiado');
+
     },
 
     limpiarModalNatural() {
@@ -1178,7 +1155,6 @@ window.limpiarModalJuridica = function() {
 
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('consultaspartidas', ModuloPartidas);
-    console.log('✅ consultaspartidas registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

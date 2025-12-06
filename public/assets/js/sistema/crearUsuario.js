@@ -11,22 +11,18 @@ const ModuloCrearUsuario = {
     // ============================================
     async init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo Crear Usuario ya está inicializado');
             return;
         }
-
-        console.log('👤 Inicializando Módulo Crear Usuario...');
         
         this.cachearElementos();
         this.setupEventListeners();
         await this.cargarDatosIniciales();
         
         this.inicializado = true;
-        console.log('✅ Módulo Crear Usuario inicializado correctamente');
     },
 
     // ============================================
-    // 📦 CACHEAR ELEMENTOS DEL DOM
+    // CACHEAR ELEMENTOS DEL DOM
     // ============================================
     cachearElementos() {
         this.elementos = {
@@ -61,13 +57,13 @@ const ModuloCrearUsuario = {
     },
 
     // ============================================
-    // 🎯 CONFIGURAR EVENT LISTENERS
+    // CONFIGURAR EVENT LISTENERS
     // ============================================
     setupEventListeners() {
         // El botón crear ya tiene onclick en HTML, pero podemos agregarlo aquí también
         if (this.elementos.btnCrear) {
             // El onclick global ya existe, no hace falta agregar otro
-            console.log('✓ Botón crear configurado');
+            //console.log('✓ Botón crear configurado');
         }
         this.configurarTogglePassword('usuPass', 'togglePasswordCrear');
         this.configurarTogglePassword('usuPassConfirm', 'togglePasswordConfirmCrear');
@@ -87,7 +83,7 @@ const ModuloCrearUsuario = {
     },
 
     // ============================================
-    // 📊 CARGAR DATOS INICIALES
+    // CARGAR DATOS INICIALES
     // ============================================
     async cargarDatosIniciales() {
         try {
@@ -95,14 +91,13 @@ const ModuloCrearUsuario = {
                 this.cargarRoles(),
                 this.cargarTiposDePersonal()
             ]);
-            console.log('✓ Datos iniciales cargados');
         } catch (error) {
             console.error('❌ Error al cargar datos iniciales:', error);
         }
     },
 
     // ============================================
-    // 🔧 CARGAR ROLES
+    // CARGAR ROLES
     // ============================================
     async cargarRoles() {
         try {
@@ -122,7 +117,6 @@ const ModuloCrearUsuario = {
                 select.appendChild(option);
             });
 
-            console.log('✓ Roles cargados:', response.data.length);
         } catch (error) {
             console.error('❌ Error cargando roles:', error);
             mostrarAlerta('No se pudieron cargar los roles.', 'error', 'alertContainerCrearUsuario');
@@ -130,7 +124,7 @@ const ModuloCrearUsuario = {
     },
 
     // ============================================
-    // 🔧 CARGAR TIPOS DE PERSONAL
+    // CARGAR TIPOS DE PERSONAL
     // ============================================
     async cargarTiposDePersonal() {
         try {
@@ -147,15 +141,13 @@ const ModuloCrearUsuario = {
                 select.appendChild(option);
             });
 
-            console.log('✓ Tipos de personal cargados:', response.data.length);
         } catch (error) {
-            console.error('❌ Error cargando tipo de personal:', error);
             mostrarAlerta('No se pudieron cargar los tipos de personal.', 'error', 'alertContainerCrearUsuario');
         }
     },
 
     // ============================================
-    // 💾 CREAR USUARIO
+    // CREAR USUARIO
     // ============================================
     async crearUsuario() {
         this.limpiarAlertas();
@@ -194,7 +186,7 @@ const ModuloCrearUsuario = {
     },
 
     // ============================================
-    // 📝 RECOLECTAR DATOS DEL FORMULARIO
+    // RECOLECTAR DATOS DEL FORMULARIO
     // ============================================
     recolectarDatos() {
         return {
@@ -282,7 +274,6 @@ const ModuloCrearUsuario = {
         document.querySelectorAll('.usuario-container input, .usuario-container select').forEach(el => {
             el.value = '';
         });
-        console.log('🧹 Formulario de crear usuario limpiado');
     }
 };
 
@@ -308,7 +299,6 @@ window.limpiarFormularioCrearUsuario = function() {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('crearusuario', ModuloCrearUsuario);
-    console.log('✅ crearusuario registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

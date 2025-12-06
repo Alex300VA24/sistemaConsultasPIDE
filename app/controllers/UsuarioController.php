@@ -2,7 +2,6 @@
 namespace App\Controllers;
 
 use App\Services\UsuarioService;
-use App\Helpers\Debug;
 
 class UsuarioController {
     private $usuarioService;
@@ -12,7 +11,7 @@ class UsuarioController {
     }
     
     /**
-     * 🔹 LOGIN: Valida usuario y contraseña, obtiene datos básicos
+     * LOGIN: Valida usuario y contraseña, obtiene datos básicos
      * Luego solicita validar CUI (segunda fase)
      */
     public function login() {
@@ -42,8 +41,6 @@ class UsuarioController {
                 return;
             }
 
-            // Login válido, pero aún no validó CUI
-            session_start();
             $_SESSION['nombreUsuario'] = $nombreUsuario;
             $_SESSION['requireCUI'] = true;
 
@@ -66,46 +63,29 @@ class UsuarioController {
 
 
     /**
-     * 🔹 VALIDAR CUI: Comprueba el CUI ingresado por el usuario
+     * VALIDAR CUI: Comprueba el CUI ingresado por el usuario
      * Si es correcto, completa la autenticación y retorna datos del usuario
      */
     public function validarCUI() {
         try {
-            $debug = new Debug();
-            $debug->log_debug("Inicio validarCUI()");
             
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                $debug->log_debug("Método no permitido", $_SERVER['REQUEST_METHOD']);
                 throw new \Exception("Método no permitido");
             }
 
-            session_start();
-            $debug->log_debug("Sesión iniciada", $_SESSION);
-
             $json = file_get_contents('php://input');
-            $debug->log_debug("JSON recibido", $json);
 
             $data = json_decode($json, true);
-            $debug->log_debug("JSON decodificado", $data);
 
             $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
             $password = $_SESSION['password'] ?? null;
             $cui = $data['cui'] ?? '';
 
-            $debug->log_debug("Variables preparadas", [
-                'nombreUsuario' => $nombreUsuario,
-                'password' => $password,
-                'cui' => $cui
-            ]);
-
             if (!$nombreUsuario || !$password) {
-                $debug->log_debug("Sesión incompleta", $_SESSION);
                 throw new \Exception("Sesión incompleta para validar CUI");
             }
 
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
-
-            $debug->log_debug("Resultado del servicio", $resultado);
 
             // Guardar sesión completa
             $_SESSION['usuarioID'] = $resultado['usuario']['USU_id'] ?? null;
@@ -115,22 +95,19 @@ class UsuarioController {
 
             $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
             $_SESSION['permisos'] = $permisos;
-            $debug->log_debug("Sesión actualizada", $_SESSION);
 
             $respuesta = [
                 'success' => true,
                 'message' => $resultado['mensaje'] ?? 'Sin mensaje',
                 'data' => [
                     'usuario' => $resultado['usuario'] ?? [],
-                    'permisos' => $permisos  // ⭐ Enviar permisos al frontend
+                    'permisos' => $permisos  // Enviar permisos al frontend
                 ]
             ];
-            $debug->log_debug("Respuesta JSON", $respuesta);
 
             $this->jsonResponse($respuesta);
 
         } catch (\Exception $e) {
-            $debug->log_debug("Error capturado", $e->getMessage());
             $this->jsonResponse([
                 'success' => false,
                 'message' => $e->getMessage()
@@ -141,10 +118,9 @@ class UsuarioController {
 
 
     /**
-     * 🔹 LOGOUT: Cierra sesión del usuario
+     * LOGOUT: Cierra sesión del usuario
      */
     public function logout() {
-        session_start();
         session_destroy();
 
         $this->jsonResponse([
@@ -158,7 +134,6 @@ class UsuarioController {
      */
     public function obtenerUsuarioActual() {
         try {
-            session_start();
 
             if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
                 throw new \Exception("Usuario no autenticado");
@@ -213,7 +188,7 @@ class UsuarioController {
     }
 
 
-    // 🔹 Método para eliminar usuario
+    // Método para eliminar usuario
     public function eliminarUsuario() {
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -264,7 +239,7 @@ class UsuarioController {
                 throw new \Exception("No se encontró la contraseña en la sesión");
             }
 
-            // ✅ Armar la respuesta combinada
+            // Armar la respuesta combinada
             $respuesta = [
                 "success" => true,
                 "data" => [
@@ -501,10 +476,7 @@ class UsuarioController {
         }
     }
 
-    
-
-
-    //🔹 Enviar respuesta JSON
+    //Enviar respuesta JSON
     private function jsonResponse($data, $statusCode = 200) {
         http_response_code($statusCode);
         header('Content-Type: application/json');

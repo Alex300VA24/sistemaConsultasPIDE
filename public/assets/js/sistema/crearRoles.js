@@ -16,18 +16,14 @@ const ModuloRoles = {
     // ============================================
     async init() {
         if (this.inicializado) {
-            console.log('ℹ️ Módulo Roles ya está inicializado');
             return;
         }
-
-        console.log('🎭 Inicializando Módulo Gestión de Roles...');
         
         this.cachearElementos();
         this.setupEventListeners();
         await this.cargarModulos();
         
         this.inicializado = true;
-        console.log('✅ Módulo Roles inicializado correctamente');
     },
 
     // ============================================
@@ -56,9 +52,7 @@ const ModuloRoles = {
     // 🎯 CONFIGURAR EVENT LISTENERS
     // ============================================
     setupEventListeners() {
-        // Los event listeners para tabs y botones se manejan desde HTML
-        // o se pueden agregar aquí si lo prefieres
-        console.log('✓ Event listeners configurados');
+        // console.log('✓ Event listeners configurados');
     },
 
     // ============================================
@@ -66,19 +60,15 @@ const ModuloRoles = {
     // ============================================
     async cargarModulos() {
         try {
-            console.log('📥 Cargando módulos...');
             const response = await api.listarModulos();
             
             if (response.success && response.data) {
                 this.modulosDisponibles = response.data;
-                console.log('✅ Módulos cargados:', this.modulosDisponibles.length);
                 this.renderizarModulos();
             } else {
-                console.error('❌ Error al cargar módulos:', response.message);
                 mostrarAlerta('Error al cargar módulos', 'error', 'alertContainerRoles');
             }
         } catch (error) {
-            console.error('❌ Error al cargar módulos:', error);
             mostrarAlerta('Error de conexión al cargar módulos', 'error', 'alertContainerRoles');
         }
     },
@@ -90,7 +80,6 @@ const ModuloRoles = {
         const container = this.elementos.modulosContainer;
         
         if (!container) {
-            console.error('❌ Contenedor #modulosContainer no encontrado');
             return;
         }
         
@@ -106,14 +95,10 @@ const ModuloRoles = {
             return;
         }
         
-        console.log('📦 Total módulos:', this.modulosDisponibles.length);
-        
         // Organizar módulos por jerarquía
         const modulosPadre = this.modulosDisponibles.filter(m => 
             !m.MOD_padre_id || m.MOD_padre_id === null || m.MOD_padre_id === 0
         );
-        
-        console.log('👨 Módulos padre encontrados:', modulosPadre.length);
         
         if (modulosPadre.length === 0) {
             container.innerHTML = `
@@ -129,7 +114,6 @@ const ModuloRoles = {
             container.appendChild(moduloPadreDiv);
         });
         
-        console.log('✅ Módulos renderizados correctamente');
     },
 
     // ============================================
@@ -175,8 +159,6 @@ const ModuloRoles = {
         // Agregar hijos si existen
         const hijos = this.modulosDisponibles.filter(m => m.MOD_padre_id === padre.MOD_id);
         
-        console.log(`👶 Padre "${padre.MOD_nombre}" tiene ${hijos.length} hijos`);
-        
         if (hijos.length > 0) {
             const hijosContainer = this.crearContenedorHijos(padre.MOD_id, hijos, index);
             moduloPadreDiv.appendChild(hijosContainer);
@@ -186,7 +168,7 @@ const ModuloRoles = {
     },
 
     // ============================================
-    // 🏗️ CREAR CONTENEDOR DE HIJOS
+    // CREAR CONTENEDOR DE HIJOS
     // ============================================
     crearContenedorHijos(padreId, hijos, indexPadre) {
         const hijosContainer = document.createElement('div');
@@ -246,13 +228,12 @@ const ModuloRoles = {
             
             // Quitar estado indeterminado
             checkbox.indeterminate = false;
-            
-            console.log(`${checkbox.checked ? '✅' : '❌'} Padre ${padreId}: ${checkboxesHijos.length} hijos ${checkbox.checked ? 'marcados' : 'desmarcados'}`);
+    
         }
     },
 
     // ============================================
-    // 🔄 TOGGLE MÓDULO HIJO
+    // TOGGLE MÓDULO HIJO
     // ============================================
     toggleModuloHijo(checkbox, padreId) {
         const checkboxPadre = document.getElementById(`modulo-${padreId}`);
@@ -267,15 +248,12 @@ const ModuloRoles = {
             if (todosMarcados) {
                 checkboxPadre.checked = true;
                 checkboxPadre.indeterminate = false;
-                console.log(`✅ Todos los hijos del padre ${padreId} marcados`);
             } else if (algunoMarcado) {
                 checkboxPadre.checked = false;
                 checkboxPadre.indeterminate = true;
-                console.log(`⚠️ Algunos hijos del padre ${padreId} marcados (indeterminado)`);
             } else {
                 checkboxPadre.checked = false;
                 checkboxPadre.indeterminate = false;
-                console.log(`❌ Ningún hijo del padre ${padreId} marcado`);
             }
         }
     },
@@ -333,8 +311,6 @@ const ModuloRoles = {
             return;
         }
         
-        console.log('📦 Módulos seleccionados:', modulosSeleccionados);
-        
         try {
             const data = {
                 codigo,
@@ -343,8 +319,6 @@ const ModuloRoles = {
                 descripcion,
                 modulos: modulosSeleccionados
             };
-            
-            console.log('📤 Enviando datos:', data);
             
             const response = this.rolEnEdicion 
                 ? await api.actualizarRol({ ...data, rol_id: this.rolEnEdicion })
@@ -362,6 +336,7 @@ const ModuloRoles = {
                 
                 setTimeout(() => {
                     this.limpiarFormulario();
+                    location.reload();
                 }, 3000);
                 // Limpiar formulario
                 
@@ -374,40 +349,34 @@ const ModuloRoles = {
                 mostrarAlerta(response.message || 'Error al guardar el rol', 'error', 'alertContainerRoles');
             }
         } catch (error) {
-            console.error('❌ Error al guardar rol:', error);
             mostrarAlerta(error.message || 'Error al guardar el rol', 'error', 'alertContainerRoles');
         }
     },
 
     // ============================================
-    // 📋 CARGAR ROLES
+    // CARGAR ROLES
     // ============================================
     async cargarRoles() {
         try {
-            console.log('📥 Cargando roles...');
             const response = await api.listarRoles();
             
             if (response.success && response.data) {
-                console.log('✅ Roles cargados:', response.data.length);
                 this.renderizarTablaRoles(response.data);
             } else {
-                console.error('❌ Error al cargar roles');
                 mostrarAlerta('Error al cargar roles', 'danger', 'alertContainerRoles');
             }
         } catch (error) {
-            console.error('❌ Error al cargar roles:', error);
             mostrarAlerta('Error de conexión al cargar roles', 'danger', 'alertContainerRoles');
         }
     },
 
     // ============================================
-    // 🎨 RENDERIZAR TABLA DE ROLES
+    // RENDERIZAR TABLA DE ROLES
     // ============================================
     renderizarTablaRoles(roles) {
         const tbody = this.elementos.tablaRoles;
         
         if (!tbody) {
-            console.error('❌ Tbody de tabla no encontrado');
             return;
         }
         
@@ -457,7 +426,6 @@ const ModuloRoles = {
     // ============================================
     async editarRol(rolId) {
         try {
-            console.log('✏️ Editando rol:', rolId);
             
             // Cambiar a la pestaña de creación
             this.cambiarTab('crear');
@@ -469,9 +437,6 @@ const ModuloRoles = {
             
             if (response.success && response.data) {
                 const rol = response.data;
-                
-                console.log('📄 Datos del rol:', rol);
-                console.log('📦 Módulos del rol:', rol.modulos);
                 
                 // Llenar campos del formulario
                 this.elementos.rolCodigo.value = rol.ROL_codigo || '';
@@ -485,11 +450,8 @@ const ModuloRoles = {
                     cb.indeterminate = false;
                 });
                 
-                console.log('🧹 Todos los checkboxes desmarcados');
-                
                 // Marcar módulos seleccionados
                 if (rol.modulos && Array.isArray(rol.modulos) && rol.modulos.length > 0) {
-                    console.log('🔍 Procesando módulos:', rol.modulos);
                     
                     let modulosMarcados = 0;
                     
@@ -499,7 +461,6 @@ const ModuloRoles = {
                         if (checkbox) {
                             checkbox.checked = true;
                             modulosMarcados++;
-                            console.log(`✅ Marcado módulo ID: ${moduloId}`);
                             
                             // Si es un checkbox hijo, actualizar el estado del padre
                             if (checkbox.classList.contains('checkbox-hijo')) {
@@ -514,8 +475,6 @@ const ModuloRoles = {
                             console.warn(`⚠️ No se encontró checkbox para módulo ID: ${moduloId}`);
                         }
                     });
-                    
-                    console.log(`✅ Total módulos marcados: ${modulosMarcados} de ${rol.modulos.length}`);
                     
                     // Actualizar estado de todos los padres
                     setTimeout(() => {
@@ -540,13 +499,12 @@ const ModuloRoles = {
                 }, 200);
             }
         } catch (error) {
-            console.error('❌ Error al cargar rol:', error);
             mostrarAlerta('Error al cargar rol para edición', 'danger', 'alertContainerRoles');
         }
     },
 
     // ============================================
-    // 🔄 ACTUALIZAR ESTADO DE UN PADRE
+    // ACTUALIZAR ESTADO DE UN PADRE
     // ============================================
     actualizarEstadoPadre(padreId) {
         const checkboxPadre = document.getElementById(`modulo-${padreId}`);
@@ -560,25 +518,20 @@ const ModuloRoles = {
             if (todosMarcados && checkboxesHijos.length > 0) {
                 checkboxPadre.checked = true;
                 checkboxPadre.indeterminate = false;
-                console.log(`✅ Padre ${padreId}: Todos los hijos marcados`);
             } else if (algunoMarcado) {
                 checkboxPadre.checked = false;
                 checkboxPadre.indeterminate = true;
-                console.log(`⚠️ Padre ${padreId}: Algunos hijos marcados (indeterminado)`);
             } else {
                 checkboxPadre.checked = false;
                 checkboxPadre.indeterminate = false;
-                console.log(`❌ Padre ${padreId}: Ningún hijo marcado`);
             }
         }
     },
 
     // ============================================
-    // 🔄 ACTUALIZAR TODOS LOS PADRES
+    // ACTUALIZAR TODOS LOS PADRES
     // ============================================
     actualizarTodosLosPadres() {
-        console.log('🔄 Actualizando estado de todos los padres...');
-        
         const checkboxesPadre = document.querySelectorAll('.checkbox-padre');
         
         checkboxesPadre.forEach(checkboxPadre => {
@@ -586,11 +539,10 @@ const ModuloRoles = {
             this.actualizarEstadoPadre(padreId);
         });
         
-        console.log('✅ Estado de todos los padres actualizado');
     },
 
     // ============================================
-    // 🗑️ ELIMINAR ROL
+    // ELIMINAR ROL
     // ============================================
     async eliminarRol(rolId) {
         if (!confirm('¿Está seguro de eliminar este rol? Esta acción no se puede deshacer.')) {
@@ -598,7 +550,6 @@ const ModuloRoles = {
         }
         
         try {
-            console.log('🗑️ Eliminando rol:', rolId);
             const response = await api.eliminarRol(rolId);
             
             if (response.success) {
@@ -608,18 +559,15 @@ const ModuloRoles = {
                 mostrarAlerta(response.message || 'Error al eliminar rol', 'danger', 'alertContainerRoles');
             }
         } catch (error) {
-            console.error('❌ Error al eliminar rol:', error);
             mostrarAlerta(error.message || 'Error al eliminar rol', 'danger', 'alertContainerRoles');
         }
     },
 
     // ============================================
-    // 📑 CAMBIAR TAB
+    // CAMBIAR TAB
     // ============================================
     cambiarTab(tab) {
         if (!['crear','listar'].includes(tab)) return;
-
-        console.log('📑 Cambiando a tab:', tab);
         
         this.tabActual = tab;
         
@@ -639,11 +587,9 @@ const ModuloRoles = {
     },
 
     // ============================================
-    // 🧹 LIMPIAR FORMULARIO
+    // LIMPIAR FORMULARIO
     // ============================================
     limpiarFormulario() {
-        console.log('🧹 Limpiando formulario...');
-        
         // Limpiar campos de texto
         this.elementos.rolCodigo.value = '';
         this.elementos.rolNombre.value = '';
@@ -666,8 +612,6 @@ const ModuloRoles = {
         
         // Resetear modo edición
         this.rolEnEdicion = null;
-        
-        console.log('✅ Formulario limpiado');
     }
 };
 
@@ -701,7 +645,6 @@ window.limpiarFormulario = function() {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('crearroles', ModuloRoles);
-    console.log('✅ crearroles registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM

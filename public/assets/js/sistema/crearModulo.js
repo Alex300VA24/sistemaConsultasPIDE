@@ -7,7 +7,6 @@ const ModuloCrearModulo = {
     modoEdicion: false,
 
     init() {
-        console.log('🧩 Inicializando Módulo de Gestión de Módulos...');
         this.setupEventListeners();
         this.cargarModulosPadre();
         this.switchTab('crearModulo');
@@ -397,9 +396,6 @@ const ModuloCrearModulo = {
     },
 
     async recargarSidebar() {
-        // Aquí recargaríamos la barra de navegación dinámicamente
-        // Por ahora, recargamos la página completa
-        console.log('🔄 Recargando sidebar...');
         window.location.reload();
     },
 
@@ -430,7 +426,6 @@ const ModuloCrearModulo = {
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('crearmodulo', ModuloCrearModulo);
-    console.log('✅ crearmodulo registrado en Dashboard');
 }
 
 // Auto-inicializar cuando se cargue el DOM
