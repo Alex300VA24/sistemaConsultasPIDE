@@ -257,7 +257,6 @@ class API {
         return this.post('/sunarp/tsirsarp-juridica', datos);
     }
 
-
     async crearUsuario(data) {
         return this.post('/crear-usuario', { data })
     }
