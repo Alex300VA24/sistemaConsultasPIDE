@@ -15,15 +15,24 @@ class UsuarioService {
             throw new \Exception("Usuario y contraseña son requeridos");
         }
         
-        $usuario = $this->usuarioRepository->login($nombreUsuario, $password);
+        // Primero obtenemos el usuario por nombre de usuario
+        $validacion = $this->usuarioRepository->obtenerPasswordUser($nombreUsuario);
         
-        if ($usuario === null) {
+        if ($validacion === null) {
             throw new \Exception("Credenciales incorrectas");
         }
         
+        error_log(print_r($validacion, true) ."". print_r($password, true));
+        // Verificar la contraseña hasheada
+        if (!password_verify($password, $validacion['USU_password_hash'])) {
+            throw new \Exception("Credenciales incorrectas");
+        }
+        $hasheadoPass = $validacion['USU_password_hash']; 
+        $usuario = $this->usuarioRepository->login($nombreUsuario, $hasheadoPass);
+        
         return $usuario;
     }
-    
+
     // Service: validar la estructura devuelta por el repo
     public function validarCUI($nombreUsuario, $password, $cui) {
 
@@ -35,12 +44,26 @@ class UsuarioService {
             throw new \Exception("El CUI debe ser de 1 dígito");
         }
 
-        $usuario = $this->usuarioRepository->validarCUI($nombreUsuario, $password, $cui);
+        // Primero validamos usuario y contraseña
+        $validacion = $this->usuarioRepository->obtenerPasswordCUIUser($nombreUsuario);
+        
+        if ($validacion === null) {
+            throw new \Exception("Credenciales incorrectas");
+        }
+        
+        // Verificar la contraseña hasheada
+        if (!password_verify($password, $validacion['USU_password_hash'])) {
+            throw new \Exception("Credenciales incorrectas");
+        }
 
-        // Usuario inválido
-        if ($usuario === null) {
+        // Ahora validamos el CUI
+        if ($validacion['USU_cui'] != $cui) {
             throw new \Exception("CUI incorrecto");
         }
+
+        $hasheadoPass = $validacion["USU_password_hash"];
+        $usuario = $this->usuarioRepository->validarCUI($nombreUsuario, $hasheadoPass, $cui);
+        
         if (is_array($usuario) && isset($usuario['valido']) && $usuario['valido'] == false) {
             throw new \Exception($usuario['mensaje'] ?? 'CUI incorrecto');
         }
@@ -48,48 +71,31 @@ class UsuarioService {
         // ===============================
         //   AQUI AGREGAS LA SESIÓN
         // ===============================
-        $usuarioData = $usuario['usuario'];   // datos que vienen del SP
-
-        $_SESSION['ROL_nombre'] = $usuarioData['ROL_nombre']; 
-        $_SESSION['usuario_id'] = $usuarioData['USU_id'];
+        $usuarioData = $usuario['usuario'];
+        $_SESSION['ROL_nombre'] = $usuario['ROL_nombre']; 
+        $_SESSION['usuario_id'] = $usuario['USU_id'];
         $_SESSION['usuario'] = $usuarioData; // opcional
 
         return $usuario;
     }
 
 
-
-
-
     public function crearUsuario($data) {
         try {
             // Validaciones mínimas
             if (empty($data['usuLogin']) || empty($data['usuPass'])) {
-                throw new \Exception("El login y la contraseña son obligatorios");
+                throw new \Exception("El usuario y la contraseña son obligatorios");
             }
+
+            // Hashear la contraseña antes de guardar
+            $data['usuPass'] = password_hash($data['usuPass'], PASSWORD_DEFAULT);
 
             // Llamada al repositorio
             return $this->usuarioRepository->crearUsuario($data);
 
         } catch (\Throwable $e) {
-            // Crear carpeta de logs si no existe
-            $logDir = __DIR__ . '/../../logs';
-            if (!is_dir($logDir)) {
-                mkdir($logDir, 0777, true);
-            }
-
-            // Contenido del log
-            $logFile = $logDir . '/error_crear_usuario.txt';
-            $errorMsg = "[" . date('Y-m-d H:i:s') . "] ERROR: " . $e->getMessage() . PHP_EOL;
-            $errorMsg .= "Datos enviados:" . PHP_EOL . print_r($data, true) . PHP_EOL;
-            $errorMsg .= str_repeat("-", 60) . PHP_EOL;
-
-            // Escribir log
-            file_put_contents($logFile, $errorMsg, FILE_APPEND);
-
             // Re-lanzar la excepción para que el controlador la maneje
             throw new \Exception($e->getMessage());
-
         }
     }
 
@@ -140,20 +146,30 @@ class UsuarioService {
     {
         return $this->usuarioRepository->obtenerDni($nombreUsuario);
     }
+    public function obtenerPasswordPorDNI($dni)
+    {
+        return $this->usuarioRepository->obtenerPasswordPorDNI($dni);
+    }
 
     /**
      * Actualizar usuario
      */
     public function actualizarUsuario($datos)
     {
+        $validacion = $this->usuarioRepository->obtenerPasswordUser($datos['usuUsername']);
+        
+        if ($validacion === null) {
+            throw new \Exception("No se encontró el usuario");
+        }
+        $datos['usuPassActual'] = $validacion['USU_password_hash'];
         // Validaciones
         $this->validarDatosUsuario($datos, true);
 
         // Si hay contraseña nueva, hashearla
-        if (!empty($datos['USU_pass'])) {
-            $datos['USU_pass'] = $datos['USU_pass'];
+        if (!empty($datos['usuPass'])) {
+            $datos['usuPass'] = password_hash($datos['usuPass'], PASSWORD_DEFAULT);
         } else {
-            $datos['USU_pass'] = null; // No actualizar contraseña
+            $datos['usuPass'] = null; // No actualizar contraseña
         }
 
         // Actualizar en BD
@@ -162,14 +178,21 @@ class UsuarioService {
         return $response;
     }
 
-    public function actualizarPassword($datos)
-    {
+    public function actualizarPassword($datos){
+
         // Validaciones
         $this->validarPassword($datos, true);
 
+        $validacion = $this->usuarioRepository->obtenerPasswordPorId($datos['USU_id']);
+        
+        if ($validacion === null) {
+            throw new \Exception("No se encontró el usuario");
+        }
+        $datos['USU_passActual'] = $validacion['USU_password_hash'];
+
         // Si hay contraseña nueva, hashearla
         if (!empty($datos['USU_pass'])) {
-            $datos['USU_pass'] = $datos['USU_pass'];
+            $datos['USU_pass'] = password_hash($datos['USU_pass'], PASSWORD_DEFAULT);
         } else {
             $datos['USU_pass'] = null; // No actualizar contraseña
         }
@@ -198,39 +221,39 @@ class UsuarioService {
         }
 
         // Validar tipo de persona
-        if (empty($datos['PER_tipo'])) {
+        if (empty($datos['perTipo'])) {
             $errores[] = 'Tipo de persona es requerido';
         }
 
         // Validar documento
-        if (empty($datos['PER_documento_tipo'])) {
+        if (empty($datos['perDocumentoTipo'])) {
             $errores[] = 'Tipo de documento es requerido';
         }
-        if (empty($datos['PER_documento_num'])) {
+        if (empty($datos['perDocumentoNum'])) {
             $errores[] = 'Número de documento es requerido';
         }
 
         // Validar nombres
-        if (empty($datos['PER_nombre'])) {
+        if (empty($datos['perNombre'])) {
             $errores[] = 'Nombres son requeridos';
         }
         
-        if (empty($datos['PER_apellido_pat'])) {
+        if (empty($datos['perApellidoPat'])) {
             $errores[] = 'Apellido paterno es requerido';
         }
 
         // Validar sexo
-        if (empty($datos['PER_sexo'])) {
+        if (empty($datos['perSexo'])) {
             $errores[] = 'Sexo es requerido';
         }
 
         // Validar login
-        if (empty($datos['USU_login'])) {
-            $errores[] = 'Login/Usuario es requerido';
+        if (empty($datos['usuUsername'])) {
+            $errores[] = 'Usuario es requerido';
         }
 
         // Validar email si se proporciona
-        if (!empty($datos['PER_email']) && !filter_var($datos['PER_email'], FILTER_VALIDATE_EMAIL)) {
+        if (!empty($datos['perEmail']) && !filter_var($datos['perEmail'], FILTER_VALIDATE_EMAIL)) {
             $errores[] = 'Email inválido';
         }
 

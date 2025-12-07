@@ -14,7 +14,7 @@ class UsuarioController {
      * LOGIN: Valida usuario y contraseña, obtiene datos básicos
      * Luego solicita validar CUI (segunda fase)
      */
-    public function login() {
+    public function login(){
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new \Exception("Método no permitido");
@@ -31,6 +31,8 @@ class UsuarioController {
             $_SESSION['nombreUsuario'] = $nombreUsuario;
             $_SESSION['password'] = $password;
             $_SESSION['requireCUI'] = true;
+
+            error_log("Resultado del login: " . print_r($resultado, true));
 
 
             if (!$resultado['valido']) {
@@ -425,8 +427,10 @@ class UsuarioController {
             }
 
             $datos = $input['data'];
+            error_log("Datos recibidos para actualizar usuario: " . print_r($datos, true));
 
             $response = $this->usuarioService->actualizarUsuario($datos);
+            error_log("Respuesta de actualización de usuario: " . print_r($response, true));
 
             echo json_encode($response);
         } catch (\Exception $e) {

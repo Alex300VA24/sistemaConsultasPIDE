@@ -108,3 +108,8 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     </script>
 </body>
 </html>
+
+<?php
+    //echo password_hash('12345678', PASSWORD_DEFAULT);
+?>
+

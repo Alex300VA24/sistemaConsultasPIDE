@@ -1,6 +1,5 @@
-// ============================================
-// 🎭 MÓDULO DE GESTIÓN DE ROLES
-// ============================================
+
+/* ---- MÓDULO DE GESTIÓN DE ROLES ---- */
 
 const ModuloRoles = {
     elementos: {},
@@ -11,9 +10,7 @@ const ModuloRoles = {
     rolEnEdicion: null,
     tabActual: 'crear',
 
-    // ============================================
-    // 🚀 INICIALIZACIÓN
-    // ============================================
+    /* ---- INICIALIZACIÓN ---- */
     async init() {
         if (this.inicializado) {
             return;
@@ -26,9 +23,9 @@ const ModuloRoles = {
         this.inicializado = true;
     },
 
-    // ============================================
-    // 📦 CACHEAR ELEMENTOS DEL DOM
-    // ============================================
+    // --------------------------------------------
+    // CACHEAR ELEMENTOS DEL DOM
+    // --------------------------------------------
     cachearElementos() {
         this.elementos = {
             // Tabs

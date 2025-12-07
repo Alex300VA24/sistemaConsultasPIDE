@@ -1,5 +1,5 @@
 // ============================================
-// 🔐 MÓDULO DE ACTUALIZAR CONTRASEÑA
+// MÓDULO DE ACTUALIZAR CONTRASEÑA
 // ============================================
 
 const ModuloActualizarPassword = {
@@ -18,7 +18,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 🚀 INICIALIZACIÓN
+    // INICIALIZACIÓN
     // ============================================
     async init() {
         if (this.inicializado) {
@@ -53,7 +53,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 🎯 CONFIGURAR EVENT LISTENERS
+    // CONFIGURAR EVENT LISTENERS
     // ============================================
     setupEventListeners() {
         // Toggle password visibility
@@ -62,7 +62,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 👁️ CONFIGURAR TOGGLE PASSWORD
+    // CONFIGURAR TOGGLE PASSWORD
     // ============================================
     configurarTogglePassword(inputId, iconId) {
         const input = document.getElementById(inputId);
@@ -79,7 +79,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 👤 CARGAR DATOS DEL USUARIO ACTUAL
+    // CARGAR DATOS DEL USUARIO ACTUAL
     // ============================================
     async cargarDatosUsuarioActual() {
         try {
@@ -114,7 +114,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 📄 MOSTRAR INFORMACIÓN DEL USUARIO
+    // MOSTRAR INFORMACIÓN DEL USUARIO
     // ============================================
     mostrarInfoUsuario() {
         const infoElement = this.elementos.infoUsuarioActual;
@@ -130,7 +130,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 🔍 VERIFICAR SI TIENE ACCESO A RENIEC
+    // VERIFICAR SI TIENE ACCESO A RENIEC
     // ============================================
     tieneAccesoRENIEC() {
         const modulosRENIEC = ['DNI', 'PAR'];
