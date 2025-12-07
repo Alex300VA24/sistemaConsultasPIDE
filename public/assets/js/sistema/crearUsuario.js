@@ -181,8 +181,21 @@ const ModuloCrearUsuario = {
 
                 // Verificar si tiene acceso a RENIEC
                 const tieneAccesoRENIEC = this.tieneAccesoRENIEC();
+                
                 // Si hay contraseña nueva y tiene acceso a RENIEC, actualizar en RENIEC primero
                 if (data.usuPass && data.usuPass.trim() !== '' && tieneAccesoRENIEC) {
+                    // Solicitar contraseña actual mediante modal
+                    const passwordAnterior = await this.solicitarPasswordActual();
+                    
+                    if (!passwordAnterior) {
+                        window.mostrarAlerta(
+                            'Debe ingresar la contraseña actual para cambiarla',
+                            'warning',
+                            'alertContainerCrearUsuario'
+                        );
+                        return;
+                    }
+                    
                     window.mostrarAlerta(
                         'Actualizando contraseña en RENIEC...',
                         'info',
@@ -190,7 +203,7 @@ const ModuloCrearUsuario = {
                     );
                     
                     const resultadoRENIEC = await api.actualizarPasswordRENIEC({
-                        credencialAnterior: data.usuPassActual,
+                        credencialAnterior: passwordAnterior,
                         credencialNueva: data.usuPass,
                         nuDni: this.usuarioEscogido.dni
                     });
@@ -210,6 +223,7 @@ const ModuloCrearUsuario = {
                         'alertContainerCrearUsuario'
                     );
                 }
+                
                 // Actualizar en base de datos
                 window.mostrarAlerta(
                     'Actualizando datos en el sistema...',
@@ -249,7 +263,7 @@ const ModuloCrearUsuario = {
         } catch (error) {
             console.error('Error en guardarUsuario:', error);
             window.mostrarAlerta(
-                 error.message|| 'Error de conexión con el servidor.',
+                error.message|| 'Error de conexión con el servidor.',
                 'error',
                 'alertContainerCrearUsuario'
             );
@@ -263,6 +277,330 @@ const ModuloCrearUsuario = {
                 titulo.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
+    },
+
+    // Función para solicitar contraseña actual mediante modal
+    solicitarPasswordActual() {
+        return new Promise((resolve, reject) => {
+            // Crear el modal dinámicamente
+            const modalHTML = `
+                <div id="modalPasswordActual" class="modal-overlay-password">
+                    <div class="modal-content-password">
+                        <div class="modal-header-password">
+                            <h3>Verificación de Contraseña</h3>
+                            <button type="button" class="btn-close-modal-password" id="btnCerrarModalPassword">&times;</button>
+                        </div>
+                        <div class="modal-body-password">
+                            <p class="modal-description-password">Para actualizar la contraseña, primero debe ingresar su contraseña actual.</p>
+                            <div class="form-group-password">
+                                <label for="passwordActualModal">Contraseña Actual *</label>
+                                <div class="password-input-wrapper">
+                                    <input 
+                                        type="password" 
+                                        id="passwordActualModal" 
+                                        class="form-control-password" 
+                                        placeholder="Ingrese su contraseña actual"
+                                        autocomplete="current-password"
+                                    >
+                                    <button type="button" class="btn-toggle-password" id="btnTogglePassword">
+                                        <span class="icon-eye">👁️</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="alertModalPassword" class="alert-container-password"></div>
+                        </div>
+                        <div class="modal-footer-password">
+                            <button type="button" class="btn btn-secondary-password" id="btnCancelarPassword">Cancelar</button>
+                            <button type="button" class="btn btn-primary-password" id="btnConfirmarPassword">Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar estilos si no existen
+            if (!document.getElementById('modalPasswordStyles')) {
+                const styles = document.createElement('style');
+                styles.id = 'modalPasswordStyles';
+                styles.textContent = `
+                    .modal-overlay-password {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 9999;
+                        animation: fadeInPassword 0.3s ease;
+                    }
+
+                    .modal-content-password {
+                        background: white;
+                        border-radius: 12px;
+                        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+                        max-width: 500px;
+                        width: 90%;
+                        max-height: 90vh;
+                        overflow-y: auto;
+                        animation: slideDownPassword 0.3s ease;
+                    }
+
+                    .modal-header-password {
+                        padding: 20px 24px;
+                        border-bottom: 1px solid #e5e7eb;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .modal-header-password h3 {
+                        margin: 0;
+                        font-size: 1.25rem;
+                        font-weight: 600;
+                        color: #1f2937;
+                    }
+
+                    .btn-close-modal-password {
+                        background: none;
+                        border: none;
+                        font-size: 28px;
+                        color: #6b7280;
+                        cursor: pointer;
+                        padding: 0;
+                        width: 32px;
+                        height: 32px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 6px;
+                        transition: all 0.2s;
+                    }
+
+                    .btn-close-modal-password:hover {
+                        background-color: #f3f4f6;
+                        color: #1f2937;
+                    }
+
+                    .modal-body-password {
+                        padding: 24px;
+                    }
+
+                    .modal-description-password {
+                        color: #6b7280;
+                        margin-bottom: 20px;
+                        font-size: 0.95rem;
+                        line-height: 1.5;
+                    }
+
+                    .form-group-password {
+                        margin-bottom: 16px;
+                    }
+
+                    .form-group-password label {
+                        display: block;
+                        margin-bottom: 8px;
+                        font-weight: 500;
+                        color: #374151;
+                        font-size: 0.95rem;
+                    }
+
+                    .password-input-wrapper {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                    .password-input-wrapper .form-control-password {
+                        flex: 1;
+                        padding-right: 45px;
+                    }
+
+                    .form-control-password {
+                        width: 100%;
+                        padding: 10px 12px;
+                        border: 1px solid #d1d5db;
+                        border-radius: 8px;
+                        font-size: 0.95rem;
+                        transition: all 0.2s;
+                    }
+
+                    .form-control-password:focus {
+                        outline: none;
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                    }
+
+                    .btn-toggle-password {
+                        position: absolute;
+                        right: 8px;
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        padding: 6px 10px;
+                        color: #6b7280;
+                        transition: all 0.2s;
+                        border-radius: 6px;
+                    }
+
+                    .btn-toggle-password:hover {
+                        background-color: #f3f4f6;
+                        color: #1f2937;
+                    }
+
+                    .icon-eye {
+                        font-size: 20px;
+                        display: inline-block;
+                    }
+
+                    .modal-footer-password {
+                        padding: 16px 24px;
+                        border-top: 1px solid #e5e7eb;
+                        display: flex;
+                        justify-content: flex-end;
+                        gap: 12px;
+                    }
+
+                    .btn {
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    .btn-primary-password {
+                        background-color: #3b82f6;
+                        color: white;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    .btn-primary-password:hover {
+                        background-color: #2563eb;
+                    }
+
+                    .btn-secondary-password {
+                        background-color: #f3f4f6;
+                        color: #374151;
+                        padding: 10px 20px;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+
+                    .btn-secondary-password:hover {
+                        background-color: #e5e7eb;
+                    }
+
+                    .alert-container-password {
+                        margin-top: 12px;
+                    }
+
+                    @keyframes fadeInPassword {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
+                    }
+
+                    @keyframes slideDownPassword {
+                        from {
+                            transform: translateY(-20px);
+                            opacity: 0;
+                        }
+                        to {
+                            transform: translateY(0);
+                            opacity: 1;
+                        }
+                    }
+                `;
+                document.head.appendChild(styles);
+            }
+            
+            // Insertar modal en el DOM
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHTML;
+            document.body.appendChild(modalContainer.firstElementChild);
+            
+            const modal = document.getElementById('modalPasswordActual');
+            const input = document.getElementById('passwordActualModal');
+            const btnToggle = document.getElementById('btnTogglePassword');
+            const btnCerrar = document.getElementById('btnCerrarModalPassword');
+            const btnCancelar = document.getElementById('btnCancelarPassword');
+            const btnConfirmar = document.getElementById('btnConfirmarPassword');
+            const alertContainer = document.getElementById('alertModalPassword');
+            
+            // Función para cerrar modal
+            const cerrarModal = (password = null) => {
+                modal.remove();
+                if (password) {
+                    resolve(password);
+                } else {
+                    resolve(null);
+                }
+            };
+            
+            // Toggle visibilidad de contraseña
+            btnToggle.addEventListener('click', () => {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    btnToggle.querySelector('.icon-eye').textContent = '👁️‍🗨️';
+                } else {
+                    input.type = 'password';
+                    btnToggle.querySelector('.icon-eye').textContent = '👁️';
+                }
+            });
+            
+            // Confirmar
+            btnConfirmar.addEventListener('click', () => {
+                const password = input.value.trim();
+                if (!password) {
+                    alertContainer.innerHTML = '<div style="color: #f59e0b; padding: 8px; background: #fef3c7; border-radius: 6px; font-size: 0.9rem;">Por favor, ingrese su contraseña actual.</div>';
+                    return;
+                }
+                cerrarModal(password);
+            });
+            
+            // Cerrar modal
+            btnCerrar.addEventListener('click', () => cerrarModal());
+            btnCancelar.addEventListener('click', () => cerrarModal());
+            
+            // Cerrar con ESC
+            const handleEscape = (e) => {
+                if (e.key === 'Escape') {
+                    cerrarModal();
+                    document.removeEventListener('keydown', handleEscape);
+                }
+            };
+            document.addEventListener('keydown', handleEscape);
+            
+            // Confirmar con Enter
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    btnConfirmar.click();
+                }
+            });
+            
+            // Cerrar al hacer clic fuera
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    cerrarModal();
+                }
+            });
+            
+            // Enfocar input
+            setTimeout(() => input.focus(), 100);
+        });
     },
 
     tieneAccesoRENIEC() {

@@ -93,9 +93,8 @@ class ConsultasReniecController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        $service = new \App\Services\UsuarioService();
-        $credencialAnterior = $service->obtenerPasswordPorDNI($input['nuDni']);
-
+        $credencialAnterior = $input['credencialAnterior'];
+        
         // Validar campos requeridos
         if (!isset($credencialAnterior) || 
             !isset($input['credencialNueva']) || 
@@ -123,7 +122,10 @@ class ConsultasReniecController {
 
         // Realizar actualización
         try {
-            // ⛑ Manejar errores del servicio RENIEC
+
+            // Convertir
+
+            // Manejar errores del servicio RENIEC
             $resultado = $this->actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni);
 
             if (!$resultado['success']) {
