@@ -627,6 +627,7 @@
     overflow-x: auto;
 }
 
+.usuario-container #tablaUsuarios,
 .usuario-container #tablaModulos,
 .usuario-container #tablaRoles {
     width: 100%;
@@ -638,12 +639,14 @@
     box-shadow: var(--shadow-sm);
 }
 
+.usuario-container #tablaUsuarios thead,
 .usuario-container #tablaModulos thead,
 .usuario-container #tablaRoles thead {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
     color: var(--surface);
 }
 
+.usuario-container #tablaUsuarios thead tr th,
 .usuario-container #tablaModulos thead tr th,
 .usuario-container #tablaRoles thead tr th {
     padding: 16px 20px;
@@ -656,17 +659,20 @@
     border-bottom: 3px solid rgba(255, 255, 255, 0.1);
 }
 
+.usuario-container #tablaUsuarios tbody tr,
 .usuario-container #tablaModulos tbody tr,
 .usuario-container #tablaRoles tbody tr {
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
 }
 
+.usuario-container #tablaUsuarios tbody tr:last-child,
 .usuario-container #tablaModulos tbody tr:last-child,
 .usuario-container #tablaRoles tbody tr:last-child {
     border-bottom: none;
 }
 
+.usuario-container #tablaUsuarios tbody tr:hover,
 .usuario-container #tablaModulos tbody tr:hover,
 .usuario-container #tablaRoles tbody tr:hover {
     background: var(--background);
@@ -674,6 +680,7 @@
     box-shadow: var(--shadow-sm);
 }
 
+.usuario-container #tablaUsuarios tbody td,
 .usuario-container #tablaModulos tbody td,
 .usuario-container #tablaRoles tbody td {
     padding: 16px 20px;
@@ -866,12 +873,14 @@
     .usuario-container .table-container {
         padding: 20px 15px;
     }
-
+    .usuario-container #tablaUsuarios,
     .usuario-container #tablaRoles,
     .usuario-container #tablaModulos {
         font-size: 12px;
     }
 
+    .usuario-container #tablaUsuarios thead tr th,
+    .usuario-container #tablaUsuarios tbody td,
     .usuario-container #tablaRoles thead tr th,
     .usuario-container #tablaRoles tbody td,
     .usuario-container #tablaModulos thead tr th,
@@ -911,6 +920,8 @@
     .usuario-container .table-container {
         padding: 15px 10px;
     }
+    
+    .usuario-container #tablaUsuarios,
     .usuario-container #tablaModulos,
     .usuario-container #tablaRoles {
         min-width: 800px;
@@ -928,11 +939,17 @@
         transform: translateY(0);
     }
 }
-
+.usuario-container #tablaUsuarios tbody tr,
 .usuario-container #tablaModulos tbody tr,
 .usuario-container #tablaRoles tbody tr {
     animation: tableLoad 0.3s ease forwards;
 }
+
+.usuario-container #tablaUsuarios tbody tr:nth-child(1) { animation-delay: 0.05s; }
+.usuario-container #tablaUsuarios tbody tr:nth-child(2) { animation-delay: 0.1s; }
+.usuario-container #tablaUsuarios tbody tr:nth-child(3) { animation-delay: 0.15s; }
+.usuario-container #tablaUsuarios tbody tr:nth-child(4) { animation-delay: 0.2s; }
+.usuario-container #tablaUsuarios tbody tr:nth-child(5) { animation-delay: 0.25s; }
 
 .usuario-container #tablaRoles tbody tr:nth-child(1) { animation-delay: 0.05s; }
 .usuario-container #tablaRoles tbody tr:nth-child(2) { animation-delay: 0.1s; }
@@ -945,6 +962,8 @@
 .usuario-container #tablaModulos tbody tr:nth-child(3) { animation-delay: 0.15s; }
 .usuario-container #tablaModulos tbody tr:nth-child(4) { animation-delay: 0.2s; }
 .usuario-container #tablaModulos tbody tr:nth-child(5) { animation-delay: 0.25s; }
+
+
 
 /* Mejora para select múltiple si se usa */
 .usuario-container select[multiple] {

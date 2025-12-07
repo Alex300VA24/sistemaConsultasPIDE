@@ -281,7 +281,7 @@ const ModuloActualizarUsuario = {
     },
 
     // ============================================
-    // 💾 ACTUALIZAR USUARIO
+    // ACTUALIZAR USUARIO
     // ============================================
     async actualizarUsuario() {
         try {

@@ -99,12 +99,8 @@ class ConsultasSunarpController {
             echo json_encode($datosReniec, JSON_UNESCAPED_UNICODE);
             return;
         }
-<<<<<<< HEAD
 
         error_log("Datos RENIEC obtenidos correctamente");
-=======
-        error_log("✅ Datos RENIEC obtenidos correctamente");
->>>>>>> c06798e (Arreglando compatibilidad)
         http_response_code(200);
         echo json_encode($datosReniec, JSON_UNESCAPED_UNICODE);
     }

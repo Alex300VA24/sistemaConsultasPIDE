@@ -79,8 +79,7 @@ class ConsultasReniecController {
     }
 
     // ACTUALIZAR CONTRASEÑA RENIEC
-    public function actualizarPasswordRENIEC()
-    {
+    public function actualizarPasswordRENIEC(){
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -94,8 +93,11 @@ class ConsultasReniecController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
+        $service = new \App\Services\UsuarioService();
+        $credencialAnterior = $service->obtenerPasswordPorDNI($input['nuDni']);
+
         // Validar campos requeridos
-        if (!isset($input['credencialAnterior']) || 
+        if (!isset($credencialAnterior) || 
             !isset($input['credencialNueva']) || 
             !isset($input['nuDni'])) {
             http_response_code(400);
@@ -105,8 +107,7 @@ class ConsultasReniecController {
             ]);
             return;
         }
-
-        $credencialAnterior = trim($input['credencialAnterior']);
+        ;
         $credencialNueva = trim($input['credencialNueva']);
         $nuDni = trim($input['nuDni']);
 
@@ -121,10 +122,29 @@ class ConsultasReniecController {
         }
 
         // Realizar actualización
-        $resultado = $this->actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni);
+        try {
+            // ⛑ Manejar errores del servicio RENIEC
+            $resultado = $this->actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni);
 
-        http_response_code($resultado['success'] ? 200 : 400);
-        echo json_encode($resultado);
+            if (!$resultado['success']) {
+                http_response_code(400);
+            } else {
+                http_response_code(200);
+            }
+
+            echo json_encode($resultado);
+            return;
+
+        } catch (\Exception $e) {
+
+            // ⛑ Capturar timeout, conexión fallida, errores SOAP, CURL, etc.
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al comunicarse con RENIEC: ' . $e->getMessage()
+            ]);
+            return;
+        }
     }
 
     // SERVICIO ACTUALIZAR CONTRASEÑA RENIEC

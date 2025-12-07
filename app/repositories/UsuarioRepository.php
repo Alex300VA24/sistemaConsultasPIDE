@@ -88,6 +88,59 @@ class UsuarioRepository {
         }
     }
 
+    // UsuarioRepository.php
+    public function obtenerPasswordUser($nombreUsuario) {
+        $sql = "SELECT u.USU_password_hash, r.ROL_nombre 
+                FROM usuario u
+                LEFT JOIN usuario_rol ur ON u.USU_id = ur.USR_usuario_id
+                LEFT JOIN rol r ON ur.USR_rol_id = r.ROL_id
+                WHERE u.USU_username = :login 
+                AND u.USU_estado_id = 1";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['login' => $nombreUsuario]);
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerPasswordCUIUser($nombreUsuario) {
+        $sql = "SELECT u.USU_password_hash, u.USU_cui, r.ROL_nombre 
+                FROM usuario u
+                LEFT JOIN usuario_rol ur ON u.USU_id = ur.USR_usuario_id
+                LEFT JOIN rol r ON ur.USR_rol_id = r.ROL_id
+                WHERE u.USU_username = :login 
+                AND u.USU_estado_id = 1";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['login' => $nombreUsuario]);
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerPasswordPorDNI($dni) {
+        $sql = 'SELECT USU_password_hash 
+                FROM USUARIO u
+                INNER JOIN PERSONA p ON u.USU_persona_id = p.PER_id 
+                WHERE p.PER_documento_numero = :dni AND u.USU_estado_id = 1';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['dni' => $dni]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerPasswordPorId($id) {
+        $sql = "SELECT u.USU_password_hash, r.ROL_nombre 
+                FROM usuario u
+                LEFT JOIN usuario_rol ur ON u.USU_id = ur.USR_usuario_id
+                LEFT JOIN rol r ON ur.USR_rol_id = r.ROL_id
+                WHERE u.USU_id = :usuarioID
+                AND u.USU_estado_id = 1";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['usuarioID' => $id]);
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
     public function crearUsuario(array $data)
     {
@@ -174,15 +227,35 @@ class UsuarioRepository {
      */
     public function eliminarUsuario(int $usuarioId) {
         try {
-            $sql = "EXEC sp_EliminarUsuario @UsuarioID = :UsuarioID;";
+            $sql = "
+                DECLARE @resultado INT;
+                DECLARE @mensaje VARCHAR(500);
+
+                EXEC SP_ELIMINAR_USUARIO 
+                    @p_usuario_id = :UsuarioID,
+                    @p_eliminado_por = NULL,
+                    @p_resultado = @resultado OUTPUT,
+                    @p_mensaje = @mensaje OUTPUT;
+
+                SELECT 
+                    @resultado AS Resultado,
+                    @mensaje AS Mensaje;
+            ";
+
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':UsuarioID', $usuarioId, PDO::PARAM_INT);
             $stmt->execute();
-            return true;
-        } catch (PDOException $e) {
+
+            // obtener el resultado del select
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $result; // Ej: ["Resultado" => 1, "Mensaje" => "Usuario eliminado exitosamente"]
+        }
+        catch (PDOException $e) {
             throw new \Exception("Error al eliminar usuario: " . $e->getMessage());
         }
     }
+
 
     public function obtenerDni($nombreUsuario)
     {
@@ -191,7 +264,7 @@ class UsuarioRepository {
         $stmt->bindParam(1, $nombreUsuario);
         $stmt->execute();
 
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
     }
 
@@ -238,7 +311,7 @@ class UsuarioRepository {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
 
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             error_log("Error obteniendo los roles:" . $e->getMessage());
             throw $e;
@@ -251,7 +324,7 @@ class UsuarioRepository {
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
 
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             error_log("Error obteniendo los tipos de personal:" . $e->getMessage());
             throw $e;
@@ -294,24 +367,24 @@ class UsuarioRepository {
             $stmt = $this->db->prepare($sql);
             
             $stmt->bindParam(':usuarioId', $datos['USU_id'], PDO::PARAM_INT);
-            $stmt->bindParam(':perTipo', $datos['PER_tipo'], PDO::PARAM_INT);
-            $stmt->bindParam(':perTipoPersonal', $datos['PER_tipoPersonal'], PDO::PARAM_INT);
-            $stmt->bindParam(':perDocumentoTipo', $datos['PER_documento_tipo'], PDO::PARAM_INT);
-            $stmt->bindParam(':perDocumentoNum', $datos['PER_documento_num'], PDO::PARAM_STR);
-            $stmt->bindParam(':perNombre', $datos['PER_nombre'], PDO::PARAM_STR);
-            $stmt->bindParam(':perApellidoPat', $datos['PER_apellido_pat'], PDO::PARAM_STR);
-            $stmt->bindParam(':perApellidoMat', $datos['PER_apellido_mat'], PDO::PARAM_STR);
-            $stmt->bindParam(':perSexo', $datos['PER_sexo'], PDO::PARAM_STR);
-            $stmt->bindParam(':perEmail', $datos['PER_email'], PDO::PARAM_STR);
-            $stmt->bindParam(':usuLogin', $datos['USU_login'], PDO::PARAM_STR);
-            $stmt->bindParam(':usuPassActual', $datos['USU_passActual'], PDO::PARAM_STR);
+            $stmt->bindParam(':perTipo', $datos['perTipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perTipoPersonal', $datos['perTipoPersonal'], PDO::PARAM_INT);
+            $stmt->bindParam(':perDocumentoTipo', $datos['perDocumentoTipo'], PDO::PARAM_INT);
+            $stmt->bindParam(':perDocumentoNum', $datos['perDocumentoNum'], PDO::PARAM_STR);
+            $stmt->bindParam(':perNombre', $datos['perNombre'], PDO::PARAM_STR);
+            $stmt->bindParam(':perApellidoPat', $datos['perApellidoPat'], PDO::PARAM_STR);
+            $stmt->bindParam(':perApellidoMat', $datos['perApellidoMat'], PDO::PARAM_STR);
+            $stmt->bindParam(':perSexo', $datos['perSexo'], PDO::PARAM_STR);
+            $stmt->bindParam(':perEmail', $datos['perEmail'], PDO::PARAM_STR);
+            $stmt->bindParam(':usuLogin', $datos['usuUsername'], PDO::PARAM_STR);
+            $stmt->bindParam(':usuPassActual', $datos['usuPassActual'], PDO::PARAM_STR);
 
             // contraseña nueva puede ser null
-            $usuPass = !empty($datos['USU_pass']) ? $datos['USU_pass'] : null;
+            $usuPass = !empty($datos['usuPass']) ? $datos['usuPass'] : null;
             $stmt->bindParam(':usuPass', $usuPass, PDO::PARAM_STR);
 
-            $stmt->bindParam(':usuPermiso', $datos['USU_permiso'], PDO::PARAM_INT);
-            $stmt->bindParam(':usuEstado', $datos['USU_estado'], PDO::PARAM_INT);
+            $stmt->bindParam(':usuPermiso', $datos['usuPermiso'], PDO::PARAM_INT);
+            $stmt->bindParam(':usuEstado', $datos['usuEstado'], PDO::PARAM_INT);
 
 
             $stmt->execute();

@@ -1,17 +1,17 @@
-// ============================================
-// 🧩 MÓDULO DE GESTIÓN DE MÓDULOS
-// ============================================
+/* ---- MÓDULO DE GESTIÓN DE MÓDULOS ---- */
 
 const ModuloCrearModulo = {
     moduloActualId: null,
     modoEdicion: false,
 
+    /* ---- INICIALIZACIÓN ---- */
     init() {
         this.setupEventListeners();
         this.cargarModulosPadre();
         this.switchTab('crearModulo');
     },
 
+    /* ---- CONFIGURAR EVENT LISTENERS ---- */
     setupEventListeners() {
         // Tabs
         document.querySelectorAll('.usuario-container .tab-btn').forEach(btn => {
@@ -422,7 +422,7 @@ const ModuloCrearModulo = {
 };
 
 // ============================================
-// 🔧 AUTO-REGISTRO DEL MÓDULO
+// AUTO-REGISTRO DEL MÓDULO
 // ============================================
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('crearmodulo', ModuloCrearModulo);
