@@ -28,6 +28,7 @@
                     <!-- Header: Datos de Persona -->
                     <div class="section-header">
                         <i class="fas fa-user"></i> Datos Personales
+
                     </div>
                     <div class="form-grid">
                         <div class="form-group">
