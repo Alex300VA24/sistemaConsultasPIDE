@@ -351,7 +351,7 @@ window.actualizarPasswordUsuarioActual = async function() {
     if (ModuloActualizarPassword.inicializado) {
         await ModuloActualizarPassword.actualizarPassword();
     } else {
-        console.warn('⚠️ Módulo Actualizar Password no está inicializado');
+        console.warn('Módulo Actualizar Password no está inicializado');
     }
 };
 
