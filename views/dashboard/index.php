@@ -67,9 +67,7 @@ require_once __DIR__ . '../../../app/helpers/generarPaginasDinamicas.php';
         <!-- ============================================ -->
         <!-- PÁGINA DE INICIO (SIEMPRE VISIBLE) -->
         <!-- ============================================ -->
-        <div id="pageInicio" class="page-content active">
-            <?php include __DIR__ . "/pages/inicio.php"; ?>
-        </div>
+
 
         <!-- ============================================ -->
         <!-- PÁGINAS DINÁMICAS (NUEVOS MÓDULOS) -->

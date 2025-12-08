@@ -70,15 +70,13 @@ class UsuarioController {
      */
     public function validarCUI() {
         try {
-            
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new \Exception("Método no permitido");
             }
 
             $json = file_get_contents('php://input');
-
             $data = json_decode($json, true);
-
+            
             $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
             $password = $_SESSION['password'] ?? null;
             $cui = $data['cui'] ?? '';
@@ -94,16 +92,23 @@ class UsuarioController {
             $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
-
+            
             $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
             $_SESSION['permisos'] = $permisos;
+
+            // Verificar si requiere cambio de password
+            $requiereCambioPassword = $resultado['usuario']['USU_requiere_cambio_password'] ?? 0;
+            $diasDesdeCambio = $resultado['usuario']['DIAS_DESDE_CAMBIO_PASSWORD'] ?? 0;
 
             $respuesta = [
                 'success' => true,
                 'message' => $resultado['mensaje'] ?? 'Sin mensaje',
                 'data' => [
                     'usuario' => $resultado['usuario'] ?? [],
-                    'permisos' => $permisos  // Enviar permisos al frontend
+                    'permisos' => $permisos,
+                    'requiere_cambio_password' => (bool)$requiereCambioPassword,
+                    'dias_desde_cambio' => (int)$diasDesdeCambio,
+                    'dias_restantes' => max(0, 30 - (int)$diasDesdeCambio)
                 ]
             ];
 
@@ -117,6 +122,83 @@ class UsuarioController {
         }
     }
 
+    /**
+     * Nuevo método: Cambiar password
+     */
+    public function cambiarPassword() {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new \Exception("Método no permitido");
+            }
+
+            // Verificar que el usuario esté autenticado
+            if (!isset($_SESSION['usuarioID'])) {
+                throw new \Exception("No hay sesión activa");
+            }
+
+            $json = file_get_contents('php://input');
+            $data = json_decode($json, true);
+
+            $passwordActual = $data['passwordActual'] ?? '';
+            $passwordNueva = $data['passwordNueva'] ?? '';
+            $usuarioId = $_SESSION['usuarioID'];
+
+            if (empty($passwordActual) || empty($passwordNueva)) {
+                throw new \Exception("Todos los campos son requeridos");
+            }
+
+            // Validar seguridad de la nueva password
+            if (!$this->validarPasswordSegura($passwordNueva)) {
+                throw new \Exception("La contraseña no cumple con los requisitos de seguridad");
+            }
+
+            $resultado = $this->usuarioService->cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva);
+
+            $this->jsonResponse([
+                'success' => true,
+                'message' => 'Contraseña actualizada correctamente',
+                'data' => $resultado
+            ]);
+
+        } catch (\Exception $e) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+    /**
+     * Validar que la password cumpla con requisitos de seguridad
+     */
+    private function validarPasswordSegura($password) {
+        // Mínimo 8 caracteres
+        if (strlen($password) < 8) {
+            return false;
+        }
+
+        // Al menos una mayúscula
+        if (!preg_match('/[A-Z]/', $password)) {
+            return false;
+        }
+
+        // Al menos una minúscula
+        if (!preg_match('/[a-z]/', $password)) {
+            return false;
+        }
+
+        // Al menos un número
+        if (!preg_match('/[0-9]/', $password)) {
+            return false;
+        }
+
+        // Al menos un carácter especial
+        if (!preg_match('/[@$!%*?&#]/', $password)) {
+            return false;
+        }
+
+        return true;
+    }
 
 
     /**

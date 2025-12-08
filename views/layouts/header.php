@@ -22,5 +22,6 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/usuario.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/inicio.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/dashboard.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/modal-password.css">
 </head>
 <body>

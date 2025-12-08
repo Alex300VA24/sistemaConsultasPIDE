@@ -231,6 +231,12 @@ switch (true) {
         $controller = new \App\Controllers\ModuloController();
         $controller->obtenerModulosUsuario();
         break;
+    
+    // Ruta para cambiar password obligatorio
+    case preg_match('#^/api/usuario/cambiar-password$#', $path):
+        $controller = new \App\Controllers\UsuarioController();
+        $controller->cambiarPassword();
+        break;
 
     // VISTAS
     

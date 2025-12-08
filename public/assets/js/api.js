@@ -86,6 +86,13 @@ class API {
         return this.get('/usuario/rol');
     }
 
+    async cambiarPassword(passwordActual, passwordNueva) {
+        return this.post('/usuario/cambiar-password', {
+            passwordActual: passwordActual,
+            passwordNueva: passwordNueva
+        });
+    }
+
     async obtenerTipoPersonal(){
         return this.get('/usuario/tipo-personal');
     }
