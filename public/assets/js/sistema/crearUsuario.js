@@ -741,9 +741,6 @@ const ModuloCrearUsuario = {
                                 <button class="btn-icon btn-edit" onclick="ModuloCrearUsuario.editarUsuario(${usuario.USU_id})" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn-icon btn-toggle" onclick="ModuloCrearUsuario.toggleEstadoUsuario(${usuario.USU_id}, ${usuario.USU_estado_id})" title="${usuario.USU_estado_id == 1 ? 'Desactivar' : 'Activar'}">
-                                    <i class="fas fa-${usuario.USU_estado_id == 1 ? 'eye' : 'eye-slash'}"></i>
-                                </button>
                                 <button class="btn-icon btn-delete" onclick="ModuloCrearUsuario.eliminarUsuario(${usuario.USU_id})" title="Eliminar">
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -843,41 +840,6 @@ const ModuloCrearUsuario = {
             console.error('Error al cargar usuario:', error);
             window.mostrarAlerta(
                 'Error al cargar el usuario',
-                'error',
-                'alertContainerCrearUsuario'
-            );
-        }
-    },
-
-    async toggleEstadoUsuario(usuarioId, estadoActual) {
-        const nuevoEstado = estadoActual == 1 ? 0 : 1;
-        const accion = nuevoEstado == 1 ? 'activar' : 'desactivar';
-        
-        if (!confirm(`¿Está seguro que desea ${accion} este usuario?`)) {
-            return;
-        }
-        
-        try {
-            const response = await api.toggleEstadoUsuario(usuarioId, nuevoEstado);
-            
-            if (response.success) {
-                window.mostrarAlerta(
-                    `Usuario ${accion === 'activar' ? 'activado' : 'desactivado'} exitosamente`,
-                    'success',
-                    'alertContainerCrearUsuario'
-                );
-                this.cargarListadoUsuarios();
-            } else {
-                window.mostrarAlerta(
-                    response.message || 'Error al cambiar el estado del usuario',
-                    'error',
-                    'alertContainerCrearUsuario'
-                );
-            }
-        } catch (error) {
-            console.error('Error al cambiar estado:', error);
-            window.mostrarAlerta(
-                'Error al cambiar el estado del usuario',
                 'error',
                 'alertContainerCrearUsuario'
             );

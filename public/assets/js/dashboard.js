@@ -25,14 +25,20 @@ const Dashboard = {
         if (usuarioData) {
             try {
                 const usuario = JSON.parse(usuarioData);
-                const requiereCambio = usuario.USU_requiere_cambio_password || false;
-                const diasDesdeCambio = usuario.DIAS_DESDE_CAMBIO_PASSWORD || 0;
+                const requiereCambio = parseInt(usuario.USU_requiere_cambio_password) || 0;
+                const diasDesdeCambio = parseInt(usuario.DIAS_DESDE_CAMBIO_PASSWORD) || 0;
+                const usuarioId = usuario.USU_id;
+
+                console.log({ usuario, requiereCambio, diasDesdeCambio, usuarioId });
 
                 if (requiereCambio) {
-                    // Verificar si ya se pospuso hoy
-                    const pospuesto = localStorage.getItem('cambio_password_pospuesto');
+                    // Clave específica por usuario
+                    const keyPospuesto = `cambio_password_pospuesto_${usuarioId}`;
+                    const pospuesto = localStorage.getItem(keyPospuesto);
                     const ahora = Date.now();
                     const unDia = 24 * 60 * 60 * 1000;
+                    
+                    console.log('Pospuesto:', pospuesto, 'Ahora:', ahora, 'Diferencia:', ahora - parseInt(pospuesto || 0));
 
                     // Si no se ha pospuesto o pasó más de 1 día
                     if (!pospuesto || (ahora - parseInt(pospuesto)) > unDia) {
@@ -42,8 +48,12 @@ const Dashboard = {
                                 const diasRestantes = Math.max(0, 30 - diasDesdeCambio);
                                 ModuloCambioPasswordObligatorio.init(diasRestantes);
                                 ModuloCambioPasswordObligatorio.mostrarModal();
+                            } else {
+                                console.warn('ModuloCambioPasswordObligatorio no está definido');
                             }
                         }, 1000);
+                    } else {
+                        console.log('Modal pospuesto para este usuario. Mostrar en:', new Date(parseInt(pospuesto) + unDia));
                     }
                 }
             } catch (error) {
@@ -100,7 +110,6 @@ const Dashboard = {
             if (element) {
                 localStorage.setItem('menuActivo', pageId);
             }
-            
             // Inicializar módulo específico
             this.inicializarModulo(pageId);
         } else {
@@ -265,9 +274,35 @@ const Dashboard = {
     async handleLogout() {
         this.ocultarModalLogout();
         try {
+            // Obtener ID del usuario antes de cerrar sesión
+            const usuarioData = sessionStorage.getItem('usuario');
+            let usuarioId = null;
+            
+            if (usuarioData) {
+                try {
+                    const usuario = JSON.parse(usuarioData);
+                    usuarioId = usuario.USU_id;
+                } catch (e) {
+                    console.error('Error al parsear usuario:', e);
+                }
+            }
+            
             await api.logout();
-            localStorage.removeItem('paginaActiva');
-            localStorage.removeItem('menuActivo');
+            
+            // Limpiar sessionStorage
+            sessionStorage.removeItem('paginaActiva');
+            sessionStorage.removeItem('menuActivo');
+            sessionStorage.removeItem('usuario');
+            sessionStorage.removeItem('permisos');
+            sessionStorage.removeItem('requiere_cambio_password');
+            sessionStorage.removeItem('dias_desde_cambio');
+            sessionStorage.removeItem('dias_restantes');
+            
+            // Limpiar localStorage específico del usuario
+            if (usuarioId) {
+                localStorage.removeItem(`cambio_password_pospuesto_${usuarioId}`);
+            }
+            
             window.location.href = this.BASE_URL + 'login';
         } catch (error) {
             console.error('❌ Error al cerrar sesión:', error);
