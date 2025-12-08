@@ -21,6 +21,7 @@ const Dashboard = {
     verificarCambioPasswordRequerido() {
         // Verificar en sessionStorage si el usuario requiere cambio de password
         const usuarioData = sessionStorage.getItem('usuario');
+        console.log(usuarioData);
         
         if (usuarioData) {
             try {
@@ -319,13 +320,32 @@ const Dashboard = {
     },
 
     restaurarPaginaActiva() {
-        const paginaGuardada = localStorage.getItem('paginaActiva');
-        const menuGuardado = localStorage.getItem('menuActivo');
+        // Verificar si es un login recién hecho
+        const esLoginNuevo = sessionStorage.getItem('loginReciente');
         
         // Ocultar TODAS las páginas
         document.querySelectorAll('.page-content').forEach(p => {
             p.classList.remove('active');
         });
+        
+        // Si es login reciente, SIEMPRE ir a inicio
+        if (esLoginNuevo === 'true') {
+            sessionStorage.removeItem('loginReciente');
+            localStorage.removeItem('paginaActiva');
+            localStorage.removeItem('menuActivo');
+            
+            const paginaInicio = document.getElementById('pageInicio');
+            if (paginaInicio) {
+                paginaInicio.classList.add('active');
+                this.restaurarMenuActivo('Inicio');
+                this.inicializarModulo('Inicio');
+            }
+            return;
+        }
+        
+        // Si no es login reciente, intentar restaurar última página
+        const paginaGuardada = localStorage.getItem('paginaActiva');
+        const menuGuardado = localStorage.getItem('menuActivo');
         
         if (paginaGuardada) {
             const pagina = document.getElementById(paginaGuardada);
@@ -335,13 +355,26 @@ const Dashboard = {
                 const pageId = paginaGuardada.replace('page', '');
                 this.restaurarMenuActivo(menuGuardado || pageId);
                 this.inicializarModulo(pageId);
+            } else {
+                // Si la página guardada no existe, ir a inicio
+                console.warn('⚠️ Página guardada no encontrada, redirigiendo a Inicio');
+                this.mostrarPaginaInicio();
             }
         } else {
-            const paginaInicio = document.getElementById('pageInicio');
-            if (paginaInicio) {
-                paginaInicio.classList.add('active');
-                this.restaurarMenuActivo('Inicio');
-            }
+            // Si no hay página guardada, mostrar inicio
+            this.mostrarPaginaInicio();
+        }
+    },
+
+    // Nuevo método auxiliar
+    mostrarPaginaInicio() {
+        const paginaInicio = document.getElementById('pageInicio');
+        if (paginaInicio) {
+            paginaInicio.classList.add('active');
+            this.restaurarMenuActivo('Inicio');
+            this.inicializarModulo('Inicio');
+        } else {
+            console.error('❌ No se encontró la página de inicio (pageInicio)');
         }
     },
 

@@ -218,7 +218,7 @@ class UsuarioRepository {
             $stmt->bindValue(':PER_email', $data['perEmail'] ?? null, PDO::PARAM_STR);
 
             // USUARIO
-            $stmt->bindValue(':USU_login', $data['usuLogin'], PDO::PARAM_STR);
+            $stmt->bindValue(':USU_login', $data['usuUsername'], PDO::PARAM_STR);
             $stmt->bindValue(':USU_pass', $data['usuPass'], PDO::PARAM_STR);
             $stmt->bindValue(':USU_permiso', $data['usuPermiso'] ?? 0, PDO::PARAM_INT);
             $stmt->bindValue(':USU_estado', $data['usuEstado'] ?? 1, PDO::PARAM_INT);
