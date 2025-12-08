@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.data.permisos) {
                     sessionStorage.setItem('permisos', JSON.stringify(response.data.permisos));
                 }
-                // Guardar datos incluyendo info de password
+                
                 sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
                 sessionStorage.setItem('permisos', JSON.stringify(response.data.permisos));
                 
@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     sessionStorage.setItem('dias_desde_cambio', response.data.dias_desde_cambio);
                     sessionStorage.setItem('dias_restantes', response.data.dias_restantes);
                 }
+                
+                // 👇 AGREGAR ESTA LÍNEA
+                sessionStorage.setItem('loginReciente', 'true');
+                
                 setTimeout(() => {
                     window.location.href = 'dashboard';
                 }, 1000);

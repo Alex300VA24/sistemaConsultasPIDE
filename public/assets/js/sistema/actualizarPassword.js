@@ -203,8 +203,8 @@ const ModuloActualizarPassword = {
             
             if (response.success) {
                 const mensaje = tieneAccesoRENIEC 
-                    ? '✅ Contraseña actualizada correctamente en ambos sistemas'
-                    : '✅ Contraseña actualizada correctamente en el sistema';
+                    ? 'Contraseña actualizada correctamente en ambos sistemas'
+                    : 'Contraseña actualizada correctamente en el sistema';
                     
                 mostrarAlerta(mensaje, 'success', 'alertContainerPassword');
                 
@@ -222,15 +222,15 @@ const ModuloActualizarPassword = {
                             console.error('❌ Error al cerrar sesión:', error);
                             alert('Error al cerrar sesión');
                         }
-                    }, 3000);
-                }, 3000);
+                    }, 2000);
+                }, 2000);
             } else {
-                mostrarAlerta('❌ Error al actualizar contraseña en el sistema: ' + (response.message || 'Error desconocido'), 'error', 'alertContainerPassword');
+                mostrarAlerta('Error al actualizar contraseña en el sistema: ' + (response.message || 'Error desconocido'), 'error', 'alertContainerPassword');
             }
             
         } catch (error) {
-            console.error('❌ Error al actualizar contraseña:', error);
-            mostrarAlerta('❌ Error al actualizar la contraseña: ' + error.message, 'error', 'alertContainerPassword');
+            console.error('Error al actualizar contraseña:', error);
+            mostrarAlerta('Error al actualizar la contraseña: ' + error.message, 'error', 'alertContainerPassword');
         } finally {
             this.mostrarCargando(false);
         }

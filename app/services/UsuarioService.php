@@ -116,7 +116,7 @@ class UsuarioService {
     public function crearUsuario($data) {
         try {
             // Validaciones mínimas
-            if (empty($data['usuLogin']) || empty($data['usuPass'])) {
+            if (empty($data['usuUsername']) || empty($data['usuPass'])) {
                 throw new \Exception("El usuario y la contraseña son obligatorios");
             }
 
