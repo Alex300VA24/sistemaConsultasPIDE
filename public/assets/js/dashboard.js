@@ -1,5 +1,5 @@
 // ============================================
-// 🚀 DASHBOARD - SISTEMA DE NAVEGACIÓN MODULAR DINÁMICO
+// DASHBOARD - SISTEMA DE NAVEGACIÓN MODULAR DINÁMICO
 // ============================================
 
 const Dashboard = {
@@ -11,7 +11,45 @@ const Dashboard = {
     
     init() {
         this.setupEventListeners();
+        this.verificarCambioPasswordRequerido(); // AGREGAR ESTA LÍNEA
         this.restaurarPaginaActiva();
+    },
+
+    // ============================================
+    // NUEVO MÉTODO: Verificar si requiere cambio de password
+    // ============================================
+    verificarCambioPasswordRequerido() {
+        // Verificar en sessionStorage si el usuario requiere cambio de password
+        const usuarioData = sessionStorage.getItem('usuario');
+        
+        if (usuarioData) {
+            try {
+                const usuario = JSON.parse(usuarioData);
+                const requiereCambio = usuario.USU_requiere_cambio_password || false;
+                const diasDesdeCambio = usuario.DIAS_DESDE_CAMBIO_PASSWORD || 0;
+
+                if (requiereCambio) {
+                    // Verificar si ya se pospuso hoy
+                    const pospuesto = localStorage.getItem('cambio_password_pospuesto');
+                    const ahora = Date.now();
+                    const unDia = 24 * 60 * 60 * 1000;
+
+                    // Si no se ha pospuesto o pasó más de 1 día
+                    if (!pospuesto || (ahora - parseInt(pospuesto)) > unDia) {
+                        // Mostrar modal después de que cargue el DOM
+                        setTimeout(() => {
+                            if (typeof ModuloCambioPasswordObligatorio !== 'undefined') {
+                                const diasRestantes = Math.max(0, 30 - diasDesdeCambio);
+                                ModuloCambioPasswordObligatorio.init(diasRestantes);
+                                ModuloCambioPasswordObligatorio.mostrarModal();
+                            }
+                        }, 1000);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al verificar cambio de password:', error);
+            }
+        }
     },
 
     setupEventListeners() {
@@ -431,9 +469,34 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
     }, timeout);
 };
 
+
 // Función para verificar acceso
 function verificarAcceso(codigoModulo) {
     try {
+        // Verificar si requiere cambio de password
+        const requiereCambio = sessionStorage.getItem('requiere_cambio_password');
+        const diasRestantes = parseInt(sessionStorage.getItem('dias_restantes') || '30');
+
+        // Si el password expiró (0 días restantes o menos), bloquear módulos críticos
+        if (requiereCambio === 'true' && diasRestantes <= 0) {
+            const modulosProtegidos = ['DNI', 'RUC', 'PAR']; // Módulos de RENIEC, SUNAT, SUNARP
+            
+            if (modulosProtegidos.includes(codigoModulo)) {
+                mostrarAlerta(
+                    'Tu contraseña ha expirado. Debes cambiarla para acceder a este módulo.',
+                    'error'
+                );
+                
+                // Mostrar modal de cambio de password
+                if (typeof ModuloCambioPasswordObligatorio !== 'undefined') {
+                    ModuloCambioPasswordObligatorio.mostrarModal();
+                }
+                
+                return false;
+            }
+        }
+
+        // Verificar permisos normales
         const permisosStr = sessionStorage.getItem('permisos');
         if (!permisosStr) return false;
         const permisos = JSON.parse(permisosStr);

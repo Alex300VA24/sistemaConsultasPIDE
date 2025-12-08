@@ -35,11 +35,10 @@ class UsuarioService {
 
     // Service: validar la estructura devuelta por el repo
     public function validarCUI($nombreUsuario, $password, $cui) {
-
         if (empty($cui)) {
             throw new \Exception("Es requerido el CUI");
         }
-
+        
         if (strlen($cui) !== 1) {
             throw new \Exception("El CUI debe ser de 1 dígito");
         }
@@ -68,15 +67,49 @@ class UsuarioService {
             throw new \Exception($usuario['mensaje'] ?? 'CUI incorrecto');
         }
 
-        // ===============================
-        //   AQUI AGREGAS LA SESIÓN
-        // ===============================
+        // Establecer datos de sesión
         $usuarioData = $usuario['usuario'];
-        $_SESSION['ROL_nombre'] = $usuario['ROL_nombre']; 
-        $_SESSION['usuario_id'] = $usuario['USU_id'];
-        $_SESSION['usuario'] = $usuarioData; // opcional
+        $_SESSION['ROL_nombre'] = $usuarioData['ROL_nombre'] ?? null;
+        $_SESSION['usuario_id'] = $usuarioData['USU_id'] ?? null;
+        $_SESSION['usuario'] = $usuarioData;
 
         return $usuario;
+    }
+    /**
+     * Nuevo método: Cambiar password del usuario (obligatorio)
+     */
+    public function cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva) {
+        // Obtener el hash actual de la base de datos
+        $usuario = $this->usuarioRepository->obtenerUsuarioPorId($usuarioId);
+        
+        if (!$usuario) {
+            throw new \Exception("Usuario no encontrado");
+        }
+
+        // Verificar que la password actual sea correcta
+        if (!password_verify($passwordActual, $usuario['USU_password_hash'])) {
+            throw new \Exception("La contraseña actual es incorrecta");
+        }
+
+        // Verificar que la nueva password sea diferente a la actual
+        if (password_verify($passwordNueva, $usuario['USU_password_hash'])) {
+            throw new \Exception("La nueva contraseña debe ser diferente a la actual");
+        }
+
+        // Hashear la nueva password
+        $nuevoHash = password_hash($passwordNueva, PASSWORD_BCRYPT);
+
+        // Actualizar en la base de datos usando el nuevo SP
+        $resultado = $this->usuarioRepository->actualizarPasswordObligatorio($usuarioId, $nuevoHash);
+
+        if (!$resultado) {
+            throw new \Exception("Error al actualizar la contraseña");
+        }
+
+        return [
+            'actualizado' => true,
+            'fecha_actualizacion' => date('Y-m-d H:i:s')
+        ];
     }
 
 

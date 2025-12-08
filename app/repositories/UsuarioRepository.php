@@ -66,7 +66,7 @@ class UsuarioRepository {
 
             // El primer SELECT puede ser mensaje, el segundo los datos
             $first = $results[0][0];
-
+            
             if (isset($first['VALIDO']) && $first['VALIDO'] == 0) {
                 return [
                     'valido' => false,
@@ -76,7 +76,7 @@ class UsuarioRepository {
 
             // Si no hay error, asumimos que el último resultset es el usuario
             $usuarioData = end($results)[0];
-
+            
             return [
                 'valido' => true,
                 'mensaje' => 'CUI validado correctamente',
@@ -85,6 +85,31 @@ class UsuarioRepository {
 
         } catch (PDOException $e) {
             throw new \Exception("Error al validar CUI: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Nuevo método: Actualizar password obligatorio (usa SP_USUARIO_ACTUALIZAR_PASSWORD)
+     */
+    public function actualizarPasswordObligatorio($usuarioId, $nuevoHash) {
+        try {
+            $sql = "EXEC SP_USUARIO_ACTUALIZAR_PASSWORD @USU_id = :usuarioId, @USU_password_hash_nuevo = :nuevoHash";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':usuarioId', $usuarioId, PDO::PARAM_INT);
+            $stmt->bindParam(':nuevoHash', $nuevoHash, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($resultado && isset($resultado['EXITOSO']) && $resultado['EXITOSO'] == 1) {
+                return true;
+            }
+
+            return false;
+
+        } catch (PDOException $e) {
+            throw new \Exception("Error al actualizar password: " . $e->getMessage());
         }
     }
 
