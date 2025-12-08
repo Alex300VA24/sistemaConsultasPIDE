@@ -126,7 +126,7 @@
                             <label>Estado <span class="required">*</span></label>
                             <select id="usuEstado">
                                 <option value="1" selected>Activo</option>
-                                <option value="0">Inactivo</option>
+                                <option value="2">Inactivo</option>
                             </select>
                         </div>
 

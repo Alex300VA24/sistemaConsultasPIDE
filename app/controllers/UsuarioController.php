@@ -154,10 +154,17 @@ class UsuarioController {
 
             $resultado = $this->usuarioService->cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva);
 
+            // Obtener datos actualizados del usuario
+            $usuarioActualizado = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
+
             $this->jsonResponse([
                 'success' => true,
                 'message' => 'Contraseña actualizada correctamente',
-                'data' => $resultado
+                'data' => [
+                    'actualizado' => $resultado['actualizado'],
+                    'fecha_actualizacion' => $resultado['fecha_actualizacion'],
+                    'usuario' => $usuarioActualizado
+                ]
             ]);
 
         } catch (\Exception $e) {

@@ -80,7 +80,7 @@ class UsuarioService {
      */
     public function cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva) {
         // Obtener el hash actual de la base de datos
-        $usuario = $this->usuarioRepository->obtenerUsuarioPorId($usuarioId);
+        $usuario = $this->usuarioRepository->obtenerPasswordPorId($usuarioId);
         
         if (!$usuario) {
             throw new \Exception("Usuario no encontrado");
