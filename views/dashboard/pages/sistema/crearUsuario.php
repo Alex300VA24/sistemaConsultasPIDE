@@ -103,17 +103,16 @@
                             <input type="text" id="usuLogin" maxlength="15" placeholder="Nombre de usuario">
                         </div>
 
-                        <div class="form-group" style="position: relative;">
+                        <div class="form-group password-container">
                             <label>Contraseña <span class="required">*</span></label>
-                            <i id="togglePasswordCrear" class="fas fa-eye-slash toggle-password"style="position: absolute; right: 10px; top: 40px; cursor: pointer; color: #666;"></i>
                             <input type="password" id="usuPass" maxlength="100" placeholder="Contraseña segura">
+                            <i id="togglePasswordCrear" class="fas fa-eye-slash toggle-password"></i>
                         </div>
 
-                        <div class="form-group" style="position: relative;">
+                        <div class="form-group password-container">
                             <label>Confirmar Contraseña <span class="required">*</span></label>
-                            <i id="togglePasswordConfirmCrear" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 40px; cursor: pointer; color: #666;"></i>
                             <input type="password" id="usuPassConfirm" maxlength="100" placeholder="Repita la contraseña">
-                            
+                            <i id="togglePasswordConfirmCrear" class="fas fa-eye-slash toggle-password"></i>
                         </div>
 
                         <div class="form-group">

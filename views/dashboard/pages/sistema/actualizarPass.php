@@ -17,22 +17,25 @@
             </div>
             <div class="form-grid">
 
-                <div class="form-group">
-                    <label>Contraseña Actual <span style="color: red;">*</span></label>
+                <div class="form-group password-container">
+                    <label>Contraseña Actual <span class="required">*</span></label>
                     <input type="password" id="usuPassActualPassword" maxlength="100" placeholder="Ingrese su contraseña actual" required>
+                    <i id="togglePasswordActual" class="fas fa-eye-slash toggle-password"></i>
+                    <small class="password-hint"></small>
                 </div>
 
-                <div class="form-group" style="position: relative;">
-                    <label>Nueva Contraseña <span style="color: red;">*</span></label>
+                <div class="form-group password-container">
+                    <label>Nueva Contraseña <span class="required">*</span></label>
                     <input type="password" id="usu-passPassword" maxlength="100" placeholder="Ingrese su nueva contraseña" required>
-                    <i id="togglePassword2" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
-                    <small style="color: #666; font-size: 12px;">Mínimo 6 caracteres</small>
+                    <i id="togglePassword2" class="fas fa-eye-slash toggle-password"></i>
+                    <small class="password-hint">Mínimo 6 caracteres</small>
                 </div>
 
-                <div class="form-group" style="position: relative;">
-                    <label>Confirmar Nueva Contraseña <span style="color: red;">*</span></label>
+                <div class="form-group password-container">
+                    <label>Confirmar Nueva Contraseña <span class="required">*</span></label>
                     <input type="password" id="usu-passConfirmPassword" maxlength="100" placeholder="Confirme su nueva contraseña" required>
-                    <i id="togglePasswordConfirm2" class="fas fa-eye-slash toggle-password" style="position: absolute; right: 10px; top: 38px; cursor: pointer; color: #666;"></i>
+                    <i id="togglePasswordConfirm2" class="fas fa-eye-slash toggle-password"></i>
+                    <small class="password-hint"></small>
                 </div>
             </div>
 

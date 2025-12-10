@@ -89,8 +89,6 @@
     font-size: 18px;
 }
 
-/* Form Grid - Estilo DNI */
-
 
 /* Form Group - Estilo DNI */
 .usuario-container .form-group {
@@ -1408,4 +1406,51 @@
     color: var(--text-secondary);
     font-size: 14px;
     font-style: italic;
+}
+
+/* Agrega todo lo debajo para los passwords*/
+/* ============================================
+   👁️ PASSWORD TOGGLE - CREAR USUARIO
+   ============================================ */
+
+.usuario-container .password-container {
+    position: relative;
+}
+
+.usuario-container .password-container .toggle-password {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 12px; /* Compensa el espacio del label */
+    cursor: pointer;
+    color: #5f6368;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    z-index: 10;
+}
+
+.usuario-container .password-container .toggle-password:hover {
+    color: var(--primary-color);
+}
+
+.usuario-container .password-container input {
+    padding-right: 50px !important;
+}
+
+/* ============================================
+   💡 HINT DE CONTRASEÑA
+   ============================================ */
+
+.usuario-container .password-hint {
+    display: block;
+    color: #666;
+    font-size: 12px;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+/* Ajuste específico para form-group con hint */
+.usuario-container .password-container:has(.password-hint) .toggle-password {
+    margin-top: 0; /* Ajuste para cuando hay hint debajo */
 }
