@@ -35,7 +35,7 @@ class UsuarioController {
             error_log("Resultado del login: " . print_r($resultado, true));
 
 
-            if (!$resultado['valido']) {
+            if (!$resultado['success']) {
                 $this->jsonResponse([
                     'success' => false,
                     'message' => $resultado['mensaje']

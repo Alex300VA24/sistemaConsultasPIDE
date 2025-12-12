@@ -302,9 +302,7 @@ const ModuloCrearUsuario = {
                                         placeholder="Ingrese su contraseña actual"
                                         autocomplete="current-password"
                                     >
-                                    <button type="button" class="btn-toggle-password" id="btnTogglePassword">
-                                        <span class="icon-eye">👁️</span>
-                                    </button>
+                                    <i id="btnTogglePasswordModal" class="fas fa-eye-slash toggle-password-modal"></i>
                                 </div>
                             </div>
                             <div id="alertModalPassword" class="alert-container-password"></div>
@@ -414,7 +412,7 @@ const ModuloCrearUsuario = {
 
                     .password-input-wrapper .form-control-password {
                         flex: 1;
-                        padding-right: 45px;
+                        padding-right: 50px !important;
                     }
 
                     .form-control-password {
@@ -432,26 +430,20 @@ const ModuloCrearUsuario = {
                         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
                     }
 
-                    .btn-toggle-password {
+                    .toggle-password-modal {
                         position: absolute;
-                        right: 8px;
-                        background: none;
-                        border: none;
+                        right: 18px;
+                        top: 50%;
+                        transform: translateY(-50%);
                         cursor: pointer;
-                        padding: 6px 10px;
-                        color: #6b7280;
-                        transition: all 0.2s;
-                        border-radius: 6px;
+                        color: #5f6368;
+                        transition: all 0.3s ease;
+                        font-size: 1.1rem;
+                        z-index: 10;
                     }
 
-                    .btn-toggle-password:hover {
-                        background-color: #f3f4f6;
-                        color: #1f2937;
-                    }
-
-                    .icon-eye {
-                        font-size: 20px;
-                        display: inline-block;
+                    .toggle-password-modal:hover {
+                        color: #3b82f6;
                     }
 
                     .modal-footer-password {
@@ -534,7 +526,7 @@ const ModuloCrearUsuario = {
             
             const modal = document.getElementById('modalPasswordActual');
             const input = document.getElementById('passwordActualModal');
-            const btnToggle = document.getElementById('btnTogglePassword');
+            const btnToggle = document.getElementById('btnTogglePasswordModal');
             const btnCerrar = document.getElementById('btnCerrarModalPassword');
             const btnCancelar = document.getElementById('btnCancelarPassword');
             const btnConfirmar = document.getElementById('btnConfirmarPassword');
@@ -554,10 +546,12 @@ const ModuloCrearUsuario = {
             btnToggle.addEventListener('click', () => {
                 if (input.type === 'password') {
                     input.type = 'text';
-                    btnToggle.querySelector('.icon-eye').textContent = '👁️‍🗨️';
+                    btnToggle.classList.remove('fa-eye-slash');
+                    btnToggle.classList.add('fa-eye');
                 } else {
                     input.type = 'password';
-                    btnToggle.querySelector('.icon-eye').textContent = '👁️';
+                    btnToggle.classList.remove('fa-eye');
+                    btnToggle.classList.add('fa-eye-slash');
                 }
             });
             
@@ -823,6 +817,10 @@ const ModuloCrearUsuario = {
                 
                 // Cambiar modo a edición
                 this.modoEdicion = true;
+
+                if (this.modoEdicion){
+                    document.getElementById('cui').disabled = true;
+                }
                 
                 // Cambiar texto del botón
                 const btn = document.getElementById('btnGuardarUsuario');
@@ -893,6 +891,8 @@ const ModuloCrearUsuario = {
         if (btn) {
             btn.innerHTML = '<i class="fas fa-save"></i> <span>Guardar Usuario</span>';
         }
+
+        document.getElementById('cui').disabled = false;
         
         // Limpiar alertas
         const alertContainer = document.getElementById('alertContainerCrearUsuario');

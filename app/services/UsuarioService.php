@@ -17,12 +17,12 @@ class UsuarioService {
         
         // Primero obtenemos el usuario por nombre de usuario
         $validacion = $this->usuarioRepository->obtenerPasswordUser($nombreUsuario);
-        
+        error_log("Validacion:" . print_r($validacion, true));
         if ($validacion === null) {
             throw new \Exception("Credenciales incorrectas");
         }
         
-        error_log(print_r($validacion, true) ."". print_r($password, true));
+        error_log(print_r($validacion, true) ." Password: ". print_r($password, true));
         // Verificar la contraseña hasheada
         if (!password_verify($password, $validacion['USU_password_hash'])) {
             throw new \Exception("Credenciales incorrectas");
