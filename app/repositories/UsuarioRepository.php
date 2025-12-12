@@ -15,29 +15,31 @@ class UsuarioRepository {
     }
     
 
-    public function login($nombreUsuario, $password) {
-        try {
-            $sql = "EXEC SP_USUARIO_LOGIN @USU_username = :nombreUsuario, @USU_pass = :password";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
-            $stmt->bindParam(':password', $password, PDO::PARAM_STR);
-            $stmt->execute();
+    public function login($username, $password)
+    {
+        $sql = "EXEC SP_USUARIO_LOGIN :username, :password";
 
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            ':username' => $username,
+            ':password' => $password
+        ]);
 
-            if (!$result) {
-                return ['valido' => false, 'mensaje' => 'Sin respuesta del servidor'];
-            }
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if (!$resultado) {
             return [
-                'valido' => (bool)$result['VALIDO'],
-                'mensaje' => $result['MENSAJE']
+                'success' => false,
+                'mensaje' => 'Error inesperado en el login'
             ];
-
-        } catch (PDOException $e) {
-            throw new \Exception("Error al iniciar sesión: " . $e->getMessage());
         }
+
+        return [
+            'success' => $resultado['VALIDO'] == 1,
+            'mensaje' => $resultado['MENSAJE']
+        ];
     }
+
 
     /**
      * Validar CUI usando SP_S_USUARIO_VALIDAR_CUI
@@ -115,18 +117,21 @@ class UsuarioRepository {
 
     // UsuarioRepository.php
     public function obtenerPasswordUser($nombreUsuario) {
-        $sql = "SELECT u.USU_password_hash, r.ROL_nombre 
+        $sql = "SELECT 
+                    u.USU_password_hash, 
+                    r.ROL_nombre,
+                    u.USU_estado_id
                 FROM usuario u
                 LEFT JOIN usuario_rol ur ON u.USU_id = ur.USR_usuario_id
                 LEFT JOIN rol r ON ur.USR_rol_id = r.ROL_id
-                WHERE u.USU_username = :login 
-                AND u.USU_estado_id = 1";
-        
+                WHERE u.USU_username = :login";
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['login' => $nombreUsuario]);
-        
+
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     public function obtenerPasswordCUIUser($nombreUsuario) {
         $sql = "SELECT u.USU_password_hash, u.USU_cui, r.ROL_nombre 
