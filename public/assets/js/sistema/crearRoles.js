@@ -370,6 +370,43 @@ const ModuloRoles = {
     // ============================================
     // RENDERIZAR TABLA DE ROLES
     // ============================================
+    // Función auxiliar para generar un hash simple a partir de un string
+    // Se usa para obtener un color "pseudo-aleatorio" pero consistente para cada módulo
+    obtenerColorModulo(nombreModulo) {
+        let hash = 0;
+        for (let i = 0; i < nombreModulo.length; i++) {
+            // Usa el bitwise OR de 0 para asegurar un entero de 32 bits
+            hash = nombreModulo.charCodeAt(i) + ((hash << 5) - hash) | 0; 
+        }
+        // Genera un color HSL a partir del hash para asegurar que sean colores diferentes y visibles
+        const hue = Math.abs(hash) % 360; // Tono entre 0 y 359
+        return `hsl(${hue}, 70%, 50%)`; // Saturación y luminosidad fijas para buena visibilidad
+    },
+
+    // Función auxiliar para generar los badges de módulos
+    crearBadgesModulos(modulosCadena) {
+        if (!modulosCadena || modulosCadena.trim() === '') {
+            return 'Sin módulos';
+        }
+
+        // Separa los nombres de los módulos
+        const modulosArray = modulosCadena.split(',').map(m => m.trim()).filter(m => m.length > 0);
+        
+        // Genera el HTML para cada badge
+        const badgesHtml = modulosArray.map(nombreModulo => {
+            // Obtiene un color consistente para el módulo
+            const color = this.obtenerColorModulo(nombreModulo);
+            
+            // Estilos para el badge, usando el color generado
+            const style = `background-color: ${color}; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; margin: 2px; display: inline-block;`;
+
+            return `<span style="${style}">${nombreModulo}</span>`;
+        }).join(' '); // Une los badges con un espacio
+
+        return badgesHtml;
+    },
+
+    // Función de la clase (manteniendo la estructura original)
     renderizarTablaRoles(roles) {
         const tbody = this.elementos.tablaRoles;
         
@@ -393,14 +430,17 @@ const ModuloRoles = {
         }
         
         roles.forEach(rol => {
+            // Llama a la nueva función auxiliar para obtener el HTML de los badges
+            const modulosHtml = this.crearBadgesModulos(rol.MODULOS_NOMBRES);
+            console.log(modulosHtml);
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><strong>${rol.ROL_codigo}</strong></td>
                 <td>${rol.ROL_nombre}</td>
                 <td>${rol.ROL_nivel}</td>
                 <td>${rol.TOTAL_USUARIOS || 0}</td>
-                <td><small>${rol.MODULOS_NOMBRES || 'Sin módulos'}</small></td>
-                <td>
+                <td>${modulosHtml}</td> <td>
                     <span class="badge ${rol.ROL_activo ? 'badge-success' : 'badge-danger'}">
                         ${rol.ROL_activo ? 'Activo' : 'Inactivo'}
                     </span>
@@ -419,7 +459,7 @@ const ModuloRoles = {
     },
 
     // ============================================
-    // ✏️ EDITAR ROL
+    // EDITAR ROL
     // ============================================
     async editarRol(rolId) {
         try {
