@@ -83,28 +83,8 @@ const ModuloDNI = {
             this.limpiarResultados();
             this.elementos.alertContainer.innerHTML = '';
 
-            // Obtener credenciales del usuario actual
-            const usuario = localStorage.getItem('usuario');
-            
-            const credencialesResponse = await api.obtenerDniYPassword(usuario);
-
-            if (!credencialesResponse.success || !credencialesResponse.data) {
-                mostrarAlerta('No se pudieron obtener las credenciales del usuario', 'danger', 'alertContainerDNI');
-                return;
-            }
-
-            const dniUsuario = credencialesResponse.data.DNI;
-            const password = credencialesResponse.data.password;
-
-            // Armar payload para la API
-            const payload = {
-                dniConsulta: dni,
-                dniUsuario: dniUsuario,
-                password: password
-            };
-
-            // Realizar consulta a la API
-            const response = await api.consultarDNI(payload);
+            // Realizar consulta a la API directamente (el backend maneja las credenciales)
+            const response = await api.consultarDNI(dni); // Cambio: paso directo del DNI
 
             // Manejar respuesta
             if (response.success && response.data) {

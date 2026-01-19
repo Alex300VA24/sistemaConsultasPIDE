@@ -2,39 +2,41 @@
 
 namespace App\Controllers;
 
-class ConsultasSunarpController {
-    
+class ConsultasSunarpController
+{
+
     private $urlSUNARP;
     private $rucUsuario;
     private $nombreUsuario;
     private $passUsuario;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $envFile = __DIR__ . '/../../.env';
         if (file_exists($envFile)) {
             $content = file_get_contents($envFile);
-            
+
             // Parsear manualmente manejando comillas
             $lines = preg_split('/\r\n|\n|\r/', $content);
-            
+
             foreach ($lines as $line) {
                 $line = trim($line);
-                
+
                 // Ignorar líneas vacías o comentarios
                 if (empty($line) || $line[0] === '#') {
                     continue;
                 }
-                
+
                 // Usar regex para dividir correctamente
                 if (preg_match('/^([^=]+)=(.*)$/', $line, $matches)) {
                     $name = trim($matches[1]);
                     $value = trim($matches[2]);
-                    
+
                     // Manejar comillas
                     if (preg_match('/^["\'](.*)["\']$/', $value, $quoteMatches)) {
                         $value = $quoteMatches[1];
                     }
-                    
+
                     $_ENV[$name] = $value;
                 }
             }
@@ -48,11 +50,26 @@ class ConsultasSunarpController {
     // ========================================
     // BUSCAR PERSONA NATURAL (SOLO RENIEC)
     // ========================================
-    public function buscarPersonaNatural() {
+    public function buscarPersonaNatural()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No autorizado. Debe iniciar sesión.'
+            ]);
+            return;
+        }
+
         if (ob_get_level()) {
             ob_clean();
         }
-        
+
         header('Content-Type: application/json; charset=utf-8');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -66,18 +83,31 @@ class ConsultasSunarpController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['dni']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
+        if (!isset($input['dni'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan datos: dni, dniUsuario o password'
+                'message' => 'Faltan datos: dni es requerido'
             ]);
             return;
         }
 
         $dni = trim($input['dni']);
-        $dniUsuario = trim($input['dniUsuario']);
-        $passwordPIDE = trim($input['password']);
+
+        // Usar credenciales del servidor
+        // Nota: PIDE_SUNARP_USUARIO y PIDE_SUNARP_PASS se cargaron en __construct
+        // Pero para RENIEC se suelen usar las de PIDE general.
+        // Asumiremos que se usan PIDE_DNI_USUARIO y PIDE_PASSWORD para RENIEC
+        // O si buscarPersonaNatural usa la lógica de RENIEC interna.
+
+        $dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? '';
+        $passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? '';
+
+        if (empty($dniUsuario) || empty($passwordPIDE)) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error de configuración de credenciales PIDE']);
+            return;
+        }
 
         if (!preg_match('/^\d{8}$/', $dni)) {
             http_response_code(400);
@@ -92,7 +122,7 @@ class ConsultasSunarpController {
 
 
         $datosReniec = $this->obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE);
-        
+
         if (!$datosReniec['success']) {
             error_log("Error RENIEC: " . $datosReniec['message']);
             http_response_code(404);
@@ -108,11 +138,26 @@ class ConsultasSunarpController {
     // ========================================
     // BUSCAR PERSONA JURÍDICA (SOLO SUNAT)
     // ========================================
-    public function buscarPersonaJuridica() {
+    public function buscarPersonaJuridica()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No autorizado. Debe iniciar sesión.'
+            ]);
+            return;
+        }
+
         if (ob_get_level()) {
             ob_clean();
         }
-        
+
         header('Content-Type: application/json; charset=utf-8');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -126,18 +171,17 @@ class ConsultasSunarpController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['dniUsuario']) || !isset($input['password'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Faltan datos: dniUsuario o password'
-            ]);
-            return;
-        }
+        // Ya no requerimos dniUsuario ni password del cliente
 
-        $dniUsuario = trim($input['dniUsuario']);
-        $passwordPIDE = trim($input['password']);
         $tipoBusqueda = $input['tipoBusqueda'] ?? 'ruc';
+
+        // Usamos credenciales configuradas en el servidor si fuera necesario
+        // Pero para SUNAT (buscarPersonaJuridica) generalmente usa solo RUC o Razón Social
+        // y la configuración interna de ConsultasSunatController.
+
+        // Si el metodo necesita llamar a algo de SUNARP que requiere credenciales:
+        $dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? '';
+        $passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? '';
 
         error_log("=== INICIO BÚSQUEDA PERSONA JURÍDICA (SUNAT) ===");
         error_log("Tipo de búsqueda: $tipoBusqueda");
@@ -168,7 +212,7 @@ class ConsultasSunarpController {
 
             $sunatController = new ConsultasSunatController();
             $datosSunat = $this->consultarRUCInterno($sunatController, $ruc);
-            
+
             if (!$datosSunat['success']) {
                 error_log("Error SUNAT: " . $datosSunat['message']);
                 http_response_code(404);
@@ -185,7 +229,6 @@ class ConsultasSunarpController {
 
             http_response_code(200);
             echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
-
         } else if ($tipoBusqueda === 'razonSocial') {
             if (!isset($input['razonSocial']) || empty(trim($input['razonSocial']))) {
                 http_response_code(400);
@@ -201,7 +244,7 @@ class ConsultasSunarpController {
 
             $sunatController = new ConsultasSunatController();
             $resultadosSunat = $this->buscarRazonSocialInterno($sunatController, $razonSocial);
-            
+
             if (!$resultadosSunat['success']) {
                 error_log("Error SUNAT: " . $resultadosSunat['message']);
                 http_response_code(404);
@@ -213,8 +256,6 @@ class ConsultasSunarpController {
 
             http_response_code(200);
             echo json_encode($resultadosSunat, JSON_UNESCAPED_UNICODE);
-            
-
         } else {
             http_response_code(400);
             echo json_encode([
@@ -228,11 +269,23 @@ class ConsultasSunarpController {
     // ========================================
     // CONSULTAR TSIRSARP - PERSONA NATURAL
     // ========================================
-    public function consultarTSIRSARPNatural() {
+    public function consultarTSIRSARPNatural()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         if (ob_get_level()) {
             ob_clean();
         }
-        
+
         header('Content-Type: application/json; charset=utf-8');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -246,14 +299,7 @@ class ConsultasSunarpController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['usuario']) || !isset($input['clave'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Faltan credenciales: usuario o clave'
-            ]);
-            return;
-        }
+        // Ya no validamos usuario/clave del input
 
         $usuario = $this->nombreUsuario;
         $clave = $this->passUsuario;
@@ -281,11 +327,23 @@ class ConsultasSunarpController {
     // ========================================
     // CONSULTAR TSIRSARP - PERSONA JURÍDICA
     // ========================================
-    public function consultarTSIRSARPJuridica() {
+    public function consultarTSIRSARPJuridica()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         if (ob_get_level()) {
             ob_clean();
         }
-        
+
         header('Content-Type: application/json; charset=utf-8');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -299,11 +357,11 @@ class ConsultasSunarpController {
 
         $input = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($input['usuario']) || !isset($input['clave']) || !isset($input['razonSocial'])) {
+        if (!isset($input['razonSocial'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan datos: usuario, clave o razonSocial'
+                'message' => 'Falta dato: razonSocial'
             ]);
             return;
         }
@@ -332,7 +390,8 @@ class ConsultasSunarpController {
     // ========================================
     // CONSULTAR GOficina - Obtener Catálogo de Oficinas
     // ========================================
-    public function consultarGOficina() {
+    public function consultarGOficina()
+    {
         if (ob_get_level()) ob_clean();
         header('Content-Type: application/json; charset=utf-8');
 
@@ -361,10 +420,11 @@ class ConsultasSunarpController {
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
     }
 
-    private function ejecutarGOficina($usuario, $clave) {
+    private function ejecutarGOficina($usuario, $clave)
+    {
         try {
             $url = $this->urlSUNARP . "/GOficina?out=json";
-            
+
             $data = [
                 "PIDE" => [
                     "usuario" => (string)$usuario,
@@ -373,9 +433,9 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-            
+
             error_log("GOficina Request: " . $jsonData);
-            
+
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -406,14 +466,14 @@ class ConsultasSunarpController {
 
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
-                
+
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     return ['success' => false, 'message' => 'Error al decodificar JSON', 'data' => []];
                 }
 
                 // Extraer oficinas del response
                 $oficinas = $jsonResponse['oficina']['oficina'] ?? [];
-                
+
                 if (empty($oficinas)) {
                     return ['success' => false, 'message' => 'No se encontraron oficinas', 'data' => []];
                 }
@@ -440,17 +500,17 @@ class ConsultasSunarpController {
             }
 
             return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
-
         } catch (\Exception $e) {
             error_log("Exception en ejecutarGOficina: " . $e->getMessage());
             return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
         }
     }
 
-    private function ejecutarLASIRSARP($usuario, $clave, $zona, $oficina, $partida, $registro) {
+    private function ejecutarLASIRSARP($usuario, $clave, $zona, $oficina, $partida, $registro)
+    {
         try {
             $url = $this->urlSUNARP . "/LASIRSARP?out=json";
-            
+
             $data = [
                 "PIDE" => [
                     "usuario" => (string)$usuario,
@@ -463,7 +523,7 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-            
+
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -491,14 +551,14 @@ class ConsultasSunarpController {
 
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
-                
+
                 if (json_last_error() !== JSON_ERROR_NONE) {
                     return ['success' => false, 'message' => 'Error al decodificar JSON', 'data' => []];
                 }
 
                 $asientos = $jsonResponse['listarAsientosSIRSARPResponse']['asientos']['listAsientos'] ?? [];
                 $transaccion = $jsonResponse['listarAsientosSIRSARPResponse']['asientos']['transaccion'] ?? '';
-                
+
                 return [
                     'success' => true,
                     'message' => 'Consulta exitosa',
@@ -509,16 +569,16 @@ class ConsultasSunarpController {
             }
 
             return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
-
         } catch (\Exception $e) {
             return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
         }
     }
 
-    private function ejecutarVASIRSARP($usuario, $clave, $transaccion, $idImg, $tipo, $nroTotalPag, $nroPagRef, $pagina) {
+    private function ejecutarVASIRSARP($usuario, $clave, $transaccion, $idImg, $tipo, $nroTotalPag, $nroPagRef, $pagina)
+    {
         try {
             $url = $this->urlSUNARP . "/VASIRSARP?out=json";
-            
+
             $data = [
                 "PIDE" => [
                     "usuario" => (string)$usuario,
@@ -533,7 +593,7 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-            
+
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -561,9 +621,9 @@ class ConsultasSunarpController {
 
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
-                
+
                 $img = $jsonResponse['verAsientoSIRSARPResponse']['img'] ?? null;
-                
+
                 return [
                     'success' => true,
                     'message' => 'Imagen obtenida',
@@ -572,16 +632,16 @@ class ConsultasSunarpController {
             }
 
             return ['success' => false, 'message' => "HTTP $httpCode"];
-
         } catch (\Exception $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 
-    private function ejecutarVDRPVExtra($usuario, $clave, $zona, $oficina, $placa) {
+    private function ejecutarVDRPVExtra($usuario, $clave, $zona, $oficina, $placa)
+    {
         try {
             $url = $this->urlSUNARP . "/VDRPVExtra?out=json";
-            
+
             $data = [
                 "PIDE" => [
                     "usuario" => (string)$usuario,
@@ -593,7 +653,7 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-            
+
             $ch = curl_init($url);
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
@@ -621,11 +681,11 @@ class ConsultasSunarpController {
 
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
-                
+
                 $vehiculo = $jsonResponse['verDetalleRPVExtraResponse']['vehiculo'] ?? [];
 
                 error_log("Resultado de vehiculo" . print_r($vehiculo, true));
-                
+
                 return [
                     'success' => true,
                     'message' => 'Consulta vehicular exitosa',
@@ -634,7 +694,6 @@ class ConsultasSunarpController {
             }
 
             return ['success' => false, 'message' => "HTTP $httpCode", 'data' => []];
-
         } catch (\Exception $e) {
             return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
         }
@@ -643,7 +702,8 @@ class ConsultasSunarpController {
     // ========================================
     // MÉTODO INTERNO CONSULTAR TSIRSARP
     // ========================================
-    private function consultarTSIRSARP($usuario, $clave, $tipoParticipante, $apellidoPaterno, $apellidoMaterno, $nombres, $razonSocial) {
+    private function consultarTSIRSARP($usuario, $clave, $tipoParticipante, $apellidoPaterno, $apellidoMaterno, $nombres, $razonSocial)
+    {
         try {
             $url = $this->urlSUNARP . "/TSIRSARP?out=json";
 
@@ -660,7 +720,7 @@ class ConsultasSunarpController {
             ];
 
             $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
-            
+
             error_log("TSIRSARP Request: " . $jsonData);
 
             $ch = curl_init($url);
@@ -685,7 +745,7 @@ class ConsultasSunarpController {
             if (curl_errno($ch)) {
                 $error = curl_error($ch);
                 curl_close($ch);
-                
+
                 error_log("CURL Error TSIRSARP: $error");
                 return [
                     'success' => false,
@@ -695,7 +755,7 @@ class ConsultasSunarpController {
             }
 
             curl_close($ch);
-            
+
             // Intentar decodificar JSON y mostrar estructura
             $jsonResponse = json_decode($response, true);
 
@@ -712,7 +772,7 @@ class ConsultasSunarpController {
                         'data' => []
                     ];
                 }
-                
+
                 return $this->procesarRespuestaTSIRSARP($jsonResponse, $tipoParticipante);
             } else {
                 return [
@@ -721,9 +781,8 @@ class ConsultasSunarpController {
                     'data' => []
                 ];
             }
-
         } catch (\Exception $e) {
-            
+
             error_log("Exception en consultarTSIRSARP: " . $e->getMessage());
             return [
                 'success' => false,
@@ -736,13 +795,16 @@ class ConsultasSunarpController {
     // ========================================
     // PROCESAR RESPUESTA TSIRSARP
     // ========================================
-    private function procesarRespuestaTSIRSARP($jsonResponse, $tipoParticipante) {
+    private function procesarRespuestaTSIRSARP($jsonResponse, $tipoParticipante)
+    {
         try {
             error_log("Procesando respuesta TSIRSARP. Tipo: $tipoParticipante");
-            
-            if (!isset($jsonResponse['buscarTitularidadSIRSARPResponse']) || 
-                !isset($jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad'])) {
-                
+
+            if (
+                !isset($jsonResponse['buscarTitularidadSIRSARPResponse']) ||
+                !isset($jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad'])
+            ) {
+
                 return [
                     'success' => false,
                     'message' => 'No se encontraron registros en SUNARP',
@@ -751,7 +813,7 @@ class ConsultasSunarpController {
             }
 
             $return = $jsonResponse['buscarTitularidadSIRSARPResponse']['respuestaTitularidad']['respuestaTitularidad'];
-            
+
             $registros = [];
             if (isset($return[0])) {
                 $registros = $return;
@@ -770,15 +832,14 @@ class ConsultasSunarpController {
             // ========================================
             $catalogoOficinas = [];
             $resultGOficina = $this->ejecutarGOficina($usuario, $clave);
-            
+
             if ($resultGOficina['success']) {
                 $catalogoOficinas = $resultGOficina['data'];
             } else {
-                
             }
 
             foreach ($registros as $index => $registro) {
-                
+
                 $item = [
                     'libro' => $registro['libro'] ?? '',
                     'apPaterno' => $registro['apPaterno'] ?? '',
@@ -801,10 +862,10 @@ class ConsultasSunarpController {
                 // ========================================
                 $codigoZona = $item['zona'];
                 $codigoOficina = $item['oficina'];
-                
+
                 if (!empty($catalogoOficinas) && !empty($item['oficina'])) {
                     $oficinaKey = strtoupper(trim($item['oficina']));
-                    
+
                     if (isset($catalogoOficinas[$oficinaKey])) {
                         $codigoZona = $catalogoOficinas[$oficinaKey]['codZona'];
                         $codigoOficina = $catalogoOficinas[$oficinaKey]['codOficina'];
@@ -816,9 +877,9 @@ class ConsultasSunarpController {
                 // CONSULTA LASIRSARP (Asientos)
                 // ========================================
                 if (!empty($item['numero_partida']) && !empty($codigoZona) && !empty($codigoOficina)) {
-                    
+
                     $registroCodigo = $tipoParticipante === 'N' ? '23000' : '22000';
-                    
+
                     $resultLASIRSARP = $this->ejecutarLASIRSARP(
                         $usuario,
                         $clave,
@@ -827,18 +888,18 @@ class ConsultasSunarpController {
                         $item['numero_partida'],
                         $registroCodigo
                     );
-                    
+
                     if ($resultLASIRSARP['success']) {
                         $item['asientos'] = $resultLASIRSARP['data'];
                         $item['transaccion'] = $resultLASIRSARP['transaccion'] ?? '';
-                        
+
                         // ========================================
                         // CONSULTA VASIRSARP (Imágenes)
                         // ========================================
                         if (!empty($resultLASIRSARP['data']) && !empty($item['transaccion'])) {
                             $imagenes = [];
                             $asientos = array_reverse($resultLASIRSARP['data']);
-                            
+
                             foreach ($asientos as $indexAsiento => $asiento) {
                                 $resultVASIRSARP = $this->ejecutarVASIRSARP(
                                     $usuario,
@@ -850,7 +911,7 @@ class ConsultasSunarpController {
                                     $asiento['listPag']['nroPagRef'] ?? '',
                                     $asiento['listPag']['pagina'] ?? ''
                                 );
-                                
+
                                 if ($resultVASIRSARP['success'] && !empty($resultVASIRSARP['img'])) {
                                     $imagenes[] = [
                                         'pagina' => $indexAsiento + 1,
@@ -858,7 +919,7 @@ class ConsultasSunarpController {
                                     ];
                                 }
                             }
-                            
+
                             $item['imagenes'] = $imagenes;
                         }
                     } else {
@@ -868,11 +929,13 @@ class ConsultasSunarpController {
                 // ========================================
                 // CONSULTA VDRPVExtra (Vehículos)
                 // ========================================
-                if (!empty($item['numero_placa']) && 
-                    trim($item['numero_placa']) !== '-' && 
-                    !empty($codigoZona) && 
-                    !empty($codigoOficina)) {
-                    
+                if (
+                    !empty($item['numero_placa']) &&
+                    trim($item['numero_placa']) !== '-' &&
+                    !empty($codigoZona) &&
+                    !empty($codigoOficina)
+                ) {
+
                     $resultVDRPVExtra = $this->ejecutarVDRPVExtra(
                         $usuario,
                         $clave,
@@ -880,7 +943,7 @@ class ConsultasSunarpController {
                         $codigoOficina,
                         $item['numero_placa']
                     );
-                    
+
                     if ($resultVDRPVExtra['success']) {
                         $item['datos_vehiculo'] = $resultVDRPVExtra['data'];
                     }
@@ -888,7 +951,7 @@ class ConsultasSunarpController {
 
                 $resultados[] = $item;
             }
-            
+
 
             // Al final de procesarRespuestaTSIRSARP, antes del return success
             error_log("=== RESPONSE FINAL A ENVIAR ===");
@@ -915,7 +978,6 @@ class ConsultasSunarpController {
                 'data' => $resultados,
                 'total' => count($resultados)
             ];
-
         } catch (\Exception $e) {
             return [
                 'success' => false,
@@ -925,19 +987,21 @@ class ConsultasSunarpController {
         }
     }
 
-    
+
 
     // ========================================
     // MÉTODOS INTERNOS SUNAT
     // ========================================
 
-    private function consultarRUCInterno($sunatController, $ruc) {
+    private function consultarRUCInterno($sunatController, $ruc)
+    {
         $metodoReflexion = new \ReflectionMethod($sunatController, 'consultarServicioSUNATRest');
         $metodoReflexion->setAccessible(true);
         return $metodoReflexion->invoke($sunatController, $ruc);
     }
 
-    private function buscarRazonSocialInterno($sunatController, $razonSocial) {
+    private function buscarRazonSocialInterno($sunatController, $razonSocial)
+    {
         $metodoReflexion = new \ReflectionMethod($sunatController, 'buscarPorRazonSocialSUNATRest');
         $metodoReflexion->setAccessible(true);
         return $metodoReflexion->invoke($sunatController, $razonSocial);
@@ -947,7 +1011,8 @@ class ConsultasSunarpController {
     // OBTENER DATOS DE RENIEC
 
     // ========================================
-    private function obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE) {
+    private function obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE)
+    {
         try {
             $urlRENIEC = $_ENV['PIDE_URL_RENIEC'] ?? "https://ws2.pide.gob.pe/Rest/RENIEC/Consultar?out=json";
 
@@ -1023,8 +1088,8 @@ class ConsultasSunarpController {
                             'foto' => $datosPersona['foto'] ?? null,
                             'nombres_completos' => trim(
                                 ($datosPersona['prenombres'] ?? '') . ' ' .
-                                ($datosPersona['apPrimer'] ?? '') . ' ' .
-                                ($datosPersona['apSegundo'] ?? '')
+                                    ($datosPersona['apPrimer'] ?? '') . ' ' .
+                                    ($datosPersona['apSegundo'] ?? '')
                             )
                         ]],
                         'total' => 1
@@ -1036,7 +1101,6 @@ class ConsultasSunarpController {
                 'success' => false,
                 'message' => 'No se encontraron datos en RENIEC para el DNI proporcionado'
             ];
-
         } catch (\Exception $e) {
             error_log("Exception en obtenerDatosRENIEC: " . $e->getMessage());
             return [
@@ -1046,4 +1110,3 @@ class ConsultasSunarpController {
         }
     }
 }
-?>

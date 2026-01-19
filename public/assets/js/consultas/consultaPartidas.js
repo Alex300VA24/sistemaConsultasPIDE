@@ -22,7 +22,7 @@ const ModuloPartidas = {
             return;
         }
         
-        await this.cargarCredencialesUsuario();
+        // await this.cargarCredencialesUsuario(); // ELIMINADO POR SEGURIDAD
         this.setupEventListeners();
         
         this.inicializado = true;
@@ -33,24 +33,10 @@ const ModuloPartidas = {
     // ============================================
     // CARGAR CREDENCIALES
     // ============================================
-    async cargarCredencialesUsuario() {
-        try {
-            const usuario = await api.obtenerUsuarioActual();
-            if (usuario.success && usuario.data) {
-                this.credencialesUsuario.dni = usuario.data.PER_documento_numero || '';
-                
-                if (usuario.data.USU_username) {
-                    const credenciales = await api.obtenerDniYPassword(usuario.data.USU_username);
-                    if (credenciales && credenciales.success) {
-                        this.credencialesUsuario.password = credenciales.data.password || '';
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('❌ Error al cargar credenciales:', error);
-            mostrarAlerta('Error al cargar credenciales de usuario', 'danger', "alertContainerPartidas");
-        }
-    },
+    // ============================================
+    // CARGAR CREDENCIALES (ELIMINADO)
+    // ============================================
+    // async cargarCredencialesUsuario() { ... }
 
     // ============================================
     // CONFIGURAR EVENT LISTENERS
@@ -145,17 +131,13 @@ const ModuloPartidas = {
             return;
         }
 
-        if (!this.credencialesUsuario.dni || !this.credencialesUsuario.password) {
-            mostrarAlerta('No se han cargado las credenciales del usuario. Recargue la página.', 'danger', "alertContainerPartidas");
-            return;
-        }
+        // Ya no verificamos credenciales en frontend
+        
         this.mostrarLoadingPartidas('formBusquedaNatural');
         
         try {
             const resultado = await api.buscarPersonaNaturalSunarp(
-                dni,
-                this.credencialesUsuario.dni,
-                this.credencialesUsuario.password
+                dni
             );
             
             if (resultado.success && resultado.data && resultado.data.length > 0) {
@@ -200,19 +182,14 @@ const ModuloPartidas = {
             }
         }
 
-        if (!this.credencialesUsuario.dni || !this.credencialesUsuario.password) {
-            mostrarAlerta('No se han cargado las credenciales del usuario. Recargue la página.', 'danger', "alertContainerPartidas");
-            return;
-        }
+        // Ya no verificamos credenciales en frontend
 
         this.mostrarLoadingPartidas('formBusquedaJuridica');
         
         try {
             const resultado = await api.buscarPersonaJuridicaSunarp(
                 parametro,
-                tipoBusqueda,
-                this.credencialesUsuario.dni,
-                this.credencialesUsuario.password
+                tipoBusqueda
             );
             
             if (resultado.success && resultado.data && resultado.data.length > 0) {
@@ -403,11 +380,6 @@ const ModuloPartidas = {
             return;
         }
 
-        if (!this.credencialesUsuario.dni || !this.credencialesUsuario.password) {
-            mostrarAlerta('No se han cargado las credenciales del usuario. Recargue la página.', 'danger', "alertContainerPartidas");
-            return;
-        }
-
         const btnConsultar = document.getElementById('btnConsultar');
         const originalHTML = btnConsultar.innerHTML;
         btnConsultar.disabled = true;
@@ -418,16 +390,12 @@ const ModuloPartidas = {
 
             if (this.tipoPersonaActual === 'natural') {
                 resultado = await api.consultarTSIRSARPNatural({
-                    usuario: this.credencialesUsuario.dni,
-                    clave: this.credencialesUsuario.password,
                     apellidoPaterno: this.personaSeleccionada.apellido_paterno || '',
                     apellidoMaterno: this.personaSeleccionada.apellido_materno || '',
                     nombres: this.personaSeleccionada.nombres || ''
                 });
             } else {
                 resultado = await api.consultarTSIRSARPJuridica({
-                    usuario: this.credencialesUsuario.dni,
-                    clave: this.credencialesUsuario.password,
                     razonSocial: this.personaSeleccionada.razon_social || ''
                 });
             }

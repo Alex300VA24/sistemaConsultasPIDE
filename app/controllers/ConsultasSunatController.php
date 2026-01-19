@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
-class ConsultasSunatController {
-    
+class ConsultasSunatController
+{
+
     private $urlSUNATRest;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $envFile = __DIR__ . '/../../.env';
         if (file_exists($envFile)) {
             $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -23,7 +25,18 @@ class ConsultasSunatController {
     // ========================================
     // 📌 CONSULTAR RUC (SUNAT) - REST/JSON
     // ========================================
-    public function consultarRUC() {
+    public function consultarRUC()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -60,7 +73,7 @@ class ConsultasSunatController {
 
         // Realizar consulta REST
         $resultado = $this->consultarServicioSUNATRest($ruc);
-        
+
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado);
     }
@@ -68,7 +81,18 @@ class ConsultasSunatController {
     // ========================================
     // 📌 BUSCAR POR RAZÓN SOCIAL (SUNAT) - REST/JSON
     // ========================================
-    public function buscarRazonSocial() {
+    public function buscarRazonSocial()
+    {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -105,7 +129,7 @@ class ConsultasSunatController {
 
         // Realizar consulta REST por razón social
         $resultado = $this->buscarPorRazonSocialSUNATRest($razonSocial);
-        
+
         http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado);
     }
@@ -113,7 +137,8 @@ class ConsultasSunatController {
     // ========================================
     // SERVICIO SUNAT REST - CONSULTA POR RUC
     // ========================================
-    private function consultarServicioSUNATRest($ruc) {
+    private function consultarServicioSUNATRest($ruc)
+    {
         try {
             // Construir URL con parámetros
             $url = $this->urlSUNATRest . '/DatosPrincipales?numruc=' . urlencode($ruc) . '&out=json';
@@ -174,7 +199,6 @@ class ConsultasSunatController {
                     'data' => null
                 ];
             }
-
         } catch (\Exception $e) {
             error_log("Exception en consultarServicioSUNATRest: " . $e->getMessage());
             return [
@@ -188,7 +212,8 @@ class ConsultasSunatController {
     // ========================================
     // SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL
     // ========================================
-    private function buscarPorRazonSocialSUNATRest($razonSocial) {
+    private function buscarPorRazonSocialSUNATRest($razonSocial)
+    {
         try {
             // Construir URL con parámetros
             $url = $this->urlSUNATRest . '/RazonSocial?RSocial=' . urlencode($razonSocial) . '&out=json';
@@ -247,7 +272,6 @@ class ConsultasSunatController {
                     'data' => []
                 ];
             }
-
         } catch (\Exception $e) {
             error_log("Exception en buscarPorRazonSocialSUNATRest: " . $e->getMessage());
             return [
@@ -261,10 +285,11 @@ class ConsultasSunatController {
     // ========================================
     // PROCESAR RESPUESTA JSON (CONSULTA POR RUC)
     // ========================================
-    private function procesarRespuestaJSON($jsonResponse, $ruc) {
+    private function procesarRespuestaJSON($jsonResponse, $ruc)
+    {
         try {
             $respuesta = json_decode($jsonResponse, true);
-            
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return [
                     'success' => false,
@@ -285,30 +310,30 @@ class ConsultasSunatController {
 
             // Extraer datos del multiRef
             $datos = $respuesta['list']['multiRef'];
-            
+
             // Función auxiliar para extraer valor
-            $extraerValor = function($campo) use ($datos) {
+            $extraerValor = function ($campo) use ($datos) {
                 if (!isset($datos[$campo])) {
                     return '';
                 }
-                
+
                 $valor = $datos[$campo];
-                
+
                 // Si tiene @nil=true, retornar vacío
                 if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
                     return '';
                 }
-                
+
                 // Si tiene $, retornar ese valor
                 if (is_array($valor) && isset($valor['$'])) {
                     return trim($valor['$']);
                 }
-                
+
                 // Si es string directo
                 if (is_string($valor)) {
                     return trim($valor);
                 }
-                
+
                 return '';
             };
 
@@ -329,7 +354,7 @@ class ConsultasSunatController {
                     // Datos principales
                     'ruc' => $rucObtenido,
                     'razon_social' => $extraerValor('ddp_nombre'),
-                    
+
                     // Ubicación
                     'codigo_ubigeo' => $extraerValor('ddp_ubigeo'),
                     'departamento' => $extraerValor('desc_dep'),
@@ -338,7 +363,7 @@ class ConsultasSunatController {
                     'cod_dep' => $extraerValor('cod_dep'),
                     'cod_prov' => $extraerValor('cod_prov'),
                     'cod_dist' => $extraerValor('cod_dist'),
-                    
+
                     // Dirección completa
                     'tipo_via' => $extraerValor('desc_tipvia'),
                     'codigo_tipo_via' => $extraerValor('ddp_tipvia'),
@@ -349,37 +374,37 @@ class ConsultasSunatController {
                     'codigo_tipo_zona' => $extraerValor('ddp_tipzon'),
                     'nombre_zona' => $extraerValor('ddp_nomzon'),
                     'referencia' => $extraerValor('ddp_refer1'),
-                    
+
                     // Estado y condición
                     'estado_contribuyente' => $extraerValor('desc_estado'),
                     'codigo_estado' => $extraerValor('ddp_estado'),
                     'condicion_domicilio' => $extraerValor('desc_flag22'),
                     'codigo_condicion' => $extraerValor('ddp_flag22'),
-                    
+
                     // Tipo de contribuyente
                     'tipo_contribuyente' => $extraerValor('desc_tpoemp'),
                     'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp'),
                     'tipo_persona' => $extraerValor('desc_identi'),
                     'codigo_tipo_persona' => $extraerValor('ddp_identi'),
-                    
+
                     // Actividad económica
                     'actividad_economica' => $extraerValor('desc_ciiu'),
                     'codigo_ciiu' => $extraerValor('ddp_ciiu'),
-                    
+
                     // Dependencia
                     'dependencia' => $extraerValor('desc_numreg'),
                     'codigo_dependencia' => $extraerValor('ddp_numreg'),
-                    
+
                     // Fechas
                     'fecha_actualizacion' => $extraerValor('ddp_fecact'),
                     'fecha_alta' => $extraerValor('ddp_fecalt'),
                     'fecha_baja' => $extraerValor('ddp_fecbaj'),
-                    
+
                     // Otros datos
                     'codigo_secuencia' => $extraerValor('ddp_secuen'),
                     'libreta_tributaria' => $extraerValor('ddp_lllttt'),
                     'tamaño' => $extraerValor('desc_tamano'),
-                    
+
                     // Estados booleanos
                     'es_activo' => $this->convertirBooleano($extraerValor('esActivo')),
                     'es_habido' => $this->convertirBooleano($extraerValor('esHabido')),
@@ -394,7 +419,6 @@ class ConsultasSunatController {
             $this->registrarConsulta('RUC', $ruc, $resultado['data']);
 
             return $resultado;
-
         } catch (\Exception $e) {
             error_log("Exception en procesarRespuestaJSON: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
@@ -409,13 +433,14 @@ class ConsultasSunatController {
     // ========================================
     // PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL) - CORREGIDO
     // ========================================
-    private function procesarRespuestaBusquedaJSON($jsonResponse) {
+    private function procesarRespuestaBusquedaJSON($jsonResponse)
+    {
         try {
             error_log("Procesando respuesta de búsqueda por razón social");
             error_log("Response raw: " . substr($jsonResponse, 0, 1000));
 
             $respuesta = json_decode($jsonResponse, true);
-            
+
             if (json_last_error() !== JSON_ERROR_NONE) {
                 error_log("Error JSON decode: " . json_last_error_msg());
                 return [
@@ -437,7 +462,7 @@ class ConsultasSunatController {
             }
 
             $multiRef = $respuesta['list']['multiRef'];
-            
+
             // Verificar si multiRef es un array de resultados
             if (!is_array($multiRef)) {
                 error_log("multiRef no es un array");
@@ -460,34 +485,34 @@ class ConsultasSunatController {
             $resultados = [];
 
             // Función auxiliar para extraer valor
-            $extraerValor = function($campo, $datos) {
+            $extraerValor = function ($campo, $datos) {
                 if (!isset($datos[$campo])) {
                     return '';
                 }
-                
+
                 $valor = $datos[$campo];
-                
+
                 if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
                     return '';
                 }
-                
+
                 if (is_array($valor) && isset($valor['$'])) {
                     return trim($valor['$']);
                 }
-                
+
                 if (is_string($valor)) {
                     return trim($valor);
                 }
-                
+
                 return '';
             };
 
             foreach ($multiRef as $index => $datos) {
                 $ruc = $extraerValor('ddp_numruc', $datos);
                 $nombre = $extraerValor('ddp_nombre', $datos);
-                
+
                 error_log("Procesando resultado $index: RUC=$ruc, Nombre=$nombre");
-                
+
                 // Solo procesar si tiene RUC
                 if (!empty($ruc)) {
                     $resultado = [
@@ -495,7 +520,7 @@ class ConsultasSunatController {
                         'ruc' => $ruc,
                         'razon_social' => $nombre,
                         'secuencia' => (int)$extraerValor('ddp_secuen', $datos),
-                        
+
                         // Ubicación
                         'codigo_ubigeo' => $extraerValor('ddp_ubigeo', $datos),
                         'departamento' => $extraerValor('desc_dep', $datos),
@@ -504,7 +529,7 @@ class ConsultasSunatController {
                         'cod_dep' => $extraerValor('cod_dep', $datos),
                         'cod_prov' => $extraerValor('cod_prov', $datos),
                         'cod_dist' => $extraerValor('cod_dist', $datos),
-                        
+
                         // Dirección
                         'tipo_via' => $extraerValor('desc_tipvia', $datos),
                         'codigo_tipo_via' => $extraerValor('ddp_tipvia', $datos),
@@ -515,42 +540,42 @@ class ConsultasSunatController {
                         'codigo_tipo_zona' => $extraerValor('ddp_tipzon', $datos),
                         'nombre_zona' => $extraerValor('ddp_nomzon', $datos),
                         'referencia' => $extraerValor('ddp_refer1', $datos),
-                        
+
                         // Estado
                         'estado_contribuyente' => $extraerValor('desc_estado', $datos),
                         'codigo_estado' => $extraerValor('ddp_estado', $datos),
                         'condicion_domicilio' => $extraerValor('desc_flag22', $datos),
                         'codigo_condicion' => $extraerValor('ddp_flag22', $datos),
-                        
+
                         // Tipo
                         'tipo_contribuyente' => $extraerValor('desc_tpoemp', $datos),
                         'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp', $datos),
                         'tipo_persona' => $extraerValor('desc_identi', $datos),
                         'codigo_tipo_persona' => $extraerValor('ddp_identi', $datos),
-                        
+
                         // Actividad
                         'actividad_economica' => $extraerValor('desc_ciiu', $datos),
                         'codigo_ciiu' => $extraerValor('ddp_ciiu', $datos),
-                        
+
                         // Dependencia
                         'dependencia' => $extraerValor('desc_numreg', $datos),
                         'codigo_dependencia' => $extraerValor('ddp_numreg', $datos),
-                        
+
                         // Fechas
                         'fecha_actualizacion' => $extraerValor('ddp_fecact', $datos),
                         'fecha_alta' => $extraerValor('ddp_fecalt', $datos),
                         'fecha_baja' => $extraerValor('ddp_fecbaj', $datos),
-                        
+
                         // Estados booleanos
                         'es_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)),
                         'es_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)),
                         'estado_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)) ? 'SÍ' : 'NO',
                         'estado_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)) ? 'SÍ' : 'NO'
                     ];
-                    
+
                     // Construir dirección completa
                     $resultado['direccion_completa'] = $this->construirDireccionDesdeArray($resultado);
-                    
+
                     $resultados[] = $resultado;
                     error_log("Resultado procesado exitosamente");
                 } else {
@@ -575,7 +600,6 @@ class ConsultasSunatController {
                 'data' => $resultados,
                 'total' => count($resultados)
             ];
-
         } catch (\Exception $e) {
             error_log("Exception en procesarRespuestaBusquedaJSON: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
@@ -590,55 +614,57 @@ class ConsultasSunatController {
     // ========================================
     // CONSTRUIR DIRECCIÓN COMPLETA DESDE ARRAY
     // ========================================
-    private function construirDireccionDesdeArray($data) {
+    private function construirDireccionDesdeArray($data)
+    {
         $partes = [];
-        
+
         if (!empty($data['tipo_via']) && $data['tipo_via'] !== '-') {
             $partes[] = $data['tipo_via'];
         }
-        
+
         if (!empty($data['nombre_via']) && $data['nombre_via'] !== '-') {
             $partes[] = $data['nombre_via'];
         }
-        
+
         if (!empty($data['numero']) && $data['numero'] !== '-') {
             $partes[] = 'NRO. ' . $data['numero'];
         }
-        
+
         if (!empty($data['interior']) && $data['interior'] !== '-') {
             $partes[] = 'INT. ' . $data['interior'];
         }
-        
+
         if (!empty($data['nombre_zona']) && $data['nombre_zona'] !== '-') {
             $partes[] = $data['nombre_zona'];
         }
-        
+
         if (!empty($data['referencia']) && $data['referencia'] !== '-') {
             $partes[] = '(' . $data['referencia'] . ')';
         }
-        
+
         return implode(' ', $partes);
     }
 
     // ========================================
     // CONVERTIR A BOOLEANO
     // ========================================
-    private function convertirBooleano($valor) {
+    private function convertirBooleano($valor)
+    {
         // Si está vacío, retornar false
         if (empty($valor)) {
             return false;
         }
-        
+
         // Si ya es booleano, retornarlo directamente
         if (is_bool($valor)) {
             return $valor;
         }
-        
+
         // Si es numérico
         if (is_numeric($valor)) {
             return (int)$valor === 1;
         }
-        
+
         // Si es string, convertir
         $valorStr = strtolower((string)$valor);
         return in_array($valorStr, ['true', '1', 'yes', 'si', 'sí']);
@@ -647,7 +673,8 @@ class ConsultasSunatController {
     // ========================================
     // REGISTRAR CONSULTA EN LOG
     // ========================================
-    private function registrarConsulta($tipo, $documento, $respuesta) {
+    private function registrarConsulta($tipo, $documento, $respuesta)
+    {
         try {
             error_log(sprintf(
                 "[%s] Consulta %s: %s - %s",
@@ -656,10 +683,8 @@ class ConsultasSunatController {
                 $documento,
                 $respuesta['razon_social'] ?? 'N/A'
             ));
-            
         } catch (\Exception $e) {
             error_log("Error al registrar consulta: " . $e->getMessage());
         }
     }
 }
-?>
