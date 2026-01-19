@@ -4,17 +4,27 @@ namespace App\Controllers;
 
 use App\Services\ModuloService;
 
-class ModuloController {
+class ModuloController
+{
     private $moduloService;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->moduloService = new ModuloService();
     }
 
     /**
      * Crear un nuevo módulo
      */
-    public function crearModulo() {
+    public function crearModulo()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
 
@@ -58,7 +68,6 @@ class ModuloController {
                     'message' => 'Error al crear el módulo'
                 ]);
             }
-
         } catch (\Exception $e) {
             error_log("Error en crearModulo: " . $e->getMessage());
             http_response_code(500);
@@ -73,7 +82,15 @@ class ModuloController {
     /**
      * Actualizar un módulo existente
      */
-    public function actualizarModulo() {
+    public function actualizarModulo()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
 
@@ -125,7 +142,6 @@ class ModuloController {
                     'message' => 'Error al actualizar el módulo'
                 ]);
             }
-
         } catch (\Exception $e) {
             error_log("Error en actualizarModulo: " . $e->getMessage());
             http_response_code(500);
@@ -140,7 +156,15 @@ class ModuloController {
     /**
      * Listar todos los módulos
      */
-    public function listarModulos() {
+    public function listarModulos()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $modulos = $this->moduloService->listarModulos();
 
@@ -149,7 +173,6 @@ class ModuloController {
                 'data' => $modulos,
                 'total' => count($modulos)
             ]);
-
         } catch (\Exception $e) {
             error_log("Error en listarModulos: " . $e->getMessage());
             http_response_code(500);
@@ -164,7 +187,15 @@ class ModuloController {
     /**
      * Obtener un módulo específico por ID
      */
-    public function obtenerModulo() {
+    public function obtenerModulo()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $moduloId = $_GET['id'] ?? null;
 
@@ -191,7 +222,6 @@ class ModuloController {
                     'message' => 'Módulo no encontrado'
                 ]);
             }
-
         } catch (\Exception $e) {
             error_log("Error en obtenerModulo: " . $e->getMessage());
             http_response_code(500);
@@ -206,7 +236,15 @@ class ModuloController {
     /**
      * Eliminar un módulo
      */
-    public function eliminarModulo() {
+    public function eliminarModulo()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             $moduloId = $data['modulo_id'] ?? null;
@@ -244,7 +282,6 @@ class ModuloController {
                     'message' => 'Error al eliminar el módulo'
                 ]);
             }
-
         } catch (\Exception $e) {
             error_log("Error en eliminarModulo: " . $e->getMessage());
             http_response_code(500);
@@ -259,7 +296,15 @@ class ModuloController {
     /**
      * Cambiar el estado activo/inactivo de un módulo
      */
-    public function toggleEstadoModulo() {
+    public function toggleEstadoModulo()
+    {
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         try {
             $data = json_decode(file_get_contents('php://input'), true);
             $moduloId = $data['modulo_id'] ?? null;
@@ -288,7 +333,6 @@ class ModuloController {
                     'message' => 'Error al cambiar el estado del módulo'
                 ]);
             }
-
         } catch (\Exception $e) {
             error_log("Error en toggleEstadoModulo: " . $e->getMessage());
             http_response_code(500);
@@ -303,7 +347,8 @@ class ModuloController {
     /**
      * Obtener los módulos del usuario actual (según sus permisos)
      */
-    public function obtenerModulosUsuario() {
+    public function obtenerModulosUsuario()
+    {
         try {
             // Verificar sesión
             if (!isset($_SESSION['usuario_id'])) {
@@ -322,7 +367,6 @@ class ModuloController {
                 'success' => true,
                 'data' => $modulos
             ]);
-
         } catch (\Exception $e) {
             error_log("Error en obtenerModulosUsuario: " . $e->getMessage());
             http_response_code(500);

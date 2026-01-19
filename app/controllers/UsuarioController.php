@@ -414,11 +414,27 @@ class UsuarioController
 
     public function obtenerDniYPassword()
     {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'No autorizado']);
+            return;
+        }
+
         header('Content-Type: application/json');
 
         try {
             $data = json_decode(file_get_contents("php://input"), true);
             $nombreUsuario = $data['nombreUsuario'] ?? null;
+
+            if (empty($nombreUsuario)) {
+                // Intentar obtener del usuario actual si no se envía
+                $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
+            }
 
             if (empty($nombreUsuario)) {
                 throw new \Exception("El nombre de usuario es requerido");
@@ -434,19 +450,14 @@ class UsuarioController
                 return;
             }
 
-            // Obtener la contraseña desde la sesión
-            $passwordSesion = $_SESSION['password'] ?? null;
+            // YA NO DEVOLVEMOS LA CONTRASEÑA
 
-            if (empty($passwordSesion)) {
-                throw new \Exception("No se encontró la contraseña en la sesión");
-            }
-
-            // Armar la respuesta combinada
+            // Armar la respuesta combinada (SOLO DNI)
             $respuesta = [
                 "success" => true,
                 "data" => [
-                    "DNI" => $resultado['DNI'],
-                    "password" => $passwordSesion
+                    "DNI" => $resultado['DNI']
+                    // "password" => REMOVIDO POR SEGURIDAD
                 ]
             ];
 

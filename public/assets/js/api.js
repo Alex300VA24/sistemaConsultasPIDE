@@ -127,13 +127,8 @@ class API {
     }
 
     // 📌 --- CONSULTAS RENIEC ---
-    /**
-     * Consultar DNI en RENIEC
-     * @param {string} dni - DNI de 8 dígitos
-     * @returns {Promise} - Datos de la persona
-     */
-    async consultarDNI(data) {
-        return this.post('/consultar-dni', data);
+    async consultarDNI(dni) {
+        return this.post('/consultar-dni', { dniConsulta: dni });
     }
 
     async actualizarPasswordRENIEC(data) {
@@ -198,11 +193,9 @@ class API {
      *   total: 1
      * }
      */
-    async buscarPersonaNaturalSunarp(dni, dniUsuario, password) {
+    async buscarPersonaNaturalSunarp(dni) {
         return this.post('/buscar-persona-natural-sunarp', { 
-            dni, 
-            dniUsuario, 
-            password 
+            dni
         });
     }
 
@@ -239,11 +232,9 @@ class API {
      *   total: 1
      * }
      */
-    async buscarPersonaJuridicaSunarp(parametro, tipoBusqueda, dniUsuario, password) {
+    async buscarPersonaJuridicaSunarp(parametro, tipoBusqueda) {
         const data = {
-            tipoBusqueda,
-            dniUsuario,
-            password
+            tipoBusqueda
         };
 
         if (tipoBusqueda === 'ruc') {
@@ -310,6 +301,7 @@ class API {
     }
 
     async obtenerDniYPassword(nombreUsuario) {
+        // Método Deprecado: Ya no retorna password, solo DNI
         return this.post('/obtener-dni-pass', {
             nombreUsuario
         });

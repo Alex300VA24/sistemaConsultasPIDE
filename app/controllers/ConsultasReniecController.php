@@ -30,6 +30,20 @@ class ConsultasReniecController {
     // CONSULTAR DNI (RENIEC)
     public function consultarDNI()
     {
+        // 1. Verificación de Autenticación
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No autorizado. Debe iniciar sesión.'
+            ]);
+            return;
+        }
+
         header('Content-Type: application/json');
 
         // Solo se permite método POST
@@ -47,18 +61,31 @@ class ConsultasReniecController {
         $input = json_decode(file_get_contents('php://input'), true);
 
         // Validar campos requeridos
-        if (!isset($input['dniConsulta']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
+        if (!isset($input['dniConsulta'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan datos: dni, dniUsuario o password'
+                'message' => 'Faltan datos: dniConsulta es requerido'
             ]);
             return;
         }
 
         $dni = trim($input['dniConsulta']);
-        $this->dniUsuario = trim($input['dniUsuario']);
-        $this->passwordPIDE = trim($input['password']);
+        
+        // Usar credenciales del servidor (.env)
+        // Asumimos que PIDE_DNI_USUARIO y PIDE_PASSWORD están en .env
+        $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? '';
+        $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? '';
+
+        if (empty($this->dniUsuario) || empty($this->passwordPIDE)) {
+            error_log("Error de configuración: Credenciales PIDE no encontradas en .env");
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error de configuración del servidor'
+            ]);
+            return;
+        }
 
         // Validar formato del DNI a consultar
         if (!preg_match('/^\d{8}$/', $dni)) {
@@ -70,7 +97,7 @@ class ConsultasReniecController {
             return;
         }
 
-        // Realizar la consulta con las credenciales del usuario
+        // Realizar la consulta con las credenciales del servidor
         $resultado = $this->consultarServicioRENIEC($dni, $this->dniUsuario, $this->passwordPIDE);
 
         // Enviar respuesta según resultado
