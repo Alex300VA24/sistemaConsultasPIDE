@@ -53,7 +53,6 @@ function recordarMasTarde() {
             const keyPospuesto = `cambio_password_pospuesto_${usuarioId}`;
             localStorage.setItem(keyPospuesto, Date.now());
             
-            console.log(`Password pospuesto para usuario ${usuarioId} hasta ${new Date(Date.now() + 24*60*60*1000)}`);
         }
     } catch (error) {
         console.error('Error al posponer cambio de password:', error);

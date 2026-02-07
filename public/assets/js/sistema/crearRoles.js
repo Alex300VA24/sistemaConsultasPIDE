@@ -53,11 +53,11 @@ const ModuloRoles = {
     },
 
     // ============================================
-    // 📦 CARGAR MÓDULOS DISPONIBLES
+    // CARGAR MÓDULOS DISPONIBLES
     // ============================================
     async cargarModulos() {
         try {
-            const response = await api.listarModulos();
+            const response = await api.listarRolesModulos();
             
             if (response.success && response.data) {
                 this.modulosDisponibles = response.data;
@@ -370,8 +370,6 @@ const ModuloRoles = {
     // ============================================
     // RENDERIZAR TABLA DE ROLES
     // ============================================
-    // Función auxiliar para generar un hash simple a partir de un string
-    // Se usa para obtener un color "pseudo-aleatorio" pero consistente para cada módulo
     obtenerColorModulo(nombreModulo) {
         let hash = 0;
         for (let i = 0; i < nombreModulo.length; i++) {
@@ -432,7 +430,6 @@ const ModuloRoles = {
         roles.forEach(rol => {
             // Llama a la nueva función auxiliar para obtener el HTML de los badges
             const modulosHtml = this.crearBadgesModulos(rol.MODULOS_NOMBRES);
-            console.log(modulosHtml);
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
@@ -459,7 +456,7 @@ const ModuloRoles = {
     },
 
     // ============================================
-    // EDITAR ROL
+    // ✏️ EDITAR ROL
     // ============================================
     async editarRol(rolId) {
         try {
@@ -620,6 +617,7 @@ const ModuloRoles = {
             document.querySelector('.rol-container .tab-btn:nth-child(2)').classList.add('active');
             document.getElementById('tab-listar').classList.add('active');
             this.cargarRoles();
+            this.limpiarFormulario();
         }
     },
 

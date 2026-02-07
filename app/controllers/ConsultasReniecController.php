@@ -30,20 +30,6 @@ class ConsultasReniecController {
     // CONSULTAR DNI (RENIEC)
     public function consultarDNI()
     {
-        // 1. Verificación de Autenticación
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
-            http_response_code(401);
-            echo json_encode([
-                'success' => false,
-                'message' => 'No autorizado. Debe iniciar sesión.'
-            ]);
-            return;
-        }
-
         header('Content-Type: application/json');
 
         // Solo se permite método POST
@@ -61,31 +47,18 @@ class ConsultasReniecController {
         $input = json_decode(file_get_contents('php://input'), true);
 
         // Validar campos requeridos
-        if (!isset($input['dniConsulta'])) {
+        if (!isset($input['dniConsulta']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
             http_response_code(400);
             echo json_encode([
                 'success' => false,
-                'message' => 'Faltan datos: dniConsulta es requerido'
+                'message' => 'Faltan datos: dni, dniUsuario o password'
             ]);
             return;
         }
 
         $dni = trim($input['dniConsulta']);
-        
-        // Usar credenciales del servidor (.env)
-        // Asumimos que PIDE_DNI_USUARIO y PIDE_PASSWORD están en .env
-        $this->dniUsuario = $_ENV['PIDE_DNI_USUARIO'] ?? '';
-        $this->passwordPIDE = $_ENV['PIDE_PASSWORD'] ?? '';
-
-        if (empty($this->dniUsuario) || empty($this->passwordPIDE)) {
-            error_log("Error de configuración: Credenciales PIDE no encontradas en .env");
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error de configuración del servidor'
-            ]);
-            return;
-        }
+        $this->dniUsuario = trim($input['dniUsuario']);
+        $this->passwordPIDE = trim($input['password']);
 
         // Validar formato del DNI a consultar
         if (!preg_match('/^\d{8}$/', $dni)) {
@@ -97,7 +70,7 @@ class ConsultasReniecController {
             return;
         }
 
-        // Realizar la consulta con las credenciales del servidor
+        // Realizar la consulta con las credenciales del usuario
         $resultado = $this->consultarServicioRENIEC($dni, $this->dniUsuario, $this->passwordPIDE);
 
         // Enviar respuesta según resultado
@@ -317,14 +290,15 @@ class ConsultasReniecController {
             // Procesar respuesta
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
+                $estructura = $jsonResponse['consultarResponse']['return'];
 
                 // Validar estructura esperada
-                if (isset($jsonResponse['consultarResponse']['return']['datosPersona'])) {
-                    $datosPersona = $jsonResponse['consultarResponse']['return']['datosPersona'];
+                if (isset($estructura['datosPersona'])) {
+                    $datosPersona = $estructura['datosPersona'];
 
                     $resultado = [
                         'success' => true,
-                        'message' => 'Consulta exitosa',
+                        'message' => $estructura['deResultado'],
                         'data' => [
                             'dni' => $dni,
                             'nombres' => $datosPersona['prenombres'] ?? '',
@@ -340,12 +314,11 @@ class ConsultasReniecController {
 
                     // (Opcional) Registrar en base de datos
                     // $this->registrarConsulta('DNI', $dni, $resultado['data']);
-
                     return $resultado;
                 } else {
                     return [
                         'success' => false,
-                        'message' => 'No se encontraron datos para el DNI proporcionado',
+                        'message' => $estructura["deResultado"],
                         'data' => null
                     ];
                 }

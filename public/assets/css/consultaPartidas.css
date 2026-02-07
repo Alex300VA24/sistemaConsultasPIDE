@@ -153,6 +153,50 @@
     opacity: 0.7;
 }
 
+.consulta-partidas-container .search-form select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    color: var(--text-primary);
+    font-weight: 500;
+    min-height: 44px;
+}
+
+.consulta-partidas-container .search-form select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.consulta-partidas-container .search-form select:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+.consulta-partidas-container .search-form select::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.consulta-partidas-container .search-form select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 40px;
+}
+
+.consulta-partidas-container .search-form:invalid:not(:placeholder-shown) {
+    border-color: var(--danger-color);
+}
+
+
+
 /* Grupo de Botones */
 .consulta-partidas-container .btn-group {
     display: flex;
@@ -362,7 +406,7 @@
 
 .consulta-partidas-container .photo-placeholder::before {
     content: '\f007';
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 400;
     font-size: 80px;
     color: var(--text-secondary);
@@ -465,9 +509,9 @@
 }
 
 .modal-dialog-partidas {
-    width: 90%;
-    max-width: 700px;
-    max-height: 90vh;
+    width: 95%;
+    max-width: 1100px;
+    max-height: 95vh;
     overflow-y: auto;
 }
 
@@ -677,9 +721,9 @@
 
 /* Results Table en Modal */
 .modal-results-table {
-    max-height: 300px;
+    max-height: 500px;
+    margin-top: 25px;
     overflow-y: auto;
-    margin-top: 20px;
 }
 
 .modal-results-table table {

@@ -76,7 +76,7 @@ function generarPaginasDinamicas($modulos, $permisos) {
         
         $idPagina = obtenerIdPagina($modulo['MOD_url']);
         $rutaArchivo = obtenerRutaArchivo($modulo['MOD_url']);
-        $rutaCompleta = __DIR__ . "/../../views/dashboard/" . $rutaArchivo;
+        $rutaCompleta = __DIR__ . "/../views/dashboard/" . $rutaArchivo;
         error_log("Esta es la ruta completa: " . $rutaCompleta);
         
         // Evitar duplicados

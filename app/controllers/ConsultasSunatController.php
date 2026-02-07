@@ -23,20 +23,10 @@ class ConsultasSunatController
     }
 
     // ========================================
-    // 📌 CONSULTAR RUC (SUNAT) - REST/JSON
+    // CONSULTAR RUC (SUNAT) - REST/JSON
     // ========================================
     public function consultarRUC()
     {
-        // 1. Verificación de Autenticación
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
-            http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'No autorizado']);
-            return;
-        }
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -83,16 +73,6 @@ class ConsultasSunatController
     // ========================================
     public function buscarRazonSocial()
     {
-        // 1. Verificación de Autenticación
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
-            http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'No autorizado']);
-            return;
-        }
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -216,7 +196,14 @@ class ConsultasSunatController
     {
         try {
             // Construir URL con parámetros
-            $url = $this->urlSUNATRest . '/RazonSocial?RSocial=' . urlencode($razonSocial) . '&out=json';
+
+            // Codificar para query string
+            // Codificar espacios y caracteres especiales
+            $razonSocialParam = rawurlencode($razonSocial);
+
+            // Construir URL
+            $url = $this->urlSUNATRest . '/RazonSocial?RSocial=' . $razonSocialParam . '&out=json';
+
 
             error_log("URL búsqueda razón social: $url");
 

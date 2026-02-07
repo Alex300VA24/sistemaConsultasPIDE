@@ -3,7 +3,7 @@
 // ============================================
 
 const Dashboard = {
-    BASE_URL: '/sistemaConsultasPIDE/public/',
+    BASE_URL: '/MDESistemaPIDE/public/',
     modulosInicializados: new Set(),
     
     // Registro de módulos disponibles (se auto-registran)
@@ -21,7 +21,6 @@ const Dashboard = {
     verificarCambioPasswordRequerido() {
         // Verificar en sessionStorage si el usuario requiere cambio de password
         const usuarioData = sessionStorage.getItem('usuario');
-        console.log(usuarioData);
         
         if (usuarioData) {
             try {
@@ -30,8 +29,6 @@ const Dashboard = {
                 const diasDesdeCambio = parseInt(usuario.DIAS_DESDE_CAMBIO_PASSWORD) || 0;
                 const usuarioId = usuario.USU_id;
 
-                console.log({ usuario, requiereCambio, diasDesdeCambio, usuarioId });
-
                 if (requiereCambio) {
                     // Clave específica por usuario
                     const keyPospuesto = `cambio_password_pospuesto_${usuarioId}`;
@@ -39,8 +36,6 @@ const Dashboard = {
                     const ahora = Date.now();
                     const unDia = 24 * 60 * 60 * 1000;
                     
-                    console.log('Pospuesto:', pospuesto, 'Ahora:', ahora, 'Diferencia:', ahora - parseInt(pospuesto || 0));
-
                     // Si no se ha pospuesto o pasó más de 1 día
                     if (!pospuesto || (ahora - parseInt(pospuesto)) > unDia) {
                         // Mostrar modal después de que cargue el DOM
@@ -53,8 +48,6 @@ const Dashboard = {
                                 console.warn('ModuloCambioPasswordObligatorio no está definido');
                             }
                         }, 1000);
-                    } else {
-                        console.log('Modal pospuesto para este usuario. Mostrar en:', new Date(parseInt(pospuesto) + unDia));
                     }
                 }
             } catch (error) {
@@ -477,7 +470,9 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
         success: 'fa-check-circle',
         error: 'fa-exclamation-circle',
         warning: 'fa-exclamation-triangle',
-        info: 'fa-info-circle'
+        info: 'fa-info-circle',
+        danger: 'fa-times-circle',
+        noData: 'fa-search-minus'
     };
     
     const tiposColores = {
@@ -542,15 +537,16 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
 function verificarAcceso(codigoModulo) {
     try {
         // Verificar si requiere cambio de password
-        const requiereCambio = sessionStorage.getItem('requiere_cambio_password');
+        const requiereCambio = sessionStorage.getItem('requiere_cambio_password') === 'true' ? 1 : 0;
         const diasRestantes = parseInt(sessionStorage.getItem('dias_restantes') || '30');
 
+
         // Si el password expiró (0 días restantes o menos), bloquear módulos críticos
-        if (requiereCambio === 'true' && diasRestantes <= 0) {
+        if (requiereCambio && diasRestantes <= 0) {
             const modulosProtegidos = ['DNI', 'RUC', 'PAR']; // Módulos de RENIEC, SUNAT, SUNARP
             
             if (modulosProtegidos.includes(codigoModulo)) {
-                mostrarAlerta(
+                alert(
                     'Tu contraseña ha expirado. Debes cambiarla para acceder a este módulo.',
                     'error'
                 );
@@ -577,6 +573,7 @@ function verificarAcceso(codigoModulo) {
 
 // Funciones de navegación con validación
 window.irConsultaReniec = function() {
+    console.log("Este es el resultado de verificar acceso: ", verificarAcceso('DNI'));
     if (!verificarAcceso('DNI')) {
         alert('No tienes permisos para acceder al módulo de RENIEC');
         return;

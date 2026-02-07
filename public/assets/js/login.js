@@ -53,14 +53,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
                 sessionStorage.setItem('permisos', JSON.stringify(response.data.permisos));
+
                 
                 if (response.data.requiere_cambio_password) {
                     sessionStorage.setItem('requiere_cambio_password', 'true');
-                    sessionStorage.setItem('dias_desde_cambio', response.data.dias_desde_cambio);
-                    sessionStorage.setItem('dias_restantes', response.data.dias_restantes);
                 }
-                
-                // 👇 AGREGAR ESTA LÍNEA
+
+                sessionStorage.setItem('requiere_cambio_password', 'false');
+                sessionStorage.setItem('dias_desde_cambio', response.data.dias_desde_cambio);
+                sessionStorage.setItem('dias_restantes', response.data.dias_restantes);
+
+                // AGREGAR ESTA LÍNEA
                 sessionStorage.setItem('loginReciente', 'true');
                 
                 setTimeout(() => {

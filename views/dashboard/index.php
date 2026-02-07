@@ -1,4 +1,8 @@
 <?php
+    header("Content-type: text/html; charset=utf-8");
+?>
+
+<?php
 use App\Helpers\Permisos;
 
 // Obtener permisos según id del usuario

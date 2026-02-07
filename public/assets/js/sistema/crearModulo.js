@@ -61,9 +61,11 @@ const ModuloCrearModulo = {
             activeTab.classList.add('active');
         }
 
+
         // Cargar datos según la tab
         if (tabName === 'listarModulos') {
             this.cargarListadoModulos();
+            this.limpiarFormulario();
         }
     },
 
