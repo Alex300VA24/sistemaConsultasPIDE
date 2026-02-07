@@ -573,7 +573,6 @@ function verificarAcceso(codigoModulo) {
 
 // Funciones de navegación con validación
 window.irConsultaReniec = function() {
-    console.log("Este es el resultado de verificar acceso: ", verificarAcceso('DNI'));
     if (!verificarAcceso('DNI')) {
         alert('No tienes permisos para acceder al módulo de RENIEC');
         return;

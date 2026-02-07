@@ -71,7 +71,6 @@ const ModuloPartidas = {
     async cargarOficinasRegistrales() {
         try {
             const oficinas = await api.obtenerOficinasRegistrales();
-            console.log(oficinas);
 
             if (oficinas.success && oficinas.data) {
                 const seleccionOficina = document.getElementById('oficinaRegistralID');
@@ -613,7 +612,6 @@ const ModuloPartidas = {
         this.cacheDetalles = {}; // Limpiar cache
 
         const info = document.getElementById('infoGrid');
-        console.log(info);
         info.style.display = 'grid';
         const resultsSection = document.getElementById('resultsSection');
         resultsSection.style.display = 'block';
@@ -906,7 +904,6 @@ const ModuloPartidas = {
 
         // Verificar si ya está en cache
         if (this.cacheDetalles[numeroPartida]) {
-            console.log('Usando detalle desde cache:', numeroPartida);
             this.mostrarDetallePartida({
                 ...partida,
                 ...this.cacheDetalles[numeroPartida]
@@ -930,7 +927,6 @@ const ModuloPartidas = {
     // ============================================
     async cargarDetallePartidaBajoDemanda(partida) {
         if (this.cargandoDetalle) {
-            console.log('Ya hay una carga en progreso');
             return;
         }
 
@@ -1466,7 +1462,6 @@ const ModuloPartidas = {
         // Agregar al body (no a resultsSection)
         document.body.appendChild(loadingIndicator);
 
-        console.log('Loading overlay agregado');
     },
 
     // ============================================
@@ -1476,7 +1471,6 @@ const ModuloPartidas = {
         const loadingIndicator = document.getElementById('loadingDetallePartida');
         if (loadingIndicator) {
             loadingIndicator.remove();
-            console.log('Loading overlay removido');
         }
     },
 
@@ -1734,12 +1728,10 @@ const ModuloPartidas = {
             this.mostrarCampo('libro', registro.libro || '-'); // Si libro también debe ocultarse
         }
 
-        console.log("Este es registro: ", registro);
         // Secciones adicionales
         if (registro.imagenes && registro.imagenes.length > 0) {
             this.mostrarImagenes(registro.imagenes);
         } else {
-            console.log(document.getElementById('imagenesSection'));
             document.getElementById('imagenesSection').style.display = 'none';
         }
         if (registro.datos_vehiculo && Object.keys(registro.datos_vehiculo).length > 0) {
@@ -1804,7 +1796,6 @@ const ModuloPartidas = {
     },
 
     mostrarImagenes(imagenes) {
-        console.log(imagenes);
         const imagenesSection = document.getElementById('imagenesSection');
         const selectImagenes = document.getElementById('selectImagenes');
         const imagenViewer = document.getElementById('imagenViewer');
@@ -2108,7 +2099,6 @@ const ModuloPartidas = {
     // ============================================
 
     limpiarResultadosAnteriores() {
-        console.log('🧹 Reconstruyendo resultsSection desde cero...');
 
         // 1. Limpiar variables de estado
         this.partidasEncontradas = [];
@@ -2277,14 +2267,12 @@ const ModuloPartidas = {
         `;
         }
 
-        console.log('✅ resultsSection reconstruido desde cero');
     },
 
     // ============================================
     // VERSIÓN SIMPLIFICADA (SI LA ANTERIOR ES DEMASIADO)
     // ============================================
     limpiarResultadosAnteriorresSimple() {
-        console.log('🧹 Limpiando resultados...');
 
         // Variables
         this.partidasEncontradas = [];
@@ -2319,8 +2307,6 @@ const ModuloPartidas = {
         if (vehiculoSection) {
             vehiculoSection.style.display = 'none';
         }
-
-        console.log('✅ Limpieza completada');
     },
 
     // ============================================
@@ -2330,7 +2316,6 @@ const ModuloPartidas = {
     // ACTUALIZAR: limpiarFormularioPartidas
     // ============================================
     limpiarFormularioPartidas() {
-        console.log('🧹 Limpiando formulario completo...');
 
         // 1. Limpiar estado
         this.personaSeleccionada = null;
@@ -2349,8 +2334,6 @@ const ModuloPartidas = {
         // 5. Limpiar modales
         this.limpiarModalNatural();
         this.limpiarModalJuridica();
-
-        console.log('✅ Formulario completamente limpiado');
     },
 
     limpiarModalNatural() {
