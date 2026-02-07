@@ -1,1 +1,21 @@
 .env
+.env.*
+.encryption_key
+
+# Composer / PHP
+/vendor/
+composer.phar
+.phpunit.result.cache
+phpunit.xml.bak
+/coverage/
+
+# Cache & logs
+/cache/
+/logs/
+*.log
+
+# Backups / dumps
+*.bak
+*.backup
+*.sql
+*.zip
