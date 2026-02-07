@@ -296,7 +296,7 @@
 
 .consulta-dni-container .photo-placeholder::before {
     content: '\f007';
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 400;
     font-size: 80px;
     color: var(--text-secondary);

@@ -91,6 +91,7 @@ const ModuloCrearUsuario = {
         // Cargar datos según la tab
         if (tabName === 'listarUsuarios') {
             this.cargarListadoUsuarios();
+            this.limpiarFormulario();
         }
     },
 
@@ -284,7 +285,7 @@ const ModuloCrearUsuario = {
         return new Promise((resolve, reject) => {
             // Crear el modal dinámicamente
             const modalHTML = `
-                <div id="modalPasswordActual" class="modal-overlay-password">
+                <div id="modalPasswordActualWindow" class="modal-overlay-password">
                     <div class="modal-content-password">
                         <div class="modal-header-password">
                             <h3>Verificación de Contraseña</h3>
@@ -302,7 +303,7 @@ const ModuloCrearUsuario = {
                                         placeholder="Ingrese su contraseña actual"
                                         autocomplete="current-password"
                                     >
-                                    <i id="btnTogglePasswordModal" class="fas fa-eye-slash toggle-password-modal"></i>
+                                    <i id="btnTogglePasswordWindow" class="fas fa-eye-slash toggle-password-modal"></i>
                                 </div>
                             </div>
                             <div id="alertModalPassword" class="alert-container-password"></div>
@@ -524,9 +525,9 @@ const ModuloCrearUsuario = {
             modalContainer.innerHTML = modalHTML;
             document.body.appendChild(modalContainer.firstElementChild);
             
-            const modal = document.getElementById('modalPasswordActual');
+            const modal = document.getElementById('modalPasswordActualWindow');
             const input = document.getElementById('passwordActualModal');
-            const btnToggle = document.getElementById('btnTogglePasswordModal');
+            const btnToggle = document.getElementById('btnTogglePasswordWindow');
             const btnCerrar = document.getElementById('btnCerrarModalPassword');
             const btnCancelar = document.getElementById('btnCancelarPassword');
             const btnConfirmar = document.getElementById('btnConfirmarPassword');
@@ -818,7 +819,7 @@ const ModuloCrearUsuario = {
                 // Cambiar modo a edición
                 this.modoEdicion = true;
 
-                if (this.modoEdicion){
+                if (this.modoEdicion) {
                     document.getElementById('cui').disabled = true;
                 }
                 
@@ -882,6 +883,7 @@ const ModuloCrearUsuario = {
     },
 
     limpiarFormulario() {
+        document.getElementById('cui').disabled = false;
         document.getElementById('formCrearUsuario').reset();
         this.modoEdicion = false;
         this.moduloActualId = null;
@@ -891,8 +893,6 @@ const ModuloCrearUsuario = {
         if (btn) {
             btn.innerHTML = '<i class="fas fa-save"></i> <span>Guardar Usuario</span>';
         }
-
-        document.getElementById('cui').disabled = false;
         
         // Limpiar alertas
         const alertContainer = document.getElementById('alertContainerCrearUsuario');

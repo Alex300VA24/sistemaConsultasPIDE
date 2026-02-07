@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /sistemaConsultasPIDE/public/
+RewriteBase /MDESistemaPIDE/public/
 
 # Redirige todo a index.php, excepto los archivos existentes
 RewriteCond %{REQUEST_FILENAME} !-f

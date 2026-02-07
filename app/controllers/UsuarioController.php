@@ -1,26 +1,20 @@
 <?php
-
 namespace App\Controllers;
 
 use App\Services\UsuarioService;
-use App\Helpers\InputValidator;
-use App\Middleware\RateLimiter;
 
-class UsuarioController
-{
+class UsuarioController {
     private $usuarioService;
-
-    public function __construct()
-    {
+    
+    public function __construct() {
         $this->usuarioService = new UsuarioService();
     }
-
+    
     /**
      * LOGIN: Valida usuario y contraseña, obtiene datos básicos
      * Luego solicita validar CUI (segunda fase)
      */
-    public function login()
-    {
+    public function login(){
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new \Exception("Método no permitido");
@@ -29,20 +23,19 @@ class UsuarioController
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
 
-            // Sanitizar entrada
-            $nombreUsuario = InputValidator::sanitizeString($data['nombreUsuario'] ?? '');
-            $password = $data['password'] ?? ''; // No sanitizar password
-
-            if (empty($nombreUsuario) || empty($password)) {
-                throw new \Exception("Usuario y contraseña son requeridos");
-            }
+            $nombreUsuario = $data['nombreUsuario'] ?? '';
+            $password = $data['password'] ?? '';
 
             $resultado = $this->usuarioService->login($nombreUsuario, $password);
 
-            if (!$resultado['success']) {
-                // Registrar intento fallido para rate limiting
-                RateLimiter::hit('login', $nombreUsuario);
+            $_SESSION['nombreUsuario'] = $nombreUsuario;
+            $_SESSION['password'] = $password;
+            $_SESSION['requireCUI'] = true;
 
+            error_log("Resultado del login: " . print_r($resultado, true));
+
+
+            if (!$resultado['success']) {
                 $this->jsonResponse([
                     'success' => false,
                     'message' => $resultado['mensaje']
@@ -50,18 +43,7 @@ class UsuarioController
                 return;
             }
 
-            // Limpiar intentos fallidos después de éxito
-            RateLimiter::clear('login', $nombreUsuario);
-
-            // SEGURIDAD: En lugar de guardar la contraseña en sesión,
-            // generamos un token temporal cifrado que expira en 5 minutos
-            $authToken = bin2hex(random_bytes(32));
-            $encryptedData = $this->encryptAuthData($nombreUsuario, $password);
-
             $_SESSION['nombreUsuario'] = $nombreUsuario;
-            $_SESSION['auth_token'] = $authToken;
-            $_SESSION['auth_data'] = $encryptedData;
-            $_SESSION['auth_expiry'] = time() + 300; // 5 minutos para completar CUI
             $_SESSION['requireCUI'] = true;
 
             $this->jsonResponse([
@@ -72,6 +54,7 @@ class UsuarioController
                     'usuarioLogin' => $nombreUsuario
                 ]
             ]);
+
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -80,78 +63,12 @@ class UsuarioController
         }
     }
 
-    /**
-     * Cifra los datos de autenticación temporales
-     * 
-     * @param string $username
-     * @param string $password
-     * @return string Datos cifrados en base64
-     */
-    private function encryptAuthData(string $username, string $password): string
-    {
-        $data = json_encode(['u' => $username, 'p' => $password, 't' => time()]);
-        $key = $this->getEncryptionKey();
-        $iv = random_bytes(16);
-        $encrypted = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
-        return base64_encode($iv . $encrypted);
-    }
-
-    /**
-     * Descifra los datos de autenticación temporales
-     * 
-     * @param string $encryptedData
-     * @return array|null Datos descifrados o null si falla
-     */
-    private function decryptAuthData(string $encryptedData): ?array
-    {
-        try {
-            $data = base64_decode($encryptedData);
-            $iv = substr($data, 0, 16);
-            $encrypted = substr($data, 16);
-            $key = $this->getEncryptionKey();
-            $decrypted = openssl_decrypt($encrypted, 'AES-256-CBC', $key, 0, $iv);
-
-            if ($decrypted === false) {
-                return null;
-            }
-
-            return json_decode($decrypted, true);
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
-
-    /**
-     * Obtiene la clave de cifrado (desde variable de entorno o genera una)
-     * 
-     * @return string
-     */
-    private function getEncryptionKey(): string
-    {
-        // Idealmente esto vendría de una variable de entorno
-        $key = $_ENV['APP_ENCRYPTION_KEY'] ?? null;
-
-        if ($key === null) {
-            // Generar clave única basada en la instalación
-            $keyFile = __DIR__ . '/../../.encryption_key';
-            if (file_exists($keyFile)) {
-                $key = file_get_contents($keyFile);
-            } else {
-                $key = bin2hex(random_bytes(32));
-                file_put_contents($keyFile, $key);
-            }
-        }
-
-        return hash('sha256', $key, true);
-    }
-
 
     /**
      * VALIDAR CUI: Comprueba el CUI ingresado por el usuario
      * Si es correcto, completa la autenticación y retorna datos del usuario
      */
-    public function validarCUI()
-    {
+    public function validarCUI() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new \Exception("Método no permitido");
@@ -159,48 +76,23 @@ class UsuarioController
 
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
-
-            // Verificar que la sesión de pre-autenticación no haya expirado
-            $authExpiry = $_SESSION['auth_expiry'] ?? 0;
-            if (time() > $authExpiry) {
-                // Limpiar sesión expirada
-                unset($_SESSION['auth_data'], $_SESSION['auth_token'], $_SESSION['auth_expiry']);
-                throw new \Exception("Sesión expirada. Por favor inicie sesión nuevamente.");
-            }
-
+            
             $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
-            $encryptedData = $_SESSION['auth_data'] ?? null;
-            $cui = InputValidator::sanitizeString($data['cui'] ?? '');
+            $password = $_SESSION['password'] ?? null;
+            $cui = $data['cui'] ?? '';
 
-            // Validar CUI
-            if (!InputValidator::validateCUI($cui)) {
-                throw new \Exception("CUI debe ser un dígito numérico");
-            }
-
-            if (!$nombreUsuario || !$encryptedData) {
+            if (!$nombreUsuario || !$password) {
                 throw new \Exception("Sesión incompleta para validar CUI");
             }
 
-            // Descifrar datos de autenticación
-            $authData = $this->decryptAuthData($encryptedData);
-            if (!$authData || !isset($authData['p'])) {
-                throw new \Exception("Error de autenticación. Por favor inicie sesión nuevamente.");
-            }
-
-            $password = $authData['p'];
-
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
-
-            // Limpiar datos sensibles de la sesión después de validación exitosa
-            unset($_SESSION['auth_data'], $_SESSION['auth_token'], $_SESSION['auth_expiry']);
 
             // Guardar sesión completa
             $_SESSION['usuarioID'] = $resultado['usuario']['USU_id'] ?? null;
             $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
-            $_SESSION['login_time'] = time();
-
+            
             $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
             $_SESSION['permisos'] = $permisos;
 
@@ -221,6 +113,7 @@ class UsuarioController
             ];
 
             $this->jsonResponse($respuesta);
+
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -232,8 +125,7 @@ class UsuarioController
     /**
      * Nuevo método: Cambiar password
      */
-    public function cambiarPassword()
-    {
+    public function cambiarPassword() {
         try {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new \Exception("Método no permitido");
@@ -274,6 +166,7 @@ class UsuarioController
                     'usuario' => $usuarioActualizado
                 ]
             ]);
+
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -285,8 +178,7 @@ class UsuarioController
     /**
      * Validar que la password cumpla con requisitos de seguridad
      */
-    private function validarPasswordSegura($password)
-    {
+    private function validarPasswordSegura($password) {
         // Mínimo 8 caracteres
         if (strlen($password) < 8) {
             return false;
@@ -319,8 +211,7 @@ class UsuarioController
     /**
      * LOGOUT: Cierra sesión del usuario
      */
-    public function logout()
-    {
+    public function logout() {
         session_destroy();
 
         $this->jsonResponse([
@@ -332,8 +223,7 @@ class UsuarioController
     /**
      * Obtener datos del usuario actual desde la sesión
      */
-    public function obtenerUsuarioActual()
-    {
+    public function obtenerUsuarioActual() {
         try {
 
             if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
@@ -357,6 +247,7 @@ class UsuarioController
                 'message' => 'Usuario obtenido correctamente',
                 'data' => $usuario
             ]);
+
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -367,8 +258,7 @@ class UsuarioController
 
 
     // 🔹 Método para crear usuario
-    public function crearUsuario()
-    {
+    public function crearUsuario() {
         try {
             $input = json_decode(file_get_contents('php://input'), true);
             $data = $input['data'] ?? $input; // si viene dentro de 'data', la saca
@@ -390,8 +280,7 @@ class UsuarioController
 
 
     // Método para eliminar usuario
-    public function eliminarUsuario()
-    {
+    public function eliminarUsuario() {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (empty($data['usuario_id'])) {
@@ -414,27 +303,11 @@ class UsuarioController
 
     public function obtenerDniYPassword()
     {
-        // 1. Verificación de Autenticación
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
-            http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'No autorizado']);
-            return;
-        }
-
         header('Content-Type: application/json');
 
         try {
             $data = json_decode(file_get_contents("php://input"), true);
             $nombreUsuario = $data['nombreUsuario'] ?? null;
-
-            if (empty($nombreUsuario)) {
-                // Intentar obtener del usuario actual si no se envía
-                $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
-            }
 
             if (empty($nombreUsuario)) {
                 throw new \Exception("El nombre de usuario es requerido");
@@ -450,18 +323,24 @@ class UsuarioController
                 return;
             }
 
-            // YA NO DEVOLVEMOS LA CONTRASEÑA
+            // Obtener la contraseña desde la sesión
+            $passwordSesion = $_SESSION['password'] ?? null;
 
-            // Armar la respuesta combinada (SOLO DNI)
+            if (empty($passwordSesion)) {
+                throw new \Exception("No se encontró la contraseña en la sesión");
+            }
+
+            // Armar la respuesta combinada
             $respuesta = [
                 "success" => true,
                 "data" => [
-                    "DNI" => $resultado['DNI']
-                    // "password" => REMOVIDO POR SEGURIDAD
+                    "DNI" => $resultado['DNI'],
+                    "password" => $passwordSesion
                 ]
             ];
 
             echo json_encode($respuesta);
+
         } catch (\Throwable $e) {
             echo json_encode([
                 "success" => false,
@@ -612,8 +491,7 @@ class UsuarioController
     /**
      * Actualizar usuario
      */
-    public function actualizarUsuario()
-    {
+    public function actualizarUsuario(){
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
@@ -653,8 +531,7 @@ class UsuarioController
         }
     }
 
-    public function actualizarPassword()
-    {
+    public function actualizarPassword(){
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
@@ -693,8 +570,7 @@ class UsuarioController
     }
 
     //Enviar respuesta JSON
-    private function jsonResponse($data, $statusCode = 200)
-    {
+    private function jsonResponse($data, $statusCode = 200) {
         http_response_code($statusCode);
         header('Content-Type: application/json');
         echo json_encode($data);

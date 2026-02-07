@@ -40,7 +40,6 @@ class UsuarioRepository {
         ];
     }
 
-
     /**
      * Validar CUI usando SP_S_USUARIO_VALIDAR_CUI
      */
@@ -115,7 +114,6 @@ class UsuarioRepository {
         }
     }
 
-    // UsuarioRepository.php
     public function obtenerPasswordUser($nombreUsuario) {
         $sql = "SELECT 
                     u.USU_password_hash, 
@@ -131,7 +129,6 @@ class UsuarioRepository {
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
 
     public function obtenerPasswordCUIUser($nombreUsuario) {
         $sql = "SELECT u.USU_password_hash, u.USU_cui, r.ROL_nombre 

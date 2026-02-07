@@ -5,7 +5,7 @@
 const ModuloActualizarPassword = {
     elementos: {},
     inicializado: false,
-    BASE_URL: '/sistemaConsultasPIDE/public/',
+    BASE_URL: '/MDESistemaPIDE/public/',
     
     // Estado del usuario actual
     usuarioActual: {
