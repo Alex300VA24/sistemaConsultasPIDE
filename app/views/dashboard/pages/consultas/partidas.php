@@ -1,769 +1,355 @@
-<div class="consulta-partidas-container">
-    <div class="page-title">
-        <h1><i class="fas fa-file-contract"></i> Consulta de Partidas Registrales - SUNARP</h1>
-    </div>
-
-    <div class="content-wrapper">
-        <!-- Alertas -->
-        <div id="alertContainerPartidas"></div>
-        <!-- Selector de Tipo de Persona -->
-        <div class="tipo-persona-selector">
-            <div class="radio-option">
-                <input type="radio" id="personaNatural" name="tipoPersona" value="natural" checked>
-                <label for="personaNatural">PERSONA NATURAL</label>
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center shadow-lg">
+                <i class="fas fa-file-contract text-white text-xl"></i>
             </div>
-            <div class="radio-option">
-                <input type="radio" id="personaJuridica" name="tipoPersona" value="juridica">
-                <label for="personaJuridica">PERSONA JURÍDICA</label>
-            </div>
-            <div class="radio-option">
-                <input type="radio" id="porPartidas" name="tipoPersona" value="partida">
-                <label for="porPartida">POR PARTIDA</label>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Consulta de Partidas Registrales - SUNARP</h1>
+                <p class="text-sm text-gray-600">Superintendencia Nacional de los Registros Públicos</p>
             </div>
         </div>
+    </div>
 
-        <!-- Sección de Búsqueda -->
-        <div class="search-section">
-            <form class="search-form" id="searchFormPartidas">
-                <div>
-                    <label for="persona" id="labelPersona">Persona:</label>
+    <!-- Alertas -->
+    <div id="alertContainerPartidas"></div>
+
+    <!-- Selector de Tipo de Persona -->
+    <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+        <div class="flex flex-wrap gap-3">
+            <label class="flex-1 min-w-[200px] cursor-pointer">
+                <input type="radio" id="personaNatural" name="tipoPersona" value="natural" checked class="peer sr-only">
+                <div class="px-6 py-3 rounded-xl border-2 border-gray-300 bg-white/60 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all text-center font-semibold text-gray-700 peer-checked:text-violet-700">
+                    <i class="fas fa-user mr-2"></i>PERSONA NATURAL
+                </div>
+            </label>
+            <label class="flex-1 min-w-[200px] cursor-pointer">
+                <input type="radio" id="personaJuridica" name="tipoPersona" value="juridica" class="peer sr-only">
+                <div class="px-6 py-3 rounded-xl border-2 border-gray-300 bg-white/60 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all text-center font-semibold text-gray-700 peer-checked:text-violet-700">
+                    <i class="fas fa-building mr-2"></i>PERSONA JURÍDICA
+                </div>
+            </label>
+            <label class="flex-1 min-w-[200px] cursor-pointer">
+                <input type="radio" id="porPartidas" name="tipoPersona" value="partida" class="peer sr-only">
+                <div class="px-6 py-3 rounded-xl border-2 border-gray-300 bg-white/60 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all text-center font-semibold text-gray-700 peer-checked:text-violet-700">
+                    <i class="fas fa-file-alt mr-2"></i>POR PARTIDA
+                </div>
+            </label>
+        </div>
+    </div>
+
+    <!-- Formulario de Búsqueda -->
+    <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+        <form id="searchFormPartidas">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div class="md:col-span-2">
+                    <label for="persona" id="labelPersona" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user text-violet-600 mr-2"></i>Persona:
+                    </label>
                     <input
                         type="text"
                         id="persona"
                         name="persona"
                         readonly
-                        placeholder="Haga clic en el botón de búsqueda">
+                        placeholder="Haga clic en el botón de búsqueda"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"
+                    >
+                    <div id="contenedorOficina" style="display: none;" class="mt-3">
+                        <select name="oficinasRegistrales" id="oficinaRegistralID" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80">
+                            <option value="">Seleccione Oficina Registral</option>
+                        </select>
+                    </div>
                 </div>
-                <div style="display: none;" id="contenedorOficina">
-                    <select name="oficinasRegistrales" id="oficinaRegistralID">
-                        <option value="">Seleccione Oficina Registral</option>
-                    </select>
-                </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-modal" id="btnBuscarPersona" title="Buscar Persona">
+                <div class="flex gap-2">
+                    <button type="button" id="btnBuscarPersona" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30">
                         <i class="fas fa-magnifying-glass"></i>
                         <span>Buscar</span>
                     </button>
-                    <button type="button" class="btn btn-search" id="btnConsultar" title="Consultar" disabled>
+                    <button type="button" id="btnConsultar" disabled class="flex-1 bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-lg shadow-violet-500/30 disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-search"></i>
                         <span>Consultar</span>
-
                     </button>
-                    <button type="button" class="btn btn-clear" id="btnLimpiar" title="Limpiar">
+                    <button type="button" id="btnLimpiar" class="px-4 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition duration-200">
                         <i class="fas fa-eraser"></i>
-                        <span>Limpiar</span>
                     </button>
-                </div>
-            </form>
-        </div>
-        <!-- Sección de Resultados -->
-        <div class="results-section" id="resultsSection" style="display: none;">
-            <div class="results-layout">
-                <!-- Foto (solo para personas naturales) -->
-                <div class="photo-section">
-                    <div class="photo-frame" id="photoSection">
-                        <img id="personaFoto" src="" alt="Foto" style="display: none;">
-                        <div class="no-photo" id="noFoto">
-                            <i class="fas fa-user"></i>
-                            <span>Sin foto</span>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <!-- Información -->
-                <div class="info-grid" id="infoGrid">
-                    <!-- Fila 1: Libro -->
-                    <div class="info-item">
-                        <span class="info-label">Libro</span>
-                        <div class="info-value white-bg" id="libro">-</div>
-                    </div>
-                    <div class="info-item"></div>
-                    <div class="info-item"></div>
-
-                    <!-- Fila 2: Nombres (siempre visible inicialmente) -->
-                    <div class="info-item full-width" id="containerNombres">
-                        <span class="info-label">Nombres</span>
-                        <div class="info-value white-bg" id="nombres">-</div>
-                    </div>
-
-                    <!-- Fila 3: Apellidos (siempre visible inicialmente) -->
-                    <div class="info-item" id="containerApellidoPaterno">
-                        <span class="info-label">Apellido Paterno</span>
-                        <div class="info-value white-bg" id="apellidoPaterno">-</div>
-                    </div>
-                    <div class="info-item" id="containerApellidoMaterno">
-                        <span class="info-label">Apellido Materno</span>
-                        <div class="info-value white-bg" id="apellidoMaterno">-</div>
-                    </div>
-                    <div class="info-item"></div>
-
-                    <!-- Fila 4: Razón Social (oculta por defecto, solo para jurídicas) -->
-                    <div class="info-item full-width" id="containerRazonSocial" style="display: none;">
-                        <span class="info-label">Razón Social</span>
-                        <div class="info-value white-bg" id="campoRazonSocial">-</div>
-                    </div>
-
-                    <!-- Fila 5: Documento -->
-                    <div class="info-item">
-                        <span class="info-label">Tipo de Documento</span>
-                        <div class="info-value white-bg" id="tipoDoc">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Nro. Documento</span>
-                        <div class="info-value white-bg" id="nroDoc">-</div>
-                    </div>
-                    <div class="info-item"></div>
-
-                    <!-- Fila 6: Partida y Placa -->
-                    <div class="info-item">
-                        <span class="info-label">Nro. Partida</span>
-                        <div class="info-value white-bg" id="nroPartida">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Nro. Placa</span>
-                        <div class="info-value white-bg" id="nroPlaca">-</div>
-                    </div>
-                    <div class="info-item"></div>
-
-                    <!-- Fila 7: Estado y Zona -->
-                    <div class="info-item">
-                        <span class="info-label">Estado</span>
-                        <div class="info-value white-bg" id="estado">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Zona</span>
-                        <div class="info-value white-bg" id="zona">-</div>
-                    </div>
-                    <div class="info-item"></div>
-
-                    <!-- Fila 8: Oficina -->
-                    <div class="info-item full-width">
-                        <span class="info-label">Oficina</span>
-                        <div class="info-value white-bg" id="oficina">-</div>
-                    </div>
-
-                    <!-- Fila 9: Dirección -->
-                    <div class="info-item full-width">
-                        <span class="info-label">Dirección</span>
-                        <div class="info-value white-bg" id="direccion">-</div>
-                    </div>
-                </div>
-
-                <!-- Sección de Asientos Registrales -->
-                <div class="asientos-section" id="asientosSection" style="display: none;">
-                    <div class="section-header">
-                        <h3><i class="fas fa-file-invoice"></i> Asientos Registrales</h3>
-                    </div>
-                    <div id="asientosContainer" class="asientos-container"></div>
-                </div>
-
-                <!-- Sección de Imágenes de Documentos -->
-                <div class="imagenes-section" id="imagenesSection" style="display: none;">
-                    <div class="section-header">
-                        <h3><i class="fas fa-images"></i> Imágenes de Documentos</h3>
-                    </div>
-
-                    <div class="imagenes-viewer">
-                        <!-- Selector de página -->
-                        <div class="imagenes-selector">
-                            <label for="selectImagenes"><strong>Seleccionar página:</strong></label>
-                            <select id="selectImagenes" class="imagen-select"></select>
-                        </div>
-
-                        <!-- Controles de Zoom y Descarga -->
-                        <div class="image-controls">
-                            <button type="button" id="btnZoomOut" class="btn-zoom" title="Alejar">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" id="btnZoomReset" class="btn-zoom" title="Restablecer zoom">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                            <button type="button" id="btnZoomIn" class="btn-zoom" title="Acercar">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <span id="zoomLabel" class="zoom-label">100%</span>
-                            <button type="button" id="btnVerImagen" class="btn-view" title="Ver imagen en nueva pestaña">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Ver</span>
-                            </button>
-                            <button type="button" id="btnDescargar" class="btn-download" title="Descargar imagen">
-                                <i class="fas fa-download"></i>
-                                <span>Descargar</span>
-                            </button>
-                        </div>
-
-                        <!-- Contenedor de la imagen con scroll -->
-                        <div class="imagen-container">
-                            <div class="imagen-wrapper">
-                                <img id="imagenViewer" src="" alt="Documento" style="display: none;">
-                                <div class="no-imagen" id="noImagen">
-                                    <i class="fas fa-image"></i>
-                                    <span>Seleccione una página</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sección de Datos Vehiculares -->
-                <div class="vehiculo-section" id="vehiculoSection" style="display: none;">
-                    <div class="section-header">
-                        <h3><i class="fas fa-car"></i> Información Vehicular</h3>
-                    </div>
-                    <div id="vehiculoContainer" class="vehiculo-container"></div>
-
                 </div>
             </div>
+        </form>
+    </div>
+
+    <!-- Sección de Resultados -->
+    <div id="resultsSection" style="display: none;" class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Foto -->
+            <div class="lg:col-span-1" id="photoSection">
+                <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-camera text-violet-600 mr-2"></i>
+                        Fotografía
+                    </h3>
+                    <div class="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+                        <img id="personaFoto" src="" alt="Foto" style="display: none;" class="w-full h-full object-cover">
+                        <div id="noFoto" class="text-center text-gray-400">
+                            <i class="fas fa-user text-6xl mb-3"></i>
+                            <p class="text-sm">Sin fotografía</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información -->
+            <div class="lg:col-span-2">
+                <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-info-circle text-violet-600 mr-2"></i>
+                        Información del Registro
+                    </h3>
+                    
+                    <div id="infoGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Los campos se generarán dinámicamente -->
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
+                            <div id="libro" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nombres</span>
+                            <div id="nombres" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div id="containerApellidoPaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Paterno</span>
+                            <div id="apellidoPaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div id="containerApellidoMaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Materno</span>
+                            <div id="apellidoMaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        
+                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Razón Social</span>
+                            <div id="campoRazonSocial" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipo de Documento</span>
+                            <div id="tipoDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Documento</span>
+                            <div id="nroDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Partida</span>
+                            <div id="nroPartida" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Placa</span>
+                            <div id="nroPlaca" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Estado</span>
+                            <div id="estado" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Zona</span>
+                            <div id="zona" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Oficina</span>
+                            <div id="oficina" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Dirección</span>
+                            <div id="direccion" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Asientos Registrales -->
+        <div id="asientosSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-file-invoice text-violet-600 mr-2"></i>
+                Asientos Registrales
+            </h3>
+            <div id="asientosContainer" class="overflow-x-auto"></div>
+        </div>
+
+        <!-- Imágenes de Documentos -->
+        <div id="imagenesSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-images text-violet-600 mr-2"></i>
+                Imágenes de Documentos
+            </h3>
+            
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <label for="selectImagenes" class="text-sm font-medium text-gray-700">Seleccionar página:</label>
+                    <select id="selectImagenes" class="flex-1 max-w-xs px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"></select>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 p-4 bg-white/60 rounded-xl border border-gray-200">
+                    <button type="button" id="btnZoomOut" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" id="btnZoomReset" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button type="button" id="btnZoomIn" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <span id="zoomLabel" class="px-3 font-semibold text-gray-700">100%</span>
+                    <button type="button" id="btnVerImagen" class="ml-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center gap-2">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Ver</span>
+                    </button>
+                    <button type="button" id="btnDescargar" class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition flex items-center gap-2">
+                        <i class="fas fa-download"></i>
+                        <span>Descargar</span>
+                    </button>
+                </div>
+
+                <div class="border-2 border-gray-300 rounded-xl overflow-auto bg-gray-50" style="max-height: 600px; min-height: 400px;">
+                    <div class="inline-block min-w-full text-center">
+                        <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="inline-block max-w-full h-auto shadow-lg rounded">
+                        <div id="noImagen" class="flex flex-col items-center justify-center py-20 text-gray-400">
+                            <i class="fas fa-image text-6xl mb-3"></i>
+                            <span>Seleccione una página</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información Vehicular -->
+        <div id="vehiculoSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-car text-violet-600 mr-2"></i>
+                Información Vehicular
+            </h3>
+            <div id="vehiculoContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
     </div>
 </div>
 
+<!-- Modales se mantienen igual pero con estilos actualizados -->
 <!-- Modal: Búsqueda de Personas Naturales -->
-<div id="modalBusquedaNatural" class="modal-partidas">
-    <div class="modal-dialog-partidas">
-        <div class="modal-content-partidas">
-            <div class="modal-header-partidas">
-                <h5 class="modal-title-partidas">
-                    <i class="fas fa-user"></i>
-                    Búsqueda de Personas Naturales
-                </h5>
-                <button class="modal-close" data-modal="modalBusquedaNatural">&times;</button>
-            </div>
-            <div class="modal-body-partidas">
-                <form id="formBusquedaNatural" class="modal-search-form">
-                    <div class="modal-form-group">
-                        <label for="dniNatural">DNI:</label>
-                        <input
-                            type="text"
-                            id="dniNatural"
-                            maxlength="8"
-                            pattern="[0-9]{8}"
-                            placeholder="Ingrese 8 dígitos">
-                    </div>
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-search">
-                            <i class="fas fa-search"></i>
-                            <span>Buscar</span>
-                        </button>
-                        <button type="button" class="btn btn-clear" onclick="limpiarModalNatural()">
-                            <i class="fas fa-eraser"></i>
-                            <span>Limpiar</span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Resultados de búsqueda -->
-                <div id="resultadosNatural" class="modal-results-table" style="display: none;"></div>
-            </div>
+<div id="modalBusquedaNatural" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+        <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
+            <h5 class="text-xl font-bold flex items-center gap-2">
+                <i class="fas fa-user"></i>
+                Búsqueda de Personas Naturales
+            </h5>
+            <button class="text-white hover:text-gray-200 text-2xl" data-modal="modalBusquedaNatural">&times;</button>
+        </div>
+        <div class="p-6">
+            <form id="formBusquedaNatural" class="mb-4">
+                <div class="mb-4">
+                    <label for="dniNatural" class="block text-sm font-medium text-gray-700 mb-2">DNI:</label>
+                    <input
+                        type="text"
+                        id="dniNatural"
+                        maxlength="8"
+                        pattern="[0-9]{8}"
+                        placeholder="Ingrese 8 dígitos"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"
+                    >
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-violet-500 to-violet-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-violet-600 hover:to-violet-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-search"></i>
+                        <span>Buscar</span>
+                    </button>
+                    <button type="button" onclick="limpiarModalNatural()" class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-eraser mr-2"></i>
+                        Limpiar
+                    </button>
+                </div>
+            </form>
+            <div id="resultadosNatural" style="display: none;"></div>
         </div>
     </div>
 </div>
 
 <!-- Modal: Búsqueda de Personas Jurídicas -->
-<div id="modalBusquedaJuridica" class="modal-partidas">
-    <div class="modal-dialog-partidas">
-        <div class="modal-content-partidas">
-            <div class="modal-header-partidas">
-                <h5 class="modal-title-partidas">
-                    <i class="fas fa-building"></i>
-                    Búsqueda de Personas Jurídicas
-                </h5>
-                <button class="modal-close" data-modal="modalBusquedaJuridica">&times;</button>
+<div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+        <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
+            <h5 class="text-xl font-bold flex items-center gap-2">
+                <i class="fas fa-building"></i>
+                Búsqueda de Personas Jurídicas
+            </h5>
+            <button class="text-white hover:text-gray-200 text-2xl" data-modal="modalBusquedaJuridica">&times;</button>
+        </div>
+        <div class="p-6">
+            <div class="flex gap-3 mb-4">
+                <label class="flex-1 cursor-pointer">
+                    <input type="radio" id="porRuc" name="tipoBusquedaJuridica" value="ruc" checked class="peer sr-only">
+                    <div class="px-4 py-2 rounded-xl border-2 border-gray-300 bg-white/60 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all text-center font-semibold text-gray-700 peer-checked:text-violet-700">
+                        POR RUC
+                    </div>
+                </label>
+                <label class="flex-1 cursor-pointer">
+                    <input type="radio" id="porRazonSocial" name="tipoBusquedaJuridica" value="razonSocial" class="peer sr-only">
+                    <div class="px-4 py-2 rounded-xl border-2 border-gray-300 bg-white/60 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all text-center font-semibold text-gray-700 peer-checked:text-violet-700">
+                        POR RAZÓN SOCIAL
+                    </div>
+                </label>
             </div>
-            <div class="modal-body-partidas">
-                <!-- Radio buttons para tipo de búsqueda -->
-                <div class="modal-radio-group">
-                    <div class="modal-radio-option">
-                        <input type="radio" id="porRuc" name="tipoBusquedaJuridica" value="ruc" checked>
-                        <label for="porRuc">POR RUC</label>
-                    </div>
-                    <div class="modal-radio-option">
-                        <input type="radio" id="porRazonSocial" name="tipoBusquedaJuridica" value="razonSocial">
-                        <label for="porRazonSocial">POR RAZÓN SOCIAL</label>
-                    </div>
+
+            <form id="formBusquedaJuridica" class="mb-4">
+                <div id="grupoRuc" class="mb-4">
+                    <label for="rucJuridica" class="block text-sm font-medium text-gray-700 mb-2">RUC:</label>
+                    <input
+                        type="text"
+                        id="rucJuridica"
+                        maxlength="11"
+                        pattern="[0-9]{11}"
+                        placeholder="Ingrese 11 dígitos"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"
+                    >
                 </div>
-
-                <form id="formBusquedaJuridica" class="modal-search-form">
-                    <div class="modal-form-group" id="grupoRuc">
-                        <label for="rucJuridica">RUC:</label>
-                        <input
-                            type="text"
-                            id="rucJuridica"
-                            maxlength="11"
-                            pattern="[0-9]{11}"
-                            placeholder="Ingrese 11 dígitos">
-                    </div>
-                    <div class="modal-form-group" id="grupoRazonSocial" style="display: none;">
-                        <label for="razonSocial">Razón Social:</label>
-                        <input
-                            type="text"
-                            id="razonSocial"
-                            placeholder="Ingrese la razón social">
-                    </div>
-                    <div class="btn-group">
-                        <button type="submit" class="btn btn-search">
-                            <i class="fas fa-search"></i>
-                            <span>Buscar</span>
-                        </button>
-                        <button type="button" class="btn btn-clear" onclick="limpiarModalJuridica()">
-                            <i class="fas fa-eraser"></i>
-                            <span>Limpiar</span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Resultados de búsqueda -->
-                <div id="resultadosJuridica" class="modal-results-table" style="display: none;"></div>
-            </div>
+                <div id="grupoRazonSocial" style="display: none;" class="mb-4">
+                    <label for="razonSocial" class="block text-sm font-medium text-gray-700 mb-2">Razón Social:</label>
+                    <input
+                        type="text"
+                        id="razonSocial"
+                        placeholder="Ingrese la razón social"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"
+                    >
+                </div>
+                <div class="flex gap-3">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-violet-500 to-violet-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-violet-600 hover:to-violet-700 transition flex items-center justify-center gap-2">
+                        <i class="fas fa-search"></i>
+                        <span>Buscar</span>
+                    </button>
+                    <button type="button" onclick="limpiarModalJuridica()" class="px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition">
+                        <i class="fas fa-eraser mr-2"></i>
+                        Limpiar
+                    </button>
+                </div>
+            </form>
+            <div id="resultadosJuridica" style="display: none;"></div>
         </div>
     </div>
 </div>
-
-<style>
-    /* Estilos para la sección de foto */
-    .photo-section {
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .photo-container {
-        width: 160px;
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #dee2e6;
-        border-radius: 8px;
-        background: #f8f9fa;
-        overflow: hidden;
-    }
-
-    .photo-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .no-photo {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-        font-size: 0.9em;
-        text-align: center;
-        padding: 20px;
-    }
-
-    .no-photo i {
-        font-size: 3em;
-        margin-bottom: 10px;
-        opacity: 0.5;
-    }
-
-    /* Ocultar photo-section cuando no es necesaria */
-    .photo-section.hidden {
-        display: none;
-    }
-
-    /* Ajustar grid cuando no hay foto */
-    .results-layout.no-photo {
-        grid-template-columns: 1fr;
-    }
-
-    .results-layout.no-photo .info-grid {
-        max-width: 100%;
-    }
-
-    /* Contenedores de campos con ID para fácil manipulación */
-    #containerNombres,
-    #containerApellidoPaterno,
-    #containerApellidoMaterno,
-    #containerRazonSocial {
-        transition: all 0.3s ease;
-    }
-
-    /* Asegurar que los campos full-width ocupen todo el espacio */
-    .info-item.full-width {
-        grid-column: 1 / -1;
-    }
-
-    /* Ajustes para alineación cuando se ocultan campos */
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        width: 100%;
-    }
-
-    /* Secciones adicionales */
-    .asientos-section,
-    .imagenes-section,
-    .vehiculo-section {
-        margin-top: 30px;
-        padding: 20px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .section-header {
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #3498db;
-    }
-
-    .section-header h3 {
-        margin: 0;
-        color: #2c3e50;
-        font-size: 1.2em;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .section-header i {
-        color: #3498db;
-    }
-
-    /* Asientos */
-    .asientos-container {
-        overflow-x: auto;
-    }
-
-    .asientos-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-
-    .asientos-table th,
-    .asientos-table td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .asientos-table th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .asientos-table tr:hover {
-        background-color: #f8f9fa;
-    }
-
-    /* Imágenes */
-    .imagenes-viewer {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .imagenes-selector {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .imagen-select {
-        flex: 1;
-        max-width: 300px;
-        padding: 8px 12px;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        font-size: 0.95em;
-    }
-
-    .no-imagen {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #6c757d;
-        font-size: 1em;
-        padding: 40px;
-    }
-
-    .no-imagen i {
-        font-size: 4em;
-        margin-bottom: 15px;
-        opacity: 0.5;
-    }
-
-    /* Vehículo */
-    .vehiculo-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 15px;
-    }
-
-    .vehiculo-item {
-        padding: 12px;
-        background: #f8f9fa;
-        border-radius: 5px;
-        border-left: 3px solid #3498db;
-    }
-
-    .vehiculo-item .label {
-        font-size: 0.85em;
-        color: #6c757d;
-        margin-bottom: 5px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .vehiculo-item .value {
-        font-size: 1em;
-        color: #2c3e50;
-        font-weight: 500;
-    }
-
-    /* Ocultar completamente la sección de imágenes del grid */
-    .imagenes-section[style*="display: none"] {
-        display: none !important;
-        grid-column: unset !important;
-        grid-row: unset !important;
-    }
-
-    /* Si no hay imágenes, vehículo ocupa todo el ancho disponible */
-    .results-layout:not(:has(.imagenes-section:not([style*="display: none"]))) .vehiculo-section {
-        grid-column: 1 / -1;
-    }
-
-    /* Cuando NO existan asientos, la sección de imágenes se expande */
-    .results-layout:not(:has(.asientos-section:not([style*="display: none"]))) .imagenes-section {
-        grid-column: 1 / -1 !important;
-    }
-
-
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .asientos-table {
-            font-size: 0.85em;
-        }
-
-        .imagen-container {
-            min-height: 400px;
-        }
-
-        .vehiculo-container {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    /* Ajustes responsivos */
-    @media (max-width: 768px) {
-        .photo-container {
-            width: 120px;
-            height: 150px;
-        }
-
-        .info-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .info-item.full-width {
-            grid-column: 1;
-        }
-    }
-
-    /* Estilos para los controles de imagen */
-    .image-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        margin: 15px 0;
-        border: 1px solid #dee2e6;
-    }
-
-    .btn-zoom {
-        padding: 8px 14px;
-        border: 1px solid #ced4da;
-        background: white;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 40px;
-        color: #495057;
-    }
-
-    .btn-zoom:hover {
-        background: #e9ecef;
-        border-color: #adb5bd;
-        transform: translateY(-1px);
-    }
-
-    .btn-zoom:active {
-        transform: translateY(0);
-    }
-
-    .btn-zoom i {
-        font-size: 14px;
-    }
-
-    .zoom-label {
-        font-weight: 600;
-        color: #495057;
-        min-width: 55px;
-        text-align: center;
-        font-size: 14px;
-        padding: 0 8px;
-    }
-
-    .btn-download {
-        margin-left: auto;
-        padding: 8px 16px;
-        background: #28a745;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .btn-download:hover {
-        background: #218838;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-download:active {
-        transform: translateY(0);
-    }
-
-    .btn-download i {
-        font-size: 14px;
-    }
-
-    .imagen-container {
-        position: relative;
-        overflow: auto;
-        max-height: 600px;
-        border: 2px solid #dee2e6;
-        border-radius: 8px;
-        background: #fafafa;
-        min-height: 400px;
-        display: flex;
-        /* AGREGAR */
-        justify-content: center;
-        /* AGREGAR */
-        align-items: flex-start;
-        /* AGREGAR */
-    }
-
-    .imagen-wrapper {
-        display: inline-block;
-        min-width: 100%;
-        /* CAMBIAR de min-content a 100% */
-        min-height: 300px;
-        text-align: center;
-        position: relative;
-        /* AGREGAR */
-    }
-
-    #imagenViewer {
-        transition: all 0.3s ease;
-        /* Cambiar de transform a all */
-        display: inline-block;
-        max-width: 100%;
-        height: auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 4px;
-        vertical-align: middle;
-    }
-
-    #imagenViewer.with-zoom {
-        max-width: none;
-    }
-
-    .no-imagen {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        color: #6c757d;
-        font-size: 16px;
-    }
-
-    .no-imagen i {
-        font-size: 48px;
-        opacity: 0.5;
-    }
-
-    /* Mejorar el selector de páginas */
-    .imagenes-selector {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    .imagen-select {
-        padding: 8px 12px;
-        border: 1px solid #ced4da;
-        border-radius: 6px;
-        font-size: 14px;
-        background: white;
-        cursor: pointer;
-        min-width: 200px;
-    }
-
-    .imagen-select:focus {
-        outline: none;
-        border-color: #80bdff;
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .image-controls {
-            flex-wrap: wrap;
-        }
-
-        .btn-download {
-            width: 100%;
-            justify-content: center;
-            margin-left: 0;
-            margin-top: 10px;
-        }
-    }
-
-    .btn-view {
-        padding: 8px 16px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .btn-view:hover {
-        background: #0056b3;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-</style>

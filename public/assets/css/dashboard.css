@@ -283,37 +283,6 @@ body {
     background: var(--sunarp-color);
 }
 
-/* === INFORMACIÓN DEL USUARIO === */
-.user-info {
-    background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 50%, #1e293b 100%);
-    color: white;
-    padding: 25px 20px;
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-info > div {
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    text-align: center;
-}
-
-.user-info > div strong,
-.user-info > div#currentUserName {
-    display: block;
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 5px;
-    color: white;
-}
-
-.user-info > div#currentUserRole {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.4;
-    margin-bottom: 15px;
-}
-
-
 
 /* === BOTÓN DE SALIDA === */
 .logout-btn {

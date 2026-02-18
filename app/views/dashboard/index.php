@@ -64,25 +64,58 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
 <?php $titulo = "Dashboard Principal"; ?>
 <?php include __DIR__ . "/../layouts/header.php"; ?>
 
-<div class="dashboard-container" id="dashboardContainer">
+<div class="flex h-screen overflow-hidden" id="dashboardContainer">
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
-    <div class="main-content">
-        <!-- ============================================ -->
-        <!-- PÁGINA DE INICIO (SIEMPRE VISIBLE) -->
-        <!-- ============================================ -->
+    <main id="main-content" class="ml-[70px] transition-all duration-300 min-h-screen p-6 flex-1 overflow-y-auto">
+        <!-- Header -->
+        <header class="glass rounded-2xl p-6 mb-8 shadow-lg border border-white/50">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg">
+                        <i class="fas fa-search-location text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Sistema de Consultas PIDE</h1>
+                        <p class="text-gray-500 text-sm">Plataforma de Interoperabilidad del Estado Peruano</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200">
+                        <div class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></div>
+                        <span class="text-sm font-medium text-blue-800">Sistema Operativo</span>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <i class="far fa-calendar-alt mr-1"></i>
+                        <?= date('d/m/Y H:i') ?>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <div>
+            <!-- ============================================ -->
+            <!-- PÁGINA DE INICIO (SIEMPRE VISIBLE) -->
+            <!-- ============================================ -->
 
 
-        <!-- ============================================ -->
-        <!-- PÁGINAS DINÁMICAS (NUEVOS MÓDULOS) -->
-        <!-- ============================================ -->
-        <?php 
-        // Generar páginas dinámicamente para módulos nuevos
-        // Esto generará automáticamente las páginas de los módulos
-        // que no están en la lista estática de arriba
-        generarPaginasDinamicas($modulosJerarquicos, $permisos); 
-        ?>
-    </div>
+            <!-- ============================================ -->
+            <!-- PÁGINAS DINÁMICAS (NUEVOS MÓDULOS) -->
+            <!-- ============================================ -->
+            <?php 
+            generarPaginasDinamicas($modulosJerarquicos, $permisos); 
+            ?>
+        </div>
+    </main>
 </div>
+
+<style>
+/* Asegurar que el main-content se ajuste correctamente */
+#main-content {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+</style>
 
 <?php include __DIR__ . "/../layouts/footer.php"; ?>
