@@ -1,5 +1,5 @@
 <?php
-    header("Content-type: text/html; charset=utf-8");
+header("Content-type: text/html; charset=utf-8");
 ?>
 
 <?php
@@ -15,27 +15,26 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
 ?>
 <!DOCTYPE html>
 <html lang="es-PE">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistema de Consultas PIDE</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <!-- Tailwind CSS (local) -->
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/tailwind.css">
+
+    <!-- Fuente Inter (local) -->
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/fonts.css">
+
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/login.css">
-    <link rel="stylesheet" href='<?= BASE_URL ?>assets/css/fontawesome/css/all.min.css'">
-    
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/fontawesome/css/all.min.css">
+
     <style>
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         /* Glassmorphism utilities */
         .glass {
             background: rgba(255, 255, 255, 0.7);
@@ -43,50 +42,67 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
+
         .glass-dark {
             background: rgba(30, 58, 138, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
-        
+
         /* Gradient backgrounds */
         .bg-gradient-modern {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        
+
         /* Pulse animation */
         @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
+
         .pulse-dot {
             animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        
+
         /* Float animation */
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
         }
+
         .float {
             animation: float 6s ease-in-out infinite;
         }
-        
+
         /* Modal centering fix */
         #modalValidarCUI,
         #loadingOverlay {
             display: none;
         }
-        
+
         #modalValidarCUI.show,
         #loadingOverlay.show {
             display: flex !important;
         }
     </style>
 </head>
-<body class="bg-gradient-modern min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
-    
+
+<body class=" bg-gradient-modern min-h-screen flex items-center justify-center p-4 overflow-hidden relative">
+
     <!-- Decorative elements -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl float"></div>
@@ -95,7 +111,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
 
     <div class="w-full max-w-6xl relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            
+
             <!-- Left Panel - Info -->
             <div class="hidden lg:block">
                 <div class="text-white space-y-8">
@@ -129,22 +145,21 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
                         <h2 class="text-3xl font-bold text-gray-800 mb-2">Bienvenido</h2>
                         <p class="text-gray-600">Ingrese sus credenciales para acceder al sistema</p>
                     </div>
-                    
+
                     <form id="formLogin" method="post" class="space-y-5">
                         <div>
                             <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <i class="fas fa-user text-blue-600 mr-2"></i>Usuario
                             </label>
                             <div class="relative">
-                                <input 
-                                    type="text" 
-                                    id="username" 
-                                    name="username" 
-                                    autocomplete="off" 
-                                    placeholder="Ingrese su usuario" 
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    autocomplete="off"
+                                    placeholder="Ingrese su usuario"
                                     required
-                                    class="w-full px-4 py-3 pl-11 bg-white/80 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 outline-none shadow-sm"
-                                >
+                                    class="w-full px-4 py-3 pl-11 bg-white/80 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 outline-none shadow-sm">
                                 <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
                             </div>
                         </div>
@@ -154,34 +169,31 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
                                 <i class="fas fa-lock text-blue-600 mr-2"></i>Contraseña
                             </label>
                             <div class="relative">
-                                <input 
-                                    type="password" 
-                                    id="password" 
-                                    name="password" 
-                                    placeholder="Ingrese su contraseña" 
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Ingrese su contraseña"
                                     required
-                                    class="w-full px-4 py-3 pl-11 pr-12 bg-white/80 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 outline-none shadow-sm"
-                                >
+                                    class="w-full px-4 py-3 pl-11 pr-12 bg-white/80 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 outline-none shadow-sm">
                                 <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                                <button 
+                                <button
                                     type="button"
-                                    id="togglePassword" 
-                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition"
-                                >
+                                    id="togglePassword"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition">
                                     <i class="fas fa-eye-slash"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <button 
-                            id="btnLogin" 
+                        <button
+                            id="btnLogin"
                             type="submit"
-                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3.5 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/30"
-                        >
+                            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-3.5 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/30">
                             <i class="fas fa-sign-in-alt mr-2"></i>INGRESAR AL SISTEMA
                         </button>
                     </form>
-                    
+
                     <div class="mt-6 text-center">
                         <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
                             <div class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></div>
@@ -211,7 +223,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
                     Verificación de seguridad adicional
                 </p>
             </div>
-            
+
             <form class="formValidarCUI" id="validarCUIForm" method="post">
                 <div class="p-6 space-y-6">
                     <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-xl">
@@ -226,31 +238,28 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
                             <i class="fas fa-key text-blue-600 mr-2"></i>Último dígito del CUI:
                         </label>
                         <div class="flex justify-center">
-                            <input 
-                                type="text" 
-                                id="cui" 
-                                maxlength="1" 
-                                autocomplete="off" 
-                                pattern="[0-9]" 
+                            <input
+                                type="text"
+                                id="cui"
+                                maxlength="1"
+                                autocomplete="off"
+                                pattern="[0-9]"
                                 required
-                                class="w-16 h-16 text-center text-3xl font-bold border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none bg-white/80"
-                            >
+                                class="w-16 h-16 text-center text-3xl font-bold border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 outline-none bg-white/80">
                         </div>
                     </div>
-                    
+
                     <div class="flex gap-3">
-                        <button 
-                            type="button" 
-                            id="btnCancelarCUI" 
-                            class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition duration-200"
-                        >
+                        <button
+                            type="button"
+                            id="btnCancelarCUI"
+                            class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition duration-200">
                             <i class="fas fa-times mr-2"></i>Cancelar
                         </button>
-                        <button 
-                            type="submit" 
-                            id="btnConfirmarCUI" 
-                            class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition duration-200 shadow-lg"
-                        >
+                        <button
+                            type="submit"
+                            id="btnConfirmarCUI"
+                            class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition duration-200 shadow-lg">
                             <i class="fas fa-check mr-2"></i>Confirmar
                         </button>
                     </div>
@@ -277,12 +286,15 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
         </div>
     </div>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="<?= BASE_URL ?>assets/js/api.js"></script>
     <script src="<?= BASE_URL ?>assets/js/login.js"></script>
 
     <script>
         // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function () {
+        document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -297,6 +309,7 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
         });
     </script>
 </body>
+
 </html>
 
 <?php
