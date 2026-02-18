@@ -199,7 +199,7 @@
 <div class="glass rounded-2xl p-6 text-center border border-white/50">
     <div class="flex items-center justify-center gap-2 mb-2 text-gray-600">
         <i class="fas fa-info-circle text-blue-500"></i>
-        <span class="font-medium">Sistema de Consultas PIDE v2.0</span>
+        <span class="font-medium">Sistema de Consultas PIDE v1.5</span>
         <span class="text-gray-400">|</span>
         <span class="text-sm">Plataforma de Interoperabilidad del Estado Peruano</span>
     </div>
