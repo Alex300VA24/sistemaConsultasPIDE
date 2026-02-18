@@ -42,7 +42,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 btnLogin.innerHTML = originalText;
             }
         } catch (error) {
-            alert('Error: ' + error.message);
+            Swal.fire({
+                title: 'Error de Autenticación',
+                html: `<p style="color: #64748b; font-size: 0.95rem;">${error.message}</p>`,
+                icon: 'error',
+                iconColor: '#dc3545',
+                confirmButtonText: 'Reintentar',
+                confirmButtonColor: '#6366f1',
+                background: '#ffffff',
+                backdrop: 'rgba(0, 0, 0, 0.5)',
+                didOpen: (popup) => {
+                    popup.style.borderRadius = '1.25rem';
+                    popup.style.padding = '2rem';
+                    popup.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+                    const btn = popup.querySelector('.swal2-confirm');
+                    if (btn) {
+                        btn.style.borderRadius = '0.75rem';
+                        btn.style.padding = '0.65rem 2rem';
+                        btn.style.fontWeight = '600';
+                    }
+                }
+            });
             btnLogin.disabled = false;
             btnLogin.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>INGRESAR AL SISTEMA';
         }
@@ -54,7 +74,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const cui = document.getElementById('cui').value;
         if (!cui || cui.length < 1) {
-            alert('Por favor ingrese un CUI válido');
+            Swal.fire({
+                title: 'CUI Requerido',
+                html: '<p style="color: #64748b; font-size: 0.95rem;">Por favor ingrese un CUI válido para continuar con la verificación.</p>',
+                icon: 'warning',
+                iconColor: '#f59e0b',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#6366f1',
+                background: '#ffffff',
+                backdrop: 'rgba(0, 0, 0, 0.5)',
+                didOpen: (popup) => {
+                    popup.style.borderRadius = '1.25rem';
+                    popup.style.padding = '2rem';
+                    popup.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+                    const btn = popup.querySelector('.swal2-confirm');
+                    if (btn) {
+                        btn.style.borderRadius = '0.75rem';
+                        btn.style.padding = '0.65rem 2rem';
+                        btn.style.fontWeight = '600';
+                    }
+                }
+            });
             return;
         }
 
@@ -94,7 +134,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 1000);
             }
         } catch (error) {
-            alert('Error: ' + error.message);
+            Swal.fire({
+                title: 'Error de Verificación',
+                html: `<p style="color: #64748b; font-size: 0.95rem;">${error.message}</p>`,
+                icon: 'error',
+                iconColor: '#dc3545',
+                confirmButtonText: 'Reintentar',
+                confirmButtonColor: '#6366f1',
+                background: '#ffffff',
+                backdrop: 'rgba(0, 0, 0, 0.5)',
+                didOpen: (popup) => {
+                    popup.style.borderRadius = '1.25rem';
+                    popup.style.padding = '2rem';
+                    popup.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+                    const btn = popup.querySelector('.swal2-confirm');
+                    if (btn) {
+                        btn.style.borderRadius = '0.75rem';
+                        btn.style.padding = '0.65rem 2rem';
+                        btn.style.fontWeight = '600';
+                    }
+                }
+            });
             const btnConfirmar = document.getElementById('btnConfirmarCUI');
             btnConfirmar.disabled = false;
             btnConfirmar.innerHTML = '<i class="fas fa-check mr-2"></i>Confirmar';

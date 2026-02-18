@@ -296,7 +296,7 @@ const Dashboard = {
             window.location.href = this.BASE_URL + 'login';
         } catch (error) {
             console.error('❌ Error al cerrar sesión:', error);
-            alert('Error al cerrar sesión');
+            mostrarAlertaModal('Error', 'Ocurrió un error al cerrar sesión. Inténtelo nuevamente.', 'error');
         }
     },
 
@@ -453,7 +453,7 @@ window.registrarModulo = function(nombre, modulo) {
     Dashboard.registrarModulo(nombre, modulo);
 };
 
-// Función de alertas
+// Función de alertas inline (en contenedores dentro de la página)
 window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertContainer') {
     const alertContainer = document.getElementById(contenedorId);
     
@@ -528,6 +528,71 @@ window.mostrarAlerta = function(mensaje, tipo = 'info', contenedorId = 'alertCon
     }, timeout);
 };
 
+// ============================================
+// 🔔 FUNCIÓN DE ALERTAS MODALES (SweetAlert2)
+// ============================================
+window.mostrarAlertaModal = function(titulo, mensaje, tipo = 'error') {
+    const tipoConfig = {
+        error: {
+            icon: 'error',
+            confirmColor: '#dc3545',
+            iconColor: '#dc3545'
+        },
+        warning: {
+            icon: 'warning',
+            confirmColor: '#f59e0b',
+            iconColor: '#f59e0b'
+        },
+        info: {
+            icon: 'info',
+            confirmColor: '#3b82f6',
+            iconColor: '#3b82f6'
+        },
+        success: {
+            icon: 'success',
+            confirmColor: '#10b981',
+            iconColor: '#10b981'
+        }
+    };
+
+    const config = tipoConfig[tipo] || tipoConfig.error;
+
+    return Swal.fire({
+        title: titulo,
+        html: `<p style="color: #64748b; font-size: 0.95rem; line-height: 1.6;">${mensaje}</p>`,
+        icon: config.icon,
+        iconColor: config.iconColor,
+        confirmButtonText: 'Entendido',
+        confirmButtonColor: config.confirmColor,
+        background: '#ffffff',
+        backdrop: 'rgba(0, 0, 0, 0.5)',
+        customClass: {
+            popup: 'swal-modal-custom',
+            title: 'swal-title-custom',
+            confirmButton: 'swal-btn-custom'
+        },
+        didOpen: (popup) => {
+            popup.style.borderRadius = '1.25rem';
+            popup.style.padding = '2rem';
+            popup.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
+            const title = popup.querySelector('.swal2-title');
+            if (title) {
+                title.style.fontSize = '1.35rem';
+                title.style.fontWeight = '700';
+                title.style.color = '#1e293b';
+            }
+            const btn = popup.querySelector('.swal2-confirm');
+            if (btn) {
+                btn.style.borderRadius = '0.75rem';
+                btn.style.padding = '0.65rem 2rem';
+                btn.style.fontWeight = '600';
+                btn.style.fontSize = '0.9rem';
+                btn.style.boxShadow = '0 4px 14px 0 rgba(0, 0, 0, 0.15)';
+            }
+        }
+    });
+};
+
 
 // Función para verificar acceso
 function verificarAcceso(codigoModulo) {
@@ -542,9 +607,10 @@ function verificarAcceso(codigoModulo) {
             const modulosProtegidos = ['DNI', 'RUC', 'PAR']; // Módulos de RENIEC, SUNAT, SUNARP
             
             if (modulosProtegidos.includes(codigoModulo)) {
-                alert(
+                mostrarAlertaModal(
+                    'Contraseña Expirada',
                     'Tu contraseña ha expirado. Debes cambiarla para acceder a este módulo.',
-                    'error'
+                    'warning'
                 );
                 
                 // Mostrar modal de cambio de password
@@ -570,7 +636,7 @@ function verificarAcceso(codigoModulo) {
 // Funciones de navegación con validación
 window.irConsultaReniec = function() {
     if (!verificarAcceso('DNI')) {
-        alert('No tienes permisos para acceder al módulo de RENIEC');
+        mostrarAlertaModal('Acceso Denegado', 'No tienes permisos para acceder al módulo de <strong>RENIEC</strong>. Contacta al administrador del sistema.', 'error');
         return;
     }
     showPage('ConsultasDni');
@@ -578,7 +644,7 @@ window.irConsultaReniec = function() {
 
 window.irConsultaSunat = function() {
     if (!verificarAcceso('RUC')) {
-        alert('No tienes permisos para acceder al módulo de SUNAT');
+        mostrarAlertaModal('Acceso Denegado', 'No tienes permisos para acceder al módulo de <strong>SUNAT</strong>. Contacta al administrador del sistema.', 'error');
         return;
     }
     showPage('ConsultasRuc');
@@ -586,7 +652,7 @@ window.irConsultaSunat = function() {
 
 window.irConsultaSunarp = function() {
     if (!verificarAcceso('PAR')) {
-        alert('No tienes permisos para acceder al módulo de SUNARP');
+        mostrarAlertaModal('Acceso Denegado', 'No tienes permisos para acceder al módulo de <strong>SUNARP</strong>. Contacta al administrador del sistema.', 'error');
         return;
     }
     showPage('ConsultasPartidas');

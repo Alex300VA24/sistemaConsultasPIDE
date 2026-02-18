@@ -19,3 +19,12 @@ phpunit.xml.bak
 *.backup
 *.sql
 *.zip
+
+# Node.js
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Sistema
+.DS_Store
+Thumbs.db

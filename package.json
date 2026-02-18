@@ -1,0 +1,28 @@
+{
+  "name": "mdesistemapide",
+  "version": "1.0.0",
+  "description": "Aplicacion web para consultar servicios de la **Plataforma de Interoperabilidad del Estado (PIDE)** y administrar usuarios, roles y modulos internos. Integra consultas a **RENIEC, SUNAT y SUNARP**, con autenticacion, control de acceso y vistas web (login + dashboard).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:css": "npx tailwindcss -i src/tailwind.css -o public/assets/css/tailwind.css --minify",
+    "watch:css": "npx tailwindcss -i src/tailwind.css -o public/assets/css/tailwind.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex300VA24/sistemaConsultasPIDE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex300VA24/sistemaConsultasPIDE/issues"
+  },
+  "homepage": "https://github.com/Alex300VA24/sistemaConsultasPIDE#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
