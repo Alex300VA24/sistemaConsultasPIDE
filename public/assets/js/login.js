@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalCUI = document.getElementById('modalValidarCUI');
     const btnCancelarCUI = document.getElementById('btnCancelarCUI');
     const btnLogin = document.getElementById('btnLogin');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    // Función para mostrar loading
+    function showLoading() {
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'flex';
+        }
+    }
+
+    // Función para ocultar loading
+    function hideLoading() {
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
+        }
+    }
 
     // Login
     formLogin.addEventListener('submit', async function(e) {
@@ -13,20 +28,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             btnLogin.disabled = true;
-            btnLogin.textContent = 'Ingresando...';
+            const originalText = btnLogin.innerHTML;
+            btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Ingresando...';
             
             const response = await api.login(nombreUsuario, password);
             
             if (response.success && response.data.requireCUI) {
                 // Mostrar modal de CUI
-                modalCUI.style.display = 'block';
+                modalCUI.style.display = 'flex';
                 sessionStorage.setItem('usuarioID', response.data.usuarioID);
                 localStorage.setItem('usuario', nombreUsuario);
+                btnLogin.disabled = false;
+                btnLogin.innerHTML = originalText;
             }
         } catch (error) {
             alert('Error: ' + error.message);
             btnLogin.disabled = false;
-            btnLogin.textContent = 'Ingresar';
+            btnLogin.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>INGRESAR AL SISTEMA';
         }
     });
 
@@ -43,7 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const btnConfirmar = document.getElementById('btnConfirmarCUI');
             btnConfirmar.disabled = true;
-            btnConfirmar.value = 'Validando...';
+            const originalText = btnConfirmar.innerHTML;
+            btnConfirmar.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Validando...';
             
             const response = await api.validarCUI(cui);
             if (response.success) {
@@ -54,17 +73,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
                 sessionStorage.setItem('permisos', JSON.stringify(response.data.permisos));
 
-                
                 if (response.data.requiere_cambio_password) {
                     sessionStorage.setItem('requiere_cambio_password', 'true');
+                } else {
+                    sessionStorage.setItem('requiere_cambio_password', 'false');
                 }
 
-                sessionStorage.setItem('requiere_cambio_password', 'false');
                 sessionStorage.setItem('dias_desde_cambio', response.data.dias_desde_cambio);
                 sessionStorage.setItem('dias_restantes', response.data.dias_restantes);
 
                 // AGREGAR ESTA LÍNEA
                 sessionStorage.setItem('loginReciente', 'true');
+                
+                // Ocultar modal y mostrar loading
+                modalCUI.style.display = 'none';
+                showLoading();
                 
                 setTimeout(() => {
                     window.location.href = 'dashboard';
@@ -74,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error: ' + error.message);
             const btnConfirmar = document.getElementById('btnConfirmarCUI');
             btnConfirmar.disabled = false;
-            btnConfirmar.value = 'Confirmar';
+            btnConfirmar.innerHTML = '<i class="fas fa-check mr-2"></i>Confirmar';
         }
     });
 
@@ -88,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             sessionStorage.clear();
             btnLogin.disabled = false;
-            btnLogin.textContent = 'Ingresar';
+            btnLogin.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>INGRESAR AL SISTEMA';
         });
     }
 

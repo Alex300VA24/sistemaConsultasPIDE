@@ -19,7 +19,6 @@ const Dashboard = {
     // NUEVO MÉTODO: Verificar si requiere cambio de password
     // ============================================
     verificarCambioPasswordRequerido() {
-        // Verificar en sessionStorage si el usuario requiere cambio de password
         const usuarioData = sessionStorage.getItem('usuario');
         
         if (usuarioData) {
@@ -27,21 +26,18 @@ const Dashboard = {
                 const usuario = JSON.parse(usuarioData);
                 const requiereCambio = parseInt(usuario.USU_requiere_cambio_password) || 0;
                 const diasDesdeCambio = parseInt(usuario.DIAS_DESDE_CAMBIO_PASSWORD) || 0;
+                const diasRestantes = parseInt(usuario.DIAS_RESTANTES) || 30;
                 const usuarioId = usuario.USU_id;
 
-                if (requiereCambio) {
-                    // Clave específica por usuario
+                if (requiereCambio === 1 || diasRestantes <= 0) {
                     const keyPospuesto = `cambio_password_pospuesto_${usuarioId}`;
                     const pospuesto = localStorage.getItem(keyPospuesto);
                     const ahora = Date.now();
                     const unDia = 24 * 60 * 60 * 1000;
                     
-                    // Si no se ha pospuesto o pasó más de 1 día
                     if (!pospuesto || (ahora - parseInt(pospuesto)) > unDia) {
-                        // Mostrar modal después de que cargue el DOM
                         setTimeout(() => {
                             if (typeof ModuloCambioPasswordObligatorio !== 'undefined') {
-                                const diasRestantes = Math.max(0, 30 - diasDesdeCambio);
                                 ModuloCambioPasswordObligatorio.init(diasRestantes);
                                 ModuloCambioPasswordObligatorio.mostrarModal();
                             } else {
@@ -430,7 +426,7 @@ const Dashboard = {
 
 function toggleSubmenu(element) {
     const submenu = element.nextElementSibling;
-    const isOpen = submenu.style.display === 'flex';
+    const isOpen = element.classList.contains('open');
     
     // Cerrar todos los submenús
     document.querySelectorAll('.submenu').forEach(s => {

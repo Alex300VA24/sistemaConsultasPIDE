@@ -22,6 +22,7 @@ const ModuloCambioPasswordObligatorio = {
     mostrarModal() {
         const modal = document.getElementById('modalPasswordObligatorio');
         if (modal) {
+            modal.style.display = 'flex';
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -30,6 +31,7 @@ const ModuloCambioPasswordObligatorio = {
     ocultarModal() {
         const modal = document.getElementById('modalPasswordObligatorio');
         if (modal) {
+            modal.style.display = 'none';
             modal.classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -43,13 +45,11 @@ function btnCambiarPass() {
 
 function recordarMasTarde() {
     try {
-        // Obtener ID del usuario actual
         const usuarioData = sessionStorage.getItem('usuario');
         if (usuarioData) {
             const usuario = JSON.parse(usuarioData);
             const usuarioId = usuario.USU_id;
             
-            // Guardar con clave específica del usuario
             const keyPospuesto = `cambio_password_pospuesto_${usuarioId}`;
             localStorage.setItem(keyPospuesto, Date.now());
             
@@ -61,5 +61,4 @@ function recordarMasTarde() {
     ModuloCambioPasswordObligatorio.ocultarModal();
 }
 
-// Exponer globalmente
 window.ModuloCambioPasswordObligatorio = ModuloCambioPasswordObligatorio;
