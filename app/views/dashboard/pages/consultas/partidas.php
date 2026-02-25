@@ -244,9 +244,9 @@
             </div>
             
             <!-- Visor de imagen principal -->
-            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-300 overflow-hidden shadow-lg" style="max-height: 600px; min-height: 450px;">
-                <div class="w-full h-full flex items-center justify-center relative" id="imageViewerContainer">
-                    <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="max-w-full max-h-full object-contain shadow-xl" />
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-300 overflow-auto shadow-lg" style="max-height: 600px; min-height: 450px;">
+                <div class="w-full h-full flex items-center justify-center relative p-4" id="imageViewerContainer">
+                    <img id="imagenViewer" src="" alt="Documento" style="display: none; transition: transform 0.2s ease;" class="shadow-xl" />
                     <div id="noImagen" class="flex flex-col items-center justify-center text-gray-400 py-16 px-8">
                         <i class="fas fa-image text-7xl mb-4 opacity-40"></i>
                         <span class="text-xl font-semibold">Seleccione una página para ver</span>
@@ -256,7 +256,7 @@
             </div>
             
             <!-- Miniatura de páginas (si hay múltiples) -->
-            <div id="thumbnailContainer" class="mt-4 flex gap-3 overflow-x-auto pb-2" style="display: none;">
+            <div id="thumbnailContainer" class="mt-4 flex gap-3 overflow-x-auto pb-3 px-1" style="display: none;">
                 <!-- Las miniaturas se generarán dinámicamente -->
             </div>
         </div>
