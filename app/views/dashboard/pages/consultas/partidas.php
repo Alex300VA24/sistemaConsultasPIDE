@@ -171,17 +171,18 @@
                                 <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Libro</span>
                                 <div id="libro" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
                             </div>
-                        
-                        <!-- Oficina -->
-                        <div id="containerOficina" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Oficina</span>
-                            <div id="oficina" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Dirección -->
-                        <div id="containerDireccion" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Dirección</span>
-                            <div id="direccion" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                            
+                            <!-- Oficina -->
+                            <div id="containerOficina" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; grid-column: span 2; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Oficina</span>
+                                <div id="oficina" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Dirección -->
+                            <div id="containerDireccion" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; grid-column: span 2; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Dirección</span>
+                                <div id="direccion" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
                         </div>
                     </div>
                 </div>
