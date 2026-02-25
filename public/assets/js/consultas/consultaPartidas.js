@@ -459,133 +459,64 @@ const ModuloPartidas = {
             </div>
         `;
 
-        if (tieneMuchosResultados) {
-            html += `
-                <div class="flex gap-4">
-                    <div class="w-64 flex-shrink-0">
-                        <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
-                            <div class="p-3 bg-gray-100 border-b border-gray-200">
-                                <h4 class="font-semibold text-gray-700">Resultados (${data.length})</h4>
-                                <p class="text-xs text-gray-500">Seleccione un registro</p>
-                            </div>
-                            <div class="overflow-y-auto max-h-96">
-            `;
-            
-            data.forEach((item, index) => {
-                const razonSocial = item.razon_social || '-';
-                const ruc = item.ruc || '-';
-                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
-                const badgeClass = estadoActivo === 'SÍ' ? 'bg-green-500' : 'bg-red-500';
-                
-                html += `
-                    <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
-                        class="w-full text-left p-3 hover:bg-violet-50 border-b border-gray-100 transition flex flex-col gap-1">
-                        <span class="font-medium text-gray-800 text-sm truncate">${razonSocial}</span>
-                        <span class="text-xs text-gray-500">${ruc}</span>
-                        <span class="px-2 py-0.5 ${badgeClass} text-white text-xs rounded w-fit">${estadoActivo === 'SÍ' ? 'ACTIVO' : 'NO ACTIVO'}</span>
-                    </button>
-                `;
-            });
+        // Estructura unificada: siempre mostrar tabla, con scroll si hay muchos registros
+        const containerClass = tieneMuchosResultados 
+            ? 'overflow-y-auto' 
+            : 'overflow-x-auto';
+        
+        const maxHeightClass = tieneMuchosResultados 
+            ? 'max-h-96' 
+            : '';
+
+        html += `
+            <div class="${containerClass} ${maxHeightClass}">
+                <table class="w-full border-collapse">
+                    <thead class="sticky top-0 z-10">
+                        <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+        `;
+
+        data.forEach((item, index) => {
+            const razonSocial = item.razon_social || '-';
+            const ruc = item.ruc || '-';
+            const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
+            const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
+            const departamento = item.departamento || '-';
+
+            const badgeActivo = estadoActivo === 'SÍ'
+                ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
+                : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
+
+            const badgeHabido = estadoHabido === 'SÍ'
+                ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
+                : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
 
             html += `
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-1 overflow-x-auto">
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-                            <p class="text-yellow-800 text-sm"><i class="fas fa-info-circle mr-2"></i>Seleccione un registro del sidebar para ver sus datos completos</p>
-                        </div>
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
-                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
+                    <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
+                    <td class="px-4 py-3">${badgeActivo}</td>
+                    <td class="px-4 py-3">${badgeHabido}</td>
+                    <td class="px-4 py-3 text-gray-600">${departamento}</td>
+                    <td class="px-4 py-3">
+                        <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
+                            class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md whitespace-nowrap">
+                            Seleccionar
+                        </button>
+                    </td>
+                </tr>
             `;
+        });
 
-            data.forEach((item, index) => {
-                const razonSocial = item.razon_social || '-';
-                const ruc = item.ruc || '-';
-                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
-                const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
-                const departamento = item.departamento || '-';
-
-                const badgeActivo = estadoActivo === 'SÍ'
-                    ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
-                    : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
-
-                const badgeHabido = estadoHabido === 'SÍ'
-                    ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
-                    : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
-
-                html += `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
-                        <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
-                        <td class="px-4 py-3">${badgeActivo}</td>
-                        <td class="px-4 py-3">${badgeHabido}</td>
-                        <td class="px-4 py-3 text-gray-600">${departamento}</td>
-                    </tr>
-                `;
-            });
-
-            html += '</tbody></table></div></div>';
-        } else {
-            html += `
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
-                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-            `;
-
-            data.forEach((item, index) => {
-                const razonSocial = item.razon_social || '-';
-                const ruc = item.ruc || '-';
-                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
-                const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
-                const departamento = item.departamento || '-';
-
-                const badgeActivo = estadoActivo === 'SÍ'
-                    ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
-                    : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
-
-                const badgeHabido = estadoHabido === 'SÍ'
-                    ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
-                    : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
-
-                html += `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
-                        <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
-                        <td class="px-4 py-3">${badgeActivo}</td>
-                        <td class="px-4 py-3">${badgeHabido}</td>
-                        <td class="px-4 py-3 text-gray-600">${departamento}</td>
-                        <td class="px-4 py-3">
-                            <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
-                                class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md">
-                                Seleccionar
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            html += '</tbody></table></div>';
-        }
+        html += '</tbody></table></div>';
 
         contenedor.innerHTML = html;
         contenedor.style.display = 'block';
@@ -1071,7 +1002,7 @@ const ModuloPartidas = {
                 (
                     (resultado.data.asientos && resultado.data.asientos.length > 0) ||
                     (resultado.data.imagenes && resultado.data.imagenes.length > 0) ||
-                    (resultado.data.datos_vehiculo && resultado.data.datos_vehiculo.length > 0)
+                    (resultado.data.datos_vehiculo && Object.keys(resultado.data.datos_vehiculo).length > 0)
                 )
             ) {
                 // Guardar en cache
@@ -1875,13 +1806,17 @@ const ModuloPartidas = {
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = "Foto de persona";
-            photoFrame.style.width = "350px";
-            photoFrame.style.height = "320px";
+            img.className = 'w-full h-full object-cover rounded-xl';
             photoFrame.appendChild(img);
+            
+            // Asegurar que el contenedor esté visible
+            photoFrame.classList.remove('hidden');
         } else {
-            photoFrame.innerHTML = '<div class="photo-placeholder"></div>';
-            photoFrame.style.width = "200px";
-            photoFrame.style.height = "200px";
+            const placeholder = document.createElement('div');
+            placeholder.className = 'w-full h-full flex items-center justify-center text-gray-400';
+            placeholder.innerHTML = '<div class="text-center"><i class="fas fa-user text-6xl mb-3"></i><p class="text-sm">Sin fotografía</p></div>';
+            photoFrame.appendChild(placeholder);
+            photoFrame.classList.remove('hidden');
         }
     },
 
@@ -1893,10 +1828,14 @@ const ModuloPartidas = {
 
         const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
         if (contenedor) {
+            // Usar clases de Tailwind para mostrar
+            contenedor.classList.remove('hidden');
             contenedor.style.display = '';
         } else {
-            const contenedorPadre = elemento ? elemento.closest('.info-item') : null;
+            // Si no hay contenedor específico, buscar el parent
+            const contenedorPadre = elemento ? elemento.closest('div') : null;
             if (contenedorPadre) {
+                contenedorPadre.classList.remove('hidden');
                 contenedorPadre.style.display = '';
             }
         }
@@ -1905,11 +1844,14 @@ const ModuloPartidas = {
     ocultarCampo(idCampo, idContenedor = null) {
         const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
         if (contenedor) {
+            // Usar clases de Tailwind para ocultar
+            contenedor.classList.add('hidden');
             contenedor.style.display = 'none';
         } else {
             const elemento = document.getElementById(idCampo);
-            const contenedorPadre = elemento ? elemento.closest('.info-item') : null;
+            const contenedorPadre = elemento ? elemento.closest('div') : null;
             if (contenedorPadre) {
+                contenedorPadre.classList.add('hidden');
                 contenedorPadre.style.display = 'none';
             }
         }
