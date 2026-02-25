@@ -134,12 +134,16 @@ const ModuloPartidas = {
         });
 
         // Cerrar modales al hacer clic fuera
-        document.querySelectorAll('.modal-partidas').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.cerrarModal(modal.id);
-                }
-            });
+        document.getElementById('modalBusquedaNatural')?.addEventListener('click', (e) => {
+            if (e.target.id === 'modalBusquedaNatural') {
+                this.cerrarModal('modalBusquedaNatural');
+            }
+        });
+
+        document.getElementById('modalBusquedaJuridica')?.addEventListener('click', (e) => {
+            if (e.target.id === 'modalBusquedaJuridica') {
+                this.cerrarModal('modalBusquedaJuridica');
+            }
         });
 
         // Botones de cierre de modales
@@ -153,9 +157,8 @@ const ModuloPartidas = {
         // Cerrar con Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-partidas:not(.hidden)').forEach(modal => {
-                    this.cerrarModal(modal.id);
-                });
+                this.cerrarModal('modalBusquedaNatural');
+                this.cerrarModal('modalBusquedaJuridica');
             }
         });
 
@@ -236,27 +239,31 @@ const ModuloPartidas = {
     // 📌 MODALES
     // ============================================
     abrirModalBusqueda() {
+        console.log('abriendo modal para tipo:', this.tipoPersonaActual);
         if (this.tipoPersonaActual === 'natural') {
             this.abrirModal('modalBusquedaNatural');
-        } else {
+        } else if (this.tipoPersonaActual === 'juridica') {
             this.abrirModal('modalBusquedaJuridica');
         }
     },
 
     abrirModal(modalId) {
+        console.log('abriendo modal:', modalId);
         const modal = document.getElementById(modalId);
         if (modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            console.log('modal encontrado, estableciendo display: flex');
+            modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            console.log('display actual:', modal.style.display);
+        } else {
+            console.error('modal no encontrado:', modalId);
         }
     },
 
     cerrarModal(modalId) {
         const modal = document.getElementById(modalId);
         if (modal) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            modal.style.display = 'none';
             document.body.style.overflow = '';
         }
     },
@@ -372,46 +379,55 @@ const ModuloPartidas = {
         const contenedor = document.getElementById('resultadosNatural');
 
         if (!data || data.length === 0) {
-            contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron datos en RENIEC</div>';
+            contenedor.innerHTML = `
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3">
+                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                    <span class="text-blue-800 font-medium">No se encontraron datos en RENIEC</span>
+                </div>
+            `;
             contenedor.style.display = 'block';
             return;
         }
 
         let html = `
-            <div style="margin-bottom: 15px; padding: 10px; background: #e8f5e9; border-radius: 5px;">
-                <strong>Datos obtenidos de RENIEC</strong>
+            <div class="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <strong class="text-emerald-800">Datos obtenidos de RENIEC</strong>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>DNI</th>
-                        <th>Nombres Completos</th>
-                        <th>Foto</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">DNI</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Nombres Completos</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Foto</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
         `;
 
         data.forEach((persona, index) => {
             const nombresCompletos = persona.nombres_completos ||
                 `${persona.nombres || ''} ${persona.apellido_paterno || ''} ${persona.apellido_materno || ''}`.trim();
 
-            let fotoHtml = '<div class="photo-placeholder"></div>';
+            let fotoHtml = `<div class="w-20 h-24 bg-gray-100 rounded flex items-center justify-center">
+                <i class="fas fa-user text-gray-400 text-2xl"></i>
+            </div>`;
 
             if (persona.foto) {
                 const fotoBase64 = persona.foto.startsWith('data:image')
                     ? persona.foto
                     : `data:image/jpeg;base64,${persona.foto}`;
-                fotoHtml = `<img src="${fotoBase64}" alt="Foto RENIEC" style="max-width: 80px; max-height: 100px;">`;
+                fotoHtml = `<img src="${fotoBase64}" alt="Foto RENIEC" class="w-20 h-24 object-cover rounded">`;
             }
             html += `
-                <tr>
-                    <td><strong>${persona.dni || '-'}</strong></td>
-                    <td>${nombresCompletos || 'N/A'}</td>
-                    <td style="text-align: center;"><div class="photo-box">${fotoHtml}</div></td>
-                    <td>
-                        <button class="btn-select" onclick="ModuloPartidas.seleccionarRegistro(${index})">
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3"><strong class="text-gray-800">${persona.dni || '-'}</strong></td>
+                    <td class="px-4 py-3 text-gray-700">${nombresCompletos || 'N/A'}</td>
+                    <td class="px-4 py-3 text-center">${fotoHtml}</td>
+                    <td class="px-4 py-3">
+                        <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
+                            class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md">
                             Seleccionar
                         </button>
                     </td>
@@ -419,7 +435,7 @@ const ModuloPartidas = {
             `;
         });
 
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         contenedor.innerHTML = html;
         contenedor.style.display = 'block';
     },
@@ -431,27 +447,33 @@ const ModuloPartidas = {
         const contenedor = document.getElementById('resultadosJuridica');
 
         if (!data || data.length === 0) {
-            contenedor.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No se encontraron datos en SUNAT</div>';
+            contenedor.innerHTML = `
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3">
+                    <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+                    <span class="text-blue-800 font-medium">No se encontraron datos en SUNAT</span>
+                </div>
+            `;
             contenedor.style.display = 'block';
             return;
         }
 
         let html = `
-            <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                <strong>${data.length} resultado(s) obtenido(s) de SUNAT</strong>
+            <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <strong class="text-blue-800">${data.length} resultado(s) obtenido(s) de SUNAT</strong>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>RUC</th>
-                        <th>Razón Social</th>
-                        <th>Estado</th>
-                        <th>Condición</th>
-                        <th>Departamento</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
         `;
 
         data.forEach((item, index) => {
@@ -462,22 +484,23 @@ const ModuloPartidas = {
             const departamento = item.departamento || '-';
 
             const badgeActivo = estadoActivo === 'SÍ'
-                ? '<span style="background: #4caf50; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">ACTIVO</span>'
-                : '<span style="background: #f44336; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">NO ACTIVO</span>';
+                ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
+                : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
 
             const badgeHabido = estadoHabido === 'SÍ'
-                ? '<span style="background: #2196f3; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">HABIDO</span>'
-                : '<span style="background: #ff9800; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">NO HABIDO</span>';
+                ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
+                : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
 
             html += `
-                <tr>
-                    <td><strong>${ruc}</strong></td>
-                    <td>${razonSocial}</td>
-                    <td>${badgeActivo}</td>
-                    <td>${badgeHabido}</td>
-                    <td>${departamento}</td>
-                    <td>
-                        <button class="btn-select" onclick="ModuloPartidas.seleccionarRegistro(${index})">
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
+                    <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
+                    <td class="px-4 py-3">${badgeActivo}</td>
+                    <td class="px-4 py-3">${badgeHabido}</td>
+                    <td class="px-4 py-3 text-gray-600">${departamento}</td>
+                    <td class="px-4 py-3">
+                        <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
+                            class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md">
                             Seleccionar
                         </button>
                     </td>
@@ -485,7 +508,7 @@ const ModuloPartidas = {
             `;
         });
 
-        html += '</tbody></table>';
+        html += '</tbody></table></div>';
         contenedor.innerHTML = html;
         contenedor.style.display = 'block';
     },
