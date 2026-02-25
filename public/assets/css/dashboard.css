@@ -539,3 +539,235 @@ body {
         padding: 25px 20px;
     }
 }
+
+
+/* ============================================
+   ESTILOS PARA LOADING OVERLAY Y SPINNERS
+   ============================================ */
+
+/* Loading Overlay para Partidas */
+.loading-detalle-partida {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    color: white;
+    animation: fadeIn 0.2s ease;
+}
+
+.loading-content {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px 60px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.loading-spinner-big {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top: 4px solid #8b5cf6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: white;
+}
+
+.loading-subtext {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
+/* Spinner pequeño para botones */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ESTILOS PARA GLASSMORPHISM
+   ============================================ */
+
+.glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================
+   ESTILOS PARA SECCIÓN DE USUARIO
+   ============================================ */
+
+.user-section {
+    padding: 20px;
+    margin: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #1e40af);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.user-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================
+   ESTILOS ADICIONALES PARA PARTIDAS
+   ============================================ */
+
+/* Asegurar que los contenedores de información se vean bien */
+#infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Estilos para los campos de información */
+.info-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.info-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Estilos para el visor de imágenes */
+#imageViewerContainer {
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#imagenViewer {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Estilos para miniaturas */
+#thumbnailContainer {
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 #e5e7eb;
+}
+
+#thumbnailContainer::-webkit-scrollbar {
+    height: 8px;
+}
+
+#thumbnailContainer::-webkit-scrollbar-track {
+    background: #e5e7eb;
+    border-radius: 4px;
+}
+
+#thumbnailContainer::-webkit-scrollbar-thumb {
+    background: #8b5cf6;
+    border-radius: 4px;
+}
+
+#thumbnailContainer::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+}
+
+/* ============================================
+   RESPONSIVE PARA PARTIDAS
+   ============================================ */
+
+@media (max-width: 768px) {
+    #infoGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .loading-content {
+        padding: 30px 40px;
+    }
+    
+    .loading-text {
+        font-size: 16px;
+    }
+    
+    .loading-subtext {
+        font-size: 13px;
+    }
+}

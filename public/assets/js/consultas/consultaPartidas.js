@@ -698,21 +698,21 @@ const ModuloPartidas = {
         const partidasPagina = this.partidasEncontradas.slice(inicio, fin);
 
         let html = `
-            <div class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6">
-                <div class="flex items-center justify-between mb-6">
+            <div class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.5); margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                     <div>
-                        <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                            <i class="fas fa-list text-violet-600"></i>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.5rem 0;">
+                            <i class="fas fa-list" style="color: #8b5cf6;"></i>
                             Partidas Registradas
                         </h3>
-                        <p class="text-sm text-gray-600 mt-1">Mostrando ${inicio + 1} - ${fin} de ${totalPartidas} partida(s)</p>
+                        <p style="font-size: 0.875rem; color: #6b7280; margin: 0;">Mostrando ${inicio + 1} - ${fin} de ${totalPartidas} partida(s)</p>
                     </div>
-                    ${totalPartidas > 1 ? '<div class="px-4 py-2 bg-violet-100 text-violet-700 rounded-lg font-semibold text-sm">' + totalPartidas + ' resultados</div>' : ''}
+                    ${totalPartidas > 1 ? '<div style="padding: 0.5rem 1rem; background: #f3e8ff; color: #7c3aed; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;">' + totalPartidas + ' resultados</div>' : ''}
                 </div>
                 
                 ${totalPaginas > 1 ? this.generarControlesPaginacion(totalPaginas) : ''}
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
         `;
 
         partidasPagina.forEach((partida, indexEnPagina) => {
@@ -726,59 +726,88 @@ const ModuloPartidas = {
             const esPrimeraPagina = this.paginaActual === 1 && indexEnPagina === 0;
 
             const estadoBadge = esActiva 
-                ? '<span class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-semibold"><i class="fas fa-check-circle"></i> ' + estado + '</span>'
-                : '<span class="inline-flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 rounded-md text-xs font-semibold"><i class="fas fa-times-circle"></i> ' + estado + '</span>';
+                ? '<span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #d1fae5; color: #065f46; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;"><i class="fas fa-check-circle"></i> ' + estado + '</span>'
+                : '<span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #fee2e2; color: #991b1b; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;"><i class="fas fa-times-circle"></i> ' + estado + '</span>';
 
             html += `
-                <label class="cursor-pointer group">
+                <label style="cursor: pointer; display: block;">
                     <input type="radio" name="partidaSeleccionada" value="${indexGlobal}" 
                            ${esPrimeraPagina ? 'checked' : ''}
                            onchange="ModuloPartidas.cambiarPartida(${indexGlobal})"
-                           class="peer sr-only">
-                    <div class="h-full p-4 bg-white/80 rounded-xl border-2 border-gray-200 peer-checked:border-violet-500 peer-checked:bg-violet-50 hover:border-violet-300 hover:shadow-lg transition-all duration-200">
-                        <div class="flex items-start justify-between mb-3">
-                            <div class="flex items-center gap-2 text-violet-600 font-bold text-lg">
+                           style="position: absolute; opacity: 0; width: 0; height: 0;">
+                    <div class="partida-card-${indexGlobal}" style="height: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.8); border-radius: 0.75rem; border: 2px solid ${esPrimeraPagina ? '#8b5cf6' : '#e5e7eb'}; ${esPrimeraPagina ? 'background: #f5f3ff;' : ''} transition: all 0.2s ease;">
+                        <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; color: #8b5cf6; font-weight: 700; font-size: 1.125rem;">
                                 <i class="fas fa-file-contract"></i>
-                                <span class="text-gray-800">${partidaNumero}</span>
-                            </div>
-                            <div class="w-5 h-5 rounded-full border-2 border-gray-300 peer-checked:border-violet-500 peer-checked:bg-violet-500 flex items-center justify-center transition-all">
-                                <i class="fas fa-check text-white text-xs opacity-0 peer-checked:opacity-100"></i>
+                                <span style="color: #1f2937;">${partidaNumero}</span>
                             </div>
                         </div>
                         
-                        <div class="space-y-2 text-sm">
-                            <div class="flex items-center gap-2 text-gray-600">
-                                <i class="fas fa-book text-violet-500 w-4"></i>
-                                <span class="font-medium">Libro:</span>
-                                <span class="text-gray-800">${libro}</span>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.875rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; color: #6b7280;">
+                                <i class="fas fa-book" style="color: #8b5cf6; width: 1rem;"></i>
+                                <span style="font-weight: 500;">Libro:</span>
+                                <span style="color: #1f2937;">${libro}</span>
                             </div>
                             
-                            <div class="flex items-start gap-2 text-gray-600">
-                                <i class="fas fa-building text-violet-500 w-4 mt-0.5"></i>
-                                <div class="flex-1">
-                                    <span class="font-medium block">Oficina:</span>
-                                    <span class="text-gray-700 text-xs leading-tight">${oficina}</span>
+                            <div style="display: flex; align-items: start; gap: 0.5rem; color: #6b7280;">
+                                <i class="fas fa-building" style="color: #8b5cf6; width: 1rem; margin-top: 0.125rem;"></i>
+                                <div style="flex: 1;">
+                                    <span style="font-weight: 500; display: block;">Oficina:</span>
+                                    <span style="color: #374151; font-size: 0.75rem; line-height: 1.25;">${oficina}</span>
                                 </div>
                             </div>
                             
-                            <div class="pt-2 border-t border-gray-200">
+                            <div style="padding-top: 0.5rem; border-top: 1px solid #e5e7eb;">
                                 ${estadoBadge}
                             </div>
                         </div>
                     </div>
                 </label>
+                <script>
+                    (function() {
+                        const radio = document.querySelector('input[name="partidaSeleccionada"][value="${indexGlobal}"]');
+                        const card = document.querySelector('.partida-card-${indexGlobal}');
+                        if (radio && card) {
+                            radio.addEventListener('change', function() {
+                                document.querySelectorAll('[class^="partida-card-"]').forEach(c => {
+                                    c.style.border = '2px solid #e5e7eb';
+                                    c.style.background = 'rgba(255, 255, 255, 0.8)';
+                                });
+                                if (this.checked) {
+                                    card.style.border = '2px solid #8b5cf6';
+                                    card.style.background = '#f5f3ff';
+                                }
+                            });
+                            card.addEventListener('mouseenter', function() {
+                                if (!radio.checked) {
+                                    this.style.border = '2px solid #c4b5fd';
+                                    this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
+                                }
+                            });
+                            card.addEventListener('mouseleave', function() {
+                                if (!radio.checked) {
+                                    this.style.border = '2px solid #e5e7eb';
+                                    this.style.boxShadow = 'none';
+                                }
+                            });
+                        }
+                    })();
+                </script>
             `;
         });
 
         html += `
                 </div>
                 
-                ${totalPaginas > 1 ? '<div class="mt-6">' + this.generarControlesPaginacion(totalPaginas) + '</div>' : ''}
+                ${totalPaginas > 1 ? '<div style="margin-top: 1.5rem;">' + this.generarControlesPaginacion(totalPaginas) + '</div>' : ''}
             </div>
         `;
 
         selectorPartidas.innerHTML = html;
         selectorPartidas.style.display = 'block';
+        
+        console.log(`✅ Selector de partidas mostrado con ${partidasPagina.length} partida(s)`);
     },
 
     // ============================================
@@ -793,30 +822,38 @@ const ModuloPartidas = {
             inicio = Math.max(1, fin - maxBotones + 1);
         }
 
-        let html = '<div class="flex items-center justify-center gap-2 flex-wrap">';
+        let html = '<div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">';
 
         // Botón Anterior
+        const btnAnteriorDisabled = this.paginaActual === 1;
         html += `
-            <button class="px-4 py-2 rounded-lg font-medium transition-all ${this.paginaActual === 1 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-violet-50 hover:text-violet-600 border border-gray-300'}" 
+            <button style="padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.3s; ${btnAnteriorDisabled ? 'background: #e5e7eb; color: #9ca3af; cursor: not-allowed;' : 'background: white; color: #374151; border: 1px solid #d1d5db;'}" 
                     onclick="ModuloPartidas.cambiarPagina(${this.paginaActual - 1})"
-                    ${this.paginaActual === 1 ? 'disabled' : ''}>
-                <i class="fas fa-chevron-left mr-1"></i> Anterior
+                    ${btnAnteriorDisabled ? 'disabled' : ''}
+                    onmouseover="if(!this.disabled) { this.style.background='#f5f3ff'; this.style.color='#7c3aed'; }"
+                    onmouseout="if(!this.disabled) { this.style.background='white'; this.style.color='#374151'; }">
+                <i class="fas fa-chevron-left" style="margin-right: 0.25rem;"></i> Anterior
             </button>
         `;
 
         // Primera página
         if (inicio > 1) {
-            html += `<button class="w-10 h-10 rounded-lg font-semibold transition-all bg-white text-gray-700 hover:bg-violet-50 hover:text-violet-600 border border-gray-300" onclick="ModuloPartidas.cambiarPagina(1)">1</button>`;
+            html += `<button style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.3s; background: white; color: #374151; border: 1px solid #d1d5db;" 
+                onclick="ModuloPartidas.cambiarPagina(1)"
+                onmouseover="this.style.background='#f5f3ff'; this.style.color='#7c3aed';"
+                onmouseout="this.style.background='white'; this.style.color='#374151';">1</button>`;
             if (inicio > 2) {
-                html += '<span class="px-2 text-gray-400">...</span>';
+                html += '<span style="padding: 0 0.5rem; color: #9ca3af;">...</span>';
             }
         }
 
         // Páginas numeradas
         for (let i = inicio; i <= fin; i++) {
+            const esActual = i === this.paginaActual;
             html += `
-                <button class="w-10 h-10 rounded-lg font-semibold transition-all ${i === this.paginaActual ? 'bg-gradient-to-r from-violet-500 to-violet-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-violet-50 hover:text-violet-600 border border-gray-300'}"
-                        onclick="ModuloPartidas.cambiarPagina(${i})">
+                <button style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.3s; ${esActual ? 'background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.4);' : 'background: white; color: #374151; border: 1px solid #d1d5db;'}"
+                        onclick="ModuloPartidas.cambiarPagina(${i})"
+                        ${!esActual ? 'onmouseover="this.style.background=\'#f5f3ff\'; this.style.color=\'#7c3aed\';" onmouseout="this.style.background=\'white\'; this.style.color=\'#374151\';"' : ''}>
                     ${i}
                 </button>
             `;
@@ -825,17 +862,23 @@ const ModuloPartidas = {
         // Última página
         if (fin < totalPaginas) {
             if (fin < totalPaginas - 1) {
-                html += '<span class="px-2 text-gray-400">...</span>';
+                html += '<span style="padding: 0 0.5rem; color: #9ca3af;">...</span>';
             }
-            html += `<button class="w-10 h-10 rounded-lg font-semibold transition-all bg-white text-gray-700 hover:bg-violet-50 hover:text-violet-600 border border-gray-300" onclick="ModuloPartidas.cambiarPagina(${totalPaginas})">${totalPaginas}</button>`;
+            html += `<button style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.3s; background: white; color: #374151; border: 1px solid #d1d5db;" 
+                onclick="ModuloPartidas.cambiarPagina(${totalPaginas})"
+                onmouseover="this.style.background='#f5f3ff'; this.style.color='#7c3aed';"
+                onmouseout="this.style.background='white'; this.style.color='#374151';">${totalPaginas}</button>`;
         }
 
         // Botón Siguiente
+        const btnSiguienteDisabled = this.paginaActual === totalPaginas;
         html += `
-            <button class="px-4 py-2 rounded-lg font-medium transition-all ${this.paginaActual === totalPaginas ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-violet-50 hover:text-violet-600 border border-gray-300'}"
+            <button style="padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 500; transition: all 0.3s; ${btnSiguienteDisabled ? 'background: #e5e7eb; color: #9ca3af; cursor: not-allowed;' : 'background: white; color: #374151; border: 1px solid #d1d5db;'}"
                     onclick="ModuloPartidas.cambiarPagina(${this.paginaActual + 1})"
-                    ${this.paginaActual === totalPaginas ? 'disabled' : ''}>
-                Siguiente <i class="fas fa-chevron-right ml-1"></i>
+                    ${btnSiguienteDisabled ? 'disabled' : ''}
+                    onmouseover="if(!this.disabled) { this.style.background='#f5f3ff'; this.style.color='#7c3aed'; }"
+                    onmouseout="if(!this.disabled) { this.style.background='white'; this.style.color='#374151'; }">
+                Siguiente <i class="fas fa-chevron-right" style="margin-left: 0.25rem;"></i>
             </button>
         `;
 
@@ -1459,9 +1502,18 @@ const ModuloPartidas = {
     // MOSTRAR DETALLE DE PARTIDA
     // ============================================
     mostrarDetallePartida(registro) {
+        console.log('📋 Mostrando detalle de partida:', registro);
+        
+        // Asegurar que resultsSection e infoGrid estén visibles
+        const resultsSection = document.getElementById('resultsSection');
+        const infoGrid = document.getElementById('infoGrid');
+        
+        if (resultsSection) resultsSection.style.display = 'block';
+        if (infoGrid) infoGrid.style.display = 'grid';
+
         // Resetear visibilidad de todos los contenedores
         const contenedores = ['containerNombres', 'containerApellidoPaterno',
-            'containerApellidoMaterno', 'containerRazonSocial', 'containerLibro',
+            'containerApellidoMaterno', 'containerRazonSocial',
             'containerNroPartida', 'containerNroPlaca', 'containerEstado',
             'containerZona', 'containerOficina', 'containerDireccion'];
         contenedores.forEach(id => {
@@ -1470,42 +1522,31 @@ const ModuloPartidas = {
         });
 
         const photoSection = document.getElementById('photoSection');
-        const resultsLayout = document.querySelector('.results-layout');
+        
         if (this.tipoPersonaActual === 'natural') {
             if (photoSection) photoSection.style.display = '';
-            if (resultsLayout) resultsLayout.style.opacity = '1';
-            this.mostrarCampo('libro', registro.libro || '-');
-            this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada.nombres || '-', 'containerNombres');
-            this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada.apellido_paterno || '-', 'containerApellidoPaterno');
-            this.mostrarCampo('apellidoMaterno', registro.apMaterno || this.personaSeleccionada.apellido_materno || '-', 'containerApellidoMaterno');
-
+            this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada?.nombres || '-', 'containerNombres');
+            this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada?.apellido_paterno || '-', 'containerApellidoPaterno');
+            this.mostrarCampo('apellidoMaterno', registro.apMaterno || this.personaSeleccionada?.apellido_materno || '-', 'containerApellidoMaterno');
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
-
             this.mostrarFotoPersona();
         } else if (this.tipoPersonaActual === 'partida') {
             if (photoSection) photoSection.style.display = 'none';
-            if (resultsLayout) resultsLayout.style.opacity = '0.8';
-
             // OCULTAR los campos específicos que no se usan en LASIRSARP
             this.ocultarCampo('nombres', 'containerNombres');
             this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
             this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
             this.ocultarCampo('tipoDoc');
             this.ocultarCampo('nroDoc');
-            this.ocultarCampo('libro', 'containerLibro');
             this.ocultarCampo('nroPartida', 'containerNroPartida');
             this.ocultarCampo('nroPlaca', 'containerNroPlaca');
             this.ocultarCampo('estado', 'containerEstado');
             this.ocultarCampo('zona', 'containerZona');
             this.ocultarCampo('oficina', 'containerOficina');
             this.ocultarCampo('direccion', 'containerDireccion');
-
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
         } else {
             if (photoSection) photoSection.style.display = 'none';
-            if (resultsLayout) resultsLayout.style.opacity = '0.8';
-            this.mostrarCampo('libro', registro.libro || '-');
-
             const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
             if (tieneNombres) {
                 this.mostrarCampo('nombres', registro.nombre || '-', 'containerNombres');
@@ -1516,16 +1557,14 @@ const ModuloPartidas = {
                 this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
                 this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
             }
-
-            const razonSocial = registro.razon_social || this.personaSeleccionada.razon_social || '-';
+            const razonSocial = registro.razon_social || this.personaSeleccionada?.razon_social || '-';
             this.mostrarCampo('campoRazonSocial', razonSocial, 'containerRazonSocial');
         }
-        // Campos comunes
 
-        // Solo mostrar estos campos si NO es tipo partida (LASIRSARP)
+        // Campos comunes - Solo mostrar si NO es tipo partida (LASIRSARP)
         if (this.tipoPersonaActual !== 'partida') {
             this.mostrarCampo('tipoDoc', registro.tipo_documento || (this.tipoPersonaActual === 'natural' ? 'DNI' : 'RUC'));
-            this.mostrarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada.dni : this.tipoPersonaActual === 'partida' ? '-' : this.personaSeleccionada.ruc) || '-');
+            this.mostrarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada?.dni : this.personaSeleccionada?.ruc) || '-');
             this.mostrarCampo('nroPartida', registro.numero_partida || '-', 'containerNroPartida');
             this.mostrarCampo('nroPlaca', registro.numero_placa || '-', 'containerNroPlaca');
             this.mostrarCampo('estado', registro.estado || '-', 'containerEstado');
@@ -1535,16 +1574,26 @@ const ModuloPartidas = {
         }
 
         // Secciones adicionales
+        const imagenesSection = document.getElementById('imagenesSection');
+        const vehiculoSection = document.getElementById('vehiculoSection');
+        
         if (registro.imagenes && registro.imagenes.length > 0) {
+            console.log(`✅ Mostrando ${registro.imagenes.length} imagen(es)`);
             this.mostrarImagenes(registro.imagenes);
         } else {
-            document.getElementById('imagenesSection').style.display = 'none';
+            console.log('⚠️ No hay imágenes para mostrar');
+            if (imagenesSection) imagenesSection.style.display = 'none';
         }
+        
         if (registro.datos_vehiculo && Object.keys(registro.datos_vehiculo).length > 0) {
+            console.log('✅ Mostrando datos vehiculares');
             this.mostrarDatosVehiculo(registro.datos_vehiculo);
         } else {
-            document.getElementById('vehiculoSection').style.display = 'none';
+            console.log('⚠️ No hay datos vehiculares');
+            if (vehiculoSection) vehiculoSection.style.display = 'none';
         }
+        
+        console.log('✅ Detalle de partida mostrado correctamente');
     },
 
     mostrarFotoPersona() {
