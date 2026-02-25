@@ -155,16 +155,15 @@ const ModuloDNI = {
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = 'Foto del DNI';
-
-            // Restablecer tamaño del contenedor
-            photoContainer.style.width = '350px';
-            photoContainer.style.height = '450px';
+            img.className = 'w-full h-full object-cover';
             photoContainer.appendChild(img);
         } else {
-            // Mostrar placeholder si no hay foto
-            photoContainer.innerHTML = '<div class="photo-placeholder"></div>';
-            photoContainer.style.width = '200px';
-            photoContainer.style.height = '200px';
+            photoContainer.innerHTML = `
+                <div class="text-center text-gray-400">
+                    <i class="fas fa-user text-6xl mb-3"></i>
+                    <p class="text-sm">Sin fotografía</p>
+                </div>
+            `;
         }
     },
 
@@ -172,16 +171,19 @@ const ModuloDNI = {
     // 🧹 LIMPIAR RESULTADOS
     // ============================================
     limpiarResultados() {
-        // Limpiar campos de texto
         Object.values(this.elementos.resultados).forEach(elemento => {
-            elemento.textContent = '';
+            if (elemento.textContent !== undefined) {
+                elemento.textContent = '';
+            }
         });
 
-        // Limpiar foto
         const photoContainer = this.elementos.photoContainer;
-        photoContainer.innerHTML = '<div class="photo-placeholder"></div>';
-        photoContainer.style.width = '200px';
-        photoContainer.style.height = '200px';
+        photoContainer.innerHTML = `
+            <div class="text-center text-gray-400">
+                <i class="fas fa-user text-6xl mb-3"></i>
+                <p class="text-sm">Sin fotografía</p>
+            </div>
+        `;
     },
 
     // ============================================
