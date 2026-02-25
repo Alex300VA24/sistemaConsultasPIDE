@@ -79,99 +79,98 @@
     </div>
 
     <!-- Sección de Resultados -->
-    <div id="resultsSection" style="display: none;" class="space-y-6">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Foto -->
-            <div class="lg:col-span-1" id="photoSection">
-                <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-camera text-violet-600 mr-2"></i>
-                        Fotografía
-                    </h3>
-                    <div class="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
-                        <img id="personaFoto" src="" alt="Foto" style="display: none;" class="w-full h-full object-cover">
-                        <div id="noFoto" class="text-center text-gray-400">
-                            <i class="fas fa-user text-6xl mb-3"></i>
-                            <p class="text-sm">Sin fotografía</p>
+    <div id="resultsSection" style="display: none;">
+        <!-- Contenedor Principal: Foto + Información -->
+        <div class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.5); margin-bottom: 1.5rem;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem;">
+                    <!-- Foto a la izquierda -->
+                    <div id="photoSection" style="display: none;">
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-camera" style="color: #8b5cf6;"></i>
+                            Fotografía
+                        </h3>
+                        <div id="fotoContainer" style="aspect-ratio: 3/4; background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb); border-radius: 0.75rem; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; min-height: 400px; max-height: 500px;">
+                            <div style="text-align: center; color: #9ca3af;">
+                                <i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block; opacity: 0.5;"></i>
+                                <p style="font-size: 0.875rem; margin: 0;">Sin fotografía</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Información -->
-            <div class="lg:col-span-2">
-                <div class="glass rounded-2xl p-6 shadow-lg border border-white/50">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-info-circle text-violet-600 mr-2"></i>
-                        Información del Registro
-                    </h3>
-                    
-                    <div id="infoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Nombres -->
-                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nombres</span>
-                            <div id="nombres" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
+                    <!-- Información a la derecha -->
+                    <div>
+                        <h3 style="font-size: 1.125rem; font-weight: 600; color: #1f2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-info-circle" style="color: #8b5cf6;"></i>
+                            Información del Registro
+                        </h3>
                         
-                        <!-- Apellido Paterno -->
-                        <div id="containerApellidoPaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Paterno</span>
-                            <div id="apellidoPaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Apellido Materno -->
-                        <div id="containerApellidoMaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Materno</span>
-                            <div id="apellidoMaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Tipo de Documento -->
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipo de Documento</span>
-                            <div id="tipoDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Nro. Documento -->
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Documento</span>
-                            <div id="nroDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Razón Social -->
-                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Razón Social</span>
-                            <div id="campoRazonSocial" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Nro. Partida -->
-                        <div id="containerNroPartida" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Partida</span>
-                            <div id="nroPartida" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Nro. Placa -->
-                        <div id="containerNroPlaca" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Placa</span>
-                            <div id="nroPlaca" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Estado -->
-                        <div id="containerEstado" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Estado</span>
-                            <div id="estado" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Zona -->
-                        <div id="containerZona" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Zona</span>
-                            <div id="zona" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <!-- Libro -->
-                        <div id="containerLibro" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
-                            <div id="libro" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
+                        <div id="infoGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <!-- Nombres -->
+                            <div id="containerNombres" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; grid-column: span 2; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Nombres</span>
+                                <div id="nombres" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Apellido Paterno -->
+                            <div id="containerApellidoPaterno" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Apellido Paterno</span>
+                                <div id="apellidoPaterno" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Apellido Materno -->
+                            <div id="containerApellidoMaterno" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Apellido Materno</span>
+                                <div id="apellidoMaterno" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Tipo de Documento -->
+                            <div style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Tipo de Documento</span>
+                                <div id="tipoDoc" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Nro. Documento -->
+                            <div style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Nro. Documento</span>
+                                <div id="nroDoc" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Razón Social -->
+                            <div id="containerRazonSocial" style="display: none; background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; grid-column: span 2; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Razón Social</span>
+                                <div id="campoRazonSocial" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Nro. Partida -->
+                            <div id="containerNroPartida" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Nro. Partida</span>
+                                <div id="nroPartida" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Nro. Placa -->
+                            <div id="containerNroPlaca" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Nro. Placa</span>
+                                <div id="nroPlaca" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Estado -->
+                            <div id="containerEstado" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Estado</span>
+                                <div id="estado" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Zona -->
+                            <div id="containerZona" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Zona</span>
+                                <div id="zona" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
+                            
+                            <!-- Libro -->
+                            <div id="containerLibro" style="background: rgba(255, 255, 255, 0.6); border-radius: 0.75rem; padding: 1rem; border: 1px solid #e5e7eb; transition: all 0.2s ease;">
+                                <span style="font-size: 0.75rem; font-weight: 500; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em;">Libro</span>
+                                <div id="libro" style="margin-top: 0.25rem; font-size: 1.125rem; font-weight: 600; color: #1f2937;">-</div>
+                            </div>
                         
                         <!-- Oficina -->
                         <div id="containerOficina" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
@@ -190,7 +189,7 @@
         </div>
 
         <!-- Asientos Registrales -->
-        <div id="asientosSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+        <div id="asientosSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
                 <i class="fas fa-file-invoice text-violet-600 mr-2"></i>
                 Asientos Registrales
@@ -199,7 +198,7 @@
         </div>
 
         <!-- Imágenes de Documentos - Viewer Profesional -->
-        <div id="imagenesSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
+        <div id="imagenesSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
                 <i class="fas fa-file-image text-violet-600 mr-2"></i>
                 Visor de Documentos
