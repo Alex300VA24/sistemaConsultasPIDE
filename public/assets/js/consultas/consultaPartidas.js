@@ -769,16 +769,21 @@ const ModuloPartidas = {
                         const radio = document.querySelector('input[name="partidaSeleccionada"][value="${indexGlobal}"]');
                         const card = document.querySelector('.partida-card-${indexGlobal}');
                         if (radio && card) {
+                            // Actualizar estilos cuando cambia el radio
                             radio.addEventListener('change', function() {
+                                // Resetear todos los cards
                                 document.querySelectorAll('[class^="partida-card-"]').forEach(c => {
                                     c.style.border = '2px solid #e5e7eb';
                                     c.style.background = 'rgba(255, 255, 255, 0.8)';
                                 });
+                                // Aplicar estilo al seleccionado
                                 if (this.checked) {
                                     card.style.border = '2px solid #8b5cf6';
                                     card.style.background = '#f5f3ff';
                                 }
                             });
+                            
+                            // Efectos hover
                             card.addEventListener('mouseenter', function() {
                                 if (!radio.checked) {
                                     this.style.border = '2px solid #c4b5fd';
@@ -789,6 +794,16 @@ const ModuloPartidas = {
                                 if (!radio.checked) {
                                     this.style.border = '2px solid #e5e7eb';
                                     this.style.boxShadow = 'none';
+                                }
+                            });
+                            
+                            // Click en el card selecciona el radio
+                            card.addEventListener('click', function() {
+                                radio.checked = true;
+                                radio.dispatchEvent(new Event('change'));
+                                // Llamar a la función de cambio de partida
+                                if (typeof ModuloPartidas !== 'undefined' && typeof ModuloPartidas.cambiarPartida === 'function') {
+                                    ModuloPartidas.cambiarPartida(${indexGlobal});
                                 }
                             });
                         }
@@ -1604,13 +1619,10 @@ const ModuloPartidas = {
         }
 
         // Buscar el contenedor de la foto
-        let fotoContainer = photoSection.querySelector('.aspect-\\[3\\/4\\]');
+        let fotoContainer = document.getElementById('fotoContainer');
         if (!fotoContainer) {
-            // Si no existe, crearlo
-            fotoContainer = document.createElement('div');
-            fotoContainer.className = 'aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden shadow-inner flex items-center justify-center';
-            fotoContainer.style.cssText = 'aspect-ratio: 3/4; background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb); border-radius: 0.75rem; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; min-height: 400px;';
-            photoSection.appendChild(fotoContainer);
+            console.error('❌ fotoContainer no encontrado');
+            return;
         }
 
         // Limpiar contenido anterior
@@ -1625,21 +1637,20 @@ const ModuloPartidas = {
             img.src = fotoBase64;
             img.alt = "Foto de persona";
             img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
-            img.className = 'w-full h-full object-cover';
             
             fotoContainer.appendChild(img);
-            photoSection.style.display = '';
+            photoSection.style.display = 'block';
             
             console.log('✅ Foto de persona mostrada');
         } else {
             const placeholder = document.createElement('div');
-            placeholder.style.cssText = 'text-align: center; color: #9ca3af;';
+            placeholder.style.cssText = 'text-align: center; color: #9ca3af; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;';
             placeholder.innerHTML = `
                 <i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block; opacity: 0.5;"></i>
                 <p style="font-size: 0.875rem; margin: 0;">Sin fotografía</p>
             `;
             fotoContainer.appendChild(placeholder);
-            photoSection.style.display = '';
+            photoSection.style.display = 'block';
             
             console.log('⚠️ No hay foto disponible, mostrando placeholder');
         }
