@@ -108,77 +108,82 @@
                     
                     <div id="infoGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Los campos se generarán dinámicamente -->
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
                             <div id="libro" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nombres</span>
                             <div id="nombres" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div id="containerApellidoPaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerApellidoPaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Paterno</span>
                             <div id="apellidoPaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div id="containerApellidoMaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerApellidoMaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Materno</span>
                             <div id="apellidoMaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
                         
-                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Razón Social</span>
                             <div id="campoRazonSocial" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipo de Documento</span>
                             <div id="tipoDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Documento</span>
                             <div id="nroDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerNroPartida" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Partida</span>
                             <div id="nroPartida" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerNroPlaca" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Placa</span>
                             <div id="nroPlaca" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerEstado" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Estado</span>
                             <div id="estado" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
+                        <div id="containerZona" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Zona</span>
                             <div id="zona" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                        <div id="containerOficina" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Oficina</span>
                             <div id="oficina" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3">
+                        <div id="containerDireccion" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Dirección</span>
                             <div id="direccion" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
+                        
+                        <div id="containerLibro" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
+                            <div id="libro2" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                     </div>
                 </div>
@@ -202,38 +207,38 @@
             </h3>
             
             <div class="space-y-4">
-                <div class="flex items-center gap-3">
-                    <label for="selectImagenes" class="text-sm font-medium text-gray-700">Seleccionar página:</label>
-                    <select id="selectImagenes" class="flex-1 max-w-xs px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white/80"></select>
+                <div class="flex items-center gap-3 bg-white/60 rounded-xl p-4 border border-gray-200">
+                    <label for="selectImagenes" class="text-sm font-medium text-gray-700 whitespace-nowrap">Seleccionar página:</label>
+                    <select id="selectImagenes" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white"></select>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 p-4 bg-white/60 rounded-xl border border-gray-200">
-                    <button type="button" id="btnZoomOut" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    <button type="button" id="btnZoomOut" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Reducir zoom">
                         <i class="fas fa-minus"></i>
                     </button>
-                    <button type="button" id="btnZoomReset" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    <button type="button" id="btnZoomReset" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Restaurar zoom">
                         <i class="fas fa-undo"></i>
                     </button>
-                    <button type="button" id="btnZoomIn" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                    <button type="button" id="btnZoomIn" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Aumentar zoom">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <span id="zoomLabel" class="px-3 font-semibold text-gray-700">100%</span>
-                    <button type="button" id="btnVerImagen" class="ml-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center gap-2">
+                    <span id="zoomLabel" class="px-3 py-2 font-semibold text-gray-700 bg-gray-100 rounded-lg rounded-lg">100%</span>
+                    <button type="button" id="btnVerImagen" class="ml-auto px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 font-medium shadow-md">
                         <i class="fas fa-external-link-alt"></i>
                         <span>Ver</span>
                     </button>
-                    <button type="button" id="btnDescargar" class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition flex items-center gap-2">
+                    <button type="button" id="btnDescargar" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 flex items-center gap-2 font-medium shadow-md">
                         <i class="fas fa-download"></i>
                         <span>Descargar</span>
                     </button>
                 </div>
 
-                <div class="border-2 border-gray-300 rounded-xl overflow-auto bg-gray-50" style="max-height: 600px; min-height: 400px;">
-                    <div class="inline-block min-w-full text-center">
-                        <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="inline-block max-w-full h-auto shadow-lg rounded">
-                        <div id="noImagen" class="flex flex-col items-center justify-center py-20 text-gray-400">
-                            <i class="fas fa-image text-6xl mb-3"></i>
-                            <span>Seleccione una página</span>
+                <div class="border-2 border-gray-300 rounded-xl overflow-auto bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center" style="max-height: 600px; min-height: 400px;">
+                    <div class="inline-block text-center">
+                        <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="max-w-full h-auto shadow-lg rounded">
+                        <div id="noImagen" class="flex flex-col items-center justify-center py-20 px-10 text-gray-400">
+                            <i class="fas fa-image text-6xl mb-4 opacity-50"></i>
+                            <span class="text-lg font-medium">Seleccione una página</span>
                         </div>
                     </div>
                 </div>
