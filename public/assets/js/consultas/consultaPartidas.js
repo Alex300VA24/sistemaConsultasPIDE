@@ -459,19 +459,15 @@ const ModuloPartidas = {
             </div>
         `;
 
-        // Estructura unificada: siempre mostrar tabla, con scroll si hay muchos registros
-        const containerClass = tieneMuchosResultados 
-            ? 'overflow-y-auto' 
-            : 'overflow-x-auto';
-        
-        const maxHeightClass = tieneMuchosResultados 
-            ? 'max-h-96' 
-            : '';
+        // Contenedor con altura máxima y scroll vertical cuando hay muchos registros
+        const tableContainerStyle = tieneMuchosResultados
+            ? 'style="max-height: 400px; overflow-y: auto; overflow-x: auto;"'
+            : 'style="overflow-x: auto;"';
 
         html += `
-            <div class="${containerClass} ${maxHeightClass}">
+            <div ${tableContainerStyle}>
                 <table class="w-full border-collapse">
-                    <thead class="sticky top-0 z-10">
+                    <thead style="position: sticky; top: 0; z-index: 10;">
                         <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
                             <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
