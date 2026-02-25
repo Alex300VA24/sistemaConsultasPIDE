@@ -1703,7 +1703,9 @@ const ModuloPartidas = {
     mostrarDetallePartida(registro) {
         // Resetear visibilidad de todos los contenedores
         const contenedores = ['containerNombres', 'containerApellidoPaterno',
-            'containerApellidoMaterno', 'containerRazonSocial'];
+            'containerApellidoMaterno', 'containerRazonSocial', 'containerLibro',
+            'containerNroPartida', 'containerNroPlaca', 'containerEstado',
+            'containerZona', 'containerOficina', 'containerDireccion'];
         contenedores.forEach(id => {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = '';
@@ -1712,8 +1714,8 @@ const ModuloPartidas = {
         const photoSection = document.getElementById('photoSection');
         const resultsLayout = document.querySelector('.results-layout');
         if (this.tipoPersonaActual === 'natural') {
-            if (photoSection) photoSection.classList.remove('hidden');
-            if (resultsLayout) resultsLayout.classList.remove('no-photo');
+            if (photoSection) photoSection.style.display = '';
+            if (resultsLayout) resultsLayout.style.opacity = '1';
             this.mostrarCampo('libro', registro.libro || '-');
             this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada.nombres || '-', 'containerNombres');
             this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada.apellido_paterno || '-', 'containerApellidoPaterno');
@@ -1723,15 +1725,15 @@ const ModuloPartidas = {
 
             this.mostrarFotoPersona();
         } else if (this.tipoPersonaActual === 'partida') {
-            if (photoSection) photoSection.classList.add('hidden');
-            if (resultsLayout) resultsLayout.classList.add('no-photo');
+            if (photoSection) photoSection.style.display = 'none';
+            if (resultsLayout) resultsLayout.style.opacity = '0.8';
 
             // OCULTAR los campos específicos que no se usan en LASIRSARP
             this.ocultarCampo('nombres', 'containerNombres');
             this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
             this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
-            this.ocultarCampo('tipoDoc', registro.tipo_documento || (this.tipoPersonaActual === 'natural' ? 'DNI' : 'RUC'));
-            this.ocultarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada.dni : this.tipoPersonaActual === 'partida' ? '-' : this.personaSeleccionada.ruc) || '-');
+            this.ocultarCampo('tipoDoc');
+            this.ocultarCampo('nroDoc');
             this.ocultarCampo('libro', 'containerLibro');
             this.ocultarCampo('nroPartida', 'containerNroPartida');
             this.ocultarCampo('nroPlaca', 'containerNroPlaca');
@@ -1742,8 +1744,8 @@ const ModuloPartidas = {
 
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
         } else {
-            if (photoSection) photoSection.classList.add('hidden');
-            if (resultsLayout) resultsLayout.classList.add('no-photo');
+            if (photoSection) photoSection.style.display = 'none';
+            if (resultsLayout) resultsLayout.style.opacity = '0.8';
             this.mostrarCampo('libro', registro.libro || '-');
 
             const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
@@ -1766,13 +1768,12 @@ const ModuloPartidas = {
         if (this.tipoPersonaActual !== 'partida') {
             this.mostrarCampo('tipoDoc', registro.tipo_documento || (this.tipoPersonaActual === 'natural' ? 'DNI' : 'RUC'));
             this.mostrarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada.dni : this.tipoPersonaActual === 'partida' ? '-' : this.personaSeleccionada.ruc) || '-');
-            this.mostrarCampo('nroPartida', registro.numero_partida || '-');
-            this.mostrarCampo('nroPlaca', registro.numero_placa || '-');
-            this.mostrarCampo('estado', registro.estado || '-');
-            this.mostrarCampo('zona', registro.zona || '-');
-            this.mostrarCampo('oficina', registro.oficina || '-');
-            this.mostrarCampo('direccion', registro.direccion || '-');
-            this.mostrarCampo('libro', registro.libro || '-'); // Si libro también debe ocultarse
+            this.mostrarCampo('nroPartida', registro.numero_partida || '-', 'containerNroPartida');
+            this.mostrarCampo('nroPlaca', registro.numero_placa || '-', 'containerNroPlaca');
+            this.mostrarCampo('estado', registro.estado || '-', 'containerEstado');
+            this.mostrarCampo('zona', registro.zona || '-', 'containerZona');
+            this.mostrarCampo('oficina', registro.oficina || '-', 'containerOficina');
+            this.mostrarCampo('direccion', registro.direccion || '-', 'containerDireccion');
         }
 
         // Secciones adicionales
