@@ -1802,17 +1802,24 @@ const ModuloPartidas = {
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = "Foto de persona";
-            img.className = 'w-full h-full object-cover rounded-xl';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '0.75rem';
             photoFrame.appendChild(img);
             
-            // Asegurar que el contenedor esté visible
-            photoFrame.classList.remove('hidden');
+            photoFrame.style.display = '';
         } else {
             const placeholder = document.createElement('div');
-            placeholder.className = 'w-full h-full flex items-center justify-center text-gray-400';
-            placeholder.innerHTML = '<div class="text-center"><i class="fas fa-user text-6xl mb-3"></i><p class="text-sm">Sin fotografía</p></div>';
+            placeholder.style.width = '100%';
+            placeholder.style.height = '100%';
+            placeholder.style.display = 'flex';
+            placeholder.style.alignItems = 'center';
+            placeholder.style.justifyContent = 'center';
+            placeholder.style.color = '#9ca3af';
+            placeholder.innerHTML = '<div style="text-align: center;"><i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block;"></i><p style="font-size: 0.875rem;">Sin fotografía</p></div>';
             photoFrame.appendChild(placeholder);
-            photoFrame.classList.remove('hidden');
+            photoFrame.style.display = '';
         }
     },
 
@@ -1824,14 +1831,11 @@ const ModuloPartidas = {
 
         const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
         if (contenedor) {
-            // Usar clases de Tailwind para mostrar
-            contenedor.classList.remove('hidden');
             contenedor.style.display = '';
         } else {
             // Si no hay contenedor específico, buscar el parent
             const contenedorPadre = elemento ? elemento.closest('div') : null;
             if (contenedorPadre) {
-                contenedorPadre.classList.remove('hidden');
                 contenedorPadre.style.display = '';
             }
         }
@@ -1840,14 +1844,11 @@ const ModuloPartidas = {
     ocultarCampo(idCampo, idContenedor = null) {
         const contenedor = idContenedor ? document.getElementById(idContenedor) : null;
         if (contenedor) {
-            // Usar clases de Tailwind para ocultar
-            contenedor.classList.add('hidden');
             contenedor.style.display = 'none';
         } else {
             const elemento = document.getElementById(idCampo);
             const contenedorPadre = elemento ? elemento.closest('div') : null;
             if (contenedorPadre) {
-                contenedorPadre.classList.add('hidden');
                 contenedorPadre.style.display = 'none';
             }
         }
