@@ -122,8 +122,6 @@ const ModuloPartidas = {
         document.getElementById('btnBuscarPersona')?.addEventListener('click', () => this.abrirModalBusqueda());
         document.getElementById('btnConsultar')?.addEventListener('click', this.handlerTSIRSARP);
 
-
-
         document.getElementById('btnLimpiar')?.addEventListener('click', () => this.limpiarFormularioPartidas());
 
         // Forms de búsqueda
@@ -144,12 +142,23 @@ const ModuloPartidas = {
             });
         });
 
-        document.querySelectorAll('.modal-close').forEach(btn => {
+        // Botones de cierre de modales
+        document.querySelectorAll('[data-modal]').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const modalId = btn.getAttribute('data-modal');
                 this.cerrarModal(modalId);
             });
         });
+
+        // Cerrar con Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-partidas:not(.hidden)').forEach(modal => {
+                    this.cerrarModal(modal.id);
+                });
+            }
+        });
+
         // Validación solo números
         document.getElementById('dniNatural')?.addEventListener('input', function (e) {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -235,11 +244,21 @@ const ModuloPartidas = {
     },
 
     abrirModal(modalId) {
-        document.getElementById(modalId)?.classList.add('show');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
     },
 
     cerrarModal(modalId) {
-        document.getElementById(modalId)?.classList.remove('show');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
     },
 
     // ============================================

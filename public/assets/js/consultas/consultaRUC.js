@@ -141,64 +141,56 @@ const ModuloRUC = {
     // 📊 LLENAR DATOS RUC
     // ============================================
     llenarDatosRUC(datos) {
-        this.limpiarCamposRUC();
-
         if (!datos) return;
 
-        // Mapeo de campos
-        const mapaCampos = {
-            'Código de Ubigeo': datos.codigo_ubigeo,
-            'Departamento': datos.departamento,
-            'Provincia': datos.provincia,
-            'Distrito': datos.distrito,
-            'Actividad Económica': datos.actividad_economica,
-            'Estado del Contribuyente': datos.estado_contribuyente,
-            'Fecha de Actualización': datos.fecha_actualizacion,
-            'Fecha de Alta': datos.fecha_alta,
-            'Fecha de Baja': datos.fecha_baja || '-',
-            'Tipo de Persona': datos.tipo_persona,
-            'Tipo de Contribuyente': datos.tipo_contribuyente,
-            'RUC': datos.ruc,
-            'Nombre y/o Razón Social': datos.razon_social,
-            'Tipo de Zona': datos.tipo_zona || '-',
-            'Tipo de Vía': datos.tipo_via,
-            'Nombre de Vía': datos.nombre_via,
-            'Número': datos.numero,
-            'Interior': datos.interior,
-            'Nombre de la Zona': datos.nombre_zona || '-',
-            'Referencia': datos.referencia || '-',
-            'Condición del Domicilio': datos.condicion_domicilio,
-            'Dependencia': datos.dependencia,
-            'Código Secuencia': datos.codigo_secuencia || '',
-            'Estado Activo': datos.estado_activo,
-            'Estado Habido': datos.estado_habido,
-            'Dirección Completa': datos.direccion_completa
+        const camposAMostrar = {
+            'ruc': datos.ruc,
+            'razon_social': datos.razon_social,
+            'codigo_ubigeo': datos.codigo_ubigeo,
+            'departamento': datos.departamento,
+            'provincia': datos.provincia,
+            'distrito': datos.distrito,
+            'actividad_economica': datos.actividad_economica,
+            'estado_contribuyente': datos.estado_contribuyente,
+            'fecha_actualizacion': datos.fecha_actualizacion,
+            'fecha_alta': datos.fecha_alta,
+            'fecha_baja': datos.fecha_baja,
+            'tipo_persona': datos.tipo_persona,
+            'tipo_contribuyente': datos.tipo_contribuyente,
+            'tipo_zona': datos.tipo_zona,
+            'tipo_via': datos.tipo_via,
+            'nombre_via': datos.nombre_via,
+            'numero': datos.numero,
+            'interior': datos.interior,
+            'nombre_zona': datos.nombre_zona,
+            'referencia': datos.referencia,
+            'condicion_domicilio': datos.condicion_domicilio,
+            'dependencia': datos.dependencia,
+            'codigo_secuencia': datos.codigo_secuencia,
+            'estado_activo': datos.estado_activo,
+            'estado_habido': datos.estado_habido,
+            'direccion_completa': datos.direccion_completa
         };
 
-        // Llenar todos los campos
-        Object.entries(mapaCampos).forEach(([labelText, valor]) => {
-            const infoItems = document.querySelectorAll('.info-item');
-            
-            infoItems.forEach(item => {
-                const label = item.querySelector('.info-label');
-                if (label && label.textContent.trim() === labelText) {
-                    const valueElement = item.querySelector('.info-value');
-                    if (valueElement) {
-                        valueElement.textContent = valor || '-';
-                    }
-                }
-            });
+        Object.entries(camposAMostrar).forEach(([campo, valor]) => {
+            const elemento = document.querySelector(`[data-campo="${campo}"]`);
+            if (elemento) {
+                elemento.textContent = valor || '-';
+            }
         });
+
+        window.contribuyenteData = datos;
     },
 
     // ============================================
     // LIMPIAR CAMPOS RUC
     // ============================================
     limpiarCamposRUC() {
-        const campos = document.querySelectorAll('.consulta-ruc-container .info-value');
+        const campos = document.querySelectorAll('[data-campo]');
         campos.forEach(campo => {
             campo.textContent = '-';
         });
+        window.contribuyenteData = null;
     },
 
     // ============================================

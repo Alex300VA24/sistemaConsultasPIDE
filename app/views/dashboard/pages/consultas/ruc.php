@@ -72,7 +72,7 @@
             <!-- RUC -->
             <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4 border-2 border-red-200 lg:col-span-3">
                 <span class="text-xs font-medium text-red-700 uppercase tracking-wide">RUC</span>
-                <div class="mt-1 text-2xl font-bold text-red-800">
+                <div class="mt-1 text-2xl font-bold text-red-800" data-campo="ruc">
                     <?php echo isset($contribuyente['ruc']) ? htmlspecialchars($contribuyente['ruc']) : '-'; ?>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             <!-- Razón Social -->
             <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border-2 border-blue-200 lg:col-span-3">
                 <span class="text-xs font-medium text-blue-700 uppercase tracking-wide">Nombre y/o Razón Social</span>
-                <div class="mt-1 text-xl font-bold text-blue-800">
+                <div class="mt-1 text-xl font-bold text-blue-800" data-campo="razon_social">
                     <?php echo isset($contribuyente['razon_social']) ? htmlspecialchars($contribuyente['razon_social']) : '-'; ?>
                 </div>
             </div>
@@ -118,7 +118,7 @@
             ?>
                 <div class="bg-white/60 rounded-xl p-4 border border-gray-200 <?= $colSpan ?>">
                     <span class="text-xs font-medium text-gray-500 uppercase tracking-wide"><?= $label ?></span>
-                    <div class="mt-1 text-base font-semibold text-gray-800">
+                    <div class="mt-1 text-base font-semibold text-gray-800" data-campo="<?= $key ?>">
                         <?php echo isset($contribuyente[$key]) ? htmlspecialchars($contribuyente[$key]) : '-'; ?>
                     </div>
                 </div>
