@@ -1860,24 +1860,61 @@ const ModuloPartidas = {
         const selectImagenes = document.getElementById('selectImagenes');
         const imagenViewer = document.getElementById('imagenViewer');
         const noImagen = document.getElementById('noImagen');
+        const thumbnailContainer = document.getElementById('thumbnailContainer');
 
         // Resetear zoom al cambiar de partida
         this.zoomLevel = 1;
         if (imagenViewer) {
-            imagenViewer.style.width = '';
-            imagenViewer.style.height = '';
-            imagenViewer.style.maxWidth = '100%';
-            imagenViewer.classList.remove('with-zoom');
+            imagenViewer.style.transform = 'scale(1)';
         }
 
+        // Limpiar selects y miniaturas anteriores
         selectImagenes.innerHTML = '';
+        thumbnailContainer.innerHTML = '';
 
+        // Llenar el select y generar miniaturas
         imagenes.forEach((img, index) => {
+            // Opción en el select
             const option = document.createElement('option');
             option.value = index;
             option.textContent = `Página ${img.pagina || (index + 1)}`;
             selectImagenes.appendChild(option);
+
+            // Miniatura
+            if (img.imagen_base64) {
+                const thumbnailDiv = document.createElement('div');
+                thumbnailDiv.className = 'flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border-2 transition-all duration-200 hover:shadow-lg';
+                thumbnailDiv.style.borderColor = '#e5e7eb';
+                thumbnailDiv.style.width = '80px';
+                thumbnailDiv.style.height = '100px';
+                
+                const img_el = document.createElement('img');
+                img_el.src = `data:image/jpeg;base64,${img.imagen_base64}`;
+                img_el.alt = `Página ${index + 1}`;
+                img_el.style.width = '100%';
+                img_el.style.height = '100%';
+                img_el.style.objectFit = 'cover';
+                
+                thumbnailDiv.appendChild(img_el);
+                thumbnailDiv.addEventListener('click', () => {
+                    selectImagenes.value = index;
+                    cambiarImagen();
+                    
+                    // Highlight the selected thumbnail
+                    document.querySelectorAll('#thumbnailContainer > div').forEach(el => {
+                        el.style.borderColor = '#e5e7eb';
+                    });
+                    thumbnailDiv.style.borderColor = '#8b5cf6';
+                });
+                
+                thumbnailContainer.appendChild(thumbnailDiv);
+            }
         });
+
+        // Mostrar miniaturas si hay más de 1 página
+        if (imagenes.length > 1) {
+            thumbnailContainer.style.display = 'flex';
+        }
 
         const cambiarImagen = () => {
             const index = parseInt(selectImagenes.value);
@@ -1898,6 +1935,11 @@ const ModuloPartidas = {
                 if (zoomLabel) {
                     zoomLabel.textContent = '100%';
                 }
+                
+                // Highlight selected thumbnail
+                document.querySelectorAll('#thumbnailContainer > div').forEach((el, i) => {
+                    el.style.borderColor = i === index ? '#8b5cf6' : '#e5e7eb';
+                });
             } else {
                 this.imagenActual = null;
                 imagenViewer.src = '';

@@ -106,84 +106,83 @@
                         Información del Registro
                     </h3>
                     
-                    <div id="infoGrid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <!-- Los campos se generarán dinámicamente -->
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
-                            <div id="libro" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
+                    <div id="infoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Nombres -->
+                        <div id="containerNombres" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nombres</span>
                             <div id="nombres" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
+                        <!-- Apellido Paterno -->
                         <div id="containerApellidoPaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Paterno</span>
                             <div id="apellidoPaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
+                        <!-- Apellido Materno -->
                         <div id="containerApellidoMaterno" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Apellido Materno</span>
                             <div id="apellidoMaterno" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
-                        
-                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Razón Social</span>
-                            <div id="campoRazonSocial" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
+                        <!-- Tipo de Documento -->
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tipo de Documento</span>
                             <div id="tipoDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
+                        <!-- Nro. Documento -->
                         <div class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Documento</span>
                             <div id="nroDoc" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        <!-- Razón Social -->
+                        <div id="containerRazonSocial" style="display: none;" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Razón Social</span>
+                            <div id="campoRazonSocial" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
                         
+                        <!-- Nro. Partida -->
                         <div id="containerNroPartida" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Partida</span>
                             <div id="nroPartida" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
+                        <!-- Nro. Placa -->
                         <div id="containerNroPlaca" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Nro. Placa</span>
                             <div id="nroPlaca" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
-                        
+                        <!-- Estado -->
                         <div id="containerEstado" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Estado</span>
                             <div id="estado" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
+                        <!-- Zona -->
                         <div id="containerZona" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Zona</span>
                             <div id="zona" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div class="bg-white/60 rounded-xl p-4 border border-gray-200"></div>
+                        <!-- Libro -->
+                        <div id="containerLibro" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
+                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
+                            <div id="libro" class="mt-1 text-lg font-semibold text-gray-800">-</div>
+                        </div>
                         
-                        <div id="containerOficina" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
+                        <!-- Oficina -->
+                        <div id="containerOficina" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Oficina</span>
                             <div id="oficina" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                         
-                        <div id="containerDireccion" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-3 hover:shadow-md transition duration-200">
+                        <!-- Dirección -->
+                        <div id="containerDireccion" class="bg-white/60 rounded-xl p-4 border border-gray-200 md:col-span-2 hover:shadow-md transition duration-200">
                             <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Dirección</span>
                             <div id="direccion" class="mt-1 text-lg font-semibold text-gray-800">-</div>
-                        </div>
-                        
-                        <div id="containerLibro" class="bg-white/60 rounded-xl p-4 border border-gray-200 hover:shadow-md transition duration-200">
-                            <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Libro</span>
-                            <div id="libro2" class="mt-1 text-lg font-semibold text-gray-800">-</div>
                         </div>
                     </div>
                 </div>
@@ -199,49 +198,66 @@
             <div id="asientosContainer" class="overflow-x-auto"></div>
         </div>
 
-        <!-- Imágenes de Documentos -->
+        <!-- Imágenes de Documentos - Viewer Profesional -->
         <div id="imagenesSection" style="display: none;" class="glass rounded-2xl p-6 shadow-lg border border-white/50">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <i class="fas fa-images text-violet-600 mr-2"></i>
-                Imágenes de Documentos
+            <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-file-image text-violet-600 mr-2"></i>
+                Visor de Documentos
             </h3>
             
-            <div class="space-y-4">
-                <div class="flex items-center gap-3 bg-white/60 rounded-xl p-4 border border-gray-200">
-                    <label for="selectImagenes" class="text-sm font-medium text-gray-700 whitespace-nowrap">Seleccionar página:</label>
-                    <select id="selectImagenes" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent transition duration-200 outline-none bg-white"></select>
+            <!-- Controles superiores -->
+            <div class="flex flex-col lg:flex-row gap-4 mb-6">
+                <!-- Selector de página -->
+                <div class="flex items-center gap-3 flex-1">
+                    <label for="selectImagenes" class="text-sm font-semibold text-gray-700 whitespace-nowrap">
+                        <i class="fas fa-file mr-2"></i>Página:
+                    </label>
+                    <select id="selectImagenes" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none bg-white font-medium"></select>
                 </div>
-
-                <div class="flex flex-wrap items-center gap-2 p-4 bg-white/60 rounded-xl border border-gray-200">
-                    <button type="button" id="btnZoomOut" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Reducir zoom">
-                        <i class="fas fa-minus"></i>
+                
+                <!-- Controles de zoom -->
+                <div class="flex items-center gap-2 bg-white/60 rounded-lg p-2 border border-gray-200">
+                    <button type="button" id="btnZoomOut" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600 hover:text-gray-800 font-semibold" title="Reducir (-)">
+                        <i class="fas fa-minus text-sm"></i>
                     </button>
-                    <button type="button" id="btnZoomReset" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Restaurar zoom">
-                        <i class="fas fa-undo"></i>
+                    <button type="button" id="btnZoomReset" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600 hover:text-gray-800 font-semibold" title="Restaurar (100%)">
+                        <i class="fas fa-redo text-sm"></i>
                     </button>
-                    <button type="button" id="btnZoomIn" class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 transition-all duration-200 text-gray-700 font-medium" title="Aumentar zoom">
-                        <i class="fas fa-plus"></i>
+                    <button type="button" id="btnZoomIn" class="p-2 hover:bg-gray-100 rounded-lg transition text-gray-600 hover:text-gray-800 font-semibold" title="Aumentar (+)">
+                        <i class="fas fa-plus text-sm"></i>
                     </button>
-                    <span id="zoomLabel" class="px-3 py-2 font-semibold text-gray-700 bg-gray-100 rounded-lg rounded-lg">100%</span>
-                    <button type="button" id="btnVerImagen" class="ml-auto px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2 font-medium shadow-md">
-                        <i class="fas fa-external-link-alt"></i>
-                        <span>Ver</span>
+                    <div class="w-px h-6 bg-gray-300 mx-1"></div>
+                    <span id="zoomLabel" class="px-3 py-1 bg-violet-100 text-violet-700 rounded-lg text-sm font-bold min-w-[60px] text-center">100%</span>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="flex gap-2">
+                    <button type="button" id="btnVerImagen" class="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all font-semibold flex items-center gap-2 shadow-md whitespace-nowrap">
+                        <i class="fas fa-expand"></i>
+                        <span>Expandir</span>
                     </button>
-                    <button type="button" id="btnDescargar" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all duration-200 flex items-center gap-2 font-medium shadow-md">
+                    <button type="button" id="btnDescargar" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all font-semibold flex items-center gap-2 shadow-md whitespace-nowrap">
                         <i class="fas fa-download"></i>
                         <span>Descargar</span>
                     </button>
                 </div>
-
-                <div class="border-2 border-gray-300 rounded-xl overflow-auto bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center" style="max-height: 600px; min-height: 400px;">
-                    <div class="inline-block text-center">
-                        <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="max-w-full h-auto shadow-lg rounded">
-                        <div id="noImagen" class="flex flex-col items-center justify-center py-20 px-10 text-gray-400">
-                            <i class="fas fa-image text-6xl mb-4 opacity-50"></i>
-                            <span class="text-lg font-medium">Seleccione una página</span>
-                        </div>
+            </div>
+            
+            <!-- Visor de imagen principal -->
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-300 overflow-hidden shadow-lg" style="max-height: 600px; min-height: 450px;">
+                <div class="w-full h-full flex items-center justify-center relative" id="imageViewerContainer">
+                    <img id="imagenViewer" src="" alt="Documento" style="display: none;" class="max-w-full max-h-full object-contain shadow-xl" />
+                    <div id="noImagen" class="flex flex-col items-center justify-center text-gray-400 py-16 px-8">
+                        <i class="fas fa-image text-7xl mb-4 opacity-40"></i>
+                        <span class="text-xl font-semibold">Seleccione una página para ver</span>
+                        <p class="text-sm mt-2">Los documentos aparecerán aquí</p>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Miniatura de páginas (si hay múltiples) -->
+            <div id="thumbnailContainer" class="mt-4 flex gap-3 overflow-x-auto pb-2" style="display: none;">
+                <!-- Las miniaturas se generarán dinámicamente -->
             </div>
         </div>
 
