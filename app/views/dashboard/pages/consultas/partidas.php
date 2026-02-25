@@ -254,7 +254,7 @@
 <!-- Modales se mantienen igual pero con estilos actualizados -->
 <!-- Modal: Búsqueda de Personas Naturales -->
 <div id="modalBusquedaNatural" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
-    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+    <div class="glass rounded-2xl shadow-2xl w-[90vw] max-w-5xl max-h-[90vh] mx-4 border border-white/50 overflow-hidden">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
@@ -262,7 +262,7 @@
             </h5>
             <button type="button" class="text-white hover:text-gray-200 text-2xl leading-none" data-modal="modalBusquedaNatural">&times;</button>
         </div>
-        <div class="p-6">
+        <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
             <form id="formBusquedaNatural" class="mb-4">
                 <div class="mb-4">
                     <label for="dniNatural" class="block text-sm font-medium text-gray-700 mb-2">DNI:</label>
@@ -293,7 +293,7 @@
 
 <!-- Modal: Búsqueda de Personas Jurídicas -->
 <div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
-    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+    <div class="glass rounded-2xl shadow-2xl w-[95vw] max-w-7xl max-h-[90vh] mx-4 border border-white/50 overflow-hidden">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">
                 <i class="fas fa-building"></i>
@@ -301,7 +301,7 @@
             </h5>
             <button type="button" class="text-white hover:text-gray-200 text-2xl leading-none" data-modal="modalBusquedaJuridica">&times;</button>
         </div>
-        <div class="p-6">
+        <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
             <div class="flex gap-3 mb-4">
                 <label class="flex-1 cursor-pointer">
                     <input type="radio" id="porRuc" name="tipoBusquedaJuridica" value="ruc" checked class="peer sr-only">

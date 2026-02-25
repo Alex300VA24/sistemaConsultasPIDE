@@ -915,7 +915,7 @@ class ConsultasSunarpController
             if ($httpCode == 200) {
                 $jsonResponse = json_decode($response, true);
 
-                $vehiculo = $jsonResponse['verRPVExtraResponse']['vehiculo'] ?? [];
+                $vehiculo = $jsonResponse['verDetalleRPVExtraResponse']['vehiculo'] ?? [];
 
                 error_log("Resultado de vehiculo" . print_r($vehiculo, true));
 

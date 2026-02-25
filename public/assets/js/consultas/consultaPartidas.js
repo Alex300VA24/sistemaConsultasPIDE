@@ -239,7 +239,6 @@ const ModuloPartidas = {
     // 📌 MODALES
     // ============================================
     abrirModalBusqueda() {
-        console.log('abriendo modal para tipo:', this.tipoPersonaActual);
         if (this.tipoPersonaActual === 'natural') {
             this.abrirModal('modalBusquedaNatural');
         } else if (this.tipoPersonaActual === 'juridica') {
@@ -248,15 +247,10 @@ const ModuloPartidas = {
     },
 
     abrirModal(modalId) {
-        console.log('abriendo modal:', modalId);
         const modal = document.getElementById(modalId);
         if (modal) {
-            console.log('modal encontrado, estableciendo display: flex');
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            console.log('display actual:', modal.style.display);
-        } else {
-            console.error('modal no encontrado:', modalId);
         }
     },
 
@@ -457,58 +451,142 @@ const ModuloPartidas = {
             return;
         }
 
+        const tieneMuchosResultados = data.length > 5;
+
         let html = `
             <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <strong class="text-blue-800">${data.length} resultado(s) obtenido(s) de SUNAT</strong>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
-                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
         `;
 
-        data.forEach((item, index) => {
-            const razonSocial = item.razon_social || '-';
-            const ruc = item.ruc || '-';
-            const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
-            const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
-            const departamento = item.departamento || '-';
-
-            const badgeActivo = estadoActivo === 'SÍ'
-                ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
-                : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
-
-            const badgeHabido = estadoHabido === 'SÍ'
-                ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
-                : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
+        if (tieneMuchosResultados) {
+            html += `
+                <div class="flex gap-4">
+                    <div class="w-64 flex-shrink-0">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="p-3 bg-gray-100 border-b border-gray-200">
+                                <h4 class="font-semibold text-gray-700">Resultados (${data.length})</h4>
+                                <p class="text-xs text-gray-500">Seleccione un registro</p>
+                            </div>
+                            <div class="overflow-y-auto max-h-96">
+            `;
+            
+            data.forEach((item, index) => {
+                const razonSocial = item.razon_social || '-';
+                const ruc = item.ruc || '-';
+                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
+                const badgeClass = estadoActivo === 'SÍ' ? 'bg-green-500' : 'bg-red-500';
+                
+                html += `
+                    <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
+                        class="w-full text-left p-3 hover:bg-violet-50 border-b border-gray-100 transition flex flex-col gap-1">
+                        <span class="font-medium text-gray-800 text-sm truncate">${razonSocial}</span>
+                        <span class="text-xs text-gray-500">${ruc}</span>
+                        <span class="px-2 py-0.5 ${badgeClass} text-white text-xs rounded w-fit">${estadoActivo === 'SÍ' ? 'ACTIVO' : 'NO ACTIVO'}</span>
+                    </button>
+                `;
+            });
 
             html += `
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
-                    <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
-                    <td class="px-4 py-3">${badgeActivo}</td>
-                    <td class="px-4 py-3">${badgeHabido}</td>
-                    <td class="px-4 py-3 text-gray-600">${departamento}</td>
-                    <td class="px-4 py-3">
-                        <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
-                            class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md">
-                            Seleccionar
-                        </button>
-                    </td>
-                </tr>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-x-auto">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <p class="text-yellow-800 text-sm"><i class="fas fa-info-circle mr-2"></i>Seleccione un registro del sidebar para ver sus datos completos</p>
+                        </div>
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
+                                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
             `;
-        });
 
-        html += '</tbody></table></div>';
+            data.forEach((item, index) => {
+                const razonSocial = item.razon_social || '-';
+                const ruc = item.ruc || '-';
+                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
+                const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
+                const departamento = item.departamento || '-';
+
+                const badgeActivo = estadoActivo === 'SÍ'
+                    ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
+                    : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
+
+                const badgeHabido = estadoHabido === 'SÍ'
+                    ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
+                    : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
+
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
+                        <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
+                        <td class="px-4 py-3">${badgeActivo}</td>
+                        <td class="px-4 py-3">${badgeHabido}</td>
+                        <td class="px-4 py-3 text-gray-600">${departamento}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table></div></div>';
+        } else {
+            html += `
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gradient-to-r from-violet-600 to-violet-700 text-white">
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">RUC</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Razón Social</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Estado</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Condición</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Departamento</th>
+                                <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+            `;
+
+            data.forEach((item, index) => {
+                const razonSocial = item.razon_social || '-';
+                const ruc = item.ruc || '-';
+                const estadoActivo = item.estado_activo || (item.es_activo ? 'SÍ' : 'NO');
+                const estadoHabido = item.estado_habido || (item.es_habido ? 'SÍ' : 'NO');
+                const departamento = item.departamento || '-';
+
+                const badgeActivo = estadoActivo === 'SÍ'
+                    ? '<span class="px-2 py-1 bg-green-500 text-white text-xs rounded font-medium">ACTIVO</span>'
+                    : '<span class="px-2 py-1 bg-red-500 text-white text-xs rounded font-medium">NO ACTIVO</span>';
+
+                const badgeHabido = estadoHabido === 'SÍ'
+                    ? '<span class="px-2 py-1 bg-blue-500 text-white text-xs rounded font-medium">HABIDO</span>'
+                    : '<span class="px-2 py-1 bg-orange-500 text-white text-xs rounded font-medium">NO HABIDO</span>';
+
+                html += `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-4 py-3"><strong class="text-gray-800">${ruc}</strong></td>
+                        <td class="px-4 py-3 text-gray-700">${razonSocial}</td>
+                        <td class="px-4 py-3">${badgeActivo}</td>
+                        <td class="px-4 py-3">${badgeHabido}</td>
+                        <td class="px-4 py-3 text-gray-600">${departamento}</td>
+                        <td class="px-4 py-3">
+                            <button onclick="ModuloPartidas.seleccionarRegistro(${index})" 
+                                class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg font-medium text-sm hover:from-emerald-600 hover:to-emerald-700 transition shadow-md">
+                                Seleccionar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table></div>';
+        }
+
         contenedor.innerHTML = html;
         contenedor.style.display = 'block';
     },
@@ -2102,38 +2180,49 @@ const ModuloPartidas = {
     },
 
     mostrarDatosVehiculo(datosVehiculo) {
+        console.log(' datosVehiculo recibidos:', datosVehiculo);
+        
         const vehiculoSection = document.getElementById('vehiculoSection');
         const vehiculoContainer = document.getElementById('vehiculoContainer');
 
+        if (!datosVehiculo || Object.keys(datosVehiculo).length === 0) {
+            console.log('No hay datos de vehículo');
+            vehiculoSection.style.display = 'none';
+            return;
+        }
+
         const camposVehiculo = {
-            'anoFabricacion': 'Año',
+            'anoFabricacion': 'Año de Fabricación',
             'placa': 'Placa',
             'marca': 'Marca',
             'modelo': 'Modelo',
             'color': 'Color',
             'nro_motor': 'Número de Motor',
             'carroceria': 'Carroceria',
-            'codCategoria': 'Codigo de Categoria',
-            'codTipoCarr': 'Codigo de Tipo de Carro',
+            'codCategoria': 'Código de Categoría',
+            'codTipoCarr': 'Código de Tipo de Carro',
             'estado': 'Estado'
         };
 
-        let html = '';
+        let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
 
         for (const [campo, label] of Object.entries(camposVehiculo)) {
             const valor = datosVehiculo[campo];
             if (valor !== undefined && valor !== null && valor !== '') {
                 html += `
-                    <div class="vehiculo-item">
-                        <div class="label">${label}</div>
-                        <div class="value">${valor}</div>
+                    <div class="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                        <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">${label}</span>
+                        <div class="mt-1 text-lg font-semibold text-gray-800">${valor}</div>
                     </div>
                 `;
             }
         }
 
+        html += '</div>';
+
         vehiculoContainer.innerHTML = html;
         vehiculoSection.style.display = 'block';
+        console.log('Sección de vehículo mostrada');
     },
 
     // ============================================
