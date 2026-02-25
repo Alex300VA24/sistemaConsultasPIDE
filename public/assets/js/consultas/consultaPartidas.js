@@ -1597,10 +1597,24 @@ const ModuloPartidas = {
     },
 
     mostrarFotoPersona() {
-        const photoFrame = document.getElementById('photoSection');
-        if (!photoFrame) return;
+        const photoSection = document.getElementById('photoSection');
+        if (!photoSection) {
+            console.warn('⚠️ photoSection no encontrado');
+            return;
+        }
 
-        photoFrame.innerHTML = '';
+        // Buscar el contenedor de la foto
+        let fotoContainer = photoSection.querySelector('.aspect-\\[3\\/4\\]');
+        if (!fotoContainer) {
+            // Si no existe, crearlo
+            fotoContainer = document.createElement('div');
+            fotoContainer.className = 'aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl overflow-hidden shadow-inner flex items-center justify-center';
+            fotoContainer.style.cssText = 'aspect-ratio: 3/4; background: linear-gradient(to bottom right, #f3f4f6, #e5e7eb); border-radius: 0.75rem; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; min-height: 400px;';
+            photoSection.appendChild(fotoContainer);
+        }
+
+        // Limpiar contenido anterior
+        fotoContainer.innerHTML = '';
 
         if (this.personaSeleccionada && this.personaSeleccionada.foto) {
             const fotoBase64 = this.personaSeleccionada.foto.startsWith('data:image')
@@ -1610,24 +1624,24 @@ const ModuloPartidas = {
             const img = document.createElement('img');
             img.src = fotoBase64;
             img.alt = "Foto de persona";
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.objectFit = 'cover';
-            img.style.borderRadius = '0.75rem';
-            photoFrame.appendChild(img);
+            img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
+            img.className = 'w-full h-full object-cover';
             
-            photoFrame.style.display = '';
+            fotoContainer.appendChild(img);
+            photoSection.style.display = '';
+            
+            console.log('✅ Foto de persona mostrada');
         } else {
             const placeholder = document.createElement('div');
-            placeholder.style.width = '100%';
-            placeholder.style.height = '100%';
-            placeholder.style.display = 'flex';
-            placeholder.style.alignItems = 'center';
-            placeholder.style.justifyContent = 'center';
-            placeholder.style.color = '#9ca3af';
-            placeholder.innerHTML = '<div style="text-align: center;"><i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block;"></i><p style="font-size: 0.875rem;">Sin fotografía</p></div>';
-            photoFrame.appendChild(placeholder);
-            photoFrame.style.display = '';
+            placeholder.style.cssText = 'text-align: center; color: #9ca3af;';
+            placeholder.innerHTML = `
+                <i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block; opacity: 0.5;"></i>
+                <p style="font-size: 0.875rem; margin: 0;">Sin fotografía</p>
+            `;
+            fotoContainer.appendChild(placeholder);
+            photoSection.style.display = '';
+            
+            console.log('⚠️ No hay foto disponible, mostrando placeholder');
         }
     },
 
@@ -1663,31 +1677,53 @@ const ModuloPartidas = {
     },
 
     mostrarImagenes(imagenes) {
+        console.log('🖼️ Iniciando mostrarImagenes con', imagenes.length, 'imagen(es)');
+        
         const imagenesSection = document.getElementById('imagenesSection');
         const selectImagenes = document.getElementById('selectImagenes');
         const imagenViewer = document.getElementById('imagenViewer');
         const noImagen = document.getElementById('noImagen');
         const thumbnailContainer = document.getElementById('thumbnailContainer');
 
-        if (!imagenesSection || !selectImagenes || !imagenViewer || !noImagen || !thumbnailContainer) {
-            console.error('❌ Elementos del visor de imágenes no encontrados');
+        if (!imagenesSection) {
+            console.error('❌ imagenesSection no encontrado');
+            return;
+        }
+        
+        if (!selectImagenes) {
+            console.error('❌ selectImagenes no encontrado');
+            return;
+        }
+        
+        if (!imagenViewer) {
+            console.error('❌ imagenViewer no encontrado');
+            return;
+        }
+        
+        if (!noImagen) {
+            console.error('❌ noImagen no encontrado');
+            return;
+        }
+        
+        if (!thumbnailContainer) {
+            console.error('❌ thumbnailContainer no encontrado');
             return;
         }
 
         // Resetear zoom al cambiar de partida
         this.zoomLevel = 1;
-        if (imagenViewer) {
-            imagenViewer.style.transform = 'scale(1)';
-            imagenViewer.style.maxWidth = '100%';
-            imagenViewer.style.maxHeight = '100%';
-            imagenViewer.style.width = 'auto';
-            imagenViewer.style.height = 'auto';
-        }
+        imagenViewer.style.transform = 'scale(1)';
+        imagenViewer.style.maxWidth = '100%';
+        imagenViewer.style.maxHeight = '100%';
+        imagenViewer.style.width = 'auto';
+        imagenViewer.style.height = 'auto';
 
         // Limpiar selects y miniaturas anteriores
         selectImagenes.innerHTML = '';
         thumbnailContainer.innerHTML = '';
         thumbnailContainer.style.display = 'none';
+
+        console.log('🔄 Generando opciones del select y miniaturas...');
 
         // Llenar el select y generar miniaturas
         imagenes.forEach((img, index) => {
@@ -1696,45 +1732,73 @@ const ModuloPartidas = {
             option.value = index;
             option.textContent = `Página ${img.pagina || (index + 1)}`;
             selectImagenes.appendChild(option);
+            
+            console.log(`  ✓ Opción ${index + 1} agregada al select`);
 
             // Miniatura
             if (img.imagen_base64) {
                 const thumbnailDiv = document.createElement('div');
-                thumbnailDiv.className = 'flex-shrink-0 cursor-pointer rounded-lg overflow-hidden border-3 transition-all duration-200 hover:shadow-xl hover:scale-105';
-                thumbnailDiv.style.borderColor = '#e5e7eb';
-                thumbnailDiv.style.borderWidth = '3px';
-                thumbnailDiv.style.borderStyle = 'solid';
-                thumbnailDiv.style.width = '90px';
-                thumbnailDiv.style.height = '110px';
-                thumbnailDiv.style.backgroundColor = '#fff';
+                thumbnailDiv.style.cssText = `
+                    flex-shrink: 0;
+                    cursor: pointer;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                    border: 3px solid #e5e7eb;
+                    width: 90px;
+                    height: 110px;
+                    background-color: #fff;
+                    transition: all 0.2s ease;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                `;
                 thumbnailDiv.setAttribute('data-index', index);
                 
                 const img_el = document.createElement('img');
                 img_el.src = `data:image/jpeg;base64,${img.imagen_base64}`;
                 img_el.alt = `Página ${index + 1}`;
-                img_el.style.width = '100%';
-                img_el.style.height = '100%';
-                img_el.style.objectFit = 'cover';
-                img_el.style.display = 'block';
+                img_el.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
                 
                 thumbnailDiv.appendChild(img_el);
+                
+                // Evento click en miniatura
                 thumbnailDiv.addEventListener('click', () => {
+                    console.log(`🖱️ Click en miniatura ${index}`);
                     selectImagenes.value = index;
                     cambiarImagen();
                 });
                 
+                // Efectos hover
+                thumbnailDiv.addEventListener('mouseenter', function() {
+                    if (this.style.borderColor !== 'rgb(139, 92, 246)') {
+                        this.style.transform = 'scale(1.05)';
+                        this.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+                    }
+                });
+                
+                thumbnailDiv.addEventListener('mouseleave', function() {
+                    if (this.style.borderColor !== 'rgb(139, 92, 246)') {
+                        this.style.transform = 'scale(1)';
+                        this.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    }
+                });
+                
                 thumbnailContainer.appendChild(thumbnailDiv);
+                console.log(`  ✓ Miniatura ${index + 1} agregada`);
             }
         });
 
         // Mostrar miniaturas si hay más de 1 página
         if (imagenes.length > 1) {
             thumbnailContainer.style.display = 'flex';
+            console.log('✅ Miniaturas visibles (múltiples páginas)');
+        } else {
+            console.log('ℹ️ Solo una página, miniaturas ocultas');
         }
 
         const cambiarImagen = () => {
             const index = parseInt(selectImagenes.value);
             const imagenData = imagenes[index];
+            
+            console.log(`🔄 Cambiando a imagen ${index + 1}`);
 
             // Resetear zoom al cambiar de imagen
             this.zoomLevel = 1;
@@ -1761,26 +1825,37 @@ const ModuloPartidas = {
                     if (i === index) {
                         el.style.borderColor = '#8b5cf6';
                         el.style.boxShadow = '0 4px 12px rgba(139, 92, 246, 0.4)';
+                        el.style.transform = 'scale(1)';
                     } else {
                         el.style.borderColor = '#e5e7eb';
-                        el.style.boxShadow = 'none';
+                        el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                        el.style.transform = 'scale(1)';
                     }
                 });
+                
+                console.log(`✅ Imagen ${index + 1} mostrada correctamente`);
             } else {
                 this.imagenActual = null;
                 imagenViewer.src = '';
                 imagenViewer.style.display = 'none';
                 noImagen.style.display = 'flex';
+                console.warn('⚠️ No hay datos de imagen para mostrar');
             }
         };
 
-        // Remover listeners anteriores
+        // Remover listeners anteriores del select
         const newSelect = selectImagenes.cloneNode(false);
         newSelect.innerHTML = selectImagenes.innerHTML;
         selectImagenes.parentNode.replaceChild(newSelect, selectImagenes);
         
-        // Agregar nuevo listener
-        document.getElementById('selectImagenes').addEventListener('change', cambiarImagen);
+        // Agregar nuevo listener al select recién creado
+        const selectActualizado = document.getElementById('selectImagenes');
+        selectActualizado.addEventListener('change', () => {
+            console.log('📝 Select cambiado');
+            cambiarImagen();
+        });
+        
+        console.log('✅ Event listener del select configurado');
 
         // Configurar controles de zoom
         this.configurarControlesZoom();
@@ -1791,7 +1866,7 @@ const ModuloPartidas = {
         // Mostrar sección
         imagenesSection.style.display = 'block';
         
-        console.log(`✅ Visor de imágenes configurado con ${imagenes.length} página(s)`);
+        console.log(`✅ Visor de imágenes configurado y visible con ${imagenes.length} página(s)`);
     },
     configurarControlesZoom() {
         const btnZoomIn = document.getElementById('btnZoomIn');
