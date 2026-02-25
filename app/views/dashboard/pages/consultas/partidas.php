@@ -253,8 +253,8 @@
 
 <!-- Modales se mantienen igual pero con estilos actualizados -->
 <!-- Modal: Búsqueda de Personas Naturales -->
-<div id="modalBusquedaNatural" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm modal-partidas">
-<div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+<div id="modalBusquedaNatural" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">
                 <i class="fas fa-user"></i>
@@ -292,8 +292,8 @@
 </div>
 
 <!-- Modal: Búsqueda de Personas Jurídicas -->
-<div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 backdrop-blur-sm modal-partidas">
-<div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
+<div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+    <div class="glass rounded-2xl shadow-2xl max-w-2xl w-full mx-4 border border-white/50">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">
                 <i class="fas fa-building"></i>
