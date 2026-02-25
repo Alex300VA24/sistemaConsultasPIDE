@@ -1530,7 +1530,7 @@ const ModuloPartidas = {
         const contenedores = ['containerNombres', 'containerApellidoPaterno',
             'containerApellidoMaterno', 'containerRazonSocial',
             'containerNroPartida', 'containerNroPlaca', 'containerEstado',
-            'containerZona', 'containerOficina', 'containerDireccion'];
+            'containerZona', 'containerOficina', 'containerDireccion', 'containerLibro'];
         contenedores.forEach(id => {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = '';
@@ -1539,14 +1539,22 @@ const ModuloPartidas = {
         const photoSection = document.getElementById('photoSection');
         
         if (this.tipoPersonaActual === 'natural') {
-            if (photoSection) photoSection.style.display = '';
+            // Mostrar foto para personas naturales
+            if (photoSection) {
+                photoSection.style.display = 'block';
+                console.log('✅ Mostrando sección de foto');
+            }
             this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada?.nombres || '-', 'containerNombres');
             this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada?.apellido_paterno || '-', 'containerApellidoPaterno');
             this.mostrarCampo('apellidoMaterno', registro.apMaterno || this.personaSeleccionada?.apellido_materno || '-', 'containerApellidoMaterno');
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
             this.mostrarFotoPersona();
         } else if (this.tipoPersonaActual === 'partida') {
-            if (photoSection) photoSection.style.display = 'none';
+            // Ocultar foto para búsqueda por partida
+            if (photoSection) {
+                photoSection.style.display = 'none';
+                console.log('⚠️ Ocultando sección de foto (búsqueda por partida)');
+            }
             // OCULTAR los campos específicos que no se usan en LASIRSARP
             this.ocultarCampo('nombres', 'containerNombres');
             this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
@@ -1560,8 +1568,13 @@ const ModuloPartidas = {
             this.ocultarCampo('oficina', 'containerOficina');
             this.ocultarCampo('direccion', 'containerDireccion');
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
+            this.ocultarCampo('libro', 'containerLibro');
         } else {
-            if (photoSection) photoSection.style.display = 'none';
+            // Ocultar foto para personas jurídicas
+            if (photoSection) {
+                photoSection.style.display = 'none';
+                console.log('⚠️ Ocultando sección de foto (persona jurídica)');
+            }
             const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
             if (tieneNombres) {
                 this.mostrarCampo('nombres', registro.nombre || '-', 'containerNombres');
@@ -1584,6 +1597,7 @@ const ModuloPartidas = {
             this.mostrarCampo('nroPlaca', registro.numero_placa || '-', 'containerNroPlaca');
             this.mostrarCampo('estado', registro.estado || '-', 'containerEstado');
             this.mostrarCampo('zona', registro.zona || '-', 'containerZona');
+            this.mostrarCampo('libro', registro.libro || '-', 'containerLibro');
             this.mostrarCampo('oficina', registro.oficina || '-', 'containerOficina');
             this.mostrarCampo('direccion', registro.direccion || '-', 'containerDireccion');
         }
