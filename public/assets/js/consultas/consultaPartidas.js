@@ -842,14 +842,6 @@ const ModuloPartidas = {
         html += '</div>';
         return html;
     },
-                    ${this.paginaActual === totalPaginas ? 'disabled' : ''}>
-                Siguiente <i class="fas fa-chevron-right"></i>
-            </button>
-        `;
-
-        html += '</div>';
-        return html;
-    },
 
     // ============================================
     // CAMBIAR PÁGINA
@@ -1017,108 +1009,11 @@ const ModuloPartidas = {
                 }
             </style>
         `;
-    },                    .loading-detalle-partida {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: rgba(0, 0, 0, 0.75);
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        z-index: 99999; /* MUY ALTO para estar sobre todo */
-                        animation: fadeIn 0.2s ease-in;
-                    }
-
-                    .loading-content {
-                        background: white;
-                        padding: 40px 60px;
-                        border-radius: 12px;
-                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-                        text-align: center;
-                        max-width: 400px;
-                    }
-
-                    .loading-spinner-big {
-                        width: 60px;
-                        height: 60px;
-                        border: 5px solid #f3f3f3;
-                        border-top: 5px solid #3498db;
-                        border-radius: 50%;
-                        animation: spin 1s linear infinite;
-                        margin: 0 auto 20px;
-                    }
-
-                    .loading-text {
-                        font-size: 18px;
-                        font-weight: 600;
-                        color: #2c3e50;
-                        margin: 0 0 10px 0;
-                    }
-
-                    .loading-subtext {
-                        font-size: 14px;
-                        color: #7f8c8d;
-                        margin: 0;
-                    }
-
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-
-                    @keyframes fadeIn {
-                        from { opacity: 0; }
-                        to { opacity: 1; }
-                    }
-
-                    /* Versión alternativa con fondo oscuro (si prefieres) */
-                    .loading-detalle-partida.dark-mode .loading-content {
-                        background: #2c3e50;
-                        color: white;
-                    }
-
-                    .loading-detalle-partida.dark-mode .loading-text {
-                        color: white;
-                    }
-
-                    .loading-detalle-partida.dark-mode .loading-subtext {
-                        color: #bdc3c7;
-                    }
-
-                    /* Responsive */
-                    @media (max-width: 768px) {
-                        .loading-content {
-                            padding: 30px 40px;
-                            max-width: 300px;
-                        }
-                        
-                        .loading-spinner-big {
-                            width: 50px;
-                            height: 50px;
-                            border-width: 4px;
-                        }
-                        
-                        .loading-text {
-                            font-size: 16px;
-                        }
-                        
-                        .loading-subtext {
-                            font-size: 13px;
-                        }
-                    }
-            </style>
-        `;
     },
 
     // ============================================
     // CONSULTAR LASIRSARP
     // ============================================
-    // ============================================
-    // VERSIÓN SIMPLE Y DIRECTA - 100% GARANTIZADA
-    // ============================================
-
     async consultarLASIRSARP() {
         if (!this.credencialesUsuario.dni || !this.credencialesUsuario.password) {
             mostrarAlerta('No se han cargado las credenciales del usuario. Recargue la página.', 'danger', "alertContainerPartidas");
