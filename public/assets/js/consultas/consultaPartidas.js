@@ -656,6 +656,7 @@ const ModuloPartidas = {
     mostrarResultadosTSIRSARP(data) {
         this.partidasEncontradas = data;
         this.paginaActual = 1;
+        this.partidaActualmenteMostrada = 0;
         this.cacheDetalles = {}; // Limpiar cache
 
         const info = document.getElementById('infoGrid');
@@ -697,6 +698,10 @@ const ModuloPartidas = {
         const fin = Math.min(inicio + this.partidasPorPagina, totalPartidas);
         const partidasPagina = this.partidasEncontradas.slice(inicio, fin);
 
+        const indiceSeleccionado = Number.isInteger(this.partidaActualmenteMostrada)
+            ? this.partidaActualmenteMostrada
+            : 0;
+
         let html = `
             <div class="glass rounded-2xl p-6 shadow-lg border border-white/50 mb-6" style="background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.5); margin-bottom: 1.5rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
@@ -723,7 +728,7 @@ const ModuloPartidas = {
             const libro = partida.libro || '-';
             const estadoUpper = estado.toUpperCase();
             const esActiva = estadoUpper === 'ACTIVA' || estadoUpper === 'VIGENTE';
-            const esPrimeraPagina = this.paginaActual === 1 && indexEnPagina === 0;
+            const esSeleccionada = indexGlobal === indiceSeleccionado;
 
             const estadoBadge = esActiva 
                 ? '<span style="display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: #d1fae5; color: #065f46; border-radius: 0.375rem; font-size: 0.75rem; font-weight: 600;"><i class="fas fa-check-circle"></i> ' + estado + '</span>'
@@ -732,10 +737,10 @@ const ModuloPartidas = {
             html += `
                 <label style="cursor: pointer; display: block;">
                     <input type="radio" name="partidaSeleccionada" value="${indexGlobal}" 
-                           ${esPrimeraPagina ? 'checked' : ''}
+                           ${esSeleccionada ? 'checked' : ''}
                            onchange="ModuloPartidas.cambiarPartida(${indexGlobal})"
                            style="position: absolute; opacity: 0; width: 0; height: 0;">
-                    <div class="partida-card-${indexGlobal}" style="height: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.8); border-radius: 0.75rem; border: 2px solid ${esPrimeraPagina ? '#8b5cf6' : '#e5e7eb'}; ${esPrimeraPagina ? 'background: #f5f3ff;' : ''} transition: all 0.2s ease;">
+                    <div data-partida-card="${indexGlobal}" style="height: 100%; padding: 1rem; border-radius: 0.75rem; border: 2px solid ${esSeleccionada ? '#8b5cf6' : '#e5e7eb'}; background: ${esSeleccionada ? '#f5f3ff' : 'rgba(255, 255, 255, 0.8)'}; transition: all 0.2s ease;">
                         <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 0.75rem;">
                             <div style="display: flex; align-items: center; gap: 0.5rem; color: #8b5cf6; font-weight: 700; font-size: 1.125rem;">
                                 <i class="fas fa-file-contract"></i>
@@ -764,63 +769,33 @@ const ModuloPartidas = {
                         </div>
                     </div>
                 </label>
-                <script>
-                    (function() {
-                        const radio = document.querySelector('input[name="partidaSeleccionada"][value="${indexGlobal}"]');
-                        const card = document.querySelector('.partida-card-${indexGlobal}');
-                        if (radio && card) {
-                            // Actualizar estilos cuando cambia el radio
-                            radio.addEventListener('change', function() {
-                                // Resetear todos los cards
-                                document.querySelectorAll('[class^="partida-card-"]').forEach(c => {
-                                    c.style.border = '2px solid #e5e7eb';
-                                    c.style.background = 'rgba(255, 255, 255, 0.8)';
-                                });
-                                // Aplicar estilo al seleccionado
-                                if (this.checked) {
-                                    card.style.border = '2px solid #8b5cf6';
-                                    card.style.background = '#f5f3ff';
-                                }
-                            });
-                            
-                            // Efectos hover
-                            card.addEventListener('mouseenter', function() {
-                                if (!radio.checked) {
-                                    this.style.border = '2px solid #c4b5fd';
-                                    this.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
-                                }
-                            });
-                            card.addEventListener('mouseleave', function() {
-                                if (!radio.checked) {
-                                    this.style.border = '2px solid #e5e7eb';
-                                    this.style.boxShadow = 'none';
-                                }
-                            });
-                            
-                            // Click en el card selecciona el radio
-                            card.addEventListener('click', function() {
-                                radio.checked = true;
-                                radio.dispatchEvent(new Event('change'));
-                                // Llamar a la función de cambio de partida
-                                if (typeof ModuloPartidas !== 'undefined' && typeof ModuloPartidas.cambiarPartida === 'function') {
-                                    ModuloPartidas.cambiarPartida(${indexGlobal});
-                                }
-                            });
-                        }
-                    })();
-                </script>
             `;
         });
 
         html += `
                 </div>
-                
-                ${totalPaginas > 1 ? '<div style="margin-top: 1.5rem;">' + this.generarControlesPaginacion(totalPaginas) + '</div>' : ''}
             </div>
         `;
 
         selectorPartidas.innerHTML = html;
         selectorPartidas.style.display = 'block';
+
+        // Efecto hover en tarjetas no seleccionadas
+        selectorPartidas.querySelectorAll('[data-partida-card]').forEach(card => {
+            const index = Number(card.getAttribute('data-partida-card'));
+            card.addEventListener('mouseenter', () => {
+                if (index !== this.partidaActualmenteMostrada) {
+                    card.style.border = '2px solid #c4b5fd';
+                    card.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.1)';
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                if (index !== this.partidaActualmenteMostrada) {
+                    card.style.border = '2px solid #e5e7eb';
+                    card.style.boxShadow = 'none';
+                }
+            });
+        });
         
         console.log(`✅ Selector de partidas mostrado con ${partidasPagina.length} partida(s)`);
     },
@@ -912,13 +887,17 @@ const ModuloPartidas = {
         }
 
         this.paginaActual = nuevaPagina;
-        this.mostrarSelectorPartidasPaginado();
 
         // Auto-seleccionar la primera partida de la nueva página
         const inicio = (this.paginaActual - 1) * this.partidasPorPagina;
-        const primeraPartida = this.partidasEncontradas[inicio];
+        const primerIndice = inicio;
+        const primeraPartida = this.partidasEncontradas[primerIndice];
         if (primeraPartida) {
+            this.partidaActualmenteMostrada = primerIndice;
+            this.mostrarSelectorPartidasPaginado();
             this.cargarYMostrarDetalle(primeraPartida);
+        } else {
+            this.mostrarSelectorPartidasPaginado();
         }
 
         // Scroll suave al selector
@@ -933,8 +912,25 @@ const ModuloPartidas = {
     // ============================================
     cambiarPartida(index) {
         if (this.partidasEncontradas && this.partidasEncontradas[index]) {
+            this.partidaActualmenteMostrada = index;
+            this.actualizarEstilosTarjetaPartida(index);
             this.cargarYMostrarDetalle(this.partidasEncontradas[index]);
         }
+    },
+
+    actualizarEstilosTarjetaPartida(indexSeleccionado) {
+        document.querySelectorAll('[data-partida-card]').forEach(card => {
+            const indexCard = Number(card.getAttribute('data-partida-card'));
+            if (indexCard === indexSeleccionado) {
+                card.style.border = '2px solid #8b5cf6';
+                card.style.background = '#f5f3ff';
+                card.style.boxShadow = '0 10px 25px rgba(124, 58, 237, 0.15)';
+            } else {
+                card.style.border = '2px solid #e5e7eb';
+                card.style.background = 'rgba(255, 255, 255, 0.8)';
+                card.style.boxShadow = 'none';
+            }
+        });
     },
 
     // ============================================
@@ -942,6 +938,11 @@ const ModuloPartidas = {
     // ============================================
     async cargarYMostrarDetalle(partida) {
         const numeroPartida = partida.numero_partida;
+        const indexPartida = this.partidasEncontradas.findIndex(p => p.numero_partida === numeroPartida);
+        if (indexPartida >= 0) {
+            this.partidaActualmenteMostrada = indexPartida;
+            this.actualizarEstilosTarjetaPartida(indexPartida);
+        }
 
         // Verificar si ya está en cache
         if (this.cacheDetalles[numeroPartida]) {
@@ -1528,6 +1529,7 @@ const ModuloPartidas = {
         const infoGrid = document.getElementById('infoGrid');
         if (resultsSection) resultsSection.style.display = 'block';
         if (infoGrid) infoGrid.style.display = 'grid';
+        this.ajustarLayoutInfoRegistro(esNatural);
 
         // Resetear visibilidad base de los contenedores de información
         const contenedores = [
@@ -1620,6 +1622,31 @@ const ModuloPartidas = {
             this.mostrarDatosVehiculo(datosVehiculo);
         } else {
             if (vehiculoSection) vehiculoSection.style.display = 'none';
+        }
+    },
+
+    ajustarLayoutInfoRegistro(mostrarFoto) {
+        const photoSection = document.getElementById('photoSection');
+        const filaPrincipal = photoSection?.parentElement;
+        const infoWrapper = document.getElementById('infoGrid')?.parentElement;
+
+        if (filaPrincipal) {
+            filaPrincipal.style.display = 'grid';
+            filaPrincipal.style.gap = '1.5rem';
+            filaPrincipal.style.gridTemplateColumns = mostrarFoto ? '300px minmax(0, 1fr)' : 'minmax(0, 1fr)';
+        }
+
+        if (infoWrapper) {
+            infoWrapper.style.width = '100%';
+            infoWrapper.style.maxWidth = '100%';
+            infoWrapper.style.minWidth = '0';
+        }
+
+        const infoGrid = document.getElementById('infoGrid');
+        if (infoGrid) {
+            infoGrid.style.width = '100%';
+            infoGrid.style.maxWidth = '100%';
+            infoGrid.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
         }
     },
 
@@ -1737,11 +1764,19 @@ const ModuloPartidas = {
             return;
         }
 
+        const imageViewerContainer = document.getElementById('imageViewerContainer');
+        if (imageViewerContainer) {
+            imageViewerContainer.style.alignItems = 'flex-start';
+            imageViewerContainer.style.justifyContent = 'flex-start';
+            imageViewerContainer.style.minWidth = 'max-content';
+            imageViewerContainer.style.minHeight = 'max-content';
+        }
+
         // Resetear zoom al cambiar de partida
         this.zoomLevel = 1;
-        imagenViewer.style.transform = 'scale(1)';
-        imagenViewer.style.maxWidth = '100%';
-        imagenViewer.style.maxHeight = '100%';
+        imagenViewer.style.transform = 'none';
+        imagenViewer.style.maxWidth = 'none';
+        imagenViewer.style.maxHeight = 'none';
         imagenViewer.style.width = 'auto';
         imagenViewer.style.height = 'auto';
 
@@ -1838,12 +1873,16 @@ const ModuloPartidas = {
                 this.imagenActual = imagenData;
                 imagenViewer.src = `data:image/jpeg;base64,${imagenData.imagen_base64}`;
                 imagenViewer.style.display = 'block';
-                imagenViewer.style.transform = 'scale(1)';
-                imagenViewer.style.maxWidth = '100%';
-                imagenViewer.style.maxHeight = '100%';
-                imagenViewer.style.width = 'auto';
-                imagenViewer.style.height = 'auto';
+                imagenViewer.style.transform = 'none';
+                imagenViewer.style.maxWidth = 'none';
+                imagenViewer.style.maxHeight = 'none';
                 noImagen.style.display = 'none';
+
+                imagenViewer.onload = () => {
+                    imagenViewer.dataset.naturalWidth = String(imagenViewer.naturalWidth || 0);
+                    imagenViewer.dataset.naturalHeight = String(imagenViewer.naturalHeight || 0);
+                    this.aplicarZoom(imagenViewer, document.getElementById('zoomLabel'));
+                };
 
                 // Actualizar el label de zoom
                 const zoomLabel = document.getElementById('zoomLabel');
@@ -1961,10 +2000,17 @@ const ModuloPartidas = {
     aplicarZoom(imagenViewer, zoomLabel) {
         if (!imagenViewer) return;
 
-        // Aplicar transformación de escala
-        imagenViewer.style.transform = `scale(${this.zoomLevel})`;
-        imagenViewer.style.transformOrigin = 'center center';
-        imagenViewer.style.transition = 'transform 0.2s ease';
+        const anchoNatural = parseFloat(imagenViewer.dataset.naturalWidth || imagenViewer.naturalWidth || 0);
+        const altoNatural = parseFloat(imagenViewer.dataset.naturalHeight || imagenViewer.naturalHeight || 0);
+
+        if (anchoNatural > 0 && altoNatural > 0) {
+            imagenViewer.style.width = `${Math.round(anchoNatural * this.zoomLevel)}px`;
+            imagenViewer.style.height = `${Math.round(altoNatural * this.zoomLevel)}px`;
+            imagenViewer.style.maxWidth = 'none';
+            imagenViewer.style.maxHeight = 'none';
+            imagenViewer.style.transform = 'none';
+            imagenViewer.style.transition = 'width 0.2s ease, height 0.2s ease';
+        }
 
         // Actualizar label
         if (zoomLabel) {
@@ -2093,7 +2139,7 @@ const ModuloPartidas = {
 
         if (!datosVehiculo || Object.keys(datosVehiculo).length === 0) {
             console.log('⚠️ No hay datos de vehículo');
-            vehiculoSection.style.display = 'none';
+            if (vehiculoSection) vehiculoSection.style.display = 'none';
             return;
         }
 
@@ -2110,7 +2156,15 @@ const ModuloPartidas = {
             'estado': { label: 'Estado', icon: 'fa-info-circle' }
         };
 
-        let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">';
+        if (vehiculoContainer) {
+            vehiculoContainer.style.display = 'grid';
+            vehiculoContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(220px, 1fr))';
+            vehiculoContainer.style.gap = '1rem';
+            vehiculoContainer.style.width = '100%';
+            vehiculoContainer.style.alignItems = 'stretch';
+        }
+
+        let html = '';
 
         for (const [campo, config] of Object.entries(camposVehiculo)) {
             const valor = datosVehiculo[campo];
@@ -2119,7 +2173,7 @@ const ModuloPartidas = {
                 const esEstado = campo === 'estado';
                 
                 html += `
-                    <div class="bg-white/80 rounded-xl p-4 border border-gray-200 hover:shadow-lg transition-all duration-200 ${esPlaca ? 'md:col-span-2 lg:col-span-1' : ''}">
+                    <div class="bg-white/80 rounded-xl p-4 border border-gray-200 hover:shadow-lg transition-all duration-200" style="${esPlaca ? 'grid-column: 1 / -1;' : ''}">
                         <div class="flex items-center gap-2 mb-2">
                             <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
                                 <i class="fas ${config.icon} text-violet-600 text-sm"></i>
@@ -2134,10 +2188,12 @@ const ModuloPartidas = {
             }
         }
 
-        html += '</div>';
-
-        vehiculoContainer.innerHTML = html;
-        vehiculoSection.style.display = 'block';
+        if (vehiculoContainer) {
+            vehiculoContainer.innerHTML = html;
+        }
+        if (vehiculoSection) {
+            vehiculoSection.style.display = 'block';
+        }
         console.log('✅ Sección de vehículo mostrada con estilo mejorado');
     },
 
