@@ -171,7 +171,7 @@ $area = $_SESSION['area'] ?? '';
                 </div>
                 <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-blue-900 pulse-dot"></div>
             </div>
-            <div class="user-info flex-1 min-w-0">
+            <div class="user-info flex flex-col flex-1 min-w-0">
                 <p class="font-semibold text-sm truncate text-white"><?= htmlspecialchars($_SESSION['nombreUsuario'] ?? '') ?></p>
                 <p class="text-xs text-blue-300 truncate"><?= htmlspecialchars($_SESSION['ROL_nombre'] ?? '') ?></p>
             </div>

@@ -870,6 +870,14 @@ class ConsultasSunarpController
         }
     }
 
+    private function limpiarRespuesta($texto) {
+        $mapa = [
+            "ï¿½" => "ó", // reemplazo del carácter mal codificado
+            "En circulaciï¿½n" => "En circulación"
+        ];
+        return strtr($texto, $mapa);
+    }
+
     private function ejecutarVDRPVExtra($usuario, $clave, $zona, $oficina, $placa)
     {
         try {
@@ -916,6 +924,8 @@ class ConsultasSunarpController
                 $jsonResponse = json_decode($response, true);
 
                 $vehiculo = $jsonResponse['verDetalleRPVExtraResponse']['vehiculo'] ?? [];
+                $limpiado = $this->limpiarRespuesta($vehiculo['estado']);
+                $vehiculo['estado'] = $limpiado;
 
                 error_log("Resultado de vehiculo" . print_r($vehiculo, true));
 
