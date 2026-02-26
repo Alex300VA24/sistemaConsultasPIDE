@@ -1518,111 +1518,109 @@ const ModuloPartidas = {
     // ============================================
     mostrarDetallePartida(registro) {
         console.log('📋 Mostrando detalle de partida:', registro);
-        
-        // Asegurar que resultsSection e infoGrid estén visibles
+
+        const data = registro || {};
+        const esNatural = this.tipoPersonaActual === 'natural';
+        const esPartida = this.tipoPersonaActual === 'partida';
+        const esJuridica = this.tipoPersonaActual === 'juridica';
+
         const resultsSection = document.getElementById('resultsSection');
         const infoGrid = document.getElementById('infoGrid');
-        
         if (resultsSection) resultsSection.style.display = 'block';
         if (infoGrid) infoGrid.style.display = 'grid';
 
-        // Resetear visibilidad de todos los contenedores
-        const contenedores = ['containerNombres', 'containerApellidoPaterno',
+        // Resetear visibilidad base de los contenedores de información
+        const contenedores = [
+            'containerNombres', 'containerApellidoPaterno',
             'containerApellidoMaterno', 'containerRazonSocial',
             'containerNroPartida', 'containerNroPlaca', 'containerEstado',
-            'containerZona', 'containerOficina', 'containerDireccion', 'containerLibro'];
+            'containerZona', 'containerOficina', 'containerDireccion', 'containerLibro'
+        ];
         contenedores.forEach(id => {
             const elem = document.getElementById(id);
             if (elem) elem.style.display = '';
         });
 
         const photoSection = document.getElementById('photoSection');
-        
-        if (this.tipoPersonaActual === 'natural') {
-            // Mostrar foto para personas naturales
+
+        if (esNatural) {
             if (photoSection) {
                 photoSection.style.display = 'block';
-                console.log('✅ Mostrando sección de foto');
             }
-            this.mostrarCampo('nombres', registro.nombre || this.personaSeleccionada?.nombres || '-', 'containerNombres');
-            this.mostrarCampo('apellidoPaterno', registro.apPaterno || this.personaSeleccionada?.apellido_paterno || '-', 'containerApellidoPaterno');
-            this.mostrarCampo('apellidoMaterno', registro.apMaterno || this.personaSeleccionada?.apellido_materno || '-', 'containerApellidoMaterno');
+            this.mostrarCampo('nombres', data.nombre || this.personaSeleccionada?.nombres || '-', 'containerNombres');
+            this.mostrarCampo('apellidoPaterno', data.apPaterno || this.personaSeleccionada?.apellido_paterno || '-', 'containerApellidoPaterno');
+            this.mostrarCampo('apellidoMaterno', data.apMaterno || this.personaSeleccionada?.apellido_materno || '-', 'containerApellidoMaterno');
             this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
             this.mostrarFotoPersona();
-        } else if (this.tipoPersonaActual === 'partida') {
-            // Ocultar foto para búsqueda por partida
+        } else if (esJuridica) {
             if (photoSection) {
                 photoSection.style.display = 'none';
-                console.log('⚠️ Ocultando sección de foto (búsqueda por partida)');
             }
-            // OCULTAR los campos específicos que no se usan en LASIRSARP
-            this.ocultarCampo('nombres', 'containerNombres');
-            this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
-            this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
-            this.ocultarCampo('tipoDoc');
-            this.ocultarCampo('nroDoc');
-            this.ocultarCampo('nroPartida', 'containerNroPartida');
-            this.ocultarCampo('nroPlaca', 'containerNroPlaca');
-            this.ocultarCampo('estado', 'containerEstado');
-            this.ocultarCampo('zona', 'containerZona');
-            this.ocultarCampo('oficina', 'containerOficina');
-            this.ocultarCampo('direccion', 'containerDireccion');
-            this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
-            this.ocultarCampo('libro', 'containerLibro');
-        } else {
-            // Ocultar foto para personas jurídicas
-            if (photoSection) {
-                photoSection.style.display = 'none';
-                console.log('⚠️ Ocultando sección de foto (persona jurídica)');
-            }
-            const tieneNombres = registro.nombre || registro.apPaterno || registro.apMaterno;
+            const tieneNombres = data.nombre || data.apPaterno || data.apMaterno;
             if (tieneNombres) {
-                this.mostrarCampo('nombres', registro.nombre || '-', 'containerNombres');
-                this.mostrarCampo('apellidoPaterno', registro.apPaterno || '-', 'containerApellidoPaterno');
-                this.mostrarCampo('apellidoMaterno', registro.apMaterno || '-', 'containerApellidoMaterno');
+                this.mostrarCampo('nombres', data.nombre || '-', 'containerNombres');
+                this.mostrarCampo('apellidoPaterno', data.apPaterno || '-', 'containerApellidoPaterno');
+                this.mostrarCampo('apellidoMaterno', data.apMaterno || '-', 'containerApellidoMaterno');
             } else {
                 this.ocultarCampo('nombres', 'containerNombres');
                 this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
                 this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
             }
-            const razonSocial = registro.razon_social || this.personaSeleccionada?.razon_social || '-';
+            const razonSocial = data.razon_social || this.personaSeleccionada?.razon_social || '-';
             this.mostrarCampo('campoRazonSocial', razonSocial, 'containerRazonSocial');
+        } else {
+            // Búsqueda por partida: solo usar información registral, sin bloque de persona/foto
+            if (photoSection) {
+                photoSection.style.display = 'none';
+            }
+            this.ocultarCampo('nombres', 'containerNombres');
+            this.ocultarCampo('apellidoPaterno', 'containerApellidoPaterno');
+            this.ocultarCampo('apellidoMaterno', 'containerApellidoMaterno');
+            this.ocultarCampo('campoRazonSocial', 'containerRazonSocial');
+            this.ocultarCampo('tipoDoc');
+            this.ocultarCampo('nroDoc');
         }
 
-        // Campos comunes - Solo mostrar si NO es tipo partida (LASIRSARP)
-        if (this.tipoPersonaActual !== 'partida') {
-            this.mostrarCampo('tipoDoc', registro.tipo_documento || (this.tipoPersonaActual === 'natural' ? 'DNI' : 'RUC'));
-            this.mostrarCampo('nroDoc', registro.numero_documento || (this.tipoPersonaActual === 'natural' ? this.personaSeleccionada?.dni : this.personaSeleccionada?.ruc) || '-');
-            this.mostrarCampo('nroPartida', registro.numero_partida || '-', 'containerNroPartida');
-            this.mostrarCampo('nroPlaca', registro.numero_placa || '-', 'containerNroPlaca');
-            this.mostrarCampo('estado', registro.estado || '-', 'containerEstado');
-            this.mostrarCampo('zona', registro.zona || '-', 'containerZona');
-            this.mostrarCampo('libro', registro.libro || '-', 'containerLibro');
-            this.mostrarCampo('oficina', registro.oficina || '-', 'containerOficina');
-            this.mostrarCampo('direccion', registro.direccion || '-', 'containerDireccion');
+        if (!esPartida) {
+            this.mostrarCampo('tipoDoc', data.tipo_documento || (esNatural ? 'DNI' : 'RUC'));
+            this.mostrarCampo('nroDoc', data.numero_documento || (esNatural ? this.personaSeleccionada?.dni : this.personaSeleccionada?.ruc) || '-');
+        } else {
+            const tipoDocWrap = document.getElementById('tipoDoc')?.closest('div');
+            const nroDocWrap = document.getElementById('nroDoc')?.closest('div');
+            if (tipoDocWrap) tipoDocWrap.style.display = 'none';
+            if (nroDocWrap) nroDocWrap.style.display = 'none';
         }
 
-        // Secciones adicionales
+        this.mostrarCampo('nroPartida', data.numero_partida || '-', 'containerNroPartida');
+        this.mostrarCampo('nroPlaca', data.numero_placa || '-', 'containerNroPlaca');
+        this.mostrarCampo('estado', data.estado || '-', 'containerEstado');
+        this.mostrarCampo('zona', data.zona || '-', 'containerZona');
+        this.mostrarCampo('libro', data.libro || '-', 'containerLibro');
+        this.mostrarCampo('oficina', data.oficina || '-', 'containerOficina');
+        this.mostrarCampo('direccion', data.direccion || '-', 'containerDireccion');
+
         const imagenesSection = document.getElementById('imagenesSection');
         const vehiculoSection = document.getElementById('vehiculoSection');
-        
-        if (registro.imagenes && registro.imagenes.length > 0) {
-            console.log(`✅ Mostrando ${registro.imagenes.length} imagen(es)`);
-            this.mostrarImagenes(registro.imagenes);
+
+        const imagenes = Array.isArray(data.imagenes)
+            ? data.imagenes
+            : Object.values(data.imagenes || {});
+
+        if (imagenes.length > 0) {
+            this.mostrarImagenes(imagenes);
         } else {
-            console.log('⚠️ No hay imágenes para mostrar');
             if (imagenesSection) imagenesSection.style.display = 'none';
         }
-        
-        if (registro.datos_vehiculo && Object.keys(registro.datos_vehiculo).length > 0) {
-            console.log('✅ Mostrando datos vehiculares');
-            this.mostrarDatosVehiculo(registro.datos_vehiculo);
+
+        const datosVehiculo = data.datos_vehiculo && typeof data.datos_vehiculo === 'object'
+            ? data.datos_vehiculo
+            : {};
+
+        if (Object.keys(datosVehiculo).length > 0) {
+            this.mostrarDatosVehiculo(datosVehiculo);
         } else {
-            console.log('⚠️ No hay datos vehiculares');
             if (vehiculoSection) vehiculoSection.style.display = 'none';
         }
-        
-        console.log('✅ Detalle de partida mostrado correctamente');
     },
 
     mostrarFotoPersona() {
@@ -1702,8 +1700,11 @@ const ModuloPartidas = {
     },
 
     mostrarImagenes(imagenes) {
-        console.log('🖼️ Iniciando mostrarImagenes con', imagenes.length, 'imagen(es)');
-        
+        const listaImagenes = (Array.isArray(imagenes) ? imagenes : Object.values(imagenes || {}))
+            .filter(img => img && img.imagen_base64);
+
+        console.log('🖼️ Iniciando mostrarImagenes con', listaImagenes.length, 'imagen(es)');
+
         const imagenesSection = document.getElementById('imagenesSection');
         const selectImagenes = document.getElementById('selectImagenes');
         const imagenViewer = document.getElementById('imagenViewer');
@@ -1730,8 +1731,9 @@ const ModuloPartidas = {
             return;
         }
         
-        if (!thumbnailContainer) {
-            console.error('❌ thumbnailContainer no encontrado');
+        if (!listaImagenes.length) {
+            this.imagenActual = null;
+            if (imagenesSection) imagenesSection.style.display = 'none';
             return;
         }
 
@@ -1745,13 +1747,15 @@ const ModuloPartidas = {
 
         // Limpiar selects y miniaturas anteriores
         selectImagenes.innerHTML = '';
-        thumbnailContainer.innerHTML = '';
-        thumbnailContainer.style.display = 'none';
+        if (thumbnailContainer) {
+            thumbnailContainer.innerHTML = '';
+            thumbnailContainer.style.display = 'none';
+        }
 
         console.log('🔄 Generando opciones del select y miniaturas...');
 
         // Llenar el select y generar miniaturas
-        imagenes.forEach((img, index) => {
+        listaImagenes.forEach((img, index) => {
             // Opción en el select
             const option = document.createElement('option');
             option.value = index;
@@ -1806,13 +1810,15 @@ const ModuloPartidas = {
                     }
                 });
                 
-                thumbnailContainer.appendChild(thumbnailDiv);
+                if (thumbnailContainer) {
+                    thumbnailContainer.appendChild(thumbnailDiv);
+                }
                 console.log(`  ✓ Miniatura ${index + 1} agregada`);
             }
         });
 
         // Mostrar miniaturas si hay más de 1 página
-        if (imagenes.length > 1) {
+        if (thumbnailContainer && listaImagenes.length > 1) {
             thumbnailContainer.style.display = 'flex';
             console.log('✅ Miniaturas visibles (múltiples páginas)');
         } else {
@@ -1821,7 +1827,7 @@ const ModuloPartidas = {
 
         const cambiarImagen = () => {
             const index = parseInt(selectImagenes.value);
-            const imagenData = imagenes[index];
+            const imagenData = listaImagenes[index];
             
             console.log(`🔄 Cambiando a imagen ${index + 1}`);
 
@@ -1868,18 +1874,12 @@ const ModuloPartidas = {
             }
         };
 
-        // Remover listeners anteriores del select
-        const newSelect = selectImagenes.cloneNode(false);
-        newSelect.innerHTML = selectImagenes.innerHTML;
-        selectImagenes.parentNode.replaceChild(newSelect, selectImagenes);
-        
-        // Agregar nuevo listener al select recién creado
-        const selectActualizado = document.getElementById('selectImagenes');
-        selectActualizado.addEventListener('change', () => {
+        // Reemplazar listener previo de forma segura
+        selectImagenes.onchange = () => {
             console.log('📝 Select cambiado');
             cambiarImagen();
-        });
-        
+        };
+
         console.log('✅ Event listener del select configurado');
 
         // Configurar controles de zoom
@@ -1891,7 +1891,7 @@ const ModuloPartidas = {
         // Mostrar sección
         imagenesSection.style.display = 'block';
         
-        console.log(`✅ Visor de imágenes configurado y visible con ${imagenes.length} página(s)`);
+        console.log(`✅ Visor de imágenes configurado y visible con ${listaImagenes.length} página(s)`);
     },
     configurarControlesZoom() {
         const btnZoomIn = document.getElementById('btnZoomIn');
@@ -2161,157 +2161,83 @@ const ModuloPartidas = {
             selectorPartidas.remove(); // Remover completamente
         }
 
-        // 3. Reconstruir resultsSection completamente
+        // 3. Limpiar secciones de resultados sin reconstruir HTML
         const resultsSection = document.getElementById('resultsSection');
         if (resultsSection) {
             resultsSection.style.display = 'none';
+        }
 
-            // Reconstruir HTML desde cero
-            resultsSection.innerHTML = `
-            <div class="results-layout">
-                <!-- Foto (solo para personas naturales) -->
-                <div class="photo-section">
-                    <div class="photo-frame" id="photoSection">
-                        <div class="no-photo">
-                            <i class="fas fa-user"></i>
-                            <span>Sin foto</span>
-                        </div>
-                    </div>
+        const infoGrid = document.getElementById('infoGrid');
+        if (infoGrid) {
+            infoGrid.style.display = 'none';
+        }
+
+        const photoSection = document.getElementById('photoSection');
+        if (photoSection) {
+            photoSection.style.display = 'none';
+        }
+
+        const fotoContainer = document.getElementById('fotoContainer');
+        if (fotoContainer) {
+            fotoContainer.innerHTML = `
+                <div style="text-align: center; color: #9ca3af;">
+                    <i class="fas fa-user" style="font-size: 4rem; margin-bottom: 0.75rem; display: block; opacity: 0.5;"></i>
+                    <p style="font-size: 0.875rem; margin: 0;">Sin fotografía</p>
                 </div>
+            `;
+        }
 
-                <!-- Información -->
-                <div class="info-grid" id="infoGrid" style="display: none;">
-                    <!-- Fila 1: Libro -->
-                    <div class="info-item">
-                        <span class="info-label">Libro</span>
-                        <div class="info-value white-bg" id="libro">-</div>
-                    </div>
-                    <div class="info-item"></div>
-                    <div class="info-item"></div>
+        ['nombres', 'apellidoPaterno', 'apellidoMaterno', 'campoRazonSocial', 'tipoDoc', 'nroDoc',
+            'nroPartida', 'nroPlaca', 'estado', 'zona', 'libro', 'oficina', 'direccion'].forEach(id => {
+            const campo = document.getElementById(id);
+            if (campo) campo.textContent = '-';
+        });
 
-                    <!-- Fila 2: Nombres -->
-                    <div class="info-item full-width" id="containerNombres">
-                        <span class="info-label">Nombres</span>
-                        <div class="info-value white-bg" id="nombres">-</div>
-                    </div>
+        const contenedores = ['containerNombres', 'containerApellidoPaterno', 'containerApellidoMaterno',
+            'containerRazonSocial', 'containerNroPartida', 'containerNroPlaca', 'containerEstado',
+            'containerZona', 'containerLibro', 'containerOficina', 'containerDireccion'];
+        contenedores.forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem) elem.style.display = '';
+        });
 
-                    <!-- Fila 3: Apellidos -->
-                    <div class="info-item" id="containerApellidoPaterno">
-                        <span class="info-label">Apellido Paterno</span>
-                        <div class="info-value white-bg" id="apellidoPaterno">-</div>
-                    </div>
-                    <div class="info-item" id="containerApellidoMaterno">
-                        <span class="info-label">Apellido Materno</span>
-                        <div class="info-value white-bg" id="apellidoMaterno">-</div>
-                    </div>
-                    <div class="info-item"></div>
+        const imagenesSection = document.getElementById('imagenesSection');
+        if (imagenesSection) {
+            imagenesSection.style.display = 'none';
+        }
 
-                    <!-- Fila 4: Razón Social -->
-                    <div class="info-item full-width" id="containerRazonSocial" style="display: none;">
-                        <span class="info-label">Razón Social</span>
-                        <div class="info-value white-bg" id="campoRazonSocial">-</div>
-                    </div>
+        const selectImagenes = document.getElementById('selectImagenes');
+        if (selectImagenes) {
+            selectImagenes.innerHTML = '';
+            selectImagenes.onchange = null;
+        }
 
-                    <!-- Fila 5: Documento -->
-                    <div class="info-item">
-                        <span class="info-label">Tipo de Documento</span>
-                        <div class="info-value white-bg" id="tipoDoc">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Nro. Documento</span>
-                        <div class="info-value white-bg" id="nroDoc">-</div>
-                    </div>
-                    <div class="info-item"></div>
+        const imagenViewer = document.getElementById('imagenViewer');
+        if (imagenViewer) {
+            imagenViewer.src = '';
+            imagenViewer.style.display = 'none';
+            imagenViewer.style.transform = 'scale(1)';
+        }
 
-                    <!-- Fila 6: Partida y Placa -->
-                    <div class="info-item">
-                        <span class="info-label">Nro. Partida</span>
-                        <div class="info-value white-bg" id="nroPartida">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Nro. Placa</span>
-                        <div class="info-value white-bg" id="nroPlaca">-</div>
-                    </div>
-                    <div class="info-item"></div>
+        const noImagen = document.getElementById('noImagen');
+        if (noImagen) {
+            noImagen.style.display = 'flex';
+        }
 
-                    <!-- Fila 7: Estado y Zona -->
-                    <div class="info-item">
-                        <span class="info-label">Estado</span>
-                        <div class="info-value white-bg" id="estado">-</div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Zona</span>
-                        <div class="info-value white-bg" id="zona">-</div>
-                    </div>
-                    <div class="info-item"></div>
+        const thumbnailContainer = document.getElementById('thumbnailContainer');
+        if (thumbnailContainer) {
+            thumbnailContainer.innerHTML = '';
+            thumbnailContainer.style.display = 'none';
+        }
 
-                    <!-- Fila 8: Oficina -->
-                    <div class="info-item full-width">
-                        <span class="info-label">Oficina</span>
-                        <div class="info-value white-bg" id="oficina">-</div>
-                    </div>
+        const vehiculoSection = document.getElementById('vehiculoSection');
+        if (vehiculoSection) {
+            vehiculoSection.style.display = 'none';
+        }
 
-                    <!-- Fila 9: Dirección -->
-                    <div class="info-item full-width">
-                        <span class="info-label">Dirección</span>
-                        <div class="info-value white-bg" id="direccion">-</div>
-                    </div>
-                </div>
-
-                <!-- Sección de Imágenes de Documentos -->
-                <div class="imagenes-section" id="imagenesSection" style="display: none;">
-                    <div class="section-header">
-                        <h3><i class="fas fa-images"></i> Imágenes de Documentos</h3>
-                    </div>
-                    
-                    <div class="imagenes-viewer">
-                        <div class="imagenes-selector">
-                            <label for="selectImagenes"><strong>Seleccionar página:</strong></label>
-                            <select id="selectImagenes" class="imagen-select"></select>
-                        </div>
-                        
-                        <div class="image-controls">
-                            <button type="button" id="btnZoomOut" class="btn-zoom" title="Alejar">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" id="btnZoomReset" class="btn-zoom" title="Restablecer zoom">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                            <button type="button" id="btnZoomIn" class="btn-zoom" title="Acercar">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <span id="zoomLabel" class="zoom-label">100%</span>
-                            <button type="button" id="btnVerImagen" class="btn-view" title="Ver imagen en nueva pestaña">
-                                <i class="fas fa-external-link-alt"></i>
-                                <span>Ver</span>
-                            </button>
-                            <button type="button" id="btnDescargar" class="btn-download" title="Descargar imagen">
-                                <i class="fas fa-download"></i>
-                                <span>Descargar</span>
-                            </button>
-                        </div>
-                        
-                        <div class="imagen-container">
-                            <div class="imagen-wrapper">
-                                <img id="imagenViewer" src="" alt="Documento" style="display: none;">
-                                <div class="no-imagen" id="noImagen">
-                                    <i class="fas fa-image"></i>
-                                    <span>Seleccione una página</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sección de Datos Vehiculares -->
-                <div class="vehiculo-section" id="vehiculoSection" style="display: none;">
-                    <div class="section-header">
-                        <h3><i class="fas fa-car"></i> Información Vehicular</h3>
-                    </div>
-                    <div id="vehiculoContainer" class="vehiculo-container"></div>
-                </div>
-            </div>
-        `;
+        const vehiculoContainer = document.getElementById('vehiculoContainer');
+        if (vehiculoContainer) {
+            vehiculoContainer.innerHTML = '';
         }
 
     },
