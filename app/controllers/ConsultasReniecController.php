@@ -2,154 +2,75 @@
 
 namespace App\Controllers;
 
-class ConsultasReniecController {
-    
-    // CONFIGURACIÓN PIDE/RENIEC
+class ConsultasReniecController extends ConsultasPideBaseController
+{
 
-    private $dniUsuario;
     private $rucUsuario;
-    private $passwordPIDE;
     private $urlRENIEC;
-    private $urlSUNAT;
-    
-    public function __construct() {
-        $envFile = __DIR__ . '/../../.env';
-        if (file_exists($envFile)) {
-            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            foreach ($lines as $line) {
-                if (strpos(trim($line), '#') === 0) continue;
-                list($name, $value) = explode('=', $line, 2);
-                $_ENV[trim($name)] = trim($value);
-            }
-        }
-        // Cargar desde configuración o variables de entorno
+    private $dniUsuario;
+    private $passwordPIDE;
+
+    public function __construct()
+    {
+        parent::__construct();
         $this->rucUsuario = $_ENV['PIDE_RUC_EMPRESA'];
         $this->urlRENIEC = $_ENV['PIDE_URL_RENIEC'];
     }
 
+    // ========================================
     // CONSULTAR DNI (RENIEC)
+    // ========================================
     public function consultarDNI()
     {
-        header('Content-Type: application/json');
+        if (!$this->validatePostRequest()) return;
 
-        // Solo se permite método POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        // Obtener datos del cuerpo del request
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        // Validar campos requeridos
-        if (!isset($input['dniConsulta']) || !isset($input['dniUsuario']) || !isset($input['password'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Faltan datos: dni, dniUsuario o password'
-            ]);
-            return;
-        }
+        $input = $this->getPostInput(['dniConsulta', 'dniUsuario', 'password'], 'Faltan datos: dni, dniUsuario o password');
+        if ($input === null) return;
 
         $dni = trim($input['dniConsulta']);
         $this->dniUsuario = trim($input['dniUsuario']);
         $this->passwordPIDE = trim($input['password']);
 
-        // Validar formato del DNI a consultar
-        if (!preg_match('/^\d{8}$/', $dni)) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'DNI inválido. Debe tener 8 dígitos'
-            ]);
-            return;
-        }
+        if (!$this->validateDni($dni)) return;
 
-        // Realizar la consulta con las credenciales del usuario
         $resultado = $this->consultarServicioRENIEC($dni, $this->dniUsuario, $this->passwordPIDE);
 
-        // Enviar respuesta según resultado
-        http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);
+        $this->sendJsonResult($resultado);
     }
 
+    // ========================================
     // ACTUALIZAR CONTRASEÑA RENIEC
-    public function actualizarPasswordRENIEC(){
-        header('Content-Type: application/json');
+    // ========================================
+    public function actualizarPasswordRENIEC()
+    {
+        if (!$this->validatePostRequest()) return;
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = $this->getPostInput(['credencialAnterior', 'credencialNueva', 'nuDni'], 'Faltan datos: credencialAnterior, credencialNueva o nuDni');
+        if ($input === null) return;
 
         $credencialAnterior = $input['credencialAnterior'];
-        
-        // Validar campos requeridos
-        if (!isset($credencialAnterior) || 
-            !isset($input['credencialNueva']) || 
-            !isset($input['nuDni'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Faltan datos: credencialAnterior, credencialNueva o nuDni'
-            ]);
-            return;
-        }
-        ;
         $credencialNueva = trim($input['credencialNueva']);
         $nuDni = trim($input['nuDni']);
 
-        // Validar formato del DNI
-        if (!preg_match('/^\d{8}$/', $nuDni)) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'DNI inválido. Debe tener 8 dígitos'
-            ]);
-            return;
-        }
+        if (!$this->validateDni($nuDni)) return;
 
-        // Realizar actualización
         try {
-
-            // Convertir
-
-            // Manejar errores del servicio RENIEC
             $resultado = $this->actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni);
 
-            if (!$resultado['success']) {
-                http_response_code(400);
-            } else {
-                http_response_code(200);
-            }
-
+            http_response_code($resultado['success'] ? 200 : 400);
             echo json_encode($resultado);
-            return;
-
         } catch (\Exception $e) {
-
-            // ⛑ Capturar timeout, conexión fallida, errores SOAP, CURL, etc.
             http_response_code(500);
             echo json_encode([
                 'success' => false,
                 'message' => 'Error al comunicarse con RENIEC: ' . $e->getMessage()
             ]);
-            return;
         }
     }
 
+    // ========================================
     // SERVICIO ACTUALIZAR CONTRASEÑA RENIEC
+    // ========================================
     private function actualizarServicioRENIEC($credencialAnterior, $credencialNueva, $nuDni)
     {
         try {
@@ -164,44 +85,21 @@ class ConsultasReniecController {
                 ]
             ];
 
-            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $curlResult = $this->executeCurl($urlActualizar, $data, 'POST', 'RENIEC');
 
-            $ch = curl_init($urlActualizar);
-
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST  => "POST",
-                CURLOPT_HTTPHEADER     => [
-                    "Content-Type: application/json; charset=UTF-8",
-                    "Accept: application/json"
-                ],
-                CURLOPT_POSTFIELDS     => $jsonData,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT        => 45
-            ]);
-
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if (curl_errno($ch)) {
-                $error = curl_error($ch);
-                curl_close($ch);
+            if (!$curlResult['success']) {
                 return [
                     'success' => false,
-                    'message' => "Error de conexión con RENIEC: $error"
+                    'message' => $curlResult['error']
                 ];
             }
 
-            curl_close($ch);
+            if ($curlResult['httpCode'] == 200) {
+                $jsonResponse = json_decode($curlResult['response'], true);
 
-            if ($httpCode == 200) {
-                $jsonResponse = json_decode($response, true);
-
-                // Validar estructura esperada
                 if (isset($jsonResponse['actualizarcredencialResponse']['return'])) {
                     $result = $jsonResponse['actualizarcredencialResponse']['return'];
-                    
+
                     $codigoResultado = $result['coResultado'] ?? '';
                     $descripcionResultado = $result['deResultado'] ?? '';
 
@@ -223,10 +121,7 @@ class ConsultasReniecController {
                     ];
                 }
             } else {
-                return [
-                    'success' => false,
-                    'message' => "Error HTTP $httpCode en el servicio RENIEC"
-                ];
+                return $this->serviceErrorResult('RENIEC', $curlResult['httpCode']);
             }
         } catch (\Exception $e) {
             return [
@@ -236,67 +131,39 @@ class ConsultasReniecController {
         }
     }
 
-
     // ========================================
-    // SERVICIO RENIEC (CURL)
+    // SERVICIO RENIEC (CURL) — protected para que Sunarp pueda usarlo
     // ========================================
-    private function consultarServicioRENIEC($dni, $dniUsuario, $passwordPIDE)
+    protected function consultarServicioRENIEC($dni, $dniUsuario, $passwordPIDE)
     {
         try {
-            // Construir la estructura del request JSON según la API de RENIEC
             $data = [
                 "PIDE" => [
                     "nuDniConsulta" => $dni,
                     "nuDniUsuario"  => $dniUsuario,
-                    "nuRucUsuario"  => $this->rucUsuario,   // este sí puede mantenerse fijo en la clase
+                    "nuRucUsuario"  => $this->rucUsuario,
                     "password"      => $passwordPIDE
                 ]
             ];
 
-            $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+            $curlResult = $this->executeCurl($this->urlRENIEC, $data, 'POST', 'RENIEC');
 
-            // Inicializar cURL
-            $ch = curl_init($this->urlRENIEC);
-
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_CUSTOMREQUEST  => "POST",
-                CURLOPT_HTTPHEADER     => [
-                    "Content-Type: application/json",
-                    "Accept: application/json"
-                ],
-                CURLOPT_POSTFIELDS     => $jsonData,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT        => 45
-            ]);
-
-            // Ejecutar petición
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            if (curl_errno($ch)) {
-                $error = curl_error($ch);
-                curl_close($ch);
+            if (!$curlResult['success']) {
                 return [
                     'success' => false,
-                    'message' => "Error de conexión con RENIEC: $error",
+                    'message' => $curlResult['error'],
                     'data' => null
                 ];
             }
 
-            curl_close($ch);
-
-            // Procesar respuesta
-            if ($httpCode == 200) {
-                $jsonResponse = json_decode($response, true);
+            if ($curlResult['httpCode'] == 200) {
+                $jsonResponse = json_decode($curlResult['response'], true);
                 $estructura = $jsonResponse['consultarResponse']['return'];
 
-                // Validar estructura esperada
                 if (isset($estructura['datosPersona'])) {
                     $datosPersona = $estructura['datosPersona'];
 
-                    $resultado = [
+                    return [
                         'success' => true,
                         'message' => $estructura['deResultado'],
                         'data' => [
@@ -311,10 +178,6 @@ class ConsultasReniecController {
                             'foto' => $datosPersona['foto'] ?? null
                         ]
                     ];
-
-                    // (Opcional) Registrar en base de datos
-                    // $this->registrarConsulta('DNI', $dni, $resultado['data']);
-                    return $resultado;
                 } else {
                     return [
                         'success' => false,
@@ -323,20 +186,75 @@ class ConsultasReniecController {
                     ];
                 }
             } else {
-                return [
-                    'success' => false,
-                    'message' => "Error HTTP $httpCode en el servicio RENIEC",
-                    'data' => null
-                ];
+                return $this->serviceErrorResult('RENIEC', $curlResult['httpCode']);
             }
         } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Error al consultar DNI: ' . $e->getMessage(),
-                'data' => null
-            ];
+            return $this->exceptionResult('consultar DNI', $e);
         }
     }
 
+    /**
+     * Método auxiliar usado por ConsultasSunarpController para obtener datos RENIEC
+     * con formato específico para búsqueda de persona natural.
+     */
+    public function obtenerDatosRENIEC($dni, $dniUsuario, $passwordPIDE)
+    {
+        try {
+            $data = [
+                "PIDE" => [
+                    "nuDniConsulta" => $dni,
+                    "nuDniUsuario"  => $dniUsuario,
+                    "nuRucUsuario"  => $this->rucUsuario,
+                    "password"      => $passwordPIDE
+                ]
+            ];
+
+            $curlResult = $this->executeCurl($this->urlRENIEC, $data, 'POST', 'RENIEC');
+
+            if (!$curlResult['success']) {
+                return [
+                    'success' => false,
+                    'message' => $curlResult['error']
+                ];
+            }
+
+            error_log("RENIEC Response Code: " . $curlResult['httpCode']);
+            error_log("RENIEC Response: " . substr($curlResult['response'], 0, 500));
+
+            if ($curlResult['httpCode'] == 200) {
+                $jsonResponse = json_decode($curlResult['response'], true);
+                $estructura = $jsonResponse['consultarResponse']['return'];
+
+                if (isset($estructura['datosPersona'])) {
+                    $datosPersona = $estructura['datosPersona'];
+
+                    return [
+                        'success' => true,
+                        'message' => 'Datos obtenidos exitosamente de RENIEC',
+                        'data' => [[
+                            'tipo' => 'PERSONA_NATURAL',
+                            'dni' => $dni,
+                            'nombres' => $datosPersona['prenombres'] ?? '',
+                            'apellido_paterno' => $datosPersona['apPrimer'] ?? '',
+                            'apellido_materno' => $datosPersona['apSegundo'] ?? '',
+                            'foto' => $datosPersona['foto'] ?? null,
+                            'nombres_completos' => trim(
+                                ($datosPersona['prenombres'] ?? '') . ' ' .
+                                    ($datosPersona['apPrimer'] ?? '') . ' ' .
+                                    ($datosPersona['apSegundo'] ?? '')
+                            )
+                        ]],
+                        'total' => 1
+                    ];
+                }
+            }
+
+            return [
+                'success' => false,
+                'message' => $estructura['deResultado'] ?? 'Error al consultar RENIEC'
+            ];
+        } catch (\Exception $e) {
+            return $this->exceptionResult('consultar RENIEC', $e);
+        }
+    }
 }
-?>

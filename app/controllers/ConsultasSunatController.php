@@ -2,23 +2,14 @@
 
 namespace App\Controllers;
 
-class ConsultasSunatController
+class ConsultasSunatController extends ConsultasPideBaseController
 {
 
     private $urlSUNATRest;
 
     public function __construct()
     {
-        $envFile = __DIR__ . '/../../.env';
-        if (file_exists($envFile)) {
-            $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-            foreach ($lines as $line) {
-                if (strpos(trim($line), '#') === 0) continue;
-                list($name, $value) = explode('=', $line, 2);
-                $_ENV[trim($name)] = trim($value);
-            }
-        }
-        // URL base del REST API de SUNAT (PIDE)
+        parent::__construct();
         $this->urlSUNATRest = $_ENV['PIDE_URL_SUNAT'];
     }
 
@@ -27,77 +18,32 @@ class ConsultasSunatController
     // ========================================
     public function consultarRUC()
     {
-        header('Content-Type: application/json');
+        if (!$this->validatePostRequest()) return;
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($input['ruc'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'RUC no proporcionado'
-            ]);
-            return;
-        }
+        $input = $this->getPostInput(['ruc'], 'RUC no proporcionado');
+        if ($input === null) return;
 
         $ruc = trim($input['ruc']);
 
-        // Validar formato
-        if (!preg_match('/^\d{11}$/', $ruc)) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'RUC inválido. Debe tener 11 dígitos'
-            ]);
-            return;
-        }
+        if (!$this->validateRuc($ruc)) return;
 
-        // Realizar consulta REST
         $resultado = $this->consultarServicioSUNATRest($ruc);
 
-        http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);
+        $this->sendJsonResult($resultado);
     }
 
     // ========================================
-    // 📌 BUSCAR POR RAZÓN SOCIAL (SUNAT) - REST/JSON
+    // BUSCAR POR RAZÓN SOCIAL (SUNAT)
     // ========================================
     public function buscarRazonSocial()
     {
-        header('Content-Type: application/json');
+        if (!$this->validatePostRequest()) return;
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($input['razonSocial'])) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Razón social no proporcionada'
-            ]);
-            return;
-        }
+        $input = $this->getPostInput(['razonSocial'], 'Razón social no proporcionada');
+        if ($input === null) return;
 
         $razonSocial = trim($input['razonSocial']);
 
-        // Validar que no esté vacío
         if (empty($razonSocial)) {
             http_response_code(400);
             echo json_encode([
@@ -107,146 +53,85 @@ class ConsultasSunatController
             return;
         }
 
-        // Realizar consulta REST por razón social
         $resultado = $this->buscarPorRazonSocialSUNATRest($razonSocial);
 
-        http_response_code($resultado['success'] ? 200 : 404);
-        echo json_encode($resultado);
+        $this->sendJsonResult($resultado);
     }
 
     // ========================================
-    // SERVICIO SUNAT REST - CONSULTA POR RUC
+    // SERVICIO SUNAT REST - CONSULTA POR RUC (protected para Sunarp)
     // ========================================
-    private function consultarServicioSUNATRest($ruc)
+    public function consultarServicioSUNATRest($ruc)
     {
         try {
-            // Construir URL con parámetros
             $url = $this->urlSUNATRest . '/DatosPrincipales?numruc=' . urlencode($ruc) . '&out=json';
 
-            // Inicializar CURL
-            $ch = curl_init($url);
+            $curlResult = $this->executeCurl($url, null, 'GET', 'SUNAT');
 
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_SSL_VERIFYPEER => false, // En producción, cambiar a true
-                CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT => 45,
-                CURLOPT_HTTPHEADER => [
-                    'Accept: application/json',
-                    'Content-Type: application/json'
-                ]
-            ]);
+            error_log("SUNAT REST Response HTTP Code: " . $curlResult['httpCode']);
 
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            curl_close($ch);
-
-            // Log para debug
-            error_log("SUNAT REST Response HTTP Code: $httpCode");
-            if ($curlError) {
-                error_log("SUNAT REST CURL Error: $curlError");
-            }
-
-            // Manejar errores de conexión
-            if ($curlError) {
+            if (!$curlResult['success']) {
                 return [
                     'success' => false,
-                    'message' => "Error de conexión con SUNAT: $curlError",
+                    'message' => $curlResult['error'],
                     'data' => null
                 ];
             }
 
-            // Procesar respuesta según código HTTP
-            if ($httpCode == 200) {
-                return $this->procesarRespuestaJSON($response, $ruc);
-            } elseif ($httpCode == 404) {
+            if ($curlResult['httpCode'] == 200) {
+                return $this->procesarRespuestaJSON($curlResult['response'], $ruc);
+            } elseif ($curlResult['httpCode'] == 404) {
                 return [
                     'success' => false,
                     'message' => 'No se encontró información para el RUC consultado',
                     'data' => null
                 ];
-            } elseif ($httpCode == 500) {
+            } elseif ($curlResult['httpCode'] == 500) {
                 return [
                     'success' => false,
                     'message' => 'Error interno del servidor SUNAT',
                     'data' => null
                 ];
             } else {
-                return [
-                    'success' => false,
-                    'message' => "Error HTTP $httpCode al consultar SUNAT",
-                    'data' => null
-                ];
+                return $this->serviceErrorResult('SUNAT', $curlResult['httpCode']);
             }
         } catch (\Exception $e) {
-            error_log("Exception en consultarServicioSUNATRest: " . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Error al consultar RUC: ' . $e->getMessage(),
-                'data' => null
-            ];
+            return $this->exceptionResult('consultar RUC', $e);
         }
     }
 
     // ========================================
-    // SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL
+    // SERVICIO SUNAT REST - BÚSQUEDA POR RAZÓN SOCIAL (protected para Sunarp)
     // ========================================
-    private function buscarPorRazonSocialSUNATRest($razonSocial)
+    public function buscarPorRazonSocialSUNATRest($razonSocial)
     {
         try {
-            // Construir URL con parámetros
-
-            // Codificar para query string
-            // Codificar espacios y caracteres especiales
             $razonSocialParam = rawurlencode($razonSocial);
-
-            // Construir URL
             $url = $this->urlSUNATRest . '/RazonSocial?RSocial=' . $razonSocialParam . '&out=json';
-
 
             error_log("URL búsqueda razón social: $url");
 
-            $ch = curl_init($url);
+            $curlResult = $this->executeCurl($url, null, 'GET', 'SUNAT');
 
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_CONNECTTIMEOUT => 30,
-                CURLOPT_TIMEOUT => 45,
-                CURLOPT_HTTPHEADER => [
-                    'Accept: application/json',
-                    'Content-Type: application/json'
-                ]
-            ]);
+            error_log("SUNAT REST Búsqueda Response HTTP Code: " . $curlResult['httpCode']);
 
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            curl_close($ch);
-
-            error_log("SUNAT REST Búsqueda Response HTTP Code: $httpCode");
-            if ($curlError) {
-                error_log("SUNAT REST Búsqueda CURL Error: $curlError");
-            }
-
-            if ($curlError) {
+            if (!$curlResult['success']) {
                 return [
                     'success' => false,
-                    'message' => "Error de conexión con SUNAT: $curlError",
+                    'message' => $curlResult['error'],
                     'data' => []
                 ];
             }
 
-            if ($httpCode == 200) {
-                return $this->procesarRespuestaBusquedaJSON($response);
-            } elseif ($httpCode == 404) {
+            if ($curlResult['httpCode'] == 200) {
+                return $this->procesarRespuestaBusquedaJSON($curlResult['response']);
+            } elseif ($curlResult['httpCode'] == 404) {
                 return [
                     'success' => false,
                     'message' => 'No se encontraron resultados para la razón social consultada',
                     'data' => []
                 ];
-            } elseif ($httpCode == 500) {
+            } elseif ($curlResult['httpCode'] == 500) {
                 return [
                     'success' => false,
                     'message' => 'Error interno del servidor SUNAT',
@@ -255,7 +140,7 @@ class ConsultasSunatController
             } else {
                 return [
                     'success' => false,
-                    'message' => "Error HTTP $httpCode al buscar en SUNAT",
+                    'message' => "Error HTTP {$curlResult['httpCode']} al buscar en SUNAT",
                     'data' => []
                 ];
             }
@@ -272,7 +157,7 @@ class ConsultasSunatController
     // ========================================
     // PROCESAR RESPUESTA JSON (CONSULTA POR RUC)
     // ========================================
-    private function procesarRespuestaJSON($jsonResponse, $ruc)
+    protected function procesarRespuestaJSON($jsonResponse, $ruc)
     {
         try {
             $respuesta = json_decode($jsonResponse, true);
@@ -285,7 +170,6 @@ class ConsultasSunatController
                 ];
             }
 
-            // Verificar estructura de la respuesta
             if (!isset($respuesta['list']['multiRef'])) {
                 error_log("Respuesta SUNAT inesperada: " . print_r($respuesta, true));
                 return [
@@ -295,37 +179,9 @@ class ConsultasSunatController
                 ];
             }
 
-            // Extraer datos del multiRef
             $datos = $respuesta['list']['multiRef'];
 
-            // Función auxiliar para extraer valor
-            $extraerValor = function ($campo) use ($datos) {
-                if (!isset($datos[$campo])) {
-                    return '';
-                }
-
-                $valor = $datos[$campo];
-
-                // Si tiene @nil=true, retornar vacío
-                if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
-                    return '';
-                }
-
-                // Si tiene $, retornar ese valor
-                if (is_array($valor) && isset($valor['$'])) {
-                    return trim($valor['$']);
-                }
-
-                // Si es string directo
-                if (is_string($valor)) {
-                    return trim($valor);
-                }
-
-                return '';
-            };
-
-            // Verificar si hay datos válidos
-            $rucObtenido = $extraerValor('ddp_numruc');
+            $rucObtenido = $this->extraerValorSunat('ddp_numruc', $datos);
             if (empty($rucObtenido)) {
                 return [
                     'success' => false,
@@ -337,70 +193,9 @@ class ConsultasSunatController
             $resultado = [
                 'success' => true,
                 'message' => 'Consulta exitosa',
-                'data' => [
-                    // Datos principales
-                    'ruc' => $rucObtenido,
-                    'razon_social' => $extraerValor('ddp_nombre'),
-
-                    // Ubicación
-                    'codigo_ubigeo' => $extraerValor('ddp_ubigeo'),
-                    'departamento' => $extraerValor('desc_dep'),
-                    'provincia' => $extraerValor('desc_prov'),
-                    'distrito' => $extraerValor('desc_dist'),
-                    'cod_dep' => $extraerValor('cod_dep'),
-                    'cod_prov' => $extraerValor('cod_prov'),
-                    'cod_dist' => $extraerValor('cod_dist'),
-
-                    // Dirección completa
-                    'tipo_via' => $extraerValor('desc_tipvia'),
-                    'codigo_tipo_via' => $extraerValor('ddp_tipvia'),
-                    'nombre_via' => $extraerValor('ddp_nomvia'),
-                    'numero' => $extraerValor('ddp_numer1'),
-                    'interior' => $extraerValor('ddp_inter1'),
-                    'tipo_zona' => $extraerValor('desc_tipzon'),
-                    'codigo_tipo_zona' => $extraerValor('ddp_tipzon'),
-                    'nombre_zona' => $extraerValor('ddp_nomzon'),
-                    'referencia' => $extraerValor('ddp_refer1'),
-
-                    // Estado y condición
-                    'estado_contribuyente' => $extraerValor('desc_estado'),
-                    'codigo_estado' => $extraerValor('ddp_estado'),
-                    'condicion_domicilio' => $extraerValor('desc_flag22'),
-                    'codigo_condicion' => $extraerValor('ddp_flag22'),
-
-                    // Tipo de contribuyente
-                    'tipo_contribuyente' => $extraerValor('desc_tpoemp'),
-                    'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp'),
-                    'tipo_persona' => $extraerValor('desc_identi'),
-                    'codigo_tipo_persona' => $extraerValor('ddp_identi'),
-
-                    // Actividad económica
-                    'actividad_economica' => $extraerValor('desc_ciiu'),
-                    'codigo_ciiu' => $extraerValor('ddp_ciiu'),
-
-                    // Dependencia
-                    'dependencia' => $extraerValor('desc_numreg'),
-                    'codigo_dependencia' => $extraerValor('ddp_numreg'),
-
-                    // Fechas
-                    'fecha_actualizacion' => $extraerValor('ddp_fecact'),
-                    'fecha_alta' => $extraerValor('ddp_fecalt'),
-                    'fecha_baja' => $extraerValor('ddp_fecbaj'),
-
-                    // Otros datos
-                    'codigo_secuencia' => $extraerValor('ddp_secuen'),
-                    'libreta_tributaria' => $extraerValor('ddp_lllttt'),
-                    'tamaño' => $extraerValor('desc_tamano'),
-
-                    // Estados booleanos
-                    'es_activo' => $this->convertirBooleano($extraerValor('esActivo')),
-                    'es_habido' => $this->convertirBooleano($extraerValor('esHabido')),
-                    'estado_activo' => $this->convertirBooleano($extraerValor('esActivo')) ? 'SÍ' : 'NO',
-                    'estado_habido' => $this->convertirBooleano($extraerValor('esHabido')) ? 'SÍ' : 'NO'
-                ]
+                'data' => $this->mapearDatosSunat($datos, $rucObtenido)
             ];
 
-            // Construir dirección completa
             $resultado['data']['direccion_completa'] = $this->construirDireccionDesdeArray($resultado['data']);
 
             $this->registrarConsulta('RUC', $ruc, $resultado['data']);
@@ -418,13 +213,12 @@ class ConsultasSunatController
     }
 
     // ========================================
-    // PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL) - CORREGIDO
+    // PROCESAR RESPUESTA JSON (BÚSQUEDA POR RAZÓN SOCIAL)
     // ========================================
-    private function procesarRespuestaBusquedaJSON($jsonResponse)
+    protected function procesarRespuestaBusquedaJSON($jsonResponse)
     {
         try {
             error_log("Procesando respuesta de búsqueda por razón social");
-            error_log("Response raw: " . substr($jsonResponse, 0, 1000));
 
             $respuesta = json_decode($jsonResponse, true);
 
@@ -437,10 +231,8 @@ class ConsultasSunatController
                 ];
             }
 
-            // Verificar estructura de la respuesta
             if (!isset($respuesta['list']['multiRef'])) {
                 error_log("No se encontró multiRef en la respuesta");
-                error_log("Estructura completa: " . print_r($respuesta, true));
                 return [
                     'success' => false,
                     'message' => 'No se encontraron resultados para la razón social consultada',
@@ -450,9 +242,7 @@ class ConsultasSunatController
 
             $multiRef = $respuesta['list']['multiRef'];
 
-            // Verificar si multiRef es un array de resultados
             if (!is_array($multiRef)) {
-                error_log("multiRef no es un array");
                 return [
                     'success' => false,
                     'message' => 'Formato de respuesta inválido',
@@ -460,10 +250,8 @@ class ConsultasSunatController
                 ];
             }
 
-            // Si multiRef no tiene índices numéricos, es un solo resultado
-            $esArrayMultiple = isset($multiRef[0]);
-            if (!$esArrayMultiple) {
-                // Es un solo resultado, convertirlo en array
+            // Normalizar a array múltiple
+            if (!isset($multiRef[0])) {
                 $multiRef = [$multiRef];
             }
 
@@ -471,96 +259,15 @@ class ConsultasSunatController
 
             $resultados = [];
 
-            // Función auxiliar para extraer valor
-            $extraerValor = function ($campo, $datos) {
-                if (!isset($datos[$campo])) {
-                    return '';
-                }
-
-                $valor = $datos[$campo];
-
-                if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
-                    return '';
-                }
-
-                if (is_array($valor) && isset($valor['$'])) {
-                    return trim($valor['$']);
-                }
-
-                if (is_string($valor)) {
-                    return trim($valor);
-                }
-
-                return '';
-            };
-
             foreach ($multiRef as $index => $datos) {
-                $ruc = $extraerValor('ddp_numruc', $datos);
-                $nombre = $extraerValor('ddp_nombre', $datos);
+                $ruc = $this->extraerValorSunat('ddp_numruc', $datos);
+                $nombre = $this->extraerValorSunat('ddp_nombre', $datos);
 
                 error_log("Procesando resultado $index: RUC=$ruc, Nombre=$nombre");
 
-                // Solo procesar si tiene RUC
                 if (!empty($ruc)) {
-                    $resultado = [
-                        // Datos principales
-                        'ruc' => $ruc,
-                        'razon_social' => $nombre,
-                        'secuencia' => (int)$extraerValor('ddp_secuen', $datos),
-
-                        // Ubicación
-                        'codigo_ubigeo' => $extraerValor('ddp_ubigeo', $datos),
-                        'departamento' => $extraerValor('desc_dep', $datos),
-                        'provincia' => $extraerValor('desc_prov', $datos),
-                        'distrito' => $extraerValor('desc_dist', $datos),
-                        'cod_dep' => $extraerValor('cod_dep', $datos),
-                        'cod_prov' => $extraerValor('cod_prov', $datos),
-                        'cod_dist' => $extraerValor('cod_dist', $datos),
-
-                        // Dirección
-                        'tipo_via' => $extraerValor('desc_tipvia', $datos),
-                        'codigo_tipo_via' => $extraerValor('ddp_tipvia', $datos),
-                        'nombre_via' => $extraerValor('ddp_nomvia', $datos),
-                        'numero' => $extraerValor('ddp_numer1', $datos),
-                        'interior' => $extraerValor('ddp_inter1', $datos),
-                        'tipo_zona' => $extraerValor('desc_tipzon', $datos),
-                        'codigo_tipo_zona' => $extraerValor('ddp_tipzon', $datos),
-                        'nombre_zona' => $extraerValor('ddp_nomzon', $datos),
-                        'referencia' => $extraerValor('ddp_refer1', $datos),
-
-                        // Estado
-                        'estado_contribuyente' => $extraerValor('desc_estado', $datos),
-                        'codigo_estado' => $extraerValor('ddp_estado', $datos),
-                        'condicion_domicilio' => $extraerValor('desc_flag22', $datos),
-                        'codigo_condicion' => $extraerValor('ddp_flag22', $datos),
-
-                        // Tipo
-                        'tipo_contribuyente' => $extraerValor('desc_tpoemp', $datos),
-                        'codigo_tipo_contribuyente' => $extraerValor('ddp_tpoemp', $datos),
-                        'tipo_persona' => $extraerValor('desc_identi', $datos),
-                        'codigo_tipo_persona' => $extraerValor('ddp_identi', $datos),
-
-                        // Actividad
-                        'actividad_economica' => $extraerValor('desc_ciiu', $datos),
-                        'codigo_ciiu' => $extraerValor('ddp_ciiu', $datos),
-
-                        // Dependencia
-                        'dependencia' => $extraerValor('desc_numreg', $datos),
-                        'codigo_dependencia' => $extraerValor('ddp_numreg', $datos),
-
-                        // Fechas
-                        'fecha_actualizacion' => $extraerValor('ddp_fecact', $datos),
-                        'fecha_alta' => $extraerValor('ddp_fecalt', $datos),
-                        'fecha_baja' => $extraerValor('ddp_fecbaj', $datos),
-
-                        // Estados booleanos
-                        'es_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)),
-                        'es_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)),
-                        'estado_activo' => $this->convertirBooleano($extraerValor('esActivo', $datos)) ? 'SÍ' : 'NO',
-                        'estado_habido' => $this->convertirBooleano($extraerValor('esHabido', $datos)) ? 'SÍ' : 'NO'
-                    ];
-
-                    // Construir dirección completa
+                    $resultado = $this->mapearDatosSunat($datos, $ruc);
+                    $resultado['secuencia'] = (int)$this->extraerValorSunat('ddp_secuen', $datos);
                     $resultado['direccion_completa'] = $this->construirDireccionDesdeArray($resultado);
 
                     $resultados[] = $resultado;
@@ -571,7 +278,6 @@ class ConsultasSunatController
             }
 
             if (empty($resultados)) {
-                error_log("No se encontraron resultados válidos");
                 return [
                     'success' => false,
                     'message' => 'No se encontraron resultados válidos para la razón social consultada',
@@ -589,7 +295,6 @@ class ConsultasSunatController
             ];
         } catch (\Exception $e) {
             error_log("Exception en procesarRespuestaBusquedaJSON: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
             return [
                 'success' => false,
                 'message' => 'Error al procesar respuesta: ' . $e->getMessage(),
@@ -599,9 +304,107 @@ class ConsultasSunatController
     }
 
     // ========================================
+    // HELPERS SUNAT
+    // ========================================
+
+    /**
+     * Extrae un valor de la estructura de datos SUNAT, manejando @nil y $.
+     */
+    protected function extraerValorSunat($campo, $datos)
+    {
+        if (!isset($datos[$campo])) {
+            return '';
+        }
+
+        $valor = $datos[$campo];
+
+        if (is_array($valor) && isset($valor['@nil']) && $valor['@nil'] === true) {
+            return '';
+        }
+
+        if (is_array($valor) && isset($valor['$'])) {
+            return trim($valor['$']);
+        }
+
+        if (is_string($valor)) {
+            return trim($valor);
+        }
+
+        return '';
+    }
+
+    /**
+     * Mapea datos crudos de SUNAT a estructura normalizada.
+     */
+    protected function mapearDatosSunat($datos, $ruc)
+    {
+        return [
+            // Datos principales
+            'ruc' => $ruc,
+            'razon_social' => $this->extraerValorSunat('ddp_nombre', $datos),
+
+            // Ubicación
+            'codigo_ubigeo' => $this->extraerValorSunat('ddp_ubigeo', $datos),
+            'departamento' => $this->extraerValorSunat('desc_dep', $datos),
+            'provincia' => $this->extraerValorSunat('desc_prov', $datos),
+            'distrito' => $this->extraerValorSunat('desc_dist', $datos),
+            'cod_dep' => $this->extraerValorSunat('cod_dep', $datos),
+            'cod_prov' => $this->extraerValorSunat('cod_prov', $datos),
+            'cod_dist' => $this->extraerValorSunat('cod_dist', $datos),
+
+            // Dirección completa
+            'tipo_via' => $this->extraerValorSunat('desc_tipvia', $datos),
+            'codigo_tipo_via' => $this->extraerValorSunat('ddp_tipvia', $datos),
+            'nombre_via' => $this->extraerValorSunat('ddp_nomvia', $datos),
+            'numero' => $this->extraerValorSunat('ddp_numer1', $datos),
+            'interior' => $this->extraerValorSunat('ddp_inter1', $datos),
+            'tipo_zona' => $this->extraerValorSunat('desc_tipzon', $datos),
+            'codigo_tipo_zona' => $this->extraerValorSunat('ddp_tipzon', $datos),
+            'nombre_zona' => $this->extraerValorSunat('ddp_nomzon', $datos),
+            'referencia' => $this->extraerValorSunat('ddp_refer1', $datos),
+
+            // Estado y condición
+            'estado_contribuyente' => $this->extraerValorSunat('desc_estado', $datos),
+            'codigo_estado' => $this->extraerValorSunat('ddp_estado', $datos),
+            'condicion_domicilio' => $this->extraerValorSunat('desc_flag22', $datos),
+            'codigo_condicion' => $this->extraerValorSunat('ddp_flag22', $datos),
+
+            // Tipo de contribuyente
+            'tipo_contribuyente' => $this->extraerValorSunat('desc_tpoemp', $datos),
+            'codigo_tipo_contribuyente' => $this->extraerValorSunat('ddp_tpoemp', $datos),
+            'tipo_persona' => $this->extraerValorSunat('desc_identi', $datos),
+            'codigo_tipo_persona' => $this->extraerValorSunat('ddp_identi', $datos),
+
+            // Actividad económica
+            'actividad_economica' => $this->extraerValorSunat('desc_ciiu', $datos),
+            'codigo_ciiu' => $this->extraerValorSunat('ddp_ciiu', $datos),
+
+            // Dependencia
+            'dependencia' => $this->extraerValorSunat('desc_numreg', $datos),
+            'codigo_dependencia' => $this->extraerValorSunat('ddp_numreg', $datos),
+
+            // Fechas
+            'fecha_actualizacion' => $this->extraerValorSunat('ddp_fecact', $datos),
+            'fecha_alta' => $this->extraerValorSunat('ddp_fecalt', $datos),
+            'fecha_baja' => $this->extraerValorSunat('ddp_fecbaj', $datos),
+
+            // Otros datos
+            'codigo_secuencia' => $this->extraerValorSunat('ddp_secuen', $datos),
+            'libreta_tributaria' => $this->extraerValorSunat('ddp_lllttt', $datos),
+            'tamaño' => $this->extraerValorSunat('desc_tamano', $datos),
+
+            // Estados booleanos
+            'es_activo' => $this->convertirBooleano($this->extraerValorSunat('esActivo', $datos)),
+            'es_habido' => $this->convertirBooleano($this->extraerValorSunat('esHabido', $datos)),
+            'estado_activo' => $this->convertirBooleano($this->extraerValorSunat('esActivo', $datos)) ? 'SÍ' : 'NO',
+            'estado_habido' => $this->convertirBooleano($this->extraerValorSunat('esHabido', $datos)) ? 'SÍ' : 'NO'
+        ];
+    }
+
+    // ========================================
     // CONSTRUIR DIRECCIÓN COMPLETA DESDE ARRAY
     // ========================================
-    private function construirDireccionDesdeArray($data)
+    protected function construirDireccionDesdeArray($data)
     {
         $partes = [];
 
@@ -635,24 +438,20 @@ class ConsultasSunatController
     // ========================================
     // CONVERTIR A BOOLEANO
     // ========================================
-    private function convertirBooleano($valor)
+    protected function convertirBooleano($valor)
     {
-        // Si está vacío, retornar false
         if (empty($valor)) {
             return false;
         }
 
-        // Si ya es booleano, retornarlo directamente
         if (is_bool($valor)) {
             return $valor;
         }
 
-        // Si es numérico
         if (is_numeric($valor)) {
             return (int)$valor === 1;
         }
 
-        // Si es string, convertir
         $valorStr = strtolower((string)$valor);
         return in_array($valorStr, ['true', '1', 'yes', 'si', 'sí']);
     }
@@ -660,7 +459,7 @@ class ConsultasSunatController
     // ========================================
     // REGISTRAR CONSULTA EN LOG
     // ========================================
-    private function registrarConsulta($tipo, $documento, $respuesta)
+    protected function registrarConsulta($tipo, $documento, $respuesta)
     {
         try {
             error_log(sprintf(
