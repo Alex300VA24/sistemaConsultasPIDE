@@ -70,7 +70,8 @@ abstract class ConsultasPideBaseController extends BaseController
 
         $headers = [
             "Content-Type: application/json; charset=UTF-8",
-            "Accept: application/json"
+            //"Accept: application/json"
+            "Content-Length: " . strlen(json_encode($data, JSON_UNESCAPED_UNICODE))
         ];
 
         $options = [
