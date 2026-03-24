@@ -1,27 +1,32 @@
 <?php
+
 namespace App\Controllers;
 
-use App\Services\UsuarioService;
+use App\Services\Contracts\UsuarioServiceInterface;
 
-class UsuarioController {
+/**
+ * Controller para operaciones de usuario.
+ * Ahora extiende BaseController (DRY: elimina jsonResponse duplicado).
+ * Recibe UsuarioServiceInterface por inyección (DIP).
+ */
+class UsuarioController extends BaseController
+{
+    /** @var UsuarioServiceInterface */
     private $usuarioService;
-    
-    public function __construct() {
-        $this->usuarioService = new UsuarioService();
+
+    public function __construct(UsuarioServiceInterface $usuarioService)
+    {
+        $this->usuarioService = $usuarioService;
     }
-    
+
     /**
      * LOGIN: Valida usuario y contraseña, obtiene datos básicos
-     * Luego solicita validar CUI (segunda fase)
      */
-    public function login(){
+    public function login(): void
+    {
         try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new \Exception("Método no permitido");
-            }
-
-            $json = file_get_contents('php://input');
-            $data = json_decode($json, true);
+            $this->validateMethod('POST');
+            $data = $this->getJsonInput();
 
             $nombreUsuario = $data['nombreUsuario'] ?? '';
             $password = $data['password'] ?? '';
@@ -33,7 +38,6 @@ class UsuarioController {
             $_SESSION['requireCUI'] = true;
 
             error_log("Resultado del login: " . print_r($resultado, true));
-
 
             if (!$resultado['success']) {
                 $this->jsonResponse([
@@ -54,7 +58,6 @@ class UsuarioController {
                     'usuarioLogin' => $nombreUsuario
                 ]
             ]);
-
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -63,20 +66,15 @@ class UsuarioController {
         }
     }
 
-
     /**
      * VALIDAR CUI: Comprueba el CUI ingresado por el usuario
-     * Si es correcto, completa la autenticación y retorna datos del usuario
      */
-    public function validarCUI() {
+    public function validarCUI(): void
+    {
         try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new \Exception("Método no permitido");
-            }
+            $this->validateMethod('POST');
+            $data = $this->getJsonInput();
 
-            $json = file_get_contents('php://input');
-            $data = json_decode($json, true);
-            
             $nombreUsuario = $_SESSION['nombreUsuario'] ?? null;
             $password = $_SESSION['password'] ?? null;
             $cui = $data['cui'] ?? '';
@@ -92,7 +90,7 @@ class UsuarioController {
             $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
-            
+
             $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
             $_SESSION['permisos'] = $permisos;
 
@@ -100,7 +98,7 @@ class UsuarioController {
             $requiereCambioPassword = $resultado['usuario']['USU_requiere_cambio_password'] ?? 0;
             $diasDesdeCambio = $resultado['usuario']['DIAS_DESDE_CAMBIO_PASSWORD'] ?? 0;
 
-            $respuesta = [
+            $this->jsonResponse([
                 'success' => true,
                 'message' => $resultado['mensaje'] ?? 'Sin mensaje',
                 'data' => [
@@ -110,10 +108,7 @@ class UsuarioController {
                     'dias_desde_cambio' => (int)$diasDesdeCambio,
                     'dias_restantes' => max(0, 30 - (int)$diasDesdeCambio)
                 ]
-            ];
-
-            $this->jsonResponse($respuesta);
-
+            ]);
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -123,21 +118,18 @@ class UsuarioController {
     }
 
     /**
-     * Nuevo método: Cambiar password
+     * Cambiar password
      */
-    public function cambiarPassword() {
+    public function cambiarPassword(): void
+    {
         try {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new \Exception("Método no permitido");
-            }
+            $this->validateMethod('POST');
 
-            // Verificar que el usuario esté autenticado
             if (!isset($_SESSION['usuarioID'])) {
                 throw new \Exception("No hay sesión activa");
             }
 
-            $json = file_get_contents('php://input');
-            $data = json_decode($json, true);
+            $data = $this->getJsonInput();
 
             $passwordActual = $data['passwordActual'] ?? '';
             $passwordNueva = $data['passwordNueva'] ?? '';
@@ -147,14 +139,11 @@ class UsuarioController {
                 throw new \Exception("Todos los campos son requeridos");
             }
 
-            // Validar seguridad de la nueva password
             if (!$this->validarPasswordSegura($passwordNueva)) {
                 throw new \Exception("La contraseña no cumple con los requisitos de seguridad");
             }
 
             $resultado = $this->usuarioService->cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva);
-
-            // Obtener datos actualizados del usuario
             $usuarioActualizado = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
 
             $this->jsonResponse([
@@ -166,7 +155,6 @@ class UsuarioController {
                     'usuario' => $usuarioActualizado
                 ]
             ]);
-
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -178,41 +166,22 @@ class UsuarioController {
     /**
      * Validar que la password cumpla con requisitos de seguridad
      */
-    private function validarPasswordSegura($password) {
-        // Mínimo 8 caracteres
-        if (strlen($password) < 8) {
-            return false;
-        }
-
-        // Al menos una mayúscula
-        if (!preg_match('/[A-Z]/', $password)) {
-            return false;
-        }
-
-        // Al menos una minúscula
-        if (!preg_match('/[a-z]/', $password)) {
-            return false;
-        }
-
-        // Al menos un número
-        if (!preg_match('/[0-9]/', $password)) {
-            return false;
-        }
-
-        // Al menos un carácter especial
-        if (!preg_match('/[@$!%*?&#]/', $password)) {
-            return false;
-        }
-
+    private function validarPasswordSegura(string $password): bool
+    {
+        if (strlen($password) < 8) return false;
+        if (!preg_match('/[A-Z]/', $password)) return false;
+        if (!preg_match('/[a-z]/', $password)) return false;
+        if (!preg_match('/[0-9]/', $password)) return false;
+        if (!preg_match('/[@$!%*?&#]/', $password)) return false;
         return true;
     }
-
 
     /**
      * LOGOUT: Cierra sesión del usuario
      */
-    public function logout() {
-        session_destroy();
+    public function logout(): void
+    {
+        $this->destroySession();
 
         $this->jsonResponse([
             'success' => true,
@@ -223,9 +192,9 @@ class UsuarioController {
     /**
      * Obtener datos del usuario actual desde la sesión
      */
-    public function obtenerUsuarioActual() {
+    public function obtenerUsuarioActual(): void
+    {
         try {
-
             if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
                 throw new \Exception("Usuario no autenticado");
             }
@@ -234,20 +203,17 @@ class UsuarioController {
                 throw new \Exception("No se encontró el ID del usuario en la sesión");
             }
 
-            $usuarioId = $_SESSION['usuarioID'];
-            $usuario = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
+            $usuario = $this->usuarioService->obtenerUsuarioPorId($_SESSION['usuarioID']);
 
             if (!$usuario) {
                 throw new \Exception("Usuario no encontrado");
             }
 
-            // 🔹 Enviar respuesta compatible con el frontend
             $this->jsonResponse([
                 'success' => true,
                 'message' => 'Usuario obtenido correctamente',
                 'data' => $usuario
             ]);
-
         } catch (\Exception $e) {
             $this->jsonResponse([
                 'success' => false,
@@ -256,12 +222,14 @@ class UsuarioController {
         }
     }
 
-
-    // 🔹 Método para crear usuario
-    public function crearUsuario() {
+    /**
+     * Crear usuario
+     */
+    public function crearUsuario(): void
+    {
         try {
-            $input = json_decode(file_get_contents('php://input'), true);
-            $data = $input['data'] ?? $input; // si viene dentro de 'data', la saca
+            $input = $this->getJsonInput();
+            $data = $input['data'] ?? $input;
 
             $result = $this->usuarioService->crearUsuario($data);
 
@@ -278,16 +246,19 @@ class UsuarioController {
         }
     }
 
-
-    // Método para eliminar usuario
-    public function eliminarUsuario() {
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        if (empty($data['usuario_id'])) {
-            return $this->jsonResponse(["error" => "Debe proporcionar el ID del usuario"], 400);
-        }
-
+    /**
+     * Eliminar usuario
+     */
+    public function eliminarUsuario(): void
+    {
         try {
+            $data = $this->getJsonInput();
+
+            if (empty($data['usuario_id'])) {
+                $this->errorResponse("Debe proporcionar el ID del usuario", 400);
+                return;
+            }
+
             $this->usuarioService->eliminarUsuario($data['usuario_id']);
             $this->jsonResponse([
                 "success" => true,
@@ -301,12 +272,15 @@ class UsuarioController {
         }
     }
 
-    public function obtenerDniYPassword()
+    /**
+     * Obtener DNI y Password
+     */
+    public function obtenerDniYPassword(): void
     {
         header('Content-Type: application/json');
 
         try {
-            $data = json_decode(file_get_contents("php://input"), true);
+            $data = $this->getJsonInput();
             $nombreUsuario = $data['nombreUsuario'] ?? null;
 
             if (empty($nombreUsuario)) {
@@ -323,24 +297,19 @@ class UsuarioController {
                 return;
             }
 
-            // Obtener la contraseña desde la sesión
             $passwordSesion = $_SESSION['password'] ?? null;
 
             if (empty($passwordSesion)) {
                 throw new \Exception("No se encontró la contraseña en la sesión");
             }
 
-            // Armar la respuesta combinada
-            $respuesta = [
+            echo json_encode([
                 "success" => true,
                 "data" => [
                     "DNI" => $resultado['DNI'],
                     "password" => $passwordSesion
                 ]
-            ];
-
-            echo json_encode($respuesta);
-
+            ]);
         } catch (\Throwable $e) {
             echo json_encode([
                 "success" => false,
@@ -352,166 +321,77 @@ class UsuarioController {
     /**
      * Listar todos los usuarios
      */
-    public function listarUsuarios()
+    public function listarUsuarios(): void
     {
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        try {
+        $this->executeServiceAction(function () {
             $usuarios = $this->usuarioService->listarUsuarios();
-
-            echo json_encode([
-                'success' => true,
+            return [
                 'message' => 'Usuarios obtenidos correctamente',
                 'data' => $usuarios
-            ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al listar usuarios: ' . $e->getMessage()
-            ]);
-        }
+            ];
+        });
     }
 
-    /* Obtener roles de usuario */
-    public function obtenerRoles()
+    /**
+     * Obtener roles de usuario
+     */
+    public function obtenerRoles(): void
     {
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        try {
+        $this->executeServiceAction(function () {
             $roles = $this->usuarioService->obtenerRoles();
-
-            echo json_encode([
-                'success' => true,
-                'message' => 'Roles obteniedo correctamente',
+            return [
+                'message' => 'Roles obtenidos correctamente',
                 'data' => $roles
-            ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener roles: ' . $e->getMessage()
-            ]);
-        }
+            ];
+        });
     }
 
-    public function obtenerTipoPersonal()
+    /**
+     * Obtener tipo de personal
+     */
+    public function obtenerTipoPersonal(): void
     {
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        try {
+        $this->executeServiceAction(function () {
             $tipos = $this->usuarioService->obtenerTipoPersonal();
-
-            echo json_encode([
-                'success' => true,
+            return [
                 'message' => 'Tipo de personal obtenido correctamente',
                 'data' => $tipos
-            ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener los tipos: ' . $e->getMessage()
-            ]);
-        }
+            ];
+        });
     }
 
     /**
      * Obtener usuario por ID para edición
      */
-    public function obtenerUsuario()
+    public function obtenerUsuario(): void
     {
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
-        try {
-            // Obtener ID desde query parameter
+        $this->executeServiceAction(function () {
             $usuarioId = $_GET['id'] ?? null;
 
             if (empty($usuarioId)) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ID de usuario es requerido'
-                ]);
-                return;
+                throw new \Exception('ID de usuario es requerido');
             }
 
             $usuario = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
-
-            echo json_encode([
-                'success' => true,
+            return [
                 'message' => 'Usuario obtenido correctamente',
                 'data' => $usuario
-            ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener usuario: ' . $e->getMessage()
-            ]);
-        }
+            ];
+        });
     }
 
     /**
      * Actualizar usuario
      */
-    public function actualizarUsuario(){
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
+    public function actualizarUsuario(): void
+    {
         try {
-            $input = json_decode(file_get_contents('php://input'), true);
+            $this->validateMethod('PUT');
+
+            $input = $this->getJsonInput();
 
             if (!isset($input['data'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Datos no proporcionados'
-                ]);
+                $this->errorResponse('Datos no proporcionados', 400);
                 return;
             }
 
@@ -523,57 +403,31 @@ class UsuarioController {
 
             echo json_encode($response);
         } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al actualizar usuario: ' . $e->getMessage()
-            ]);
+            $this->errorResponse('Error al actualizar usuario: ' . $e->getMessage(), 500);
         }
     }
 
-    public function actualizarPassword(){
-        header('Content-Type: application/json');
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
-            http_response_code(405);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Método no permitido'
-            ]);
-            return;
-        }
-
+    /**
+     * Actualizar password
+     */
+    public function actualizarPassword(): void
+    {
         try {
-            $input = json_decode(file_get_contents('php://input'), true);
+            $this->validateMethod('PUT');
+
+            $input = $this->getJsonInput();
 
             if (!isset($input['data'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Datos no proporcionados'
-                ]);
+                $this->errorResponse('Datos no proporcionados', 400);
                 return;
             }
 
             $datos = $input['data'];
-
             $response = $this->usuarioService->actualizarPassword($datos);
 
             echo json_encode($response);
         } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al actualizar usuario: ' . $e->getMessage()
-            ]);
+            $this->errorResponse('Error al actualizar usuario: ' . $e->getMessage(), 500);
         }
-    }
-
-    //Enviar respuesta JSON
-    private function jsonResponse($data, $statusCode = 200) {
-        http_response_code($statusCode);
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit;
     }
 }

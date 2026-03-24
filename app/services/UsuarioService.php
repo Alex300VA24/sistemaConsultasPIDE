@@ -2,12 +2,13 @@
 namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
+use App\Services\Contracts\UsuarioServiceInterface;
 
-class UsuarioService {
+class UsuarioService implements UsuarioServiceInterface {
     private $usuarioRepository;
     
-    public function __construct() {
-        $this->usuarioRepository = new UsuarioRepository();
+    public function __construct(UsuarioRepository $usuarioRepository) {
+        $this->usuarioRepository = $usuarioRepository;
     }
     
     public function login($nombreUsuario, $password) {

@@ -2,335 +2,200 @@
 
 namespace App\Controllers;
 
-use App\Services\ModuloService;
+use App\Services\Contracts\ModuloServiceInterface;
 
-class ModuloController {
+/**
+ * Controller para operaciones de módulos.
+ * Ahora extiende BaseController y recibe ModuloServiceInterface por inyección (DIP).
+ */
+class ModuloController extends BaseController
+{
+    /** @var ModuloServiceInterface */
     private $moduloService;
 
-    public function __construct() {
-        $this->moduloService = new ModuloService();
+    public function __construct(ModuloServiceInterface $moduloService)
+    {
+        $this->moduloService = $moduloService;
     }
 
     /**
      * Crear un nuevo módulo
      */
-    public function crearModulo() {
+    public function crearModulo(): void
+    {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $data = $this->getJsonInput();
 
             // Validar datos requeridos
             $camposRequeridos = ['codigo', 'nombre', 'descripcion', 'url', 'icono', 'orden', 'nivel'];
-            foreach ($camposRequeridos as $campo) {
-                if (!isset($data[$campo]) || empty(trim($data[$campo]))) {
-                    http_response_code(400);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => "El campo {$campo} es requerido"
-                    ]);
-                    return;
-                }
-            }
+            $this->validateRequired($data, $camposRequeridos);
 
             // Validar que el código sea único
             if ($this->moduloService->existeCodigoModulo($data['codigo'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'El código del módulo ya existe'
-                ]);
+                $this->errorResponse('El código del módulo ya existe', 400);
                 return;
             }
 
-            // Crear el módulo
             $resultado = $this->moduloService->crearModulo($data);
 
             if ($resultado) {
-                http_response_code(201);
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Módulo creado exitosamente',
-                    'data' => ['modulo_id' => $resultado]
-                ]);
+                $this->successResponse(['modulo_id' => $resultado], 'Módulo creado exitosamente', 201);
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Error al crear el módulo'
-                ]);
+                $this->errorResponse('Error al crear el módulo', 500);
             }
-
         } catch (\Exception $e) {
             error_log("Error en crearModulo: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error interno del servidor',
-                'error' => $e->getMessage()
-            ]);
+            $this->errorResponse($e->getMessage(), 500);
         }
     }
 
     /**
      * Actualizar un módulo existente
      */
-    public function actualizarModulo() {
+    public function actualizarModulo(): void
+    {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $data = $this->getJsonInput();
 
-            // Validar que exista el ID
             if (!isset($data['modulo_id']) || empty($data['modulo_id'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'El ID del módulo es requerido'
-                ]);
+                $this->errorResponse('El ID del módulo es requerido', 400);
                 return;
             }
 
-            // Validar datos requeridos
             $camposRequeridos = ['codigo', 'nombre', 'descripcion', 'url', 'icono', 'orden', 'nivel'];
-            foreach ($camposRequeridos as $campo) {
-                if (!isset($data[$campo]) || empty(trim($data[$campo]))) {
-                    http_response_code(400);
-                    echo json_encode([
-                        'success' => false,
-                        'message' => "El campo {$campo} es requerido"
-                    ]);
-                    return;
-                }
-            }
+            $this->validateRequired($data, $camposRequeridos);
 
-            // Validar que el código sea único (excepto para el módulo actual)
             if ($this->moduloService->existeCodigoModulo($data['codigo'], $data['modulo_id'])) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'El código del módulo ya existe'
-                ]);
+                $this->errorResponse('El código del módulo ya existe', 400);
                 return;
             }
 
-            // Actualizar el módulo
             $resultado = $this->moduloService->actualizarModulo($data);
 
             if ($resultado) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Módulo actualizado exitosamente'
-                ]);
+                $this->successResponse(null, 'Módulo actualizado exitosamente');
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Error al actualizar el módulo'
-                ]);
+                $this->errorResponse('Error al actualizar el módulo', 500);
             }
-
         } catch (\Exception $e) {
             error_log("Error en actualizarModulo: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error interno del servidor',
-                'error' => $e->getMessage()
-            ]);
+            $this->errorResponse($e->getMessage(), 500);
         }
     }
 
     /**
      * Listar todos los módulos
      */
-    public function listarModulos() {
-        try {
+    public function listarModulos(): void
+    {
+        $this->executeServiceAction(function () {
             $modulos = $this->moduloService->listarModulos();
-
-            echo json_encode([
-                'success' => true,
+            return [
                 'data' => $modulos,
-                'total' => count($modulos)
-            ]);
-
-        } catch (\Exception $e) {
-            error_log("Error en listarModulos: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al listar los módulos',
-                'error' => $e->getMessage()
-            ]);
-        }
+                'message' => 'Módulos obtenidos correctamente'
+            ];
+        });
     }
 
     /**
      * Obtener un módulo específico por ID
      */
-    public function obtenerModulo() {
-        try {
+    public function obtenerModulo(): void
+    {
+        $this->executeServiceAction(function () {
             $moduloId = $_GET['id'] ?? null;
 
             if (!$moduloId) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ID del módulo no proporcionado'
-                ]);
-                return;
+                throw new \Exception('ID del módulo no proporcionado');
             }
 
             $modulo = $this->moduloService->obtenerModuloPorId($moduloId);
 
-            if ($modulo) {
-                echo json_encode([
-                    'success' => true,
-                    'data' => $modulo
-                ]);
-            } else {
-                http_response_code(404);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Módulo no encontrado'
-                ]);
+            if (!$modulo) {
+                throw new \Exception('Módulo no encontrado');
             }
 
-        } catch (\Exception $e) {
-            error_log("Error en obtenerModulo: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener el módulo',
-                'error' => $e->getMessage()
-            ]);
-        }
+            return ['data' => $modulo, 'message' => 'Módulo obtenido correctamente'];
+        });
     }
 
     /**
      * Eliminar un módulo
      */
-    public function eliminarModulo() {
+    public function eliminarModulo(): void
+    {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $data = $this->getJsonInput();
             $moduloId = $data['moduloId'] ?? null;
 
             if (!$moduloId) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'ID del módulo no proporcionado'
-                ]);
+                $this->errorResponse('ID del módulo no proporcionado', 400);
                 return;
             }
 
-            // Verificar si el módulo tiene hijos
             if ($this->moduloService->tieneModulosHijos($moduloId)) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'No se puede eliminar el módulo porque tiene módulos hijos asociados'
-                ]);
+                $this->errorResponse('No se puede eliminar el módulo porque tiene módulos hijos asociados', 400);
                 return;
             }
 
             $resultado = $this->moduloService->eliminarModulo($moduloId);
 
             if ($resultado) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Módulo eliminado exitosamente'
-                ]);
+                $this->successResponse(null, 'Módulo eliminado exitosamente');
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Error al eliminar el módulo'
-                ]);
+                $this->errorResponse('Error al eliminar el módulo', 500);
             }
-
         } catch (\Exception $e) {
             error_log("Error en eliminarModulo: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al eliminar el módulo',
-                'error' => $e->getMessage()
-            ]);
+            $this->errorResponse($e->getMessage(), 500);
         }
     }
 
     /**
      * Cambiar el estado activo/inactivo de un módulo
      */
-    public function toggleEstadoModulo() {
+    public function toggleEstadoModulo(): void
+    {
         try {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $data = $this->getJsonInput();
             $moduloId = $data['modulo_id'] ?? null;
             $estado = $data['estado'] ?? null;
 
             if (!$moduloId || !isset($estado)) {
-                http_response_code(400);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Datos incompletos'
-                ]);
+                $this->errorResponse('Datos incompletos', 400);
                 return;
             }
 
             $resultado = $this->moduloService->cambiarEstadoModulo($moduloId, $estado);
 
             if ($resultado) {
-                echo json_encode([
-                    'success' => true,
-                    'message' => 'Estado del módulo actualizado exitosamente'
-                ]);
+                $this->successResponse(null, 'Estado del módulo actualizado exitosamente');
             } else {
-                http_response_code(500);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Error al cambiar el estado del módulo'
-                ]);
+                $this->errorResponse('Error al cambiar el estado del módulo', 500);
             }
-
         } catch (\Exception $e) {
             error_log("Error en toggleEstadoModulo: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al cambiar el estado',
-                'error' => $e->getMessage()
-            ]);
+            $this->errorResponse($e->getMessage(), 500);
         }
     }
 
     /**
      * Obtener los módulos del usuario actual (según sus permisos)
      */
-    public function obtenerModulosUsuario() {
+    public function obtenerModulosUsuario(): void
+    {
         try {
-            // Verificar sesión
             if (!isset($_SESSION['usuario_id'])) {
-                http_response_code(401);
-                echo json_encode([
-                    'success' => false,
-                    'message' => 'Usuario no autenticado'
-                ]);
+                $this->errorResponse('Usuario no autenticado', 401);
                 return;
             }
 
-            $usuarioId = $_SESSION['usuario_id'];
-            $modulos = $this->moduloService->obtenerModulosPorUsuario($usuarioId);
+            $modulos = $this->moduloService->obtenerModulosPorUsuario($_SESSION['usuario_id']);
 
-            echo json_encode([
-                'success' => true,
-                'data' => $modulos
-            ]);
-
+            $this->successResponse($modulos);
         } catch (\Exception $e) {
             error_log("Error en obtenerModulosUsuario: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener los módulos del usuario',
-                'error' => $e->getMessage()
-            ]);
+            $this->errorResponse($e->getMessage(), 500);
         }
     }
 }

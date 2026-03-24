@@ -7,6 +7,22 @@ class Router {
     private $groupPrefix = '';
     private $groupMiddleware = [];
 
+    /** @var Container */
+    private $container;
+
+    public function __construct(Container $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Establece el contenedor IoC.
+     */
+    public function setContainer(Container $container): void
+    {
+        $this->container = $container;
+    }
+
     public function addMiddleware($middleware) {
         $this->middleware[] = $middleware;
     }
@@ -56,7 +72,7 @@ class Router {
             'path' => $fullPath,
             'handler' => $handler,
             'middleware' => $this->groupMiddleware,
-            'skip_csrf' => $attributes['skip_csrf'] ?? false  // Nuevo
+            'skip_csrf' => $attributes['skip_csrf'] ?? false
         ];
     }
 
@@ -95,17 +111,17 @@ class Router {
             return;
         }
 
-        // 🔑 PASO 2: Guardar info de ruta en request para que middleware pueda acceder
+        // PASO 2: Guardar info de ruta en request para que middleware pueda acceder
         $request->setRoute($matchedRoute);
 
-        // 🔑 PASO 3: Ejecutar middleware global (ahora sabe qué ruta es)
+        // PASO 3: Ejecutar middleware global
         foreach ($this->middleware as $middleware) {
             if (!$middleware->handle($request)) {
                 return;
             }
         }
 
-        // 🔑 PASO 4: Ejecutar middleware de ruta
+        // PASO 4: Ejecutar middleware de ruta
         foreach ($matchedRoute['middleware'] as $middlewareClass) {
             $middleware = new $middlewareClass();
             if (!$middleware->handle($request)) {
@@ -113,7 +129,7 @@ class Router {
             }
         }
 
-        // 🔑 PASO 5: Ejecutar handler
+        // PASO 5: Ejecutar handler
         $this->executeHandler($matchedRoute['handler'], $params);
     }
 
@@ -141,7 +157,13 @@ class Router {
             $controllerClass = "App\\Controllers\\$controller";
             
             if (class_exists($controllerClass)) {
-                $instance = new $controllerClass();
+                // Usar el contenedor IoC para resolver dependencias
+                if ($this->container !== null) {
+                    $instance = $this->container->make($controllerClass);
+                } else {
+                    $instance = new $controllerClass();
+                }
+                
                 if (method_exists($instance, $method)) {
                     call_user_func_array([$instance, $method], $params);
                     return;
@@ -153,4 +175,4 @@ class Router {
         header('Content-Type: application/json');
         echo json_encode(['error' => 'Handler no válido']);
     }
-}
+}

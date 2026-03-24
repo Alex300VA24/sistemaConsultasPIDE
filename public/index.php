@@ -18,8 +18,11 @@ $config = require __DIR__ . '/../config/app.php';
 
 SecurityMiddleware::initialize($config);
 
+// Cargar el contenedor IoC con los bindings registrados
+$container = require __DIR__ . '/../app/config/bootstrap.php';
+
 $request = new Request();
-$router = new Router();
+$router = new Router($container);
 
 // Middleware global
 $router->addMiddleware(new SecurityMiddleware());
