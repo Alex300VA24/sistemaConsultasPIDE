@@ -3,12 +3,13 @@
 namespace App\Services;
 
 use App\Repositories\ModuloRepository;
+use App\Services\Contracts\ModuloServiceInterface;
 
-class ModuloService {
+class ModuloService implements ModuloServiceInterface {
     private $moduloRepository;
 
-    public function __construct() {
-        $this->moduloRepository = new ModuloRepository();
+    public function __construct(ModuloRepository $moduloRepository) {
+        $this->moduloRepository = $moduloRepository;
     }
 
     /**
