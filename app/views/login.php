@@ -289,8 +289,22 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated']) {
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="<?= BASE_URL ?>assets/js/api.js"></script>
-    <script src="<?= BASE_URL ?>assets/js/login.js"></script>
+    <!-- Core -->
+    <script src="<?= BASE_URL ?>assets/js/core/constants.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/core/events.js"></script>
+    
+    <!-- Utilities -->
+    <script src="<?= BASE_URL ?>assets/js/utils/storage.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/utils/dom.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/utils/validator.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/utils/alerts.js"></script>
+    <script src="<?= BASE_URL ?>assets/js/utils/loading.js"></script>
+    
+    <!-- API -->
+    <script src="<?= BASE_URL ?>assets/js/core/api.js"></script>
+    
+    <!-- Auth -->
+    <script src="<?= BASE_URL ?>assets/js/modules/auth/login.js"></script>
 
     <script>
         // Toggle password visibility
