@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    session_name("APPPIDESESSID");
+    session_name("PIDE_SESSION");
     session_start();
 }
 if (!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) {
@@ -22,7 +22,7 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
 
     <!-- Tailwind CSS (local) -->
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/tailwind.css">
-
+    <link rel="icon" href="<?= BASE_URL ?>assets/images/logo.svg" type="image/x-icon">
     <!-- Fuente Inter (local) -->
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/fonts.css">
 

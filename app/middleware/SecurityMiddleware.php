@@ -24,6 +24,7 @@ class SecurityMiddleware {
             'samesite' => 'Strict'
         ]);
         
+        session_name('PIDE_SESSION');
         session_start();
         SecurityHeaders::applyAllHeaders($isHttps);
         

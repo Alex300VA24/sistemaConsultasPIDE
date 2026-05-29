@@ -47,7 +47,7 @@ const LoginModule = {
             const response = await authService.login(nombreUsuario, password);
             
             if (response.success && response.data.requireCUI) {
-                this.elements.modalCUI.style.display = 'flex';
+                this.elements.modalCUI.classList.add('active');
                 Storage.session.set('usuarioID', response.data.usuarioID);
                 localStorage.setItem('usuario', nombreUsuario);
                 btnLoader.restore();
@@ -86,7 +86,7 @@ const LoginModule = {
                 Storage.session.set('dias_restantes', response.data.dias_restantes);
                 Storage.setLoginReciente();
                 
-                this.elements.modalCUI.style.display = 'none';
+                this.elements.modalCUI.classList.remove('active');
                 Loading.show();
                 
                 setTimeout(() => {
@@ -102,7 +102,7 @@ const LoginModule = {
 
     cancelarCUI() {
         if (this.elements.modalCUI) {
-            this.elements.modalCUI.style.display = 'none';
+            this.elements.modalCUI.classList.remove('active');
         }
         sessionStorage.clear();
         if (this.elements.btnLogin) {
