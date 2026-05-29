@@ -90,13 +90,8 @@ const ModuloDNI = {
 
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `consulta-dni-${dni}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            a.remove();
+            window.open(url, '_blank');
+            setTimeout(() => window.URL.revokeObjectURL(url), 30000);
         } catch (err) {
             console.error('PDF error:', err);
             Alerts.inline('Error al generar el PDF', 'danger', 'alertContainerDNI');
