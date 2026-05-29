@@ -74,9 +74,13 @@ const ModuloDNI = {
                 foto: fotoSrc
             };
 
-            const response = await fetch('/api/consultas/dni/pdf', {
+            await api.ensureCSRF();
+            const response = await fetch(`${Constants.API.BASE_URL}/consultas/dni/pdf`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': api.csrfToken
+                },
                 body: JSON.stringify(payload)
             });
 
@@ -270,7 +274,10 @@ const ModuloDNI = {
             this.elements.btnBuscar.innerHTML = '<span class="loading"></span>';
         } else {
             this.elements.btnBuscar.disabled = false;
-            this.elements.btnBuscar.innerHTML = '🔍';
+            this.elements.btnBuscar.innerHTML = `
+                <i class="fas fa-magnifying-glass"></i>
+                <span>Buscar</span>
+                `;;
         }
     },
 

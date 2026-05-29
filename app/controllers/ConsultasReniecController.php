@@ -85,7 +85,7 @@ class ConsultasReniecController extends ConsultasPideBaseController
             $dompdf = new Dompdf($options);
 
             ob_start();
-            require __DIR__ . '/../../views/dashboard/pages/consultas/dni_pdf.php';
+            require __DIR__ . '/../views/dashboard/pages/consultas/dni_pdf.php';
             $html = ob_get_clean();
 
             $dompdf->loadHtml($html);
