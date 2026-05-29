@@ -596,7 +596,8 @@ body {
 }
 
 /* Spinner pequeño para botones */
-.loading-spinner {
+.loading-spinner,
+.loading {
     display: inline-block;
     width: 16px;
     height: 16px;
@@ -618,7 +619,7 @@ body {
    ============================================ */
 
 .glass {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.5);

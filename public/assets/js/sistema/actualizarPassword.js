@@ -173,7 +173,7 @@ const ModuloActualizarPassword = {
             
             if (tieneAccesoRENIEC) {
                 // PASO 1: Actualizar en RENIEC
-                mostrarAlerta('🔄 Actualizando contraseña en RENIEC...', 'info', 'alertContainerPassword');
+                mostrarAlerta('Actualizando contraseña en RENIEC...', 'info', 'alertContainerPassword');
                 
                 const resultadoRENIEC = await consultaService.actualizarPasswordRENIEC({
                     credencialAnterior: datos.passwordActual,
@@ -189,11 +189,11 @@ const ModuloActualizarPassword = {
                 
                 mostrarAlerta('✓ Contraseña actualizada en RENIEC correctamente', 'success', 'alertContainerPassword');
             } else {
-                mostrarAlerta('ℹ️ Actualizando solo en el sistema local (sin acceso a RENIEC)', 'info', 'alertContainerPassword');
+                mostrarAlerta('Actualizando solo en el sistema local (sin acceso a RENIEC)', 'info', 'alertContainerPassword');
             }
             
             // PASO 2: Actualizar en base de datos local (SIEMPRE)
-            mostrarAlerta('🔄 Actualizando contraseña en el sistema local...', 'info', 'alertContainerPassword');
+            mostrarAlerta('Actualizando contraseña en el sistema local...', 'info', 'alertContainerPassword');
             
             const response = await authService.cambiarPassword(datos.passwordActual, datos.passwordNueva);
             
@@ -233,7 +233,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // 📝 OBTENER DATOS DEL FORMULARIO
+    // OBTENER DATOS DEL FORMULARIO
     // ============================================
     obtenerDatosFormulario() {
         return {
@@ -244,7 +244,7 @@ const ModuloActualizarPassword = {
     },
 
     // ============================================
-    // ✅ VALIDAR FORMULARIO
+    // VALIDAR FORMULARIO
     // ============================================
     validarFormulario() {
         const datos = this.obtenerDatosFormulario();

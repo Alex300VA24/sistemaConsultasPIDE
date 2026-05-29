@@ -274,7 +274,7 @@
 
 <!-- Modales se mantienen igual pero con estilos actualizados -->
 <!-- Modal: Búsqueda de Personas Naturales -->
-<div id="modalBusquedaNatural" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+<div id="modalBusquedaNatural" class="fixed inset-0 bg-black/70 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
     <div class="glass rounded-2xl shadow-2xl w-[90vw] max-w-5xl max-h-[90vh] mx-4 border border-white/50 overflow-hidden">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">
@@ -313,7 +313,7 @@
 </div>
 
 <!-- Modal: Búsqueda de Personas Jurídicas -->
-<div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/50 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
+<div id="modalBusquedaJuridica" class="fixed inset-0 bg-black/70 items-center justify-center z-50 backdrop-blur-sm" style="display: none;">
     <div class="glass rounded-2xl shadow-2xl w-[95vw] max-w-7xl max-h-[90vh] mx-4 border border-white/50 overflow-hidden">
         <div class="bg-gradient-to-r from-violet-600 to-violet-700 text-white p-6 rounded-t-2xl flex items-center justify-between">
             <h5 class="text-xl font-bold flex items-center gap-2">

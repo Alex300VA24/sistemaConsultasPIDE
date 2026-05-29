@@ -67,6 +67,15 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
 <div class="flex h-screen overflow-hidden" id="dashboardContainer">
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white" style="display: none;">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-gray-600 font-semibold text-lg">Cargando...</p>
+            <p class="text-gray-400 text-sm mt-1">Por favor espere</p>
+        </div>
+    </div>
+    
     <main id="main-content" class="ml-[70px] transition-all duration-300 min-h-screen p-6 flex-1 overflow-y-auto">
         <!-- Header -->
         <header class="glass rounded-2xl p-6 mb-8 shadow-lg border border-white/50">
