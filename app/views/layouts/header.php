@@ -48,14 +48,14 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
 
         /* Glassmorphism utilities */
         .glass {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .glass-dark {
-            background: rgba(30, 58, 138, 0.95);
+            background: rgb(30, 58, 138);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
