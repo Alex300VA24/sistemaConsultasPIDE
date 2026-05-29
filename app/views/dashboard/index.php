@@ -68,11 +68,11 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center bg-white" style="display: none;">
-        <div class="text-center">
-            <div class="w-16 h-16 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p class="text-gray-600 font-semibold text-lg">Cargando...</p>
-            <p class="text-gray-400 text-sm mt-1">Por favor espere</p>
+    <div id="loadingOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center" style="display: none; background: rgba(0, 0, 0, 0.8);">
+        <div class="bg-white rounded-2xl shadow-2xl px-12 py-10 text-center max-w-sm w-full mx-4">
+            <div class="w-14 h-14 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-5"></div>
+            <p class="text-gray-800 font-bold text-lg">Cargando...</p>
+            <p class="text-gray-500 text-sm mt-1.5">Por favor espere un momento</p>
         </div>
     </div>
     

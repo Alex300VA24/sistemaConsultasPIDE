@@ -94,7 +94,7 @@ const ModuloPartidas = {
         DOM.$('#formBusquedaJuridica')?.addEventListener('submit', (e) => this.searchJuridicPerson(e));
 
         DOM.$$('input[name="tipoBusquedaJuridica"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {});
+            radio.addEventListener('change', (e) => this.toggleBusquedaJuridica(e));
         });
 
         const modalNatural = DOM.$('#modalBusquedaNatural');
@@ -188,6 +188,19 @@ const ModuloPartidas = {
             this.openModal('modalBusquedaNatural');
         } else if (type === 'juridica') {
             this.openModal('modalBusquedaJuridica');
+        }
+    },
+
+    toggleBusquedaJuridica(e) {
+        const value = e.target.value;
+        const grupoRuc = DOM.$('#grupoRuc');
+        const grupoRazonSocial = DOM.$('#grupoRazonSocial');
+        if (value === 'ruc') {
+            DOM.show(grupoRuc);
+            DOM.hide(grupoRazonSocial);
+        } else {
+            DOM.hide(grupoRuc);
+            DOM.show(grupoRazonSocial);
         }
     },
 
