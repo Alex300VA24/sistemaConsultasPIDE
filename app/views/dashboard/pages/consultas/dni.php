@@ -91,7 +91,7 @@
                     Información Personal
                 </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="dniResultsContent" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="bg-white/60 rounded-xl p-4 border border-gray-200">
                         <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">DNI</span>
                         <div class="mt-1 text-lg font-semibold text-gray-800" id="result-dni">
@@ -147,6 +147,17 @@
                             <?php echo isset($persona['restriccion']) ? htmlspecialchars($persona['restriccion']) : '-'; ?>
                         </div>
                     </div>
+                </div>
+                
+                <div class="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+                    <button type="button" id="btnExportPDF" class="px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition flex items-center gap-2 shadow-md">
+                        <i class="fas fa-file-pdf"></i>
+                        Exportar PDF
+                    </button>
+                    <button type="button" id="btnPrint" class="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl hover:from-blue-600 hover:to-blue-700 transition flex items-center gap-2 shadow-md">
+                        <i class="fas fa-print"></i>
+                        Imprimir
+                    </button>
                 </div>
             </div>
         </div>
