@@ -68,20 +68,22 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(15,23,42,0.85); align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 24px;">
-            <div style="position: relative; width: 100px; height: 100px;">
-                <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 24px; backdrop-filter: blur(10px);"></div>
-                <img src="<?= BASE_URL ?>assets/images/muni2.png" alt="PIDE" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; object-fit: contain;">
-                <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; width: 120px; height: 120px; border: 3px solid rgba(255,255,255,0.15); border-top-color: #5EEAD4; border-radius: 50%; animation: loadSpin 1.2s linear infinite;"></div>
-                <div style="position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; width: 110px; height: 110px; border: 2px solid transparent; border-bottom-color: rgba(255,255,255,0.3); border-radius: 50%; animation: loadSpin 1.8s linear infinite reverse;"></div>
-            </div>
-            <div style="text-align: center;">
-                <div style="font-size: 28px; font-weight: 800; color: white; letter-spacing: 0.05em;">Sistema PIDE</div>
-                <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 4px;">Cargando...</div>
-            </div>
-            <div style="width: 180px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 999px; overflow: hidden;">
-                <div style="height: 100%; background: linear-gradient(90deg, #4A90D9, #1E5799); border-radius: 999px; animation: loadProgress 1.5s ease-in-out infinite;"></div>
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px);">
+        <div id="loadingOverlayInner" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 24px;">
+                <div style="position: relative; width: 100px; height: 100px;">
+                    <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 24px; backdrop-filter: blur(10px);"></div>
+                    <img src="<?= BASE_URL ?>assets/images/muni2.png" alt="PIDE" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; object-fit: contain;">
+                    <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; width: 120px; height: 120px; border: 3px solid rgba(255,255,255,0.15); border-top-color: #5EEAD4; border-radius: 50%; animation: loadSpin 1.2s linear infinite;"></div>
+                    <div style="position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; width: 110px; height: 110px; border: 2px solid transparent; border-bottom-color: rgba(255,255,255,0.3); border-radius: 50%; animation: loadSpin 1.8s linear infinite reverse;"></div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 28px; font-weight: 800; color: white; letter-spacing: 0.05em;">Sistema PIDE</div>
+                    <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 4px;">Cargando...</div>
+                </div>
+                <div style="width: 180px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 999px; overflow: hidden;">
+                    <div style="height: 100%; background: linear-gradient(90deg, #4A90D9, #1E5799); border-radius: 999px; animation: loadProgress 1.5s ease-in-out infinite;"></div>
+                </div>
             </div>
         </div>
         <style>

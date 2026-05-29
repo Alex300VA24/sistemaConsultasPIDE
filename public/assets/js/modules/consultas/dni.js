@@ -42,6 +42,135 @@ const ModuloDNI = {
                 this.handleSubmit();
             });
         }
+
+        DOM.$('#btnExportPDF')?.addEventListener('click', () => this.exportPDF());
+        DOM.$('#btnPrint')?.addEventListener('click', () => this.printResult());
+    },
+
+    exportPDF() {
+        const dniEl = DOM.$('#result-dni');
+        const dni = dniEl?.textContent?.trim();
+        if (!dni || dni === '-') {
+            Alerts.inline('Realice una consulta primero', 'warning', 'alertContainerDNI');
+            return;
+        }
+
+        const content = DOM.$('#dniResultsContent');
+        const photo = DOM.$('#photoContainer');
+        const btn = DOM.$('#btnExportPDF');
+        const loader = Loading.button(btn, { text: '<span class="loading"></span> Generando...' });
+
+        const wrapper = DOM.create('div', {
+            style: 'padding: 30px; font-family: Arial, sans-serif; background: white;'
+        });
+
+        const title = DOM.create('div', {
+            style: 'text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #2563eb;'
+        });
+        title.innerHTML = '<h1 style="margin:0; font-size:22px; color:#1f2937;">Consulta DNI - RENIEC</h1><p style="margin:5px 0 0; font-size:13px; color:#6b7280;">Fecha: ' + new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + '</p>';
+        wrapper.appendChild(title);
+
+        if (photo) {
+            const photoRow = DOM.create('div', { style: 'text-align: center; margin-bottom: 20px;' });
+            const photoClone = photo.cloneNode(true);
+            photoClone.style.maxWidth = '200px';
+            photoClone.style.margin = '0 auto';
+            photoRow.appendChild(photoClone);
+            wrapper.appendChild(photoRow);
+        }
+
+        const infoClone = content.cloneNode(true);
+        infoClone.querySelectorAll('.bg-white\\/60').forEach(el => {
+            el.style.cssText = 'padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 8px;';
+        });
+        wrapper.appendChild(infoClone);
+
+        const footer = DOM.create('div', {
+            style: 'text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af;'
+        });
+        footer.textContent = 'Sistema de Consultas PIDE - Documento generado electrónicamente';
+        wrapper.appendChild(footer);
+
+        const opt = {
+            margin:        [10, 10],
+            filename:      `consulta-dni-${DOM.val(DOM.$('#dniInput')) || ''}.pdf`,
+            image:         { type: 'jpeg', quality: 0.95 },
+            html2canvas:   { scale: 2, useCORS: true },
+            jsPDF:         { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(wrapper).save().then(() => {
+            loader.restore();
+        }).catch(err => {
+            console.error('PDF error:', err);
+            Alerts.inline('Error al generar el PDF', 'danger', 'alertContainerDNI');
+            loader.restore();
+        });
+    },
+
+    printResult() {
+        const dniEl = DOM.$('#result-dni');
+        const dni = dniEl?.textContent?.trim();
+        if (!dni || dni === '-') {
+            Alerts.inline('Realice una consulta primero', 'warning', 'alertContainerDNI');
+            return;
+        }
+
+        const content = DOM.$('#dniResultsContent');
+        const photo = DOM.$('#photoContainer');
+        if (!content) return;
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            Alerts.inline('Permita ventanas emergentes para imprimir', 'warning', 'alertContainerDNI');
+            return;
+        }
+
+        let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Consulta DNI</title>
+        <style>
+            body { font-family: Arial, sans-serif; padding: 30px; color: #1f2937; }
+            .header { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #2563eb; }
+            .header h1 { margin: 0; font-size: 22px; }
+            .header p { margin: 5px 0 0; font-size: 13px; color: #6b7280; }
+            .photo-row { text-align: center; margin-bottom: 20px; }
+            .photo-row img { max-width: 200px; border-radius: 8px; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+            .info-item { padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; }
+            .info-item.full { grid-column: 1 / -1; }
+            .info-item label { font-size: 10px; font-weight: 600; color: #6b7280; text-transform: uppercase; display: block; margin-bottom: 4px; }
+            .info-item span { font-size: 16px; font-weight: 600; color: #1f2937; }
+            .footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af; }
+            .no-photo { padding: 40px; text-align: center; color: #9ca3af; }
+            @media print { body { padding: 0; } }
+        </style></head><body>`;
+
+        html += `<div class="header"><h1>Consulta DNI - RENIEC</h1><p>Fecha: ${new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</p></div>`;
+
+        if (photo) {
+            const img = photo.querySelector('img');
+            if (img) {
+                html += `<div class="photo-row"><img src="${img.src}" alt="Foto"></div>`;
+            } else {
+                html += `<div class="photo-row no-photo"><p>Sin fotografía</p></div>`;
+            }
+        }
+
+        html += `<div class="info-grid">`;
+        content.querySelectorAll('[id^="result-"]').forEach(el => {
+            const label = el.closest('.bg-white\\/60')?.querySelector('.text-xs')?.textContent || el.id.replace('result-', '').replace(/-/g, ' ').toUpperCase();
+            const value = el.textContent || '-';
+            const fullSpan = el.closest('.md\\:col-span-2') ? ' full' : '';
+            html += `<div class="info-item${fullSpan}"><label>${label}</label><span>${value}</span></div>`;
+        });
+        html += `</div>`;
+
+        html += `<div class="footer">Sistema de Consultas PIDE - Documento generado electrónicamente</div>`;
+        html += `</body></html>`;
+
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => printWindow.print(), 500);
     },
 
     async handleSubmit() {
