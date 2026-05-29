@@ -21,6 +21,8 @@ date_default_timezone_set('America/Lima');
 if (session_status() === PHP_SESSION_NONE) {
     // En pruebas, usar almacenamiento en memoria
     ini_set('session.save_handler', 'files');
+    session_name('PIDE_SESSION');
+
     session_start();
 }
 

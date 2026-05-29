@@ -57,15 +57,15 @@ $area = $_SESSION['area'] ?? '';
 }
 
 /* User section text */
-.user-info {
-    opacity: 0;
-    visibility: hidden;
+.user-info,
+.user-info-collapsed {
+    opacity: 1;
+    visibility: visible;
     transition: all 0.25s ease-in-out;
 }
 
-#sidebar.expanded .user-info {
-    opacity: 1;
-    visibility: visible;
+#sidebar:not(.expanded) .user-info-collapsed {
+    display: none;
 }
 
 /* Chevron rotation */
@@ -83,6 +83,19 @@ $area = $_SESSION['area'] ?? '';
     flex-direction: column;
 }
 
+/* Ocultar submenús cuando sidebar está colapsado */
+#sidebar:not(.expanded) .submenu {
+    display: none !important;
+}
+
+#sidebar:not(.expanded) .has-submenu.open {
+    background: transparent !important;
+}
+
+#sidebar:not(.expanded) .has-submenu.open .chevron {
+    opacity: 0;
+}
+
 /* Active states */
 .option.active,
 .suboption.active {
@@ -98,7 +111,7 @@ $area = $_SESSION['area'] ?? '';
         <div class="flex items-center gap-3 px-4 w-full min-w-[260px]">
             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-red-500 flex items-center justify-center shadow-lg flex-shrink-0">
                 <!-- <i class="fas fa-landmark text-white text-lg"></i> -->
-                <img src="<?= BASE_URL ?>assets/images/logo.png" alt="logo">
+                <img src="<?= BASE_URL ?>assets/images/muni2.png" alt="logo">
             </div>
             <div class="nav-text">
                 <h1 class="font-bold text-sm leading-tight">MDE</h1>
@@ -163,22 +176,23 @@ $area = $_SESSION['area'] ?? '';
     </nav>
 
     <!-- User Section -->
-    <div class="p-4 border-t border-blue-700/50 min-w-[260px]">
-        <div class="flex items-center gap-3 mb-3 px-2">
+    <div class="p-4 border-t border-slate-700/50 w-[260px]">
+        <div class="flex items-center gap-3 mb-4 px-2">
             <div class="relative flex-shrink-0">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                    <?= strtoupper(substr($_SESSION['nombreUsuario'] ?? 'U', 0, 1)) ?>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center ring-2 ring-white/10">
+                    <span class="font-bold text-sm"><?= strtoupper(substr($_SESSION['nombreUsuario'] ?? 'U', 0, 1)) ?></span>
                 </div>
-                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-blue-900 pulse-dot"></div>
+                <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-slate-900"></div>
             </div>
-            <div class="user-info flex flex-col flex-1 min-w-0">
-                <p class="font-semibold text-sm truncate text-white"><?= htmlspecialchars($_SESSION['nombreUsuario'] ?? '') ?></p>
-                <p class="text-xs text-blue-300 truncate"><?= htmlspecialchars($_SESSION['ROL_nombre'] ?? '') ?></p>
+            <div class="user-info-collapsed">
+                <p class="font-semibold text-sm text-white"><?= htmlspecialchars($_SESSION['nombreUsuario'] ?? '') ?></p>
+                <p class="text-xs text-slate-400 leading-tight"><?= htmlspecialchars($_SESSION['ROL_nombre'] ?? '') ?></p>
+                <p class="text-[10px] text-slate-500"><?= htmlspecialchars($_SESSION['nombreCargo'] ?? '') ?></p>
             </div>
         </div>
         
-        <button id="btnLogout" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-red-500/20 hover:bg-red-500/30 text-red-200 transition-all border border-red-500/30 group min-w-[240px]">
-            <i class="fas fa-sign-out-alt text-sm w-5 text-center flex-shrink-0"></i>
+        <button id="btnLogout" onclick="mostrarModalLogout()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg bg-red-500/60 hover:bg-red-600 text-white transition-all duration-200 border border-red-500 min-w-[240px] group cursor-pointer">
+            <i class="fas fa-sign-out-alt text-sm w-5 text-center flex-shrink-0 group-hover:translate-x-1 transition-transform"></i>
             <span class="nav-text text-sm font-medium">Cerrar Sesión</span>
         </button>
     </div>
@@ -210,6 +224,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
     let expandTimeout;
+
+    // Logout modal functions
+    const logoutModal = document.getElementById('logoutModal');
+    const btnLogout = document.getElementById('btnLogout');
+    const cancelLogout = document.getElementById('cancelLogout');
+    const confirmLogout = document.getElementById('confirmLogout');
+
+    window.mostrarModalLogout = function() {
+        if (logoutModal) logoutModal.style.display = 'flex';
+    };
+
+    window.cerrarModalLogout = function() {
+        if (logoutModal) logoutModal.style.display = 'none';
+    };
+
+    if (btnLogout) {
+        btnLogout.addEventListener('click', mostrarModalLogout);
+    }
+
+    if (cancelLogout) {
+        cancelLogout.addEventListener('click', cerrarModalLogout);
+    }
+
+    if (confirmLogout) {
+        confirmLogout.addEventListener('click', function() {
+            fetch('<?= BASE_URL ?>api/logout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                window.location.href = '<?= BASE_URL ?>login';
+            })
+            .catch(err => {
+                window.location.href = '<?= BASE_URL ?>login';
+            });
+        });
+    }
+
+    if (logoutModal) {
+        logoutModal.addEventListener('click', function(e) {
+            if (e.target === logoutModal) {
+                cerrarModalLogout();
+            }
+        });
+    }
 
     if (sidebar && mainContent) {
         sidebar.addEventListener('mouseenter', () => {
