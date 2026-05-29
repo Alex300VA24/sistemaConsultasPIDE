@@ -68,13 +68,30 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
-        <div style="background: white; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); padding: 40px 60px; text-align: center; max-width: 360px; width: 90%;">
-            <div style="width: 56px; height: 56px; border: 4px solid #e5e7eb; border-top-color: #7c3aed; border-radius: 50%; animation: loadingSpin 1s linear infinite; margin: 0 auto 20px;"></div>
-            <p style="color: #1f2937; font-size: 18px; font-weight: 700; margin: 0 0 6px 0;">Cargando...</p>
-            <p style="color: #6b7280; font-size: 14px; margin: 0;">Por favor espere un momento</p>
-            <style>@keyframes loadingSpin { to { transform: rotate(360deg); } }</style>
+    <div id="loadingOverlay" style="display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(15,23,42,0.85); align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 24px;">
+            <div style="position: relative; width: 100px; height: 100px;">
+                <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 24px; backdrop-filter: blur(10px);"></div>
+                <img src="<?= BASE_URL ?>assets/images/muni2.png" alt="PIDE" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; object-fit: contain;">
+                <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; width: 120px; height: 120px; border: 3px solid rgba(255,255,255,0.15); border-top-color: #5EEAD4; border-radius: 50%; animation: loadSpin 1.2s linear infinite;"></div>
+                <div style="position: absolute; top: -5px; left: -5px; right: -5px; bottom: -5px; width: 110px; height: 110px; border: 2px solid transparent; border-bottom-color: rgba(255,255,255,0.3); border-radius: 50%; animation: loadSpin 1.8s linear infinite reverse;"></div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 28px; font-weight: 800; color: white; letter-spacing: 0.05em;">Sistema PIDE</div>
+                <div style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 4px;">Cargando...</div>
+            </div>
+            <div style="width: 180px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 999px; overflow: hidden;">
+                <div style="height: 100%; background: linear-gradient(90deg, #4A90D9, #1E5799); border-radius: 999px; animation: loadProgress 1.5s ease-in-out infinite;"></div>
+            </div>
         </div>
+        <style>
+            @keyframes loadSpin { to { transform: rotate(360deg); } }
+            @keyframes loadProgress {
+                0% { width: 0%; margin-left: 0; }
+                50% { width: 70%; margin-left: 15%; }
+                100% { width: 0%; margin-left: 100%; }
+            }
+        </style>
     </div>
     
     <main id="main-content" class="ml-[70px] transition-all duration-300 min-h-screen p-6 flex-1 overflow-y-auto">
