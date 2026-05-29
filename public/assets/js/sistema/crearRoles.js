@@ -57,7 +57,7 @@ const ModuloRoles = {
     // ============================================
     async cargarModulos() {
         try {
-            const response = await api.listarRolesModulos();
+            const response = await rolService.listarModulos();
             
             if (response.success && response.data) {
                 this.modulosDisponibles = response.data;
@@ -318,8 +318,8 @@ const ModuloRoles = {
             };
             
             const response = this.rolEnEdicion 
-                ? await api.actualizarRol({ ...data, rol_id: this.rolEnEdicion })
-                : await api.crearRol(data);
+                ? await rolService.actualizar({ ...data, rol_id: this.rolEnEdicion })
+                : await rolService.crear(data);
             
             if (response.success) {
                 
@@ -355,7 +355,7 @@ const ModuloRoles = {
     // ============================================
     async cargarRoles() {
         try {
-            const response = await api.listarRoles();
+            const response = await rolService.listar();
             
             if (response.success && response.data) {
                 this.renderizarTablaRoles(response.data);
@@ -467,7 +467,7 @@ const ModuloRoles = {
             // Esperar que el DOM se actualice
             await new Promise(resolve => setTimeout(resolve, 100));
             
-            const response = await api.obtenerRol(rolId);
+            const response = await rolService.obtener(rolId);
             
             if (response.success && response.data) {
                 const rol = response.data;
@@ -584,7 +584,7 @@ const ModuloRoles = {
         }
         
         try {
-            const response = await api.eliminarRol(rolId);
+            const response = await rolService.eliminar(rolId);
             
             if (response.success) {
                 mostrarAlerta(response.message || 'Rol eliminado exitosamente', 'success', 'alertContainerRoles');

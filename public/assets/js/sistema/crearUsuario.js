@@ -109,7 +109,7 @@ const ModuloCrearUsuario = {
 
     async cargarRoles() {
         try {
-            const response = await api.obtenerRoles();
+            const response = await usuarioService.obtenerRoles();
             const select = document.getElementById('usuPermiso');
             
             if (!select) return;
@@ -132,7 +132,7 @@ const ModuloCrearUsuario = {
 
     async cargarTiposDePersonal() {
         try {
-            const response = await api.obtenerTipoPersonal();
+            const response = await usuarioService.obtenerTipoPersonal();
             const select = document.getElementById('perTipoPersonal');
             
             if (!select) return;
@@ -203,7 +203,7 @@ const ModuloCrearUsuario = {
                         'alertContainerCrearUsuario'
                     );
                     
-                    const resultadoRENIEC = await api.actualizarPasswordRENIEC({
+                    const resultadoRENIEC = await consultaService.actualizarPasswordRENIEC({
                         credencialAnterior: passwordAnterior,
                         credencialNueva: data.usuPass,
                         nuDni: this.usuarioEscogido.dni
@@ -231,10 +231,10 @@ const ModuloCrearUsuario = {
                     'info',
                     'alertContainerCrearUsuario'
                 );
-                response = await api.actualizarUsuario(data);
+                response = await usuarioService.actualizar(data);
             } else {
                 // MODO CREACIÓN
-                response = await api.crearUsuario(data);
+                response = await usuarioService.crear(data);
             }
 
             if (response.success) {
@@ -710,7 +710,7 @@ const ModuloCrearUsuario = {
 
     async cargarListadoUsuarios() {
         try {
-            const response = await api.listarUsuarios();
+            const response = await usuarioService.listar();
             const tbody = document.getElementById('tablaUsuariosBody');
             
             if (!tbody) return;
@@ -772,7 +772,7 @@ const ModuloCrearUsuario = {
 
     async editarUsuario(usuarioId) {
         try {
-            const response = await api.obtenerUsuario(usuarioId);
+            const response = await usuarioService.obtener(usuarioId);
             
             if (response.success && response.data) {
                 const usuario = response.data;
@@ -851,7 +851,7 @@ const ModuloCrearUsuario = {
         }
         
         try {
-            const response = await api.eliminarUsuario(usuarioId);
+            const response = await usuarioService.eliminar(usuarioId);
             
             if (response.success) {
                 window.mostrarAlerta(

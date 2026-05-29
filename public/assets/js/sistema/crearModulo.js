@@ -71,7 +71,7 @@ const ModuloCrearModulo = {
 
     async cargarModulosPadre() {
         try {
-            const response = await api.listarModulos();
+            const response = await moduloService.listar();
             const select = document.getElementById('moduloPadre');
             
             if (!select) return;
@@ -125,9 +125,9 @@ const ModuloCrearModulo = {
             let response;
             if (this.modoEdicion && this.moduloActualId) {
                 data.modulo_id = this.moduloActualId;
-                response = await api.actualizarModulo(data);
+                response = await moduloService.actualizar(data);
             } else {
-                response = await api.crearModulo(data);
+                response = await moduloService.crear(data);
             }
 
             if (response.success) {
@@ -214,7 +214,7 @@ const ModuloCrearModulo = {
 
     async cargarListadoModulos() {
         try {
-            const response = await api.listarModulos();
+            const response = await moduloService.listar();
             const tbody = document.getElementById('tablaModulosBody');
             
             if (!tbody) return;
@@ -283,7 +283,7 @@ const ModuloCrearModulo = {
 
     async editarModulo(moduloId) {
         try {
-            const response = await api.obtenerModulo(moduloId);
+            const response = await moduloService.obtener(moduloId);
             
             if (response.success && response.data) {
                 const modulo = response.data;
@@ -336,7 +336,7 @@ const ModuloCrearModulo = {
         }
         
         try {
-            const response = await api.toggleEstadoModulo(moduloId, nuevoEstado);
+            const response = await moduloService.toggleEstado(moduloId, nuevoEstado);
             
             if (response.success) {
                 window.mostrarAlerta(
@@ -369,7 +369,7 @@ const ModuloCrearModulo = {
         }
         
         try {
-            const response = await api.eliminarModulo(moduloId);
+            const response = await moduloService.eliminar(moduloId);
             
             if (response.success) {
                 window.mostrarAlerta(

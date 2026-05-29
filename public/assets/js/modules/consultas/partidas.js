@@ -1076,6 +1076,54 @@ const ModuloPartidas = {
         DOM.show(section);
     },
 
+    async consultLASIRSARP() {
+        if (!this.validateCredentials()) return;
+
+        const partidaInput = DOM.val(DOM.$('#persona'));
+        const oficinaInput = DOM.val(DOM.$('#oficinaRegistralID'));
+
+        if (!partidaInput) {
+            Alerts.inline('Por favor ingrese un número de partida', 'warning', this.ALERT_CONTAINER);
+            return;
+        }
+
+        if (!oficinaInput) {
+            Alerts.inline('Por favor seleccione una oficina registral', 'warning', this.ALERT_CONTAINER);
+            return;
+        }
+
+        const [zona, oficina] = oficinaInput.split('-');
+
+        this.clearPreviousResults();
+
+        const btn = DOM.$('#btnConsultar');
+        const loader = Loading.button(btn, { text: '<span class="loading-spinner"></span> Consultando SUNARP...' });
+
+        try {
+            const partidaData = {
+                numero_partida: partidaInput,
+                codigo_zona: zona,
+                codigo_oficina: oficina,
+                numero_placa: '',
+                estado: 'REGISTRADA',
+                oficina: `${zona}-${oficina}`,
+                requiere_carga_bajo_demanda: true,
+                detalle_cargado: false
+            };
+
+            this.state.foundPartidas = [partidaData];
+            this.state.currentPartida = 0;
+
+            this.displayTSIRSARPResults(this.state.foundPartidas);
+            Alerts.inline('Consultando partida registral...', 'info', this.ALERT_CONTAINER);
+        } catch (error) {
+            console.error('Error in LASIRSARP:', error);
+            Alerts.inline(error.message || 'Error al consultar partida registral', 'danger', this.ALERT_CONTAINER);
+        } finally {
+            loader.restore();
+        }
+    },
+
     clearPreviousResults() {
         this.state.foundPartidas = [];
         this.state.detailCache = {};

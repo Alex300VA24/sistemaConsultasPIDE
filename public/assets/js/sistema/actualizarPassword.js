@@ -83,7 +83,7 @@ const ModuloActualizarPassword = {
     // ============================================
     async cargarDatosUsuarioActual() {
         try {
-            const response = await api.obtenerUsuarioActual();
+            const response = await usuarioService.obtenerActual();
 
             if (response.success && response.data) {
                 const usuario = response.data;
@@ -175,7 +175,7 @@ const ModuloActualizarPassword = {
                 // PASO 1: Actualizar en RENIEC
                 mostrarAlerta('🔄 Actualizando contraseña en RENIEC...', 'info', 'alertContainerPassword');
                 
-                const resultadoRENIEC = await api.actualizarPasswordRENIEC({
+                const resultadoRENIEC = await consultaService.actualizarPasswordRENIEC({
                     credencialAnterior: datos.passwordActual,
                     credencialNueva: datos.passwordNueva,
                     nuDni: this.usuarioActual.dni
@@ -195,11 +195,7 @@ const ModuloActualizarPassword = {
             // PASO 2: Actualizar en base de datos local (SIEMPRE)
             mostrarAlerta('🔄 Actualizando contraseña en el sistema local...', 'info', 'alertContainerPassword');
             
-            const response = await api.actualizarPassword({
-                USU_id: this.usuarioActual.id,
-                USU_passActual: datos.passwordActual,
-                USU_pass: datos.passwordNueva
-            });
+            const response = await authService.cambiarPassword(datos.passwordActual, datos.passwordNueva);
             
             if (response.success) {
                 const mensaje = tieneAccesoRENIEC 
@@ -216,7 +212,7 @@ const ModuloActualizarPassword = {
                     // Redirigir al login
                     setTimeout(async () => {
                         try {
-                            await api.logout();
+                            await authService.logout();
                             window.location.href = this.BASE_URL + 'login';
                         } catch (error) {
                             console.error('❌ Error al cerrar sesión:', error);
