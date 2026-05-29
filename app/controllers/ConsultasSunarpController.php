@@ -110,81 +110,10 @@ class ConsultasSunarpController extends ConsultasPideBaseController
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
     }
 
-<<<<<<< HEAD
     /**
      * Consultar LASIRSARP - Asientos registrales.
      */
     public function consultarLASIRSARP(): void
-=======
-    private function ejecutarGOficina($usuario, $clave)
-    {
-        try {
-            $url = $this->urlSUNARP . "/GOficina?out=json";
-
-            $data = [
-                "PIDE" => [
-                    "usuario" => (string)$usuario,
-                    "clave" => (string)$clave
-                ]
-            ];
-
-            error_log("GOficina Request: " . json_encode($data, JSON_UNESCAPED_UNICODE));
-
-
-            $curlResult = $this->executeCurl($url, $data, 'POST', 'SUNARP (GOficina)');
-
-            if (!$curlResult['success']) {
-                return ['success' => false, 'message' => $curlResult['error'], 'data' => []];
-            }
-
-            error_log("GOficina Response Code: " . $curlResult['httpCode']);
-
-            if ($curlResult['httpCode'] == 200) {
-                $jsonResult = $this->decodeJsonResponse($curlResult['response'], 'SUNARP (GOficina)');
-
-                if (!$jsonResult['success']) {
-                    return ['success' => false, 'message' => $jsonResult['message'], 'data' => []];
-                }
-
-                $jsonResponse = $jsonResult['data'];
-                $oficinas = $jsonResponse['oficina']['oficina'] ?? [];
-
-                if (empty($oficinas)) {
-                    return ['success' => false, 'message' => 'No se encontraron oficinas', 'data' => []];
-                }
-
-                $catalogo = [];
-                foreach ($oficinas as $oficina) {
-                    $key = strtoupper(trim($oficina['descripcion']));
-                    $catalogo[$key] = [
-                        'codZona' => $oficina['codZona'],
-                        'codOficina' => $oficina['codOficina'],
-                        'descripcion' => $oficina['descripcion']
-                    ];
-                }
-
-                error_log("GOficina: " . count($catalogo) . " oficinas cargadas");
-
-                return [
-                    'success' => true,
-                    'message' => 'Catálogo de oficinas obtenido',
-                    'data' => $catalogo,
-                    'total' => count($catalogo)
-                ];
-            }
-
-            return ['success' => false, 'message' => "HTTP {$curlResult['httpCode']}", 'data' => []];
-        } catch (\Exception $e) {
-            error_log("Exception en ejecutarGOficina: " . $e->getMessage());
-            return ['success' => false, 'message' => $e->getMessage(), 'data' => []];
-        }
-    }
-
-    // ========================================
-    // CONSULTAR LASIRSARP
-    // ========================================
-    public function consultarLASIRSARP()
->>>>>>> 45ffdb2 (cambios)
     {
         if (!$this->validatePostRequest()) return;
 
