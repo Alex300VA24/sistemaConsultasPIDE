@@ -261,30 +261,32 @@ const ModuloPartidas = {
         e.preventDefault();
 
         const searchType = DOM.$('input[name="tipoBusquedaJuridica"]:checked')?.value;
-        let param;
+
+        if (!this.validateCredentials()) return;
+
+        const payload = {
+            tipoBusqueda: searchType,
+            dniUsuario: this.state.userCredentials.dni,
+            password: this.state.userCredentials.password
+        };
 
         if (searchType === 'ruc') {
-            param = DOM.val(DOM.$('#rucJuridica'));
-            if (!Validator.validateRUC(param, this.ALERT_CONTAINER)) return;
+            const ruc = DOM.val(DOM.$('#rucJuridica'));
+            if (!Validator.validateRUC(ruc, this.ALERT_CONTAINER)) return;
+            payload.ruc = ruc;
         } else {
-            param = DOM.val(DOM.$('#razonSocial'));
-            if (!param.trim()) {
+            const razonSocial = DOM.val(DOM.$('#razonSocial'));
+            if (!razonSocial.trim()) {
                 Alerts.inline('Por favor ingrese una razón social', 'warning', this.ALERT_CONTAINER);
                 return;
             }
+            payload.razonSocial = razonSocial;
         }
-
-        if (!this.validateCredentials()) return;
 
         this.showLoading('formBusquedaJuridica');
 
         try {
-            const result = await consultaService.buscarPersonaJuridica({
-                parametro: param,
-                tipoBusqueda: searchType,
-                dniUsuario: this.state.userCredentials.dni,
-                password: this.state.userCredentials.password
-            });
+            const result = await consultaService.buscarPersonaJuridica(payload);
 
             if (result.success && result.data?.length > 0) {
                 this.state.foundRecords = result.data;
