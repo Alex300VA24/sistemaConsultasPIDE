@@ -74,7 +74,7 @@ const ModuloDNI = {
     },
 
     // ============================================
-    // 🔍 CONSULTAR DNI
+    // CONSULTAR DNI
     // ============================================
     async consultarDNI(dni) {
         try {
@@ -197,7 +197,11 @@ const ModuloDNI = {
             btnBuscar.innerHTML = '<span class="loading"></span>';
         } else {
             btnBuscar.disabled = false;
-            btnBuscar.innerHTML = '🔍';
+            btnBuscar.innerHTML = `
+                <i class="fas fa-magnifying-glass"></i>
+                <span>Buscar</span>
+                `;
+
         }
     },
 
