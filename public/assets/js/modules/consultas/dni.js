@@ -47,7 +47,7 @@ const ModuloDNI = {
         DOM.$('#btnPrint')?.addEventListener('click', () => this.printResult());
     },
 
-    exportPDF() {
+    async exportPDF() {
         const dniEl = DOM.$('#result-dni');
         const dni = dniEl?.textContent?.trim();
         if (!dni || dni === '-') {
@@ -55,57 +55,50 @@ const ModuloDNI = {
             return;
         }
 
-        const content = DOM.$('#dniResultsContent');
-        const photo = DOM.$('#photoContainer');
         const btn = DOM.$('#btnExportPDF');
         const loader = Loading.button(btn, { text: '<span class="loading"></span> Generando...' });
 
-        const wrapper = DOM.create('div', {
-            style: 'padding: 30px; font-family: Arial, sans-serif; background: white;'
-        });
+        try {
+            const photo = DOM.$('#photoContainer img');
+            const fotoSrc = photo ? photo.src : '';
 
-        const title = DOM.create('div', {
-            style: 'text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #2563eb;'
-        });
-        title.innerHTML = '<h1 style="margin:0; font-size:22px; color:#1f2937;">Consulta DNI - RENIEC</h1><p style="margin:5px 0 0; font-size:13px; color:#6b7280;">Fecha: ' + new Date().toLocaleDateString('es-PE', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + '</p>';
-        wrapper.appendChild(title);
+            const payload = {
+                dni: dni,
+                nombres: DOM.text(DOM.$('#result-nombres')),
+                apellido_paterno: DOM.text(DOM.$('#result-paterno')),
+                apellido_materno: DOM.text(DOM.$('#result-materno')),
+                estado_civil: DOM.text(DOM.$('#result-estado-civil')),
+                direccion: DOM.text(DOM.$('#result-direccion')),
+                restriccion: DOM.text(DOM.$('#result-restriccion')),
+                ubigeo: DOM.text(DOM.$('#result-ubigeo')),
+                foto: fotoSrc
+            };
 
-        if (photo) {
-            const photoRow = DOM.create('div', { style: 'text-align: center; margin-bottom: 20px;' });
-            const photoClone = photo.cloneNode(true);
-            photoClone.style.maxWidth = '200px';
-            photoClone.style.margin = '0 auto';
-            photoRow.appendChild(photoClone);
-            wrapper.appendChild(photoRow);
-        }
+            const response = await fetch('/api/consultas/dni/pdf', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
-        const infoClone = content.cloneNode(true);
-        infoClone.querySelectorAll('.bg-white\\/60').forEach(el => {
-            el.style.cssText = 'padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 8px;';
-        });
-        wrapper.appendChild(infoClone);
+            if (!response.ok) {
+                throw new Error('Error del servidor: ' + response.status);
+            }
 
-        const footer = DOM.create('div', {
-            style: 'text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af;'
-        });
-        footer.textContent = 'Sistema de Consultas PIDE - Documento generado electrónicamente';
-        wrapper.appendChild(footer);
-
-        const opt = {
-            margin:        [10, 10],
-            filename:      `consulta-dni-${DOM.val(DOM.$('#dniInput')) || ''}.pdf`,
-            image:         { type: 'jpeg', quality: 0.95 },
-            html2canvas:   { scale: 2, useCORS: true },
-            jsPDF:         { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(wrapper).save().then(() => {
-            loader.restore();
-        }).catch(err => {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `consulta-dni-${dni}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        } catch (err) {
             console.error('PDF error:', err);
             Alerts.inline('Error al generar el PDF', 'danger', 'alertContainerDNI');
+        } finally {
             loader.restore();
-        });
+        }
     },
 
     printResult() {

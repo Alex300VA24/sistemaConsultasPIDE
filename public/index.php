@@ -77,6 +77,7 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) {
     // CONSULTAS
     $router->group(['prefix' => '/api/consultas'], function ($router) {
         $router->post('/dni', 'ConsultasReniecController@consultarDNI');
+        $router->post('/dni/pdf', 'ConsultasReniecController@generarPDF');
         $router->post('/ruc', 'ConsultasSunatController@consultarRUC');
         $router->post('/buscar/natural', 'ConsultasSunarpController@buscarPersonaNatural');
         $router->post('/buscar/juridica', 'ConsultasSunarpController@buscarPersonaJuridica');
