@@ -545,12 +545,24 @@ const ModuloPartidas = {
     showNoResultsMessage() {
         const resultsSection = DOM.$('#resultsSection');
         if (resultsSection) {
-            resultsSection.style.display = 'block';
-            resultsSection.innerHTML = `
+            DOM.hide(DOM.$('#infoGrid'));
+            DOM.hide(DOM.$('#photoSection'));
+            DOM.hide(DOM.$('#asientosSection'));
+            DOM.hide(DOM.$('#imagenesSection'));
+            DOM.hide(DOM.$('#vehiculoSection'));
+
+            let msg = DOM.$('#noResultsAlert');
+            if (!msg) {
+                msg = DOM.create('div', { id: 'noResultsAlert' });
+                resultsSection.appendChild(msg);
+            }
+            msg.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 12px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 6px; padding: 14px 18px;">
                     <div style="width: 32px; height: 32px; background: #f5c6cb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">!</div>
                     <div><strong>Aviso:</strong> No se encontraron registros en SUNARP.</div>
                 </div>`;
+            resultsSection.style.display = 'block';
+            DOM.show(msg);
         }
     },
 
@@ -750,14 +762,21 @@ const ModuloPartidas = {
         if (!overlay) {
             overlay = DOM.create('div', {
                 id: 'loadingOverlayPartida',
-                style: 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999999; display: flex; align-items: center; justify-content: center;'
+                style: 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px); z-index: 999999; display: flex; align-items: center; justify-content: center;'
             });
             overlay.innerHTML = `
-                <div style="background: white; padding: 40px; border-radius: 10px; text-align: center;">
-                    <div style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
-                    <p>Cargando detalles de la partida...</p>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                    <div style="position: relative; width: 80px; height: 80px;">
+                        <div style="position: absolute; inset: 0; background: rgba(255,255,255,0.1); border-radius: 20px; backdrop-filter: blur(10px);"></div>
+                        <i class="fas fa-file-contract" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-size: 32px; color: rgba(255,255,255,0.8);"></i>
+                        <div style="position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border: 3px solid rgba(255,255,255,0.15); border-top-color: #5EEAD4; border-radius: 50%; animation: loadSpin 1.2s linear infinite;"></div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="color: white; font-size: 18px; font-weight: 700;">Cargando detalles</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 4px;">Consultando partida registral...</div>
+                    </div>
                 </div>
-                <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>`;
+                <style>@keyframes loadSpin { to { transform: rotate(360deg); } }</style>`;
             document.body.appendChild(overlay);
         }
         DOM.show(overlay);
@@ -858,6 +877,11 @@ const ModuloPartidas = {
     },
 
     showPersonPhoto() {
+        if (this.state.currentPersonType !== 'natural') {
+            DOM.hide(DOM.$('#photoSection'));
+            return;
+        }
+
         const container = DOM.$('#fotoContainer');
         const section = DOM.$('#photoSection');
         if (!container || !section) return;
@@ -1167,6 +1191,11 @@ const ModuloPartidas = {
 
         DOM.hide(DOM.$('#imagenesSection'));
         DOM.hide(DOM.$('#vehiculoSection'));
+
+        const noResultsAlert = DOM.$('#noResultsAlert');
+        if (noResultsAlert) {
+            DOM.remove(noResultsAlert);
+        }
     },
 
     clearForm() {
