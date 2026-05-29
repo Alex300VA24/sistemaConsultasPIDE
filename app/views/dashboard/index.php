@@ -68,11 +68,12 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
     
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 z-[9999] flex items-center justify-center" style="display: none; background: rgba(0, 0, 0, 0.8);">
-        <div class="bg-white rounded-2xl shadow-2xl px-12 py-10 text-center max-w-sm w-full mx-4">
-            <div class="w-14 h-14 border-4 border-gray-200 border-t-violet-600 rounded-full animate-spin mx-auto mb-5"></div>
-            <p class="text-gray-800 font-bold text-lg">Cargando...</p>
-            <p class="text-gray-500 text-sm mt-1.5">Por favor espere un momento</p>
+    <div id="loadingOverlay" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 16px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); padding: 40px 60px; text-align: center; max-width: 360px; width: 90%;">
+            <div style="width: 56px; height: 56px; border: 4px solid #e5e7eb; border-top-color: #7c3aed; border-radius: 50%; animation: loadingSpin 1s linear infinite; margin: 0 auto 20px;"></div>
+            <p style="color: #1f2937; font-size: 18px; font-weight: 700; margin: 0 0 6px 0;">Cargando...</p>
+            <p style="color: #6b7280; font-size: 14px; margin: 0;">Por favor espere un momento</p>
+            <style>@keyframes loadingSpin { to { transform: rotate(360deg); } }</style>
         </div>
     </div>
     

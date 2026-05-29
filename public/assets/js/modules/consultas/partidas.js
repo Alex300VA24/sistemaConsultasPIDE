@@ -154,7 +154,7 @@ const ModuloPartidas = {
                 ui.inputPersona.value = '';
                 DOM.hide(ui.containerOffice);
                 DOM.show(ui.btnBuscar);
-                btnConsultar.disabled = false;
+                btnConsultar.disabled = true;
                 btnConsultar.removeEventListener('click', this.handlers.lASIRSARP);
                 btnConsultar.addEventListener('click', this.handlers.tSIRSARP);
                 break;
@@ -164,7 +164,7 @@ const ModuloPartidas = {
                 ui.inputPersona.value = '';
                 DOM.hide(ui.containerOffice);
                 DOM.show(ui.btnBuscar);
-                btnConsultar.disabled = false;
+                btnConsultar.disabled = true;
                 btnConsultar.removeEventListener('click', this.handlers.lASIRSARP);
                 btnConsultar.addEventListener('click', this.handlers.tSIRSARP);
                 break;
@@ -1183,6 +1183,10 @@ const ModuloPartidas = {
         
         DOM.hide(DOM.$('#resultadosNatural'));
         DOM.hide(DOM.$('#resultadosJuridica'));
+
+        if (this.state.currentPersonType !== 'partida') {
+            DOM.$('#btnConsultar').disabled = true;
+        }
     },
 
     showLoading(formId) {
@@ -1203,6 +1207,28 @@ const ModuloPartidas = {
 };
 
 window.ModuloPartidas = ModuloPartidas;
+
+window.limpiarModalNatural = function() {
+    const input = DOM.$('#dniNatural');
+    if (input) input.value = '';
+    const container = DOM.$('#resultadosNatural');
+    if (container) {
+        container.innerHTML = '';
+        DOM.hide(container);
+    }
+};
+
+window.limpiarModalJuridica = function() {
+    const ruc = DOM.$('#rucJuridica');
+    if (ruc) ruc.value = '';
+    const razon = DOM.$('#razonSocial');
+    if (razon) razon.value = '';
+    const container = DOM.$('#resultadosJuridica');
+    if (container) {
+        container.innerHTML = '';
+        DOM.hide(container);
+    }
+};
 
 if (typeof window.registrarModulo === 'function') {
     window.registrarModulo('consultaspartidas', ModuloPartidas);
