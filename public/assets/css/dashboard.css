@@ -463,6 +463,43 @@ body {
 }
 
 /* === RESPONSIVE === */
+
+/* === Botón hamburguesa - Oculto en desktop === */
+.mobile-menu-btn {
+    display: none;
+}
+
+/* === Overlay - Oculto por defecto === */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* === Botón cerrar sidebar - Oculto en desktop === */
+.sidebar-close-btn {
+    display: none;
+}
+
+/* === Body scroll lock cuando sidebar está abierto === */
+body.sidebar-mobile-open {
+    overflow: hidden;
+}
+
 @media (max-width: 1024px) {
     :root {
         --sidebar-width: 260px;
@@ -470,47 +507,134 @@ body {
 }
 
 @media (max-width: 768px) {
+    /* Sidebar oculto por defecto en móvil */
     .sideBar {
         transform: translateX(-100%);
-        transition: transform 0.3s ease;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 280px;
     }
 
     .sideBar.mobile-open {
         transform: translateX(0);
+        box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
     }
 
+    /* Main content ocupa todo el ancho */
     .main-content {
         margin-left: 0;
         width: 100%;
+        padding: 80px 16px 20px 16px;
     }
 
-    /* Botón hamburguesa para móvil */
+    /* Botón hamburguesa visible */
     .mobile-menu-btn {
+        display: flex;
         position: fixed;
-        top: 20px;
-        left: 20px;
+        top: 16px;
+        left: 16px;
         z-index: 1001;
-        background: var(--pide-primary);
+        background: linear-gradient(135deg, var(--pide-primary), var(--pide-secondary));
         color: white;
         border: none;
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 15px rgba(30, 64, 175, 0.4);
+        transition: all 0.3s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-menu-btn:hover,
+    .mobile-menu-btn:active {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.5);
     }
 
     .mobile-menu-btn i {
         font-size: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    /* Botón cerrar dentro del sidebar */
+    .sidebar-close-btn {
+        display: flex;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .sidebar-close-btn:hover,
+    .sidebar-close-btn:active {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.1);
+    }
+
+    .sidebar-close-btn i {
+        font-size: 18px;
+    }
+
+    /* Sidebar header necesita padding-top para el botón cerrar */
+    .sidebar-header {
+        position: relative;
+        padding-top: 50px;
+    }
+
+    /* Modal responsive */
+    .modal-content {
+        padding: 25px 20px;
+        max-width: 90%;
+    }
+
+    .modal-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-cancel,
+    .btn-logout {
+        width: 100%;
+        justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
+    .main-content {
+        padding: 72px 12px 16px 12px;
+    }
+
+    .mobile-menu-btn {
+        top: 12px;
+        left: 12px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .mobile-menu-btn i {
+        font-size: 18px;
+    }
+
     .sidebar-header {
-        padding: 20px 15px;
+        padding: 45px 15px 20px 15px;
     }
 
     .sidebar-logo {
@@ -532,11 +656,16 @@ body {
     }
 
     .user-info {
-        padding: 20px 15px;
+        padding: 15px 12px;
     }
 
     .modal-content {
-        padding: 25px 20px;
+        padding: 20px 16px;
+        max-width: 95%;
+    }
+
+    .modal-content h3 {
+        font-size: 1.1rem;
     }
 }
 

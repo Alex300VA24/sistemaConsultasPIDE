@@ -1,3 +1,4 @@
+<script src="<?= BASE_URL ?>assets/js/sidebar-mobile.js"></script>
 <script src="<?= BASE_URL ?>assets/js/api.js"></script>
 <script src="<?= BASE_URL ?>assets/js/dashboard.js"></script>
 <script src="<?= BASE_URL ?>assets/js/modulo-cambio-password.js"></script>

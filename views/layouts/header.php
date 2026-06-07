@@ -16,6 +16,7 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $titulo ?? 'Dashboard - Sistema de Consultas PIDE' ?></title>
     <link rel="stylesheet" href='<?= BASE_URL ?>assets/css/fontawesome/css/all.min.css'">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaDNI.css">
@@ -27,3 +28,9 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/modal-password.css">
 </head>
 <body>
+    <!-- Botón hamburguesa para móvil -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+        <i class="fas fa-bars" id="mobileMenuIcon"></i>
+    </button>
+    <!-- Overlay para cerrar sidebar en móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>

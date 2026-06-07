@@ -42,8 +42,11 @@ $cargo = $_SESSION['cargo'] ?? '';
 $area = $_SESSION['area'] ?? '';
 ?>
 
-<div class="sideBar">
+<div class="sideBar" id="sideBar">
     <div class="sidebar-header">
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Cerrar menú">
+            <i class="fas fa-times"></i>
+        </button>
         <img class="sidebar-logo" src="<?= BASE_URL ?>assets/images/logo.png" alt="Logo">
         <div class="sidebar-title">MDE</div>
         <div class="sidebar-subtitle">Sistema de Consultas PIDE</div>
