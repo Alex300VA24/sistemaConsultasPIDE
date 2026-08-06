@@ -85,9 +85,14 @@ class UsuarioController extends BaseController
 
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
 
+            session_regenerate_id(true);
+
             // Guardar sesión completa
             $_SESSION['usuarioID'] = $resultado['usuario']['USU_id'] ?? null;
             $_SESSION['rolID'] = $resultado['usuario']['ROL_id'] ?? null;
+            $_SESSION['login_time'] = time();
+            $_SESSION['last_activity'] = time();
+            $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
             $_SESSION['authenticated'] = true;
             $_SESSION['requireCUI'] = false;
 
