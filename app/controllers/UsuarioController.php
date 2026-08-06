@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\Contracts\UsuarioServiceInterface;
+use App\Middleware\SecurityMiddleware;
 
 /**
  * Controller para operaciones de usuario.
@@ -233,6 +234,8 @@ class UsuarioController extends BaseController
     public function crearUsuario(): void
     {
         try {
+            SecurityMiddleware::requirePermission('usuarios.registrar');
+
             $input = $this->getJsonInput();
             $data = $input['data'] ?? $input;
 
@@ -257,6 +260,8 @@ class UsuarioController extends BaseController
     public function eliminarUsuario(): void
     {
         try {
+            SecurityMiddleware::requirePermission('usuarios.eliminar');
+
             $data = $this->getJsonInput();
 
             if (empty($data['usuario_id'])) {
@@ -282,6 +287,8 @@ class UsuarioController extends BaseController
      */
     public function obtenerDniYPassword(): void
     {
+        SecurityMiddleware::requirePermission('usuarios.obtener_dni_pass');
+
         header('Content-Type: application/json');
 
         try {
@@ -391,6 +398,8 @@ class UsuarioController extends BaseController
     public function actualizarUsuario(): void
     {
         try {
+            SecurityMiddleware::requirePermission('usuarios.actualizar');
+
             $this->validateMethod('PUT');
 
             $input = $this->getJsonInput();
@@ -418,6 +427,8 @@ class UsuarioController extends BaseController
     public function actualizarPassword(): void
     {
         try {
+            SecurityMiddleware::requirePermission('usuarios.actualizar_password');
+
             $this->validateMethod('PUT');
 
             $input = $this->getJsonInput();

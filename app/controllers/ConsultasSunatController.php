@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\Contracts\SunatServiceInterface;
+use App\Middleware\SecurityMiddleware;
 
 /**
  * Controller para consultas SUNAT.
@@ -23,6 +24,8 @@ class ConsultasSunatController extends ConsultasPideBaseController
      */
     public function consultarRUC(): void
     {
+        SecurityMiddleware::requirePermission('sunat.consultar');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['ruc'], 'RUC no proporcionado');

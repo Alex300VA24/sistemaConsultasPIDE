@@ -51,6 +51,29 @@ class Authorization {
             'practicantes.leer',
         ]
     ];
+
+    private static $actionModuleMap = [
+        'usuarios.registrar' => 'RUSU',
+        'usuarios.actualizar' => 'RUSU',
+        'usuarios.actualizar_password' => 'RUSU',
+        'usuarios.eliminar' => 'RUSU',
+        'usuarios.obtener_dni_pass' => 'RUSU',
+        'roles.crear' => 'CROL',
+        'roles.actualizar' => 'CROL',
+        'roles.eliminar' => 'CROL',
+        'modulos.toggle_estado' => 'CMOD',
+        'reniec.consultar' => 'DNI',
+        'reniec.generar_pdf' => 'DNI',
+        'reniec.actualizar_password' => 'APAS',
+        'sunat.consultar' => 'RUC',
+        'sunarp.persona_natural' => 'PAR',
+        'sunarp.persona_juridica' => 'PAR',
+        'sunarp.partidas_natural' => 'PAR',
+        'sunarp.partidas_juridica' => 'PAR',
+        'sunarp.partidas_lasirsarp' => 'PAR',
+        'sunarp.detalle_partida' => 'PAR',
+        'sunarp.goficinas' => 'PAR',
+    ];
     
     /**
      * Verificar si el usuario está autenticado
@@ -81,6 +104,19 @@ class Authorization {
      * Verificar si el usuario tiene un permiso específico
      */
     public static function hasPermission($permission) {
+        $permisos = $_SESSION['permisos'] ?? [];
+        if (!is_array($permisos)) {
+            $permisos = [$permisos];
+        }
+
+        if (in_array($permission, $permisos)) {
+            return true;
+        }
+
+        if (isset(self::$actionModuleMap[$permission])) {
+            return in_array(self::$actionModuleMap[$permission], $permisos);
+        }
+
         $role = self::getCurrentRole();
         
         if (!isset(self::$rolePermissions[$role])) {

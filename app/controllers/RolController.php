@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Services\RolService;
 use App\Helpers\Debug;
+use App\Middleware\SecurityMiddleware;
 
 class RolController {
     private $rolService;
@@ -13,6 +14,8 @@ class RolController {
 
     public function crearRol() {
         try {
+            SecurityMiddleware::requirePermission('roles.crear');
+
             $data = json_decode(file_get_contents('php://input'), true);
             
             $datos = [
@@ -43,6 +46,8 @@ class RolController {
 
     public function actualizarRol() {
         try {
+            SecurityMiddleware::requirePermission('roles.actualizar');
+
             $data = json_decode(file_get_contents('php://input'), true);
             
             $datos = [
@@ -122,6 +127,8 @@ class RolController {
 
     public function eliminarRol() {
         try {
+            SecurityMiddleware::requirePermission('roles.eliminar');
+
             $data = json_decode(file_get_contents('php://input'), true);
             $rolId = $data['rol_id'] ?? 0;
             

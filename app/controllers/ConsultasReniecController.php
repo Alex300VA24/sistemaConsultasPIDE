@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\Contracts\ReniecServiceInterface;
+use App\Middleware\SecurityMiddleware;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
@@ -25,6 +26,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
      */
     public function consultarDNI(): void
     {
+        SecurityMiddleware::requirePermission('reniec.consultar');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dniConsulta', 'dniUsuario', 'password'], 'Faltan datos: dni, dniUsuario o password');
@@ -46,6 +49,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
      */
     public function generarPDF(): void
     {
+        SecurityMiddleware::requirePermission('reniec.generar_pdf');
+
         if (ob_get_level()) {
             ob_clean();
         }
@@ -113,6 +118,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
      */
     public function actualizarPasswordRENIEC(): void
     {
+        SecurityMiddleware::requirePermission('reniec.actualizar_password');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['credencialAnterior', 'credencialNueva', 'nuDni'], 'Faltan datos: credencialAnterior, credencialNueva o nuDni');

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\Contracts\ModuloServiceInterface;
+use App\Middleware\SecurityMiddleware;
 
 /**
  * Controller para operaciones de módulos.
@@ -157,6 +158,8 @@ class ModuloController extends BaseController
     public function toggleEstadoModulo(): void
     {
         try {
+            SecurityMiddleware::requirePermission('modulos.toggle_estado');
+
             $data = $this->getJsonInput();
             $moduloId = $data['modulo_id'] ?? null;
             $estado = $data['estado'] ?? null;

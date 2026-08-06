@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Services\Contracts\SunarpServiceInterface;
+use App\Middleware\SecurityMiddleware;
 
 /**
  * Controller para consultas SUNARP.
@@ -24,6 +25,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function buscarPersonaNatural(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.persona_natural');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dni', 'dniUsuario', 'password'], 'Faltan datos: dni, dniUsuario o password');
@@ -45,6 +48,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function buscarPersonaJuridica(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.persona_juridica');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dniUsuario', 'password'], 'Faltan datos: dniUsuario o password');
@@ -60,6 +65,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function consultarTSIRSARPNatural(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.partidas_natural');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['usuario', 'clave'], 'Faltan credenciales: usuario o clave');
@@ -80,6 +87,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function consultarTSIRSARPJuridica(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.partidas_juridica');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['usuario', 'clave', 'razonSocial'], 'Faltan datos: usuario, clave o razonSocial');
@@ -98,6 +107,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function consultarGOficina(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.goficinas');
+
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             http_response_code(405);
             echo json_encode(['success' => false, 'message' => 'Método no permitido']);
@@ -115,6 +126,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function consultarLASIRSARP(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.partidas_lasirsarp');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['zona', 'oficina', 'partida'], 'Faltan datos: zona, oficina o partida');
@@ -141,6 +154,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
      */
     public function cargarDetallePartida(): void
     {
+        SecurityMiddleware::requirePermission('sunarp.detalle_partida');
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(
