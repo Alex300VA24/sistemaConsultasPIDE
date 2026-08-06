@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Services\DashboardService;
 
-class DashboardController {
+class DashboardController extends BaseController {
     private $service;
 
     public function __construct() {
@@ -18,12 +18,8 @@ class DashboardController {
                 'success' => true,
                 'data' => $data
             ]);
-        } catch (\Exception $e) {
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al obtener los datos del inicio',
-                'error' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 }

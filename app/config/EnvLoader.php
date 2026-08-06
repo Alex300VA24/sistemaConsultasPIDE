@@ -20,7 +20,7 @@ class EnvLoader
             return;
         }
 
-        $envFile = __DIR__ . '/../../.env';
+        $envFile = getenv('PIDE_ENV_FILE') ?: __DIR__ . '/../../.env';
 
         if (!file_exists($envFile)) {
             return;

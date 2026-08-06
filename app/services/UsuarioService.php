@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Repositories\UsuarioRepository;
 use App\Services\Contracts\UsuarioServiceInterface;
+use App\Exceptions\ValidationException;
+use App\Exceptions\NotFoundException;
 
 class UsuarioService implements UsuarioServiceInterface {
     private $usuarioRepository;
@@ -13,17 +15,15 @@ class UsuarioService implements UsuarioServiceInterface {
     
     public function login($nombreUsuario, $password) {
         if (empty($nombreUsuario) || empty($password)) {
-            throw new \Exception("Usuario y contraseña son requeridos");
+            throw new ValidationException("Usuario y contraseña son requeridos");
         }
         
         // Primero obtenemos el usuario por nombre de usuario
         $validacion = $this->usuarioRepository->obtenerPasswordUser($nombreUsuario);
-        error_log("Validacion:" . print_r($validacion, true));
         if ($validacion === null) {
             throw new \Exception("Credenciales incorrectas");
         }
-        
-        error_log(print_r($validacion, true) ." Password: ". print_r($password, true));
+
         // Verificar la contraseña hasheada
         if (!password_verify($password, $validacion['USU_password_hash'])) {
             throw new \Exception("Credenciales incorrectas");
@@ -37,11 +37,11 @@ class UsuarioService implements UsuarioServiceInterface {
     // Service: validar la estructura devuelta por el repo
     public function validarCUI($nombreUsuario, $password, $cui) {
         if (empty($cui)) {
-            throw new \Exception("Es requerido el CUI");
+            throw new ValidationException("Es requerido el CUI");
         }
         
         if (strlen($cui) !== 1) {
-            throw new \Exception("El CUI debe ser de 1 dígito");
+            throw new ValidationException("El CUI debe ser de 1 dígito");
         }
 
         // Primero validamos usuario y contraseña
@@ -118,7 +118,7 @@ class UsuarioService implements UsuarioServiceInterface {
         try {
             // Validaciones mínimas
             if (empty($data['usuUsername']) || empty($data['usuPass'])) {
-                throw new \Exception("El usuario y la contraseña son obligatorios");
+                throw new ValidationException("El usuario y la contraseña son obligatorios");
             }
 
             // Hashear la contraseña antes de guardar
@@ -128,8 +128,8 @@ class UsuarioService implements UsuarioServiceInterface {
             return $this->usuarioRepository->crearUsuario($data);
 
         } catch (\Throwable $e) {
-            // Re-lanzar la excepción para que el controlador la maneje
-            throw new \Exception($e->getMessage());
+            // Re-lanzar para que el controlador la maneje (se preserva el tipo)
+            throw $e;
         }
     }
 
@@ -161,7 +161,7 @@ class UsuarioService implements UsuarioServiceInterface {
         $usuario = $this->usuarioRepository->obtenerUsuarioPorId($usuarioId);
 
         if (!$usuario) {
-            throw new \Exception('Usuario no encontrado');
+            throw new NotFoundException('Usuario no encontrado');
         }
 
         return $usuario;
@@ -292,7 +292,7 @@ class UsuarioService implements UsuarioServiceInterface {
         }
 
         if (!empty($errores)) {
-            throw new \Exception(implode(', ', $errores));
+            throw new ValidationException(implode(', ', $errores));
         }
     }
 
@@ -309,7 +309,7 @@ class UsuarioService implements UsuarioServiceInterface {
 
 
         if (!empty($errores)) {
-            throw new \Exception(implode(', ', $errores));
+            throw new ValidationException(implode(', ', $errores));
         }
     }
     

@@ -4,6 +4,11 @@ namespace App\Controllers;
 
 use App\Services\Contracts\UsuarioServiceInterface;
 use App\Middleware\SecurityMiddleware;
+use App\Middleware\RateLimiter;
+use App\Middleware\CsrfMiddleware;
+use App\Exceptions\RateLimitException;
+use App\Exceptions\ValidationException;
+use App\Exceptions\NotFoundException;
 
 /**
  * Controller para operaciones de usuario.
@@ -32,13 +37,15 @@ class UsuarioController extends BaseController
             $nombreUsuario = $data['nombreUsuario'] ?? '';
             $password = $data['password'] ?? '';
 
+            RateLimiter::check('login', $nombreUsuario);
+
             $resultado = $this->usuarioService->login($nombreUsuario, $password);
 
             $_SESSION['nombreUsuario'] = $nombreUsuario;
             $_SESSION['password'] = $password;
             $_SESSION['requireCUI'] = true;
 
-            error_log("Resultado del login: " . print_r($resultado, true));
+            error_log("Login: usuario=" . $nombreUsuario . " success=" . ($resultado['success'] ? 'true' : 'false'));
 
             if (!$resultado['success']) {
                 $this->jsonResponse([
@@ -51,6 +58,9 @@ class UsuarioController extends BaseController
             $_SESSION['nombreUsuario'] = $nombreUsuario;
             $_SESSION['requireCUI'] = true;
 
+            RateLimiter::clear('login', $nombreUsuario);
+            CsrfMiddleware::regenerateToken();
+
             $this->jsonResponse([
                 'success' => true,
                 'message' => $resultado['mensaje'],
@@ -59,11 +69,13 @@ class UsuarioController extends BaseController
                     'usuarioLogin' => $nombreUsuario
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (RateLimitException $e) {
             $this->jsonResponse([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 400);
+            ], $e->getStatusCode());
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -84,6 +96,8 @@ class UsuarioController extends BaseController
                 throw new \Exception("Sesión incompleta para validar CUI");
             }
 
+            RateLimiter::check('validar_cui', $nombreUsuario);
+
             $resultado = $this->usuarioService->validarCUI($nombreUsuario, $password, $cui);
 
             session_regenerate_id(true);
@@ -100,6 +114,8 @@ class UsuarioController extends BaseController
             $permisos = \App\Helpers\Permisos::obtenerPermisos($_SESSION['usuarioID']);
             $_SESSION['permisos'] = $permisos;
 
+            RateLimiter::clear('validar_cui', $nombreUsuario);
+
             // Verificar si requiere cambio de password
             $requiereCambioPassword = $resultado['usuario']['USU_requiere_cambio_password'] ?? 0;
             $diasDesdeCambio = $resultado['usuario']['DIAS_DESDE_CAMBIO_PASSWORD'] ?? 0;
@@ -115,11 +131,13 @@ class UsuarioController extends BaseController
                     'dias_restantes' => max(0, 30 - (int)$diasDesdeCambio)
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (RateLimitException $e) {
             $this->jsonResponse([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 400);
+            ], $e->getStatusCode());
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -142,12 +160,14 @@ class UsuarioController extends BaseController
             $usuarioId = $_SESSION['usuarioID'];
 
             if (empty($passwordActual) || empty($passwordNueva)) {
-                throw new \Exception("Todos los campos son requeridos");
+                throw new ValidationException("Todos los campos son requeridos");
             }
 
             if (!$this->validarPasswordSegura($passwordNueva)) {
-                throw new \Exception("La contraseña no cumple con los requisitos de seguridad");
+                throw new ValidationException("La contraseña no cumple con los requisitos de seguridad");
             }
+
+            RateLimiter::check('password_reset', (string)$usuarioId);
 
             $resultado = $this->usuarioService->cambiarPasswordObligatorio($usuarioId, $passwordActual, $passwordNueva);
             $usuarioActualizado = $this->usuarioService->obtenerUsuarioPorId($usuarioId);
@@ -161,11 +181,13 @@ class UsuarioController extends BaseController
                     'usuario' => $usuarioActualizado
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (RateLimitException $e) {
             $this->jsonResponse([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 400);
+            ], $e->getStatusCode());
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -188,6 +210,10 @@ class UsuarioController extends BaseController
     public function logout(): void
     {
         $this->destroySession();
+
+        // Iniciar sesión limpia y rotar token CSRF para la próxima autenticación
+        session_start();
+        CsrfMiddleware::regenerateToken();
 
         $this->jsonResponse([
             'success' => true,
@@ -220,11 +246,8 @@ class UsuarioController extends BaseController
                 'message' => 'Usuario obtenido correctamente',
                 'data' => $usuario
             ]);
-        } catch (\Exception $e) {
-            $this->jsonResponse([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -247,10 +270,7 @@ class UsuarioController extends BaseController
                 'data' => $result
             ]);
         } catch (\Throwable $e) {
-            $this->jsonResponse([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 200);
+            $this->handleError($e, 500);
         }
     }
 
@@ -274,11 +294,8 @@ class UsuarioController extends BaseController
                 "success" => true,
                 "message" => "Usuario eliminado correctamente"
             ]);
-        } catch (\Exception $e) {
-            $this->jsonResponse([
-                "success" => false,
-                "error" => $e->getMessage()
-            ], 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -302,17 +319,21 @@ class UsuarioController extends BaseController
             $resultado = $this->usuarioService->obtenerDni($nombreUsuario);
 
             if (!$resultado) {
-                echo json_encode([
+                $this->jsonResponse([
                     "success" => false,
                     "message" => "No se encontró el usuario"
-                ]);
+                ], 404);
                 return;
             }
 
             $passwordSesion = $_SESSION['password'] ?? null;
 
             if (empty($passwordSesion)) {
-                throw new \Exception("No se encontró la contraseña en la sesión");
+                $this->jsonResponse([
+                    "success" => false,
+                    "message" => "No se encontró la contraseña en la sesión"
+                ], 401);
+                return;
             }
 
             echo json_encode([
@@ -323,10 +344,7 @@ class UsuarioController extends BaseController
                 ]
             ]);
         } catch (\Throwable $e) {
-            echo json_encode([
-                "success" => false,
-                "message" => $e->getMessage()
-            ]);
+            $this->handleError($e, 500);
         }
     }
 
@@ -410,14 +428,15 @@ class UsuarioController extends BaseController
             }
 
             $datos = $input['data'];
-            error_log("Datos recibidos para actualizar usuario: " . print_r($datos, true));
+            error_log("Actualizar usuario: USU_id=" . ($datos['USU_id'] ?? '?') . " username=" . ($datos['usuUsername'] ?? '?'));
 
             $response = $this->usuarioService->actualizarUsuario($datos);
-            error_log("Respuesta de actualización de usuario: " . print_r($response, true));
+            error_log("Respuesta actualizar usuario: success=" . var_export($response['success'] ?? null, true) . " mensaje=" . ($response['message'] ?? ''));
 
+            http_response_code(empty($response['success']) ? 400 : 200);
             echo json_encode($response);
-        } catch (\Exception $e) {
-            $this->errorResponse('Error al actualizar usuario: ' . $e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -431,6 +450,8 @@ class UsuarioController extends BaseController
 
             $this->validateMethod('PUT');
 
+            RateLimiter::check('password_reset', (string)($_SESSION['usuarioID'] ?? ''));
+
             $input = $this->getJsonInput();
 
             if (!isset($input['data'])) {
@@ -441,9 +462,12 @@ class UsuarioController extends BaseController
             $datos = $input['data'];
             $response = $this->usuarioService->actualizarPassword($datos);
 
+            http_response_code(empty($response['success']) ? 400 : 200);
             echo json_encode($response);
-        } catch (\Exception $e) {
-            $this->errorResponse('Error al actualizar usuario: ' . $e->getMessage(), 500);
+        } catch (RateLimitException $e) {
+            $this->errorResponse($e->getMessage(), $e->getStatusCode());
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 }

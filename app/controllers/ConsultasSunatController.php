@@ -26,6 +26,8 @@ class ConsultasSunatController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('sunat.consultar');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['ruc'], 'RUC no proporcionado');
@@ -45,6 +47,8 @@ class ConsultasSunatController extends ConsultasPideBaseController
      */
     public function buscarRazonSocial(): void
     {
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['razonSocial'], 'Razón social no proporcionada');

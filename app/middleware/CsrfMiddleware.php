@@ -34,18 +34,54 @@ class CsrfMiddleware {
         }
     }
 
+    /**
+     * Genera un nuevo token CSRF y lo guarda en sesión.
+     */
+    public static function generateToken() {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        return $_SESSION['csrf_token'];
+    }
+
+    /**
+     * Rota el token CSRF (se usa tras login/logout).
+     */
+    public static function regenerateToken() {
+        return self::generateToken();
+    }
+
+    /**
+     * Obtiene el token CSRF almacenado en sesión (o null).
+     */
+    public static function getToken() {
+        return $_SESSION['csrf_token'] ?? null;
+    }
+
+    /**
+     * Input hidden para formularios.
+     */
+    public static function getHiddenInput() {
+        $token = self::getToken() ?? self::generateToken();
+        return '<input type="hidden" name="_token" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+    }
+
+    /**
+     * Meta tag para usar el token desde JavaScript.
+     */
+    public static function getMetaTag() {
+        $token = self::getToken() ?? self::generateToken();
+        return '<meta name="csrf-token" content="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+    }
+
     private function shouldSkip(Request $request) {
         // 1. Verificar atributo skip_csrf de la ruta
         if ($request->shouldSkipCsrf()) {
             return true;
         }
         
-        // 2. Verificar lista de rutas excluidas
+        // 2. Verificar lista de rutas excluidas (comparación EXACTA)
         $path = $request->getPath();
-        foreach ($this->excludedRoutes as $route) {
-            if ($path === $route || strpos($path, $route) === 0) {
-                return true;
-            }
+        if (in_array($path, $this->excludedRoutes, true)) {
+            return true;
         }
         
         return false;
@@ -76,8 +112,10 @@ class CsrfMiddleware {
     }
     
     private function sendError($message, $debug = []) {
-        http_response_code(403);
-        header('Content-Type: application/json');
+        if (!headers_sent()) {
+            http_response_code(403);
+            header('Content-Type: application/json');
+        }
         echo json_encode([
             'success' => false,
             'message' => $message,

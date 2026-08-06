@@ -5,7 +5,7 @@ use App\Services\RolService;
 use App\Helpers\Debug;
 use App\Middleware\SecurityMiddleware;
 
-class RolController {
+class RolController extends BaseController {
     private $rolService;
 
     public function __construct() {
@@ -35,12 +35,8 @@ class RolController {
                 'message' => $resultado['mensaje'],
                 'rol_id' => $resultado['rol_id']
             ]);
-        } catch (\Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -67,12 +63,8 @@ class RolController {
                 'success' => true,
                 'message' => $resultado['mensaje']
             ]);
-        } catch (\Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 
@@ -83,12 +75,8 @@ class RolController {
                 'success' => true,
                 'data' => $roles
             ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -100,12 +88,8 @@ class RolController {
                 'success' => true,
                 'data' => $rol
             ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -116,12 +100,8 @@ class RolController {
                 'success' => true,
                 'data' => $modulos
             ]);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -138,12 +118,8 @@ class RolController {
                 'success' => true,
                 'message' => $resultado['mensaje']
             ]);
-        } catch (\Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 400);
         }
     }
 }

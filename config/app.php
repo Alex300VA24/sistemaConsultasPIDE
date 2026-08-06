@@ -1,7 +1,7 @@
 <?php
 // config/app.php
 
-$envFile = __DIR__ . '/../.env';
+$envFile = getenv('PIDE_ENV_FILE') ?: __DIR__ . '/../.env';
 $env = [
     'APP_ENV' => 'production',
     'APP_DEBUG' => false,
@@ -22,12 +22,20 @@ if (file_exists($envFile)) {
     }
 }
 
-$allowedOrigin = '*';
-if ($env['APP_URL']) {
+// Lista exacta de orígenes permitidos (CORS). Nunca se usa '*' como fallback.
+$allowedOrigins = [];
+
+if (empty($env['APP_URL'])) {
+    if ($env['APP_ENV'] === 'production') {
+        throw new \RuntimeException(
+            'APP_URL no está definida. Configure el origen permitido en el archivo .env antes de usar el sistema en producción.'
+        );
+    }
+} else {
     $parsed = parse_url($env['APP_URL']);
     if (!empty($parsed['scheme']) && !empty($parsed['host'])) {
-        $allowedOrigin = $parsed['scheme'] . '://' . $parsed['host'] 
-                      . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        $allowedOrigins[] = $parsed['scheme'] . '://' . $parsed['host']
+                          . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
     }
 }
 
@@ -41,7 +49,7 @@ return [
     'base_url' => BASE_URL,
     
     'cors' => [
-        'allowed_origin' => $allowedOrigin,
+        'allowed_origins' => $allowedOrigins,
         'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         'allowed_headers' => ['Content-Type', 'Authorization', 'X-CSRF-Token'],
     ],

@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Middleware\RateLimiter;
+use App\Exceptions\RateLimitException;
+
 /**
  * Clase base para los controladores de consultas PIDE (RENIEC, SUNAT, SUNARP).
  * Centraliza validaciones comunes de request y envío de respuestas JSON.
@@ -12,6 +15,26 @@ abstract class ConsultasPideBaseController extends BaseController
     // ========================================
     // VALIDACIONES COMUNES DE CONSULTAS PIDE
     // ========================================
+
+    /**
+     * Verifica el rate limit para una acción y, si excede, responde 429.
+     * Retorna true si puede continuar, false si ya se envió la respuesta 429.
+     */
+    protected function enforceRateLimit(string $action, $identifier): bool
+    {
+        try {
+            RateLimiter::check($action, (string)$identifier);
+            return true;
+        } catch (RateLimitException $e) {
+            http_response_code($e->getStatusCode());
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], JSON_UNESCAPED_UNICODE);
+            return false;
+        }
+    }
 
     /**
      * Valida que el request sea POST y limpia el buffer de salida.

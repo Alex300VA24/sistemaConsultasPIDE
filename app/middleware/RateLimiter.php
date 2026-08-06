@@ -19,6 +19,8 @@ class RateLimiter
         'login' => ['attempts' => 5, 'window' => 60],      // 5 intentos por minuto
         'api' => ['attempts' => 60, 'window' => 60],       // 60 peticiones por minuto
         'password_reset' => ['attempts' => 3, 'window' => 300], // 3 intentos cada 5 minutos
+        'validar_cui' => ['attempts' => 10, 'window' => 300], // 10 intentos cada 5 minutos
+        'consulta' => ['attempts' => 30, 'window' => 60], // 30 consultas por minuto
     ];
 
     /**
@@ -158,7 +160,7 @@ class RateLimiter
         if ($identifier !== null) {
             $key .= '_' . $identifier;
         }
-        return md5($key);
+        return hash('sha256', $key);
     }
 
     /**

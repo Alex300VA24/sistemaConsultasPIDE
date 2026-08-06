@@ -1,6 +1,9 @@
 <?php
 namespace App\Controllers;
 
+use App\Exceptions\ApiException;
+use App\Exceptions\ValidationException;
+
 abstract class BaseController {
     
     protected function jsonResponse($data, $statusCode = 200) {
@@ -34,6 +37,30 @@ abstract class BaseController {
         }
         
         $this->jsonResponse($response, $statusCode);
+    }
+    
+    /**
+     * Manejo seguro de errores: el detalle real solo se registra en error_log,
+     * al cliente se devuelve un mensaje genérico con error_id.
+     * Las excepciones de dominio (ApiException) conservan su mensaje y código HTTP.
+     */
+    protected function handleError(\Throwable $e, int $statusCode = 500): void {
+        if ($e instanceof ApiException) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], $e->getStatusCode());
+            return;
+        }
+        
+        $errorId = substr(bin2hex(random_bytes(4)), 0, 8);
+        error_log("[ERROR {$errorId}] " . $e->getMessage() . " @ " . $e->getFile() . ":" . $e->getLine());
+        
+        $this->jsonResponse([
+            'success' => false,
+            'message' => 'Error interno del servidor',
+            'error_id' => $errorId
+        ], $statusCode);
     }
     
     protected function validateMethod($expectedMethod) {
@@ -103,7 +130,7 @@ abstract class BaseController {
         }
         
         if (!empty($missing)) {
-            throw new \Exception('Campos requeridos faltantes: ' . implode(', ', $missing));
+            throw new ValidationException('Campos requeridos faltantes: ' . implode(', ', $missing));
         }
         
         return true;
@@ -156,9 +183,8 @@ abstract class BaseController {
             } else {
                 $this->successResponse($result);
             }
-        } catch (\Exception $e) {
-            error_log("Error en executeServiceAction: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
     

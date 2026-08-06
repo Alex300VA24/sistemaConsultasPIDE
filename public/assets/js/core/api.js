@@ -62,6 +62,10 @@ class ApiClient {
         }
     }
 
+    resetCSRF() {
+        this.csrfToken = null;
+    }
+
     get(endpoint) {
         return this.request(endpoint, { method: 'GET' });
     }
@@ -90,6 +94,8 @@ class AuthService extends ApiClient {
         const response = await this.post(Constants.API.ENDPOINTS.LOGIN, { nombreUsuario, password });
 
         if (response.success) {
+            // El servidor rota el token CSRF tras login: refetch del nuevo token
+            this.resetCSRF();
             await this.ensureCSRF();
         }
 
@@ -101,7 +107,9 @@ class AuthService extends ApiClient {
     }
 
     async logout() {
-        return this.post(Constants.API.ENDPOINTS.LOGOUT);
+        const response = await this.post(Constants.API.ENDPOINTS.LOGOUT);
+        this.resetCSRF();
+        return response;
     }
 
     async cambiarPassword(passwordActual, passwordNueva) {

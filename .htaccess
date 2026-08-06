@@ -1,0 +1,31 @@
+# ============================================================
+#  MDESistemaPIDE — endurecimiento del despliegue
+#  La unica carpeta servida publicamente es /public.
+# ============================================================
+
+Options -Indexes
+
+# Ruta del archivo .env (fuera del webroot). La app lo lee via getenv().
+SetEnv PIDE_ENV_FILE "C:/xampp7.4/pide-env/.env"
+
+RewriteEngine On
+
+# ------------------------------------------------------------------
+# 1) Bloquear acceso directo a archivos y directorios sensibles (403)
+# ------------------------------------------------------------------
+
+# Archivos puntuales de entorno / repositorio (.env, .encryption_key, .git, .htaccess)
+RewriteRule ^\.(?:env(?:\..*)?|encryption_key|git|htaccess)(?:$|/) - [F,L]
+RewriteRule .*\.htaccess$ - [F,L]
+
+# Extensiones sensibles (backups, dumps, logs)
+RewriteRule .*\.(?:bak|backup|sql|zip|log)(?:$|/) - [F,L]
+
+# Directorios que nunca deben servirse
+RewriteRule ^(?:logs|cache|coverage|vendor|node_modules|tests)(?:$|/) - [F,L]
+
+# ------------------------------------------------------------------
+# 2) La unica carpeta servida es /public: redirigir todo lo demas
+# ------------------------------------------------------------------
+RewriteCond %{REQUEST_URI} !^/MDESistemaPIDE/public/
+RewriteRule ^ /MDESistemaPIDE/public/ [R=301,L]

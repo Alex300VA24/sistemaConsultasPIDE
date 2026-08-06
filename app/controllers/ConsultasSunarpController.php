@@ -27,6 +27,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('sunarp.persona_natural');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dni', 'dniUsuario', 'password'], 'Faltan datos: dni, dniUsuario o password');
@@ -50,6 +52,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('sunarp.persona_juridica');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dniUsuario', 'password'], 'Faltan datos: dniUsuario o password');
@@ -67,6 +71,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('sunarp.partidas_natural');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['usuario', 'clave'], 'Faltan credenciales: usuario o clave');
@@ -78,7 +84,7 @@ class ConsultasSunarpController extends ConsultasPideBaseController
 
         $resultado = $this->sunarpService->consultarTSIRSARPNatural($apellidoPaterno, $apellidoMaterno, $nombres);
 
-        http_response_code(200);
+        http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
     }
 
@@ -89,6 +95,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('sunarp.partidas_juridica');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['usuario', 'clave', 'razonSocial'], 'Faltan datos: usuario, clave o razonSocial');
@@ -98,7 +106,7 @@ class ConsultasSunarpController extends ConsultasPideBaseController
 
         $resultado = $this->sunarpService->consultarTSIRSARPJuridica($razonSocial);
 
-        http_response_code(200);
+        http_response_code($resultado['success'] ? 200 : 404);
         echo json_encode($resultado, JSON_UNESCAPED_UNICODE);
     }
 
@@ -108,6 +116,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     public function consultarGOficina(): void
     {
         SecurityMiddleware::requirePermission('sunarp.goficinas');
+
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
 
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             http_response_code(405);
@@ -127,6 +137,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     public function consultarLASIRSARP(): void
     {
         SecurityMiddleware::requirePermission('sunarp.partidas_lasirsarp');
+
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
 
         if (!$this->validatePostRequest()) return;
 
@@ -155,6 +167,8 @@ class ConsultasSunarpController extends ConsultasPideBaseController
     public function cargarDetallePartida(): void
     {
         SecurityMiddleware::requirePermission('sunarp.detalle_partida');
+
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
 
         if (!$this->validatePostRequest()) return;
 

@@ -20,7 +20,7 @@ class Database {
     }
     
     private function loadEnv() {
-        $envFile = __DIR__ . '/../../.env';
+        $envFile = getenv('PIDE_ENV_FILE') ?: __DIR__ . '/../../.env';
         if (file_exists($envFile)) {
             $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             foreach ($lines as $line) {
@@ -49,7 +49,14 @@ class Database {
             $this->connection = new PDO($dsn, $this->username, $this->password, $options);
             
         } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
+            error_log("Error de conexión a la base de datos: " . $e->getMessage() . " @ " . $e->getFile() . ":" . $e->getLine());
+            http_response_code(500);
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error interno del servidor'
+            ]);
+            exit;
         }
     }
     

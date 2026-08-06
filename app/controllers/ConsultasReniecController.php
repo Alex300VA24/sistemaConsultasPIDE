@@ -28,6 +28,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
     {
         SecurityMiddleware::requirePermission('reniec.consultar');
 
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
+
         if (!$this->validatePostRequest()) return;
 
         $input = $this->getPostInput(['dniConsulta', 'dniUsuario', 'password'], 'Faltan datos: dni, dniUsuario o password');
@@ -50,6 +52,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
     public function generarPDF(): void
     {
         SecurityMiddleware::requirePermission('reniec.generar_pdf');
+
+        if (!$this->enforceRateLimit('consulta', $_SESSION['usuarioID'] ?? '')) return;
 
         if (ob_get_level()) {
             ob_clean();
@@ -103,13 +107,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
 
             echo $dompdf->output();
             exit;
-        } catch (\Exception $e) {
-            http_response_code(500);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al generar PDF: ' . $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -119,6 +118,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
     public function actualizarPasswordRENIEC(): void
     {
         SecurityMiddleware::requirePermission('reniec.actualizar_password');
+
+        if (!$this->enforceRateLimit('password_reset', $_SESSION['usuarioID'] ?? '')) return;
 
         if (!$this->validatePostRequest()) return;
 
@@ -136,12 +137,8 @@ class ConsultasReniecController extends ConsultasPideBaseController
 
             http_response_code($resultado['success'] ? 200 : 400);
             echo json_encode($resultado);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode([
-                'success' => false,
-                'message' => 'Error al comunicarse con RENIEC: ' . $e->getMessage()
-            ]);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 }

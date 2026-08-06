@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Services\Contracts\ModuloServiceInterface;
 use App\Middleware\SecurityMiddleware;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ConflictException;
 
 /**
  * Controller para operaciones de módulos.
@@ -33,8 +35,7 @@ class ModuloController extends BaseController
 
             // Validar que el código sea único
             if ($this->moduloService->existeCodigoModulo($data['codigo'])) {
-                $this->errorResponse('El código del módulo ya existe', 400);
-                return;
+                throw new ConflictException('El código del módulo ya existe');
             }
 
             $resultado = $this->moduloService->crearModulo($data);
@@ -44,9 +45,8 @@ class ModuloController extends BaseController
             } else {
                 $this->errorResponse('Error al crear el módulo', 500);
             }
-        } catch (\Exception $e) {
-            error_log("Error en crearModulo: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -67,8 +67,7 @@ class ModuloController extends BaseController
             $this->validateRequired($data, $camposRequeridos);
 
             if ($this->moduloService->existeCodigoModulo($data['codigo'], $data['modulo_id'])) {
-                $this->errorResponse('El código del módulo ya existe', 400);
-                return;
+                throw new ConflictException('El código del módulo ya existe');
             }
 
             $resultado = $this->moduloService->actualizarModulo($data);
@@ -78,9 +77,8 @@ class ModuloController extends BaseController
             } else {
                 $this->errorResponse('Error al actualizar el módulo', 500);
             }
-        } catch (\Exception $e) {
-            error_log("Error en actualizarModulo: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -113,7 +111,7 @@ class ModuloController extends BaseController
             $modulo = $this->moduloService->obtenerModuloPorId($moduloId);
 
             if (!$modulo) {
-                throw new \Exception('Módulo no encontrado');
+                throw new NotFoundException('Módulo no encontrado');
             }
 
             return ['data' => $modulo, 'message' => 'Módulo obtenido correctamente'];
@@ -135,8 +133,7 @@ class ModuloController extends BaseController
             }
 
             if ($this->moduloService->tieneModulosHijos($moduloId)) {
-                $this->errorResponse('No se puede eliminar el módulo porque tiene módulos hijos asociados', 400);
-                return;
+                throw new ConflictException('No se puede eliminar el módulo porque tiene módulos hijos asociados');
             }
 
             $resultado = $this->moduloService->eliminarModulo($moduloId);
@@ -146,9 +143,8 @@ class ModuloController extends BaseController
             } else {
                 $this->errorResponse('Error al eliminar el módulo', 500);
             }
-        } catch (\Exception $e) {
-            error_log("Error en eliminarModulo: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -176,9 +172,8 @@ class ModuloController extends BaseController
             } else {
                 $this->errorResponse('Error al cambiar el estado del módulo', 500);
             }
-        } catch (\Exception $e) {
-            error_log("Error en toggleEstadoModulo: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 
@@ -196,9 +191,8 @@ class ModuloController extends BaseController
             $modulos = $this->moduloService->obtenerModulosPorUsuario($_SESSION['usuario_id']);
 
             $this->successResponse($modulos);
-        } catch (\Exception $e) {
-            error_log("Error en obtenerModulosUsuario: " . $e->getMessage());
-            $this->errorResponse($e->getMessage(), 500);
+        } catch (\Throwable $e) {
+            $this->handleError($e, 500);
         }
     }
 }
