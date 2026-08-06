@@ -50,7 +50,8 @@ $area = $_SESSION['area'] ?? '';
     overflow: hidden;
 }
 
-#sidebar.expanded .nav-text {
+#sidebar.expanded .nav-text,
+#sidebar.mobile-open .nav-text {
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
@@ -64,7 +65,7 @@ $area = $_SESSION['area'] ?? '';
     transition: all 0.25s ease-in-out;
 }
 
-#sidebar:not(.expanded) .user-info-collapsed {
+#sidebar:not(.expanded):not(.mobile-open) .user-info-collapsed {
     display: none;
 }
 
@@ -83,16 +84,16 @@ $area = $_SESSION['area'] ?? '';
     flex-direction: column;
 }
 
-/* Ocultar submenús cuando sidebar está colapsado */
-#sidebar:not(.expanded) .submenu {
+/* Ocultar submenús solo cuando sidebar está colapsado en desktop */
+#sidebar:not(.expanded):not(.mobile-open) .submenu {
     display: none !important;
 }
 
-#sidebar:not(.expanded) .has-submenu.open {
+#sidebar:not(.expanded):not(.mobile-open) .has-submenu.open {
     background: transparent !important;
 }
 
-#sidebar:not(.expanded) .has-submenu.open .chevron {
+#sidebar:not(.expanded):not(.mobile-open) .has-submenu.open .chevron {
     opacity: 0;
 }
 
@@ -102,9 +103,35 @@ $area = $_SESSION['area'] ?? '';
     background: rgba(59, 130, 246, 0.3) !important;
     border-left: 4px solid #3b82f6;
 }
+
+/* Mobile: sidebar completamente expandido al abrir */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 280px !important;
+    }
+
+    /* Los items del nav no deben desbordar */
+    #sidebar nav .relative {
+        min-width: 0 !important;
+    }
+
+    /* Ocultar botón cerrar en desktop */
+    .sidebar-close-btn {
+        display: none;
+    }
+
+    #sidebar.mobile-open .sidebar-close-btn {
+        display: flex !important;
+    }
+}
 </style>
 
 <aside id="sidebar" class="fixed left-0 top-0 h-full glass-dark text-white z-50 flex flex-col shadow-2xl overflow-hidden">
+    
+    <!-- Botón cerrar sidebar (mobile) -->
+    <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Cerrar menú">
+        <i class="fas fa-times"></i>
+    </button>
     
     <!-- Logo Section -->
     <div class="h-20 flex items-center border-b border-blue-700/50 relative overflow-hidden">
@@ -272,13 +299,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (sidebar && mainContent) {
+        const isMobile = () => window.innerWidth <= 768;
+
         sidebar.addEventListener('mouseenter', () => {
+            if (isMobile()) return;
             clearTimeout(expandTimeout);
             sidebar.classList.add('expanded');
             mainContent.style.marginLeft = '260px';
         });
 
         sidebar.addEventListener('mouseleave', () => {
+            if (isMobile()) return;
             expandTimeout = setTimeout(() => {
                 sidebar.classList.remove('expanded');
                 mainContent.style.marginLeft = '70px';

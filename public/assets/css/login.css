@@ -236,6 +236,11 @@ body::before {
     box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
 }
 
+.entity-info {
+    min-width: 0;
+    overflow: hidden;
+}
+
 .entity-info h4 {
     color: white;
     font-size: 1rem;
@@ -248,6 +253,8 @@ body::before {
     color: rgba(255, 255, 255, 0.75);
     font-size: 0.8rem;
     line-height: 1.4;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .divider-bar {
@@ -769,8 +776,10 @@ body::before {
 
     .entity-card {
         flex: 1;
-        min-width: 120px;
+        min-width: 130px;
+        max-width: 100%;
         padding: 12px 14px;
+        overflow: hidden;
     }
 
     .entity-card:hover {
@@ -781,6 +790,12 @@ body::before {
         width: 40px;
         height: 40px;
         font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .entity-info {
+        min-width: 0;
+        overflow: hidden;
     }
 
     .entity-info h4 {
@@ -789,6 +804,8 @@ body::before {
 
     .entity-info p {
         font-size: 0.7rem;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
     .login-right {

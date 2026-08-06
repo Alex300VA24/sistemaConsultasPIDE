@@ -118,15 +118,6 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
 
         /* Responsive sidebar */
         @media (max-width: 768px) {
-            #sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-            }
-
-            #sidebar.expanded {
-                transform: translateX(0);
-            }
-
             #main-content {
                 margin-left: 0 !important;
             }
@@ -134,4 +125,4 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
     </style>
 </head>
 
-<body class="bg-gradient-modern min-h-screen overflow-hidden">
+<body class="bg-gradient-modern min-h-screen">

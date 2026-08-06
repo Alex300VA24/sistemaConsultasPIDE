@@ -66,6 +66,12 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
 
 <div class="flex h-screen overflow-hidden" id="dashboardContainer">
     <?php include __DIR__ . "/../layouts/sidebar.php"; ?>
+
+    <!-- Botón hamburguesa (mobile) -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menú">
+        <i class="fas fa-bars" id="mobileMenuIcon"></i>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
     <!-- Loading Overlay -->
     <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99999; background: rgba(15,23,42,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
@@ -139,9 +145,28 @@ require_once __DIR__ . '/../../helpers/generarPaginasDinamicas.php';
 </div>
 
 <style>
-/* Asegurar que el main-content se ajuste correctamente */
 #main-content {
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 769px) {
+    body {
+        overflow: hidden;
+        height: 100vh;
+    }
+}
+
+@media (max-width: 768px) {
+    #dashboardContainer {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    #main-content {
+        margin-left: 0 !important;
+        overflow-y: visible !important;
+        min-height: 100svh;
+        padding-top: 72px;
+    }
 }
 </style>
 

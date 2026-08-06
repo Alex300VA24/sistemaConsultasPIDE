@@ -20,7 +20,7 @@
         isOpen: false,
 
         init() {
-            this.sidebar = document.getElementById('sideBar');
+            this.sidebar = document.getElementById('sidebar');
             this.overlay = document.getElementById('sidebarOverlay');
             this.menuBtn = document.getElementById('mobileMenuBtn');
             this.menuIcon = document.getElementById('mobileMenuIcon');
@@ -90,12 +90,10 @@
             this.isOpen = true;
             this.sidebar.classList.add('mobile-open');
             this.overlay.classList.add('active');
-            document.body.classList.add('sidebar-mobile-open');
 
-            // Cambiar ícono a X
-            if (this.menuIcon) {
-                this.menuIcon.classList.remove('fa-bars');
-                this.menuIcon.classList.add('fa-times');
+            // Ocultar botón hamburguesa
+            if (this.menuBtn) {
+                this.menuBtn.style.display = 'none';
             }
 
             // Focus trap: mover foco al sidebar
@@ -108,12 +106,10 @@
             this.isOpen = false;
             this.sidebar.classList.remove('mobile-open');
             this.overlay.classList.remove('active');
-            document.body.classList.remove('sidebar-mobile-open');
 
-            // Restaurar ícono hamburguesa
-            if (this.menuIcon) {
-                this.menuIcon.classList.remove('fa-times');
-                this.menuIcon.classList.add('fa-bars');
+            // Mostrar botón hamburguesa
+            if (this.menuBtn) {
+                this.menuBtn.style.display = '';
             }
 
             // Devolver foco al botón hamburguesa

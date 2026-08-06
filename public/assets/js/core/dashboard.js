@@ -264,6 +264,10 @@ window.toggleSubmenu = function(element) {
 };
 
 window.showPage = function(pageId, element) {
+    // Cerrar sidebar mobile si está abierto
+    if (window.SidebarMobile && window.SidebarMobile.isOpen) {
+        setTimeout(() => window.SidebarMobile.close(), 150);
+    }
     Dashboard.showPage(pageId, element);
 };
 

@@ -15,6 +15,9 @@
 <!-- Dashboard -->
 <script src="<?= BASE_URL ?>assets/js/core/dashboard.js"></script>
 
+<!-- Sidebar Mobile -->
+<script src="<?= BASE_URL ?>assets/js/sidebar-mobile.js"></script>
+
 <!-- Módulos -->
 <script src="<?= BASE_URL ?>assets/js/modules/auth/login.js"></script>
 <script src="<?= BASE_URL ?>assets/js/modules/consultas/dni.js"></script>

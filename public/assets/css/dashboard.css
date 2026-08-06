@@ -26,7 +26,6 @@
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #f1f5f9;
-    height: 100vh;
 }
 
 /* === DASHBOARD PRINCIPAL === */
@@ -480,7 +479,7 @@ body {
     background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    z-index: 999;
+    z-index: 40;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -490,15 +489,27 @@ body {
     opacity: 1;
 }
 
-/* === Botón cerrar sidebar - Oculto en desktop === */
+/* === Botón cerrar sidebar - Oculto siempre, se maneja desde sidebar.php === */
 .sidebar-close-btn {
     display: none;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* === Body scroll lock cuando sidebar está abierto === */
-body.sidebar-mobile-open {
-    overflow: hidden;
-}
+/* === Body scroll lock - no usado, conservado por compatibilidad === */
 
 @media (max-width: 1024px) {
     :root {
@@ -508,22 +519,37 @@ body.sidebar-mobile-open {
 
 @media (max-width: 768px) {
     /* Sidebar oculto por defecto en móvil */
-    .sideBar {
+    .sideBar,
+    #sidebar {
         transform: translateX(-100%);
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        width: 280px;
+        width: 280px !important;
     }
 
-    .sideBar.mobile-open {
+    .sideBar.mobile-open,
+    #sidebar.mobile-open {
         transform: translateX(0);
         box-shadow: 10px 0 40px rgba(0, 0, 0, 0.3);
     }
 
+    /* Deshabilitar el hover expand en móvil */
+    #sidebar {
+        pointer-events: auto;
+    }
+
     /* Main content ocupa todo el ancho */
-    .main-content {
-        margin-left: 0;
-        width: 100%;
+    .main-content,
+    #main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
         padding: 80px 16px 20px 16px;
+        flex: 1;
+    }
+
+    /* Evitar desbordamiento horizontal */
+    #dashboardContainer {
+        overflow-x: hidden;
+        /* El scroll vertical lo maneja #main-content en desktop */
     }
 
     /* Botón hamburguesa visible */
@@ -559,25 +585,6 @@ body.sidebar-mobile-open {
     }
 
     /* Botón cerrar dentro del sidebar */
-    .sidebar-close-btn {
-        display: flex;
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 10;
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        border: none;
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        -webkit-tap-highlight-color: transparent;
-    }
-
     .sidebar-close-btn:hover,
     .sidebar-close-btn:active {
         background: rgba(255, 255, 255, 0.25);
