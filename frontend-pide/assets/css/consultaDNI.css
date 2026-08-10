@@ -1,0 +1,426 @@
+/* Variables CSS */
+:root {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --secondary-color: #64748b;
+    --secondary-hover: #475569;
+    --success-color: #10b981;
+    --danger-color: #ef4444;
+    --warning-color: #f59e0b;
+    --info-color: #3b82f6;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* Container Principal */
+.consulta-dni-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+/* Título de Página */
+.consulta-dni-container .page-title {
+    background: var(--surface);
+    padding: 25px 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 25px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.consulta-dni-container .page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.consulta-dni-container .page-title h1 i {
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+/* Content Wrapper */
+.consulta-dni-container .content-wrapper {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 35px;
+}
+
+/* Sección de Búsqueda */
+.consulta-dni-container .search-section {
+    margin-bottom: 30px;
+}
+
+.consulta-dni-container .search-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.consulta-dni-container .form-group {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.consulta-dni-container .form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.consulta-dni-container .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+.consulta-dni-container .form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.consulta-dni-container .form-group input:hover:not(:focus) {
+    border-color: #cbd5e1;
+}
+
+.consulta-dni-container .form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Grupo de Botones */
+.consulta-dni-container .btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.consulta-dni-container .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+}
+
+.consulta-dni-container .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.consulta-dni-container .btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.consulta-dni-container .btn i {
+    position: relative;
+    z-index: 1;
+}
+
+.consulta-dni-container .btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.consulta-dni-container .btn-search {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    color: var(--surface);
+}
+
+.consulta-dni-container .btn-search:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(79, 70, 229, 0.3);
+}
+
+.consulta-dni-container .btn-clear {
+    background: var(--secondary-color);
+    color: var(--surface);
+}
+
+.consulta-dni-container .btn-clear:hover {
+    background: var(--secondary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(100, 116, 139, 0.3);
+}
+
+.consulta-dni-container .btn:active {
+    transform: translateY(0);
+}
+
+.consulta-dni-container .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Alertas */
+.consulta-dni-container #alertContainer {
+    margin-bottom: 20px;
+}
+
+.consulta-dni-container .alert {
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.consulta-dni-container .alert i {
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.consulta-dni-container .alert-success {
+    background: #d1fae5;
+    border-color: var(--success-color);
+    color: #065f46;
+}
+
+.consulta-dni-container .alert-danger {
+    background: #fee2e2;
+    border-color: var(--danger-color);
+    color: #991b1b;
+}
+
+.consulta-dni-container .alert-warning {
+    background: #fef3c7;
+    border-color: var(--warning-color);
+    color: #92400e;
+}
+
+.consulta-dni-container .alert-info {
+    background: #dbeafe;
+    border-color: var(--info-color);
+    color: #1e40af;
+}
+
+/* Contenedor de Resultados */
+.consulta-dni-container .results-container {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* Sección de Foto */
+.consulta-dni-container .photo-section {
+    display: flex;
+    justify-content: center;
+}
+
+.consulta-dni-container .photo-frame {
+    width: 200px;
+    height: 250px;
+    border: 3px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--background);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.consulta-dni-container .photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.consulta-dni-container .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.consulta-dni-container .photo-placeholder::before {
+    content: '\f007';
+    font-family: 'Font Awesome 7 Free';
+    font-weight: 400;
+    font-size: 80px;
+    color: var(--text-secondary);
+    opacity: 0.3;
+}
+
+/* Sección de Información */
+.consulta-dni-container .info-section {
+    flex: 1;
+}
+
+.consulta-dni-container .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.consulta-dni-container .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.consulta-dni-container .info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.consulta-dni-container .info-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.consulta-dni-container .info-value {
+    padding: 12px 16px;
+    background: var(--background);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.consulta-dni-container .info-value:empty::before {
+    content: '-';
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .consulta-dni-container {
+        padding: 15px;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        padding: 25px 20px;
+    }
+
+    .consulta-dni-container .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .consulta-dni-container .form-group {
+        min-width: 100%;
+    }
+
+    .consulta-dni-container .btn-group {
+        flex-direction: column;
+    }
+
+    .consulta-dni-container .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .consulta-dni-container .results-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .consulta-dni-container .photo-section {
+        order: -1;
+    }
+
+    .consulta-dni-container .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .consulta-dni-container {
+        padding: 10px;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        padding: 20px 15px;
+    }
+
+    .consulta-dni-container .form-group input {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+}
+
+/* Mejoras de accesibilidad */
+.consulta-dni-container .btn:focus-visible,
+.consulta-dni-container .form-group input:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .consulta-dni-container .search-section {
+        display: none;
+    }
+
+    .consulta-dni-container .content-wrapper {
+        box-shadow: none;
+    }
+}

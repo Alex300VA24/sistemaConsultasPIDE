@@ -96,7 +96,8 @@ class CsrfMiddleware {
         }
         
         if (!isset($_SESSION['csrf_token'])) {
-            $this->sendError('Sesión inválida');
+            // Sesión inexistente/expirada: 401 para que el cliente redirija al login
+            $this->sendError('Sesión inválida', [], 401);
             return false;
         }
         
@@ -111,9 +112,9 @@ class CsrfMiddleware {
         return true;
     }
     
-    private function sendError($message, $debug = []) {
+    private function sendError($message, $debug = [], $statusCode = 403) {
         if (!headers_sent()) {
-            http_response_code(403);
+            http_response_code($statusCode);
             header('Content-Type: application/json');
         }
         echo json_encode([

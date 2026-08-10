@@ -18,7 +18,8 @@ $nombreArea    = $_SESSION['nombreArea'] ?? 'Sin área';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $titulo ?? 'Dashboard - Sistema de Consultas PIDE' ?></title>
-    <link rel="stylesheet" href='<?= BASE_URL ?>assets/css/fontawesome/css/all.min.css'">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/tailwind.css">
+    <!-- FontAwesome + Inter ahora se importan via tailwind.css -->
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaDNI.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaRUC.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/consultaPartidas.css">

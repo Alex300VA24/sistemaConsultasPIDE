@@ -1,0 +1,97 @@
+
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" width="100%" height="100%">
+
+    <defs>
+      <!-- Fondo institucional -->
+      <linearGradient id="bgPide" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0B2D5C"/>
+        <stop offset="100%" stop-color="#0F172A"/>
+      </linearGradient>
+
+      <!-- Degradado dorado (estado) -->
+      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FACC15"/>
+        <stop offset="100%" stop-color="#CA8A04"/>
+      </linearGradient>
+
+      <!-- Degradado rojo bandera -->
+      <linearGradient id="redFlag" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#DC2626"/>
+        <stop offset="100%" stop-color="#991B1B"/>
+      </linearGradient>
+
+      <!-- Sombra suave -->
+      <filter id="shadowSoft" x="-20%" y="-20%" width="150%" height="150%">
+        <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000000" flood-opacity="0.30"/>
+      </filter>
+
+      <!-- Glow ligero -->
+      <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+
+    <!-- Fondo -->
+    <circle cx="210" cy="210" r="190" fill="url(#bgPide)"/>
+    <circle cx="210" cy="210" r="190" fill="none" stroke="#FFFFFF" stroke-width="10" opacity="0.10"/>
+
+    <!-- Logo / Nodo interoperabilidad -->
+    <g filter="url(#shadowSoft)">
+
+      <!-- Centro -->
+      <circle cx="210" cy="185" r="45" fill="url(#gold)" filter="url(#glow)"/>
+      <circle cx="210" cy="185" r="18" fill="#0F172A" opacity="0.25"/>
+
+      <!-- Conexiones -->
+      <path d="M210 140 L210 95" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+      <path d="M175 165 L120 130" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+      <path d="M245 165 L300 130" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+      <path d="M180 210 L135 260" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+      <path d="M240 210 L285 260" stroke="#E2E8F0" stroke-width="10" stroke-linecap="round" opacity="0.85"/>
+
+      <!-- Nodos externos -->
+      <circle cx="210" cy="85" r="22" fill="#38BDF8"/>
+      <circle cx="120" cy="125" r="22" fill="#22C55E"/>
+      <circle cx="300" cy="125" r="22" fill="#A855F7"/>
+      <circle cx="135" cy="270" r="22" fill="#F97316"/>
+      <circle cx="285" cy="270" r="22" fill="#EF4444"/>
+
+      <!-- Icono "Estado" (bandera estilizada) -->
+      <rect x="150" y="250" width="120" height="80" rx="18" fill="#F8FAFC" opacity="0.95"/>
+
+      <!-- Bandera Perú -->
+      <rect x="162" y="262" width="30" height="56" rx="6" fill="url(#redFlag)"/>
+      <rect x="192" y="262" width="36" height="56" rx="6" fill="#FFFFFF"/>
+      <rect x="228" y="262" width="30" height="56" rx="6" fill="url(#redFlag)"/>
+
+      <!-- Mini escudo (simplificado) -->
+      <circle cx="210" cy="290" r="10" fill="url(#gold)" opacity="0.9"/>
+      <circle cx="210" cy="290" r="5" fill="#0F172A" opacity="0.25"/>
+
+    </g>
+
+    <!-- Texto principal -->
+    <text x="210" y="365" text-anchor="middle"
+          font-family="Poppins, Arial, sans-serif"
+          font-size="34"
+          font-weight="900"
+          fill="#F8FAFC"
+          letter-spacing="2">
+      PIDE
+    </text>
+
+    <!-- Subtexto -->
+    <text x="210" y="392" text-anchor="middle"
+          font-family="Poppins, Arial, sans-serif"
+          font-size="14"
+          font-weight="600"
+          fill="#CBD5E1"
+          letter-spacing="3">
+      INTEROPERABILIDAD DEL ESTADO
+    </text>
+
+  </svg>
